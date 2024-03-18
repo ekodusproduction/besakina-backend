@@ -6,12 +6,12 @@ import { logger, loggerMiddleware } from './src/Middlewares/logger.middleware.js
 import { ApplicationError } from './src/ErrorHandler/applicationError.js';
 import { sendError } from './src/Utility/response.js';
 import { jwtAuth } from "./src/Middlewares/auth.middleware.js";
-import { validateCategory } from './src/Features/Advertisement/advertisement.validator.js';
 //routers
-import categoryRouter from './src/Features/Categories/categories.routes.js';
-import planRouter from './src/Features/Plans/plan.routes.js';
+import categoryRouter from './src/Features/Categories/category.routes.js';
+import plansRouter from './src/Features/Plans/plans.routes.js';
 import userRouter from './src/Features/Users/users.routes.js';
-import addRouter from './src/Features/Advertisement/advertisement.routes.js';
+import propertyRouter from './src/Features/Advertisement/Property/property.routes.js';
+
 const app = express()
 // Middleware setup
 app.use(cors());
@@ -29,9 +29,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRouter);
-app.use("/api/category", jwtAuth, categoryRouter);
-app.use("/api/advertise", validateCategory, addRouter);
-app.use("/api/plans", jwtAuth, planRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/property", propertyRouter);
+app.use("/api/plans", jwtAuth, plansRouter);
 
 // Error handling middleware
 app.use(async (err, req, res, next) => {

@@ -1,0 +1,4 @@
+{"level":"info","message":"/api/users/sendotp - {\"mobile\":6900547080}","service":"request-logging"}
+{"code":"ER_ACCESS_DENIED_ERROR","errno":1045,"level":"info","service":"request-logging","sqlMessage":"Access denied for user ''@'localhost' (using password: NO)","sqlState":"28000"}
+{"level":"info","message":"/api/users/sendotp - {\"mobile\":6900547080}","service":"request-logging"}
+{"code":"ERR_HTTP_HEADERS_SENT","level":"info","service":"request-logging"}

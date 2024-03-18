@@ -1,9 +1,9 @@
-import { ApplicationError } from "../../ErrorHandler/applicationError.js";
-import { sendResponse, sendError } from "../../Utility/response.js";
-import pool from "../../Mysql/mysql.database.js";
-import { fileUpload } from "../../Middlewares/multer.middleware.js";
+import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
+import { sendResponse, sendError } from "../../../Utility/response.js";
+import pool from "../../../Mysql/mysql.database.js";
+import { fileUpload } from "../../../Middlewares/multer.middleware.js";
 // import path from 'path';  // Import path module
-import { insertQuery, selectQuery, updateQuery } from "../../Utility/mysqlQuery.js";
+import { insertQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
 
 export const addAdvertisement = async (req, res, next) => {
     let connection;

@@ -1,6 +1,5 @@
-import pool from "../../Mysql/mysql.database";
-import { sendError, sendResponse } from "../../Utility/response";
-
+import pool from "../../Mysql/mysql.database.js";
+import { sendError, sendResponse } from "../../Utility/response.js";
 export const addPlan = async function (req, res, next) {
     try {
         const connection = await pool.getConnection();

@@ -2,33 +2,31 @@ import { Router } from "express";
 import {
     deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement
-} from "./advertisement.controller.js"
-import { fileUpload } from "../../Middlewares/multer.middleware.js"
-import { validationMiddleware, editImagesValidator, validateCategory } from "./advertisement.validator.js";
-import { jwtAuth } from "../../Middlewares/auth.middleware.js";
-const addRouter = Router()
+} from "./education.controller.js"
 
-
+import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
+import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
+import { validationMiddlewarePost, validationMiddlewarePut } from "./education.validation.js";
+import { editImagesValidator } from "../../../Utility/editImagesValidator.js";
+const educationRouter = Router()
 
 //protected routes id=> advertisement id
-addRouter.post("/category/:category", jwtAuth, validateCategory, fileUpload("images").array("images"), validationMiddleware, addAdvertisement)
+educationRouter.post("/:category", jwtAuth,  fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
 
-addRouter.get("/category/:category/filter", validateCategory, filterAdvertisement)
+educationRouter.get("/:category/filter",  filterAdvertisement)
 
-addRouter.put("/category/:category/id/:id", jwtAuth, validateCategory, validationMiddleware, updateAdvertisement)
-addRouter.delete("/category/:category/id/:id", jwtAuth, deleteAdvertisement)
+educationRouter.put("/:category/id/:id", jwtAuth,  validationMiddlewarePut, updateAdvertisement)
+educationRouter.delete("/:category/id/:id", jwtAuth, deleteAdvertisement)
 
-addRouter.get("/category/:category/id/:id", getAdvertisement)
+educationRouter.get("/:category/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-addRouter.delete("/category/:category/image/delete/:id", jwtAuth, validateCategory, deleteImage)
+educationRouter.delete("/:category/image/delete/:id", jwtAuth,  deleteImage)
 
-addRouter.post("/category/:category/images/:id", jwtAuth, validateCategory, fileUpload("images").array("images"), editImagesValidator, addImage)
+educationRouter.post("/:category/images/:id", jwtAuth,  fileUpload("images").array("images"), editImagesValidator, addImage)
 // list user own advertisement //id => user id
-addRouter.get("/category/:category/list/self", jwtAuth, validateCategory, listUserAdvertisement)
+educationRouter.get("/:category/list/self", jwtAuth,  listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
-addRouter.get("/category/:category/list", validateCategory, getListAdvertisement)
+educationRouter.get("/:category/list",  getListAdvertisement)
 
-
-
-export default addRouter
+export default educationRouter

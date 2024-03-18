@@ -1,5 +1,5 @@
 import { body } from 'express-validator';
-import { validateImagesArray } from './image.validation.js';
+import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 export const vehiclesValidationRules = () => {
   return [
@@ -32,4 +32,27 @@ export const editVehiclesValidationRules = () => {
     body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
     body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
   ];
+};
+
+const runValidation = async (req, res, next, rules) => {
+    await Promise.all(rules.map(rule => rule.run(req)));
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            message: errors.array()[0].msg,
+            status: "failed",
+            http_status_code: 400,
+        });
+    }
+    next();
+};
+
+export const validationMiddlewarePost = async (req, res, next) => {
+    const rules = vehiclesValidationRules();
+    await runValidation(req, res, next, rules);
+};
+
+export const validationMiddlewarePut = async (req, res, next) => {
+    const rules = editVehiclesValidationRules();
+    await runValidation(req, res, next, rules);
 };

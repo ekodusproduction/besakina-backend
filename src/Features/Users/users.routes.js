@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { } from "./users.validator.js";
+import { loginValidation, mobileValidation } from "./users.validator.js";
 import { login, sendOtp } from "./users.controller.js";
 const userRouter = Router()
 
-userRouter.post("/login", loginValidaiton, login)
-userRouter.post("/sendotp", mobileValidaiton, sendOtp)
+userRouter.post("/login", loginValidation, login)
+userRouter.post("/sendotp", mobileValidation, sendOtp)
 
 export default userRouter  

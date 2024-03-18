@@ -1,4 +1,5 @@
-import { body, validationResult } from 'express-validator';
+import { body } from 'express-validator';
+import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 const educationValidationRules = () => {
     return [
@@ -29,12 +30,9 @@ const editEducationValidationRules = () => {
     ];
 };
 
-const validationMiddlewarePost = async (req, res, next) => {
-    let validationRules = educationValidationRules();
-
-
-    await Promise.resolve(validationRules.map(rule => rule.run(req)));
-    const errors = validationResult(req)
+const runValidation = async (req, res, next, rules) => {
+    await Promise.all(rules.map(rule => rule.run(req)));
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({
             message: errors.array()[0].msg,
@@ -42,58 +40,19 @@ const validationMiddlewarePost = async (req, res, next) => {
             http_status_code: 400,
         });
     }
-
     next();
 };
 
-const ValidationMiddlewarePut = async (req, res, next) => {
-    let validationRules = editEducationValidationRules();
-    await Promise.resolve(validationRules.map(rule => rule.run(req)));
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-        return res.status(400).json({
-            message: errors.array()[0].msg,
-            status: "failed",
-            http_status_code: 400,
-        });
-    }
-
-    next();
+export const validationMiddlewarePost = async (req, res, next) => {
+    const rules = educationValidationRules();
+    await runValidation(req, res, next, rules);
 };
 
+export const validationMiddlewarePut = async (req, res, next) => {
+    const rules = editEducationValidationRules();
+    await runValidation(req, res, next, rules);
+};
 
-export const ImagesValidator = async function (req, res, next) {
-    try {
-        const rules = [
-            body("images")
-                .custom((value, { req }) => {
-                    try {
-                        if (!Array.isArray(req.files)) {
-                            throw new Error("Images must be an array");
-                        }
-
-                        for (const file of req.files) {
-                            if (!file || !file.filename || !file.mimetype) {
-                                throw new Error("Invalid file in the images array");
-                            }
-                        }
-                        return true;
-                    } catch (error) {
-                        throw new Error(error.message);
-                    }
-                })
-        ];
-
-        await Promise.all(rules.map(rule => rule.run(req)))
-        let validationErrors = validationResult(req);
-        if (!validationErrors.isEmpty()) {
-            return res.status(400).send({ "message": validationErrors.array()[0].msg, "status": "failed", "http_status_code": 400 })
-        }
-        next();
-    } catch (error) {
-        throw new Error(error)
-    }
-}
 
 
 

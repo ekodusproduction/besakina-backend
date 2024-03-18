@@ -1,7 +1,7 @@
-import pool from "../../Mysql/mysql.database.js";
 import jwt from "jsonwebtoken";
+import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
-import { ApplicationError } from "../../ErrorHandler/applicationError.js";
+ import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 
 
 export const sendOtp = async (req, res, next) => {

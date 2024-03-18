@@ -1,8 +1,7 @@
 import dotenv from "dotenv"
 dotenv.config();
 import jwt from 'jsonwebtoken';
-import { sendError } from '../../Utility/response.js';
-
+import { sendError } from "../Utility/response.js";
 export const jwtAuth = function (req, res, next) {
     // Extract the token from the request headers
     const token = req.headers.authorization;
