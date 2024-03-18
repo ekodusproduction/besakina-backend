@@ -1,0 +1,15 @@
+import mysql from 'mysql2';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const pool = mysql.createPool({
+    host: process.env.MDB_HOST,
+    port: process.env.MDB_PORT,
+    user: process.env.MDB_USER,
+    password: process.env.MDB_PASS,
+    database: "test",
+    connectionLimit: 100,
+});
+
+export default pool.promise();
