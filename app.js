@@ -2,7 +2,7 @@ import 'dotenv/config';
 
 import express from "express";
 import cors from "cors";
-import logger, { loggerMiddleware } from './src/Middlewares/logger.middleware.js';
+import { logger, loggerMiddleware } from './src/Middlewares/logger.middleware.js';
 import { ApplicationError } from './src/ErrorHandler/applicationError.js';
 import { sendError } from './src/Utility/response.js';
 import { jwtAuth } from "./src/Middlewares/auth.middleware.js";
@@ -21,7 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 // Logger middleware
 app.use(async (req, res, next) => {
     loggerMiddleware(req, res, next);
-    next();
 });
 
 // Route definitions
