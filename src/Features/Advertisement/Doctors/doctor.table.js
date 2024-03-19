@@ -1,5 +1,4 @@
-
-import pool from "./../Mysql/mysql.database.js"
+import pool from "../../../Mysql/mysql.database.js";
 
 export const createDoctorsTable = async function () {
     try {
@@ -7,7 +6,7 @@ export const createDoctorsTable = async function () {
 
         // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS doctors (
-            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             plan_id BIGINT UNSIGNED NOT NULL,        
             user_id BIGINT UNSIGNED NOT NULL,
             
@@ -60,7 +59,7 @@ export const dropDoctorsTable = async function () {
         // Execute the query
         const [results, fields] = await connection.query(dropTableQuery);
 
-        console.log('Education Table dropped successfully:');
+        console.log('Doctors Table dropped successfully:');
 
         // Release the connection back to the pool
         connection.release();

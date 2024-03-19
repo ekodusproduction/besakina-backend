@@ -1,83 +1,72 @@
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
+import { insertQuery } from "../../Utility/sqlQuery.js";
+
 export const addPlan = async function (req, res, next) {
+    let connection;
     try {
-        const connection = await pool.getConnection();
-
+        connection = await pool.getConnection();
         const requestBody = req.body;
-
-        const columns = "description, price, validity";
-        const values = [requestBody.description, requestBody.price, requestBody.validity];
-        const query = `INSERT INTO advertise (${columns}) VALUES (?, ?, ?)`;
+        const [query, values] = await insertQuery('plans', requestBody);
 
         await connection.beginTransaction();
         const [rows, field] = await connection.query(query, values);
 
-        if (rows.affectedRows > 0) {
-            await connection.commit();
-            connection.release();
-            return await sendError(res, "Error adding plan", null, 400, null);
+        if (rows.affectedRows === 0) {
+            await connection.rollback();
+            return sendError(res, "Error adding plan", 400);
         }
 
-        return await sendResponse(res, "Plan added successfully", { id: rows.insertId }, 201, null);
-
+        await connection.commit();
+        return sendResponse(res, "Plan added successfully", 201, { id: rows.insertId }, null);
     } catch (error) {
-        await connection.rollback();
-        connection.release();
-
-        return await sendError(res, error, null, 400, null);
+        if (connection) await connection.rollback();
+        next(error);
+    } finally {
+        if (connection) connection.release();
     }
 }
 
 export const getPlan = async function (req, res, next) {
+    let connection;
     try {
-        const connection = await pool.getConnection();
-
+        connection = await pool.getConnection();
         const query = `SELECT * FROM plans`;
         const [rows, field] = await connection.query(query);
-
-        await connection.commit();
-        connection.release();
-
-        if (rows.affectedRows > 0) {
-            return await sendError(res, "Error fetching plans", null, 400, null);
+        if (rows.length === 0) {
+            return sendError(res, "No plan found", 404);
         }
 
-        return await sendResponse(res, "Plan List", { plans: rows }, 201, null);
-
+        return sendResponse(res, "Plan List", 200, { plans: rows });
     } catch (error) {
-        await connection.rollback();
-        connection.release();
-
-        return await sendError(res, error, null, 400, null);
+        next(error);
+    } finally {
+        if (connection) connection.release();
     }
 }
 
 export const deletePlan = async function (req, res, next) {
+    let connection;
     try {
-        const connection = await pool.getConnection();
-
+        connection = await pool.getConnection();
         const id = req.params.id;
-
         const query = `DELETE FROM plans WHERE id = ?`;
         const values = [id];
 
         await connection.beginTransaction();
         const [rows, field] = await connection.query(query, values);
 
-        if (rows.affectedRows > 0) {
-            await connection.commit();
-            connection.release();
-            return await sendError(res, "Error deleting plan", null, 400, null);
+        if (rows.affectedRows === 0) {
+            return sendError(res, "No plan found", 404);
         }
 
-        return await sendResponse(res, "Plan deleted successfully", { id: requestBody.id }, 201, null);
-
+        await connection.commit();
+        return sendResponse(res, "Plan deleted successfully", 200, { id });
     } catch (error) {
-        await connection.rollback();
-        connection.release();
-
-        return await sendError(res, error, null, 400, null);
+        if (connection) await connection.rollback();
+        next(error);
+    } finally {
+        if (connection) connection.release();
     }
 }
 

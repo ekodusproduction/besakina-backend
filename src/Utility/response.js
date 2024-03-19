@@ -1,5 +1,5 @@
-export const sendResponse = (res, message, http_status_code, data = null, token = null) => {
-    return res.sendStatus(http_status_code).send({
+export const sendResponse = async (res, message, http_status_code, data = null, token = null) => {
+    return res.status(http_status_code).send({
         "message": message,
         "http_status_code": http_status_code,
         "success": true,
@@ -9,12 +9,12 @@ export const sendResponse = (res, message, http_status_code, data = null, token 
 };
 
 
-export const sendError = (res, message, http_status_code, data) => {
-    return res.sendStatus(http_status_code).send({
+export const sendError = async (res, message, http_status_code) => {
+    return res.status(http_status_code).send({
         "message": message,
         "http_status_code": http_status_code,
         "success": false,
-        "data": data || null,
+        "data": null,
         "token": null
     })
 }

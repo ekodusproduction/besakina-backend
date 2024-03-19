@@ -9,16 +9,17 @@ export const logger = winston.createLogger({
     ]
 });
 
-export const loggerMiddleware = async (
+export const loggerMiddleware = async function (
     req,
-    res,
-    next
-) => {// 1. Log request body.
+    res, next
+) {
     if (!req.url.includes('signin')) {
+
         const logData = `${req.url
-            } - ${JSON.stringify(req.body)}`;
+            } - ${JSON.stringify(req.body)}`
+
         logger.info(logData)
     }
-    next();
+    next()
 };
 

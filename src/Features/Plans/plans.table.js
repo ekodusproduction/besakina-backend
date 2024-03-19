@@ -9,10 +9,11 @@ export const createPlanTable = async function () {
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS plans (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        
         type VARCHAR(25),
         description text,
         price INT,
-
+        validity INT,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )

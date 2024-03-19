@@ -9,8 +9,10 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
+    "express-rate-limit": "^7.2.0",
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "mariadb": "^3.2.3",
@@ -22,7 +24,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "dropTable":"node src/Mysql/mysql.dropTable.js"
+    "dropTable": "node src/Mysql/mysql.dropTable.js",
+    "migrate": "node src/Mysql/mysql.migrate.js"
   },
   "keywords": [],
   "author": "",

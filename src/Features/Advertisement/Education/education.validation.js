@@ -30,7 +30,9 @@ const editEducationValidationRules = () => {
     ];
 };
 
-const runValidation = async (req, res, next, rules) => {
+
+export const validationMiddlewarePost = async (req, res, next) => {
+    const rules = educationValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -43,14 +45,18 @@ const runValidation = async (req, res, next, rules) => {
     next();
 };
 
-export const validationMiddlewarePost = async (req, res, next) => {
-    const rules = educationValidationRules();
-    await runValidation(req, res, next, rules);
-};
-
 export const validationMiddlewarePut = async (req, res, next) => {
     const rules = editEducationValidationRules();
-    await runValidation(req, res, next, rules);
+    await Promise.all(rules.map(rule => rule.run(req)));
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            message: errors.array()[0].msg,
+            status: "failed",
+            http_status_code: 400,
+        });
+    }
+    next();
 };
 
 

@@ -32,7 +32,7 @@ export const addAdvertisement = async (req, res, next) => {
     connection.rollback()
     await sendError(error)
   } finally {
-    connection.end();
+    connection.release();
   }
 }
 

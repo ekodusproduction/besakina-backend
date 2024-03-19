@@ -12,7 +12,7 @@ const __dirname = dirname(__filename);
 const createStorageMiddleware = (destination) => {
     return multer.diskStorage({
         destination: (req, file, cb) => {
-            const destinationPath = path.join(cwd(), 'public', destination);
+            const destinationPath = path.join('public', destination);
             cb(null, destinationPath);
         },
         filename: (req, file, cb) => {

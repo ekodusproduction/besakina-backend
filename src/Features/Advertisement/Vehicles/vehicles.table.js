@@ -1,5 +1,5 @@
 
-import pool from "../../Mysql/mysql.database.js"
+import pool from "../../../Mysql/mysql.database.js";
 
 export const createVehicleTable = async function () {
     try {
@@ -8,7 +8,7 @@ export const createVehicleTable = async function () {
         // Define your CREATE TABLE query
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS vehicles (
-            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             plan_id BIGINT UNSIGNED NOT NULL,        
             user_id BIGINT UNSIGNED NOT NULL,
 

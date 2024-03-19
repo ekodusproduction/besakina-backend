@@ -33,13 +33,8 @@ export const insertQuery = async (tableName, requestBody) => {
     } else if (selectFields.length > 1) {
       selectClause = selectFields.join(', ');
     }
-    console.log("selectClause", selectClause)
-  
     const whereClause = columns.length > 0 ? `WHERE ${columns.map(column => `${column} = ?`).join(' AND ')}` : '';
-    console.log("whereClause", whereClause)
-  
     const query = `SELECT ${selectClause} FROM ${tableName} ${whereClause}`;
-    console.log(values)
     return [query, values];
   };
   

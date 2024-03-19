@@ -1,4 +1,4 @@
-User
+
 import pool from "../../Mysql/mysql.database.js"
 
 export const createUserTable = async function () {
@@ -9,7 +9,8 @@ export const createUserTable = async function () {
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS users (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        plan_id BIGINT UNSIGNED NOT NULL,      
+        plan_id BIGINT UNSIGNED,
+              
         firstName VARCHAR(25),
         lastName VARCHAR(25),
         mobile BIGINT UNSIGNED NOT NULL UNIQUE,

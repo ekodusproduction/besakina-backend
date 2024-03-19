@@ -1,42 +1,39 @@
 import jwt from "jsonwebtoken";
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
- import { ApplicationError } from "../../ErrorHandler/applicationError.js";
-
+import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 
 export const sendOtp = async (req, res, next) => {
     const { mobile } = req.body;
     const otp = Math.floor(Math.random() * 8999 + 1000);
-    let connection;
+    const connection = await pool.getConnection();
     try {
-        connection = await pool.getConnection();
         const checkQuery = 'SELECT id FROM users WHERE mobile = ?';
-        const rows = await connection.query(checkQuery, [mobile]);
+        const [rows, fields] = await connection.query(checkQuery, [mobile]);
         console.log(rows)
-        if (rows) {
+        if (rows.length > 0) {
             const updateQuery = 'UPDATE users SET otp = ? WHERE mobile = ?';
             await connection.query(updateQuery, [otp, mobile]);
         } else {
             const insertQuery = 'INSERT INTO users (mobile, otp) VALUES (?, ?)';
             await connection.query(insertQuery, [mobile, otp]);
         }
-
-        await sendResponse(res, 'Otp sent successfully', 201, { otp }, null);
-
+        return await sendResponse(res, 'Otp sent successfully', 201, { otp }, null);
     } catch (error) {
-        console.error('Error in sendOtp:', error);
         next(error);
+        // return await sendError(res, 'OTP expired', 400);
     } finally {
         if (connection) {
-            connection.end();
+            connection.release();
         }
     }
 }
 
 export const login = async (req, res, next) => {
-    const { mobile, otp } = req.body;
+    const connection = await pool.getConnection();
 
     try {
+        const { mobile, otp } = req.body;
         const connection = await pool.getConnection();
         const selectQuery = 'SELECT * FROM users WHERE mobile = ?';
         const [rows] = await connection.query(selectQuery, [mobile]);
@@ -51,21 +48,21 @@ export const login = async (req, res, next) => {
         const fiveMin = 5 * 60 * 60 * 1000;
 
         if (user.otp !== otp) {
-            await sendError(res, 'Invalid OTP', null, 400);
+            return await sendError(res, 'Invalid OTP', 400);
         }
 
         if (Date.now() < updatedAtDate.getTime() + fiveMin) {
-            const token = await createToken(user);
-            await sendResponse(res, 'Login successful', null, 201, token);
+            const token = createToken(user);
+            return await sendResponse(res, 'Login successful', 201, null, token);
         } else {
-            await sendError(res, 'OTP expired', null, 400);
+            return await sendError(res, 'OTP expired', 400);
         }
     } catch (error) {
         console.error('Error in login:', error);
         next(error);
     } finally {
         if (connection) {
-            connection.end();
+            connection.release();
         }
     }
 }

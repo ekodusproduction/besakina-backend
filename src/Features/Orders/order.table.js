@@ -1,4 +1,3 @@
-User
 import pool from "../../Mysql/mysql.database.js"
 
 export const createOrderTable = async function () {

@@ -4,7 +4,7 @@ const plansRouter = Router()
 
 plansRouter.post("/", addPlan)
 plansRouter.get("/", getPlan)
-plansRouter.put("/id/:id", deletePlan)
+// plansRouter.put("/id/:id", deletePlan)
 plansRouter.delete("/id/:id", deletePlan)
 
 

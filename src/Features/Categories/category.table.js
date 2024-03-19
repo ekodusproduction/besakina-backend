@@ -1,4 +1,4 @@
-User
+
 import pool from "../../Mysql/mysql.database.js"
 
 export const createCategoryTable = async function () {
@@ -10,11 +10,8 @@ export const createCategoryTable = async function () {
         CREATE TABLE IF NOT EXISTS category (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         category VARCHAR(50),
-        photos VARHCHAR(255),
-        createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      )
-    `;
+        photos VARCHAR(255)
+      )`;
 
         // Execute the query
         const [results, fields] = await connection.query(createTableQuery);

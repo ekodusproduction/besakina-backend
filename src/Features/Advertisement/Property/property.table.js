@@ -1,5 +1,5 @@
 
-import pool from "../../Mysql/mysql.database.js"
+import pool from "../../../Mysql/mysql.database.js";
 
 export const createPropertyTable = async function () {
     try {
@@ -8,9 +8,9 @@ export const createPropertyTable = async function () {
         // Define your CREATE TABLE query
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS property (
-            id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            plan_id INT UNSIGNED NOT NULL,        
-            user_id INT UNSIGNED NOT NULL,
+            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            plan_id BIGINT UNSIGNED NOT NULL,        
+            user_id BIGINT UNSIGNED NOT NULL,
 
             title VARCHAR(255) NOT NULL,
             type VARCHAR(25) NOT NULL,
@@ -46,7 +46,7 @@ export const createPropertyTable = async function () {
         // Execute the query
         const [results, fields] = await connection.query(createTableQuery);
 
-        console.log('Vehicle Table created successfully:');
+        console.log('Property Table created successfully:');
 
         // Release the connection back to the pool
         connection.release();
@@ -68,7 +68,7 @@ export const dropPropertyTable = async function () {
         // Execute the query
         const [results, fields] = await connection.query(dropTableQuery);
 
-        console.log('Vehicle Table dropped successfully:');
+        console.log('Property Table dropped successfully:');
 
         // Release the connection back to the pool
         connection.release();

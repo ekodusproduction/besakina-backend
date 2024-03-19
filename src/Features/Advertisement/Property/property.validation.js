@@ -1,5 +1,6 @@
-import { body } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
+import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
 const allowedCategories = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK", "1RK", "HOUSE", "VILLA"]
 export const propertiesValidationRules = () => {
@@ -51,10 +52,14 @@ export const editPropertiesValidationRules = () => {
     ];
 };
 
-const runValidation = async (req, res, next, rules) => {
+
+
+export const validationMiddlewarePost = async (req, res, next) => {
+    const rules = propertiesValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        await deleteFiles(req.files)
         return res.status(400).json({
             message: errors.array()[0].msg,
             status: "failed",
@@ -64,12 +69,17 @@ const runValidation = async (req, res, next, rules) => {
     next();
 };
 
-export const validationMiddlewarePost = async (req, res, next) => {
-    const rules = propertiesValidationRules();
-    await runValidation(req, res, next, rules);
-};
-
 export const validationMiddlewarePut = async (req, res, next) => {
     const rules = editPropertiesValidationRules();
-    await runValidation(req, res, next, rules);
+    await Promise.all(rules.map(rule => rule.run(req)));
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        await deleteFiles(req.files)
+        return res.status(400).json({
+            message: errors.array()[0].msg,
+            status: "failed",
+            http_status_code: 400,
+        });
+    }
+    next();
 };

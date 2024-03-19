@@ -11,23 +11,23 @@ import { editImagesValidator } from "../../../Utility/editImagesValidator.js";
 const propertyRouter = Router()
 
 //protected routes id=> advertisement id
-propertyRouter.post("/:category", jwtAuth,  fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
+propertyRouter.post("/", jwtAuth, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
 
-propertyRouter.get("/:category/filter",  filterAdvertisement)
+propertyRouter.get("/filter", filterAdvertisement)
 
-propertyRouter.put("/:category/id/:id", jwtAuth,  validationMiddlewarePut, updateAdvertisement)
-propertyRouter.delete("/:category/id/:id", jwtAuth, deleteAdvertisement)
+propertyRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
+propertyRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
-propertyRouter.get("/:category/id/:id", getAdvertisement)
+propertyRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-propertyRouter.delete("/:category/image/delete/:id", jwtAuth,  deleteImage)
+propertyRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
 
-propertyRouter.post("/:category/images/:id", jwtAuth,  fileUpload("images").array("images"), editImagesValidator, addImage)
+propertyRouter.post("/images/:id", jwtAuth, fileUpload("images").array("images"), editImagesValidator, addImage)
 // list user own advertisement //id => user id
-propertyRouter.get("/:category/list/self", jwtAuth,  listUserAdvertisement)
+propertyRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
-propertyRouter.get("/:category/list",  getListAdvertisement)
+propertyRouter.get("/list", getListAdvertisement)
 
 
 

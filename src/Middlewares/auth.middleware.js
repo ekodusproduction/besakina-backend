@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 dotenv.config();
-import jwt from 'jsonwebtoken';
+import jwt, { decode } from 'jsonwebtoken';
 import { sendError } from "../Utility/response.js";
 export const jwtAuth = function (req, res, next) {
     // Extract the token from the request headers
@@ -14,7 +14,8 @@ export const jwtAuth = function (req, res, next) {
         // Verify the token
         const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
         // If token is valid, attach user information to the request object
-        req.user = decoded;
+        console.log(decoded)
+        req.user_id = decoded.userId;
         next();
     } catch (error) {
         // If token is invalid or expired, send an error response
