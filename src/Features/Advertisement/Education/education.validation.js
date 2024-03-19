@@ -62,3 +62,43 @@ export const validationMiddlewarePut = async (req, res, next) => {
 
 
 
+
+const imageUpload = () => {
+    return [
+        body('images').custom(validateImagesArray),
+    ]
+}
+const videoUpload = () => {
+    return [
+        body('video').custom(validateImagesArray),
+    ]
+}
+export const imageValidator = async (req, res, next) => {
+    const rules = imageUpload();
+    await Promise.all(rules.map(rule => rule.run(req)));
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        await deleteFiles(req.files)
+        return res.status(400).json({
+            message: errors.array()[0].msg,
+            status: "failed",
+            http_status_code: 400,
+        });
+    }
+    next();
+};
+
+export const videoValidator = async (req, res, next) => {
+    const rules = videoUpload();
+    await Promise.all(rules.map(rule => rule.run(req)));
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        await deleteFiles(req.files)
+        return res.status(400).json({
+            message: errors.array()[0].msg,
+            status: "failed",
+            http_status_code: 400,
+        });
+    }
+    next();
+};

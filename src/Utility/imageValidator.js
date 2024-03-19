@@ -1,3 +1,5 @@
+import { ApplicationError } from "../ErrorHandler/applicationError.js";
+
 export const validateImagesArray = (value, { req }) => {
     try {
         if (!Array.isArray(req.files)) {
@@ -5,8 +7,9 @@ export const validateImagesArray = (value, { req }) => {
         }
 
         for (const file of req.files) {
-            if (!file || !file.filename || !file.mimetype) {
-                throw new Error("Invalid file in the images array");
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+            if (!allowedTypes.includes(file.mimetype)) {
+                throw new ApplicationError("Unsupported file type. Only JPEG, PNG, or JPG are allowed", 400);
             }
         }
         return true;

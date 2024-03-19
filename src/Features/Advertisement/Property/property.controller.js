@@ -164,6 +164,7 @@ export const addImage = async (req, res, next) => {
     }
     return sendResponse(res, "Images added successfully to the advertisement", 200, { advertisements: rows });
   } catch (error) {
+    await deleteFiles(files)
     await connection.rollback();
     return sendError(res, error.message || "Error adding images to the advertisement", 500);
   } finally {
@@ -173,6 +174,7 @@ export const addImage = async (req, res, next) => {
   }
 }
 
+// soft delete
 export const deleteImage = async (req, res, next) => {
   const advertisementID = req.params.id;
   let files = req.body;
@@ -214,6 +216,29 @@ export const listUserAdvertisement = async (req, res, next) => {
     return sendResponse(res, "User advertisment list", 200, { advertisements: rows });
   } catch (error) {
     return sendError(res, error.message || "Error deleting images to the advertisement", 500);
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+  }
+}
+
+// activate deleted adv again
+export const activateAdvertisement = async (req, res, next) => {
+  let connection = await pool.getConnection();
+
+  try {
+    const advertisementID = req.params.id;
+    // Validate and sanitize the filter object if needed
+    const [query, values] = await updateQuery('property', { is_active: 1 }, { id: advertisementID });
+    const [rows, fields] = await connection.query(query, values);
+    if (rows.length === 0) {
+      return sendError(res, "Advertisement not updated. No matching advertisement found for the provided ID.", 404);
+    }
+    return sendResponse(res, "Advertisements updated successfully", 200, { advertisements: rows });
+  } catch (error) {
+    await connection.rollback();
+    return sendError(res, error.message || "Error fetching advertisements", 500);
   } finally {
     if (connection) {
       connection.release();

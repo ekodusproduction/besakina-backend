@@ -1,32 +1,35 @@
 import { Router } from "express";
 import {
     deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
-    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement
-} from "./doctor.validations.js"
+    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
+} from "./doctor.controller.js"
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
-import { validationMiddlewarePost, validationMiddlewarePut } from "./doctor.validations.js";
-import { editImagesValidator } from "../../../Utility/editImagesValidator.js";
-const doctorsRouter = Router()
+import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./doctor.validations.js";
+const doctorRouter = Router()
 
 //protected routes id=> advertisement id
-doctorsRouter.post("/:category", jwtAuth, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
+doctorRouter.post("/", jwtAuth, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
 
-doctorsRouter.get("/:category/filter", filterAdvertisement)
+doctorRouter.get("/filter", filterAdvertisement)
 
-doctorsRouter.put("/:category/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
-doctorsRouter.delete("/:category/id/:id", jwtAuth, deleteAdvertisement)
+doctorRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
+doctorRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
-doctorsRouter.get("/:category/id/:id", getAdvertisement)
+doctorRouter.delete("/deactivate/id/:id", jwtAuth, deleteAdvertisement)
+
+doctorRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-doctorsRouter.delete("/:category/image/delete/:id", jwtAuth, deleteImage)
+doctorRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
 
-doctorsRouter.post("/:category/images/:id", jwtAuth, fileUpload("images").array("images"), editImagesValidator, addImage)
+doctorRouter.post("/images/:id", jwtAuth, fileUpload("images").array("images"), imageValidator, addImage)
 // list user own advertisement //id => user id
-doctorsRouter.get("/:category/list/self", jwtAuth, listUserAdvertisement)
+doctorRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
-doctorsRouter.get("/:category/list", getListAdvertisement)
+doctorRouter.get("/list", getListAdvertisement)
 
-export default doctorsRouter
+
+
+export default doctorRouter

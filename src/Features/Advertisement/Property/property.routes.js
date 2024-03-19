@@ -1,13 +1,12 @@
 import { Router } from "express";
 import {
     deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
-    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement
+    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./property.controller.js"
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
-import { validationMiddlewarePost, validationMiddlewarePut } from "./property.validation.js";
-import { editImagesValidator } from "../../../Utility/editImagesValidator.js";
+import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./property.validation.js";
 const propertyRouter = Router()
 
 //protected routes id=> advertisement id
@@ -16,14 +15,16 @@ propertyRouter.post("/", jwtAuth, fileUpload("images").array("images"), validati
 propertyRouter.get("/filter", filterAdvertisement)
 
 propertyRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
-propertyRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
+propertyRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
+
+propertyRouter.delete("/deactivate/id/:id", jwtAuth, deleteAdvertisement)
 
 propertyRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
 propertyRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
 
-propertyRouter.post("/images/:id", jwtAuth, fileUpload("images").array("images"), editImagesValidator, addImage)
+propertyRouter.post("/images/:id", jwtAuth, fileUpload("images").array("images"), imageValidator, addImage)
 // list user own advertisement //id => user id
 propertyRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties

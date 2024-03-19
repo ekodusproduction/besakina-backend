@@ -3,7 +3,7 @@ import { validateImagesArray } from '../../../Utility/imageValidator.js';
 import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
 const allowedCategories = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK", "1RK", "HOUSE", "VILLA"]
-export const propertiesValidationRules = () => {
+const propertiesValidationRules = () => {
     return [
         body('plan_id').isInt().withMessage('Plan ID must be an integer').notEmpty().withMessage('Plan ID is required'),
         body('title').isString().withMessage('title must be a string').notEmpty().withMessage('Title is required'),
@@ -30,7 +30,7 @@ export const propertiesValidationRules = () => {
 
 
 
-export const editPropertiesValidationRules = () => {
+const editPropertiesValidationRules = () => {
     return [
         body('type').optional().isString().withMessage('Type must be a string'),
         body('bedrooms').optional().isInt().withMessage('Bedrooms must be an integer'),
@@ -52,8 +52,7 @@ export const editPropertiesValidationRules = () => {
     ];
 };
 
-
-
+ 
 export const validationMiddlewarePost = async (req, res, next) => {
     const rules = propertiesValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
@@ -71,6 +70,47 @@ export const validationMiddlewarePost = async (req, res, next) => {
 
 export const validationMiddlewarePut = async (req, res, next) => {
     const rules = editPropertiesValidationRules();
+    await Promise.all(rules.map(rule => rule.run(req)));
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        await deleteFiles(req.files)
+        return res.status(400).json({
+            message: errors.array()[0].msg,
+            status: "failed",
+            http_status_code: 400,
+        });
+    }
+    next();
+};
+
+
+const imageUpload = () => {
+    return [
+        body('images').custom(validateImagesArray),
+    ]
+}
+const videoUpload = () => {
+    return [
+        body('video').custom(validateVideos),
+    ]
+}
+export const imageValidator = async (req, res, next) => {
+    const rules = imageUpload();
+    await Promise.all(rules.map(rule => rule.run(req)));
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        await deleteFiles(req.files)
+        return res.status(400).json({
+            message: errors.array()[0].msg,
+            status: "failed",
+            http_status_code: 400,
+        });
+    }
+    next();
+};
+
+export const videoValidator = async (req, res, next) => {
+    const rules = videoUpload();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
