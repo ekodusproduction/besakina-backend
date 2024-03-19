@@ -9,7 +9,7 @@ export const createCategoryTable = async function () {
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS category (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        category VARCHAR(50),
+        name VARCHAR(50),
         photos VARCHAR(255)
       )`;
 
