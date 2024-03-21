@@ -1,6 +1,6 @@
-import pool from "../../Mysql/mysql.database";
-import { sendError, sendResponse } from "../../Utility/response";
-import { insertQuery } from "../../Utility/sqlQuery";
+import pool from "../../Mysql/mysql.database.js";
+import { sendError, sendResponse } from "../../Utility/response.js";
+import { insertQuery } from "../../Utility/sqlQuery.js";
 
 export const createCategory = async (req, res, next) => {
     let requestBody = req.body;
