@@ -1,7 +1,7 @@
 import mysql from 'mysql2';
 import dotenv from 'dotenv';
 dotenv.config();
-
+console.log(process.env)
 const pool = mysql.createPool({
     host: process.env.MDB_HOST,
     port: process.env.MDB_PORT,
