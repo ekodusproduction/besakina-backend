@@ -39,7 +39,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRouter);
-
 app.use("/api/category", categoryRouter);
 app.use("/api/property", propertyRouter);
 app.use("/api/plans", jwtAuth, plansRouter);

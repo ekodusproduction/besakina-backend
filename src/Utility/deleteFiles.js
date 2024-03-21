@@ -15,4 +15,4 @@ export const deleteFiles = async function (files) {
         console.error("Error deleting files:", error);
         throw error;
     }
-};
+}; 

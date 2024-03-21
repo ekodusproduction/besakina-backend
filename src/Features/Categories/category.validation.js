@@ -1,5 +1,5 @@
 import { body } from "express-validator";
-import { validateImagesArray } from "../../Utility/imageValidator";
+import { validateImagesArray } from "../../Utility/imageValidator.js";
 
 const categoryValidationRules = () => {
     return [
