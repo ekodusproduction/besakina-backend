@@ -12,3 +12,18 @@ services:
       MYSQL_DATABASE: besakina
       MYSQL_USER: besakina
       MYSQL_PASSWORD: Developer@123
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--sql-mode='NO_ENGINE_SUBSTITUTION'",
+      ]
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+    depends_on:
+      - mysql-client
+
+  mysql-client:
+    image: mysql:latest
+    container_name: mysql-client
+    command: ["tail", "-f", "/dev/null"]
