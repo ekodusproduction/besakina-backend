@@ -8,20 +8,17 @@ export const createOrderTable = async function () {
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS orders (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-        adv_id BIGINT UNSIGNED NOT NULL,
+
         plan_id BIGINT UNSIGNED NOT NULL,
         user_id BIGINT UNSIGNED NOT NULL,
 
-        category VARCHAR(25) NULL,
         payment BIGINT UNSIGNED,
         payment_status BOOL,
         payment_no BIGINT,
         
-
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-        FOREIGN KEY (adv_id) REFERENCES advertise(id) ON DELETE CASCADE,
         FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       )`;

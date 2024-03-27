@@ -125,8 +125,9 @@ export const deleteAdvertisement = async (req, res, next) => {
 
     const [query, values] = await updateQuery('property', { "is_active": 0 }, { id: advertisementID, is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
-    if (rows.length === 0) {
-      return sendError(res, "Advertisement not deleted. No matching advertisement found for the provided ID.", null, 404);
+    console.log('changed logs')
+    if (rows.changedRows === 0) {
+      return sendError(res, "Advertisement not deleted. No matching advertisement found for the provided ID.", 404);
     }
     return sendResponse(res, "Advertisements deleted successfully", 200, { advertisements: rows });
   } catch (error) {
@@ -206,7 +207,7 @@ export const listUserAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
   try {
     const [query, values] = await selectQuery('property', [], { user_id: user_id });
-   
+
     const [rows, fields] = await connection.query(query, values)
     if (rows.length === 0) {
       return sendError(res, "Advertisement not found.", 404);
