@@ -12,7 +12,8 @@ import { createHospitalityTable } from "../Features/Advertisement/Hospitality/ho
 import { createDoctorsTable } from "../Features/Advertisement/Doctors/doctor.table.js";
 
 async function createTables() {
-    try {        
+    try {
+        await createDatabase();
         await createPlanTable();
         await createUserTable();
         await createCategoryTable();
@@ -30,6 +31,14 @@ async function createTables() {
         pool.end();
     }
 }
-
+async function createDatabase() {
+    try {
+        const query = "CREATE DATABASE IF NOT EXISTS besakina";
+        await pool.query(query);
+        console.log("Database 'besakina' created successfully");
+    } catch (error) {
+        console.error("Error creating database 'besakina':", error);
+    }
+}
 // Call the function to create the tables
 createTables();

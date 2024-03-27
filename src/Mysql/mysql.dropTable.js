@@ -26,7 +26,7 @@ async function dropTables() {
 
         await dropUserTable();
         await dropPlanTable();
-
+        await dropDatabase()
     } catch (error) {
         console.error('Error dropping tables:', error);
     } finally {
@@ -35,5 +35,14 @@ async function dropTables() {
     }
 }
 
+async function dropDatabase() {
+    try {
+        const query = "DROP DATABASE IF EXISTS besakina";
+        await pool.query(query);
+        console.log("Database 'besakina' dropped successfully");
+    } catch (error) {
+        console.error("Error dropping database 'besakina':", error);
+    }
+}
 // Call the function to drop the tables
 dropTables();
