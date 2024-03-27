@@ -26,7 +26,7 @@ async function dropTables() {
 
         await dropUserTable();
         await dropPlanTable();
-        await dropDatabase()
+        // await dropDatabase()
     } catch (error) {
         console.error('Error dropping tables:', error);
     } finally {

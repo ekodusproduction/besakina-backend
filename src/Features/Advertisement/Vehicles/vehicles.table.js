@@ -23,8 +23,8 @@ export const createVehicleTable = async function () {
 
             video VARCHAR(255),
             map_location text,
-            latitude DECIMAL(11, 10) NOT NULL,
-            longitude DECIMAL(11, 10) NOT NULL,
+            latitude DECIMAL(10, 8) NOT NULL,
+            longitude DECIMAL(11, 8) NOT NULL,
 
 
             is_active BOOLEAN DEFAULT 1,
