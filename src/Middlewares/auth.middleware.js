@@ -14,7 +14,6 @@ export const jwtAuth = function (req, res, next) {
         // Verify the token
         const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
         // If token is valid, attach user information to the request object
-        console.log(decoded)
         req.user_id = decoded.userId;
         next();
     } catch (error) {

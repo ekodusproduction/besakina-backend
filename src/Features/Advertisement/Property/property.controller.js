@@ -57,7 +57,6 @@ export const getListAdvertisement = async (req, res, next) => {
   try {
     const [query, values] = await selectQuery('property', [], { is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
-    console.log(rows)
     if (rows.length === 0) {
       return sendError(res, "Advertisements not found", 404);
     }
@@ -207,8 +206,7 @@ export const listUserAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
   try {
     const [query, values] = await selectQuery('property', [], { user_id: user_id });
-    console.log('select', query)
-    console.log('values', values)
+   
     const [rows, fields] = await connection.query(query, values)
     if (rows.length === 0) {
       return sendError(res, "Advertisement not found.", 404);

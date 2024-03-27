@@ -10,7 +10,6 @@ export const sendOtp = async (req, res, next) => {
     try {
         const checkQuery = 'SELECT id FROM users WHERE mobile = ?';
         const [rows, fields] = await connection.query(checkQuery, [mobile]);
-        console.log(rows)
         if (rows.length > 0) {
             const updateQuery = 'UPDATE users SET otp = ? WHERE mobile = ?';
             await connection.query(updateQuery, [otp, mobile]);
