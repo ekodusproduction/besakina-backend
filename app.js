@@ -33,7 +33,8 @@ app.use(limiter);
 // Logger middleware
 // app.use(async (req, res, next) => loggerMiddleware(req, res, next));
 app.use((req, res, next) => {
-    console.log(req.ip)
+    console.log("ip", req.ip)
+    console.log("url", req.url)
     next();
 })
 app.use('/public', express.static('public'));
