@@ -55,7 +55,7 @@ export const login = async (req, res, next) => {
 
         if (Date.now() < updatedAtDate.getTime() + fiveMin) {
             const token = createToken(user);
-            return await sendResponse(res, 'Login successful', 201, { "planExist": user.plan_id }, token);
+            return await sendResponse(res, 'Login successful', 201, null, token);
         } else {
             return await sendError(res, 'OTP expired', 400);
         }
