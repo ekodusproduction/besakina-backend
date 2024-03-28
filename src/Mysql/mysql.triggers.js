@@ -16,7 +16,7 @@ export const planUpdateTrigger = async function () {
         END$$
         DELIMITER ;
       `;
-        const [rows, fields] = await promisePool.query(addTriggerSQL);
+        const [rows, fields] = await connection.query(addTriggerSQL);
         console.log('Plan trigger added successfully:');
 
     } catch (error) {

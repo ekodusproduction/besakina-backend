@@ -18,7 +18,7 @@ async function createTables() {
     try {
         await createPlanTable();
         await createUserTable();
-        await createCategoryTable();
+        // await createCategoryTable();
         await createPropertyTable();
         await createEducationTable();
         await createHospitalsTable();
@@ -44,4 +44,4 @@ async function createTriggers() {
 
 // Call the function to create the tables
 createTables();
-createTriggers()
+// createTriggers()
