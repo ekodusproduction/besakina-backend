@@ -1,4 +1,5 @@
 import pool from "./mysql.database.js";
+
 export const planUpdateTrigger = async function () {
     const connection = await pool.getConnection()
     try {
