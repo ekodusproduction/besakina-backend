@@ -26,6 +26,8 @@ async function createTables() {
         await createVehicleTable();
         await createDoctorsTable();
         // await createOrderTable();
+
+        await createTriggers();
     } catch (error) {
         console.error('Error creating tables:', error);
     } finally {
@@ -44,5 +46,5 @@ async function createTriggers() {
 }
 
 // Call the function to create the tables
-createTables();
-createTriggers()
+
+createTables()
