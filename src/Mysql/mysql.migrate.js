@@ -44,4 +44,4 @@ async function createTriggers() {
 
 // Call the function to create the tables
 createTables();
-// createTriggers()
+createTriggers()
