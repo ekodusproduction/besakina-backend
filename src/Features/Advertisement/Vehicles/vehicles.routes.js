@@ -3,6 +3,7 @@ import {
     deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./vehicles.controller.js"
+import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
@@ -10,7 +11,7 @@ import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } fro
 const vehiclesRouter = Router()
 
 //protected routes id=> advertisement id
-vehiclesRouter.post("/", jwtAuth, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
+vehiclesRouter.post("/", jwtAuth,checkPlanValidity, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
 
 vehiclesRouter.get("/filter", filterAdvertisement)
 

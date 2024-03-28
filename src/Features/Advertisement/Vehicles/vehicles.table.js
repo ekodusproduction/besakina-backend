@@ -19,7 +19,7 @@ export const createVehicleTable = async function () {
             ad_title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
             price DECIMAL(10, 2) NOT NULL,
-            photos JSON,
+            photos LONGTEXT,
 
             video VARCHAR(255),
             map_location text,

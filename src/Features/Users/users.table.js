@@ -10,14 +10,14 @@ export const createUserTable = async function () {
         CREATE TABLE IF NOT EXISTS users (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         plan_id BIGINT UNSIGNED,
-              
+        
         firstName VARCHAR(25),
         lastName VARCHAR(25),
         mobile BIGINT UNSIGNED NOT NULL UNIQUE,
         otp INT,
         email VARCHAR(255),
         user_profile VARCHAR(255),
-
+        plan_date CURRENT_TIMESTAMP ON UPDATE pland_id,
         FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
 
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -3,13 +3,14 @@ import {
     deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./hospitals.controller.js"
+import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitals.validation.js";
 const hospitalsRouter = Router()
 //protected routes id=> advertisement id
-hospitalsRouter.post("/", jwtAuth, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
+hospitalsRouter.post("/", jwtAuth,checkPlanValidity, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
 
 hospitalsRouter.get("/filter", filterAdvertisement)
 

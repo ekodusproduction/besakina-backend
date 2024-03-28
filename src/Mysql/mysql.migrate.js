@@ -11,6 +11,9 @@ import { createHospitalsTable } from "../Features/Advertisement/Hospitals/hospit
 import { createHospitalityTable } from "../Features/Advertisement/Hospitality/hospitality.table.js";
 import { createDoctorsTable } from "../Features/Advertisement/Doctors/doctor.table.js";
 
+// triggers
+import { planUpdateTrigger } from "./mysql.triggers.js";
+
 async function createTables() {
     try {
         await createDatabase();
@@ -31,14 +34,15 @@ async function createTables() {
         pool.end();
     }
 }
-async function createDatabase() {
+
+async function createTriggers() {
     try {
-        const query = "CREATE DATABASE IF NOT EXISTS besakina";
-        await pool.query(query);
-        console.log("Database 'besakina' created successfully");
+        await planUpdateTrigger()
     } catch (error) {
         console.error("Error creating database 'besakina':", error);
     }
 }
+
 // Call the function to create the tables
 createTables();
+createTriggers()

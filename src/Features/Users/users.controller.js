@@ -1,4 +1,7 @@
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+dotenv.config();
+
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
@@ -52,7 +55,7 @@ export const login = async (req, res, next) => {
 
         if (Date.now() < updatedAtDate.getTime() + fiveMin) {
             const token = createToken(user);
-            return await sendResponse(res, 'Login successful', 201, null, token);
+            return await sendResponse(res, 'Login successful', 201, { "planExist": user.plan_id }, token);
         } else {
             return await sendError(res, 'OTP expired', 400);
         }
@@ -69,9 +72,10 @@ export const login = async (req, res, next) => {
 
 const createToken = (result) => {
     // Convert BigInt id to string or regular number before including it in the payload
-    const userId = String(result.id); // Convert BigInt to string
-
-    return jwt.sign({ userId }, process.env.JWT_SECRET, {
+    const userId = result.id; // Convert BigInt to string
+    const plan_id = result.plan_id;
+    console.log('plan_id', plan_id)
+    return jwt.sign({ userId: userId, plan_id: plan_id }, process.env.JWT_SECRET, {
         expiresIn: '1d',
     });
 }

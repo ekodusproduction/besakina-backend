@@ -3,6 +3,7 @@ import {
     deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./property.controller.js"
+import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
@@ -10,7 +11,7 @@ import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } fro
 const propertyRouter = Router()
 
 //protected routes id=> advertisement id
-propertyRouter.post("/", jwtAuth, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
+propertyRouter.post("/", jwtAuth, checkPlanValidity, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
 
 propertyRouter.get("/filter", filterAdvertisement)
 

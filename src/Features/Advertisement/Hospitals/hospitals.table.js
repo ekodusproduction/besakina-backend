@@ -19,7 +19,7 @@ export const createHospitalsTable = async function () {
             
             price_registration DECIMAL(10, 2) NOT NULL,
             price_per_visit DECIMAL(10, 2) NOT NULL,
-            photos JSON,
+            photos LONGTEXT,
             
             video VARCHAR(255),
             map_location text,

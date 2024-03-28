@@ -2,8 +2,9 @@
 import pool from "../../Mysql/mysql.database.js"
 
 export const createPlanTable = async function () {
+    const connection = await pool.getConnection();
+
     try {
-        const connection = await pool.getConnection();
 
         // Define your CREATE TABLE query
         const createTableQuery = `
@@ -25,10 +26,11 @@ export const createPlanTable = async function () {
         console.log('Plan Table created successfully:');
 
         // Release the connection back to the pool
-        connection.release();
 
     } catch (error) {
         console.error('Error creating table:', error);
+    } finally {
+        connection.release();
     }
 }
 

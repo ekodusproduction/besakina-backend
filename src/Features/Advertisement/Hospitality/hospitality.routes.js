@@ -7,10 +7,11 @@ import {
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitality.validation.js";
+import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 const hospitalityRouter = Router()
 
 //protected routes id=> advertisement id
-hospitalityRouter.post("/", jwtAuth, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
+hospitalityRouter.post("/", jwtAuth,checkPlanValidity, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
 
 hospitalityRouter.get("/filter", filterAdvertisement)
 
