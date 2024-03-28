@@ -5,7 +5,6 @@ import { deleteFiles } from '../../../Utility/deleteFiles.js';
 const allowedCategories = ["1BHK", "2BHK", "3BHK", "4BHK", "5BHK", "1RK", "HOUSE", "VILLA"]
 const propertiesValidationRules = () => {
     return [
-        body('plan_id').isInt().withMessage('Plan ID must be an integer').notEmpty().withMessage('Plan ID is required'),
         body('title').isString().withMessage('title must be a string').notEmpty().withMessage('Title is required'),
         body('type').isString().withMessage('Type must be a string').notEmpty().withMessage('Type is required'),
         body('bedrooms').isInt().withMessage('Bedrooms must be an integer').notEmpty().withMessage('Bedrooms is required'),
@@ -25,6 +24,12 @@ const propertiesValidationRules = () => {
         body('map_location').isString().withMessage('Map location must be a string').notEmpty().withMessage('Map location is required'),
         body('longitude').isString().withMessage('Longitude must be a decimal').notEmpty().withMessage('Longitude is required'),
         body('latitude').isString().withMessage('Latitude must be a decimal').notEmpty().withMessage('Latitude is required'),
+
+        body('street').optional().isString().withMessage('Street must be a string'),
+        body('address').isString().withMessage('Address must be a string'),
+        body('city').isString().withMessage('City must be a string'),
+        body('state').isString().withMessage('State must be a string'),
+        body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
     ];
 };
 
@@ -49,10 +54,16 @@ const editPropertiesValidationRules = () => {
         body('map_location').optional().isString().withMessage('Map location must be a string'),
         body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
         body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
+
+        body('street').optional().isString().withMessage('Street must be a string'),
+        body('address').optional().isString().withMessage('Address must be a string'),
+        body('city').optional().isString().withMessage('City must be a string'),
+        body('state').optional().isString().withMessage('State must be a string'),
+        body('pincode').optional().isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
     ];
 };
 
- 
+
 export const validationMiddlewarePost = async (req, res, next) => {
     const rules = propertiesValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));

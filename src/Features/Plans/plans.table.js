@@ -3,7 +3,7 @@ import pool from "../../Mysql/mysql.database.js"
 
 export const createPlanTable = async function () {
     const connection = await pool.getConnection();
-
+    // SEARCH priority low = 1, medium = 2, high = 3
     try {
 
         // Define your CREATE TABLE query
@@ -12,9 +12,14 @@ export const createPlanTable = async function () {
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         
         type VARCHAR(25),
-        description text,
+        no_of_ads INT,
         price INT,
         validity INT,
+        verification_badge BOOLEAN,
+        search_priority INT,
+        membership_badge VARCHAR(255),
+        contact_limit INT,
+
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
@@ -35,23 +40,24 @@ export const createPlanTable = async function () {
 }
 
 export const dropPlanTable = async function () {
+    let connection;
     try {
-        const connection = await pool.getConnection();
+        connection = await pool.getConnection();
 
         // Define your DROP TABLE query
         const dropTableQuery = `
-        DROP TABLE IF EXISTS plans
-      `;
+            DROP TABLE IF EXISTS plans
+        `;
 
         // Execute the query
         const [results, fields] = await connection.query(dropTableQuery);
 
         console.log('Plan Table dropped successfully:');
-
-        // Release the connection back to the pool
-        connection.release();
     } catch (error) {
         console.error('Error dropping table:', error);
+    } finally {
+        if (connection) {
+            connection.release();
+        }
     }
-    return
-}
+};

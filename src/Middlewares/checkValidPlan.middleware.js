@@ -1,8 +1,27 @@
-import { sendError } from "../Utility/response.js"
-import pool from "../Mysql/mysql.database.js"
+import { sendError } from "../Utility/response.js";
+import pool from "../Mysql/mysql.database.js";
+
+// SQL query template with placeholders
+const countAdds = `
+    SELECT 
+        SUM(advertisement_count) AS total_advertisements
+    FROM (
+        SELECT COUNT(*) AS advertisement_count FROM property WHERE user_id = ? 
+        UNION ALL
+        SELECT COUNT(*) AS advertisement_count FROM vehicles WHERE user_id = ? 
+        UNION ALL
+        SELECT COUNT(*) AS advertisement_count FROM education WHERE user_id = ? 
+        UNION ALL
+        SELECT COUNT(*) AS advertisement_count FROM hospitals WHERE user_id = ? 
+        UNION ALL
+        SELECT COUNT(*) AS advertisement_count FROM doctors WHERE user_id = ? 
+        UNION ALL
+        SELECT COUNT(*) AS advertisement_count FROM hospitality WHERE user_id = ? 
+    ) AS advertisement_counts;
+`;
 
 export const checkPlanValidity = async function (req, res, next) {
-    const connection = await pool.getConnection()
+    const connection = await pool.getConnection();
     try {
         const user_id = req.user_id;
 
@@ -35,10 +54,15 @@ export const checkPlanValidity = async function (req, res, next) {
             return sendError(res, 'Invalid plan. Plan Expired', 400);
         }
 
+        // Replace placeholders with user_id in the SQL query
+        const dynamicQuery = countAdds.replaceAll('?', user_id);
+
+        const [count, postFields] = await connection.query(dynamicQuery);
+        
         next();
     } catch (error) {
         next(error);
     } finally {
         connection.release();
     }
-}
+};

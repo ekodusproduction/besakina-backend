@@ -16,6 +16,11 @@ export const doctorValidationRules = () => {
         body('longitude').isDecimal().withMessage('Longitude must be a decimal').notEmpty().withMessage('Longitude is required'),
         body('latitude').isDecimal().withMessage('Latitude must be a decimal').notEmpty().withMessage('Latitude is required'),
 
+        body('street').optional().isString().withMessage('Street must be a string'),
+        body('address').isString().withMessage('Address must be a string'),
+        body('city').isString().withMessage('City must be a string'),
+        body('state').isString().withMessage('State must be a string'),
+        body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
     ];
 };
 
@@ -31,6 +36,13 @@ export const editDoctorValidationRules = () => {
         body('map_location').optional().isString().withMessage('Map location must be a string'),
         body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
         body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
+
+
+        body('street').optional().isString().withMessage('Street must be a string'),
+        body('address').optional().isString().withMessage('Address must be a string'),
+        body('city').optional().isString().withMessage('City must be a string'),
+        body('state').optional().isString().withMessage('State must be a string'),
+        body('pincode').optional().isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
     ];
 };
 

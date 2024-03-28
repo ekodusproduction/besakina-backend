@@ -37,6 +37,7 @@ async function createTables() {
 async function createTriggers() {
     try {
         await planUpdateTrigger()
+        console.log('added triggers succesfully');
     } catch (error) {
         console.error("Error creating database 'besakina':", error);
     }
