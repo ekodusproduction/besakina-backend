@@ -16,7 +16,6 @@ import { planUpdateTrigger } from "./mysql.triggers.js";
 
 async function createTables() {
     try {
-        await createDatabase();
         await createPlanTable();
         await createUserTable();
         await createCategoryTable();
