@@ -11,7 +11,7 @@ export const createPlanTable = async function () {
         CREATE TABLE IF NOT EXISTS plans (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         
-        type VARCHAR(25),
+        type VARCHAR(20),
         no_of_ads INT,
         price INT,
         validity INT,

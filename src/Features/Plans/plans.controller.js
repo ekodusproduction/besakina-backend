@@ -7,7 +7,8 @@ export const addPlan = async function (req, res, next) {
     try {
         connection = await pool.getConnection();
         const requestBody = req.body;
-        const [query, values] = await insertQuery('plans', requestBody);
+        const membership_badge = req.file;
+        const [query, values] = await insertQuery('plans', { ...requestBody, membership_badge });
 
         await connection.beginTransaction();
         const [rows, field] = await connection.query(query, values);

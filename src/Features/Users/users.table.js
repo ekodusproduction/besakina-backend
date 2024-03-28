@@ -18,9 +18,9 @@ export const createUserTable = async function () {
         email VARCHAR(255),
         user_profile VARCHAR(255),
         plan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        contacts_quota INT, 
 
         FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
-
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
