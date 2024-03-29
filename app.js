@@ -52,7 +52,7 @@ app.use("/api/plans", jwtAuth, plansRouter);
 app.use(async (err, req, res, next) => {
     logger.info(err);
     if (err instanceof ApplicationError) {
-        return await sendError(res, err.message, err.code);
+        return await sendError(res, err.message, 500);
     }
     return await sendError(res, err.message, 500);
 });

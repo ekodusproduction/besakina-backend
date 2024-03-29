@@ -12,7 +12,7 @@ const propertyRouter = Router()
 
 //protected routes id=> advertisement id
 // propertyRouter.post("/", jwtAuth, checkPlanValidity, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
-propertyRouter.post("/", jwtAuth,  fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
+propertyRouter.post("/", jwtAuth, fileUpload("images"), validationMiddlewarePost, addAdvertisement)
 
 propertyRouter.get("/filter", filterAdvertisement)
 
@@ -26,7 +26,7 @@ propertyRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 propertyRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
 
-propertyRouter.post("/images/:id", jwtAuth, fileUpload("images").array("images"), imageValidator, addImage)
+propertyRouter.post("/images/:id", jwtAuth, fileUpload("images"), imageValidator, addImage)
 // list user own advertisement //id => user id
 propertyRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties

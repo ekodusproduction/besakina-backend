@@ -5,7 +5,7 @@ import { addPlanValidator } from "./plans.validator.js";
 import { jwtAuth } from "../../Middlewares/auth.middleware.js";
 const plansRouter = Router()
 
-plansRouter.post("/", jwtAuth, fileUpload('images').array('images'), addPlanValidator, addPlan)
+plansRouter.post("/", jwtAuth, fileUpload('images'), addPlanValidator, addPlan)
 
 plansRouter.get("/", getPlan)
 
