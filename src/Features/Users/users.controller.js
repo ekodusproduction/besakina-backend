@@ -85,7 +85,7 @@ export const getUsers = async function(req, res, next){
 
     try {
         const [users, userFields] = await connection.query('SELECT * FROM users')
-        
+        return await sendResponse(res, 'Login successful', 201, users, null);
     } catch (error) {
         console.error('Error in login:', error);
         next(error);
