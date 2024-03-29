@@ -10,7 +10,7 @@ export const addAdvertisement = async (req, res, next) => {
   requestBody.user_id = req.user_id;
   const category = req.params.category;
   const files = req.files;
-  console.log("files",files)
+  console.log("files", files)
   const filePaths = files.map(file => file.path);
   const photosJson = JSON.stringify(filePaths);
   requestBody.photos = photosJson;
@@ -39,10 +39,15 @@ export const getAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const [query, values] = await selectQuery('property', [], { id: advertisementID, is_active: 1 });
-    const rows = await connection.query(query, values);
+    const [rows] = await connection.query(query, values);
+
     if (rows.length === 0) {
       return sendError(res, "Advertisement not found", 404);
     }
+    rows.forEach(advertisement => {
+      advertisement.photos = JSON.parse(advertisement.photos);
+      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+    });
     return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: rows[0] });
   } catch (error) {
     return sendError(res, error.message || "Error fetching advertisement", 500);
@@ -86,6 +91,10 @@ export const filterAdvertisement = async (req, res, next) => {
     if (rows.length === 0) {
       return sendError(res, "Advertisements not found", 404);
     }
+    rows.forEach(advertisement => {
+      advertisement.photos = JSON.parse(advertisement.photos);
+      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+    });
     return sendResponse(res, "Advertisements fetched successfully", 200, { advertisements: rows });
   } catch (error) {
     return sendError(res, error.message || "Error fetching advertisements", 500);
@@ -215,6 +224,10 @@ export const listUserAdvertisement = async (req, res, next) => {
     if (rows.length === 0) {
       return sendError(res, "Advertisement not found.", 404);
     }
+    rows.forEach(advertisement => {
+      advertisement.photos = JSON.parse(advertisement.photos);
+      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+    });
     return sendResponse(res, "User advertisment list", 200, { advertisements: rows });
   } catch (error) {
     return sendError(res, error.message || "Error deleting images to the advertisement", 500);

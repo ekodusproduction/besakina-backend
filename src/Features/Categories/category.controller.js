@@ -4,7 +4,6 @@ import { insertQuery } from "../../Utility/sqlQuery.js";
 
 export const createCategory = async (req, res, next) => {
     let requestBody = req.body;
-    requestBody.photos = req.files
     const connection = await pool.getConnection();
     try {
         const [query, values] = await insertQuery('category', requestBody);
