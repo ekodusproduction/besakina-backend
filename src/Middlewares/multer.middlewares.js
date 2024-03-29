@@ -21,10 +21,12 @@ const createStorageMiddleware = (destination) => {
         },
         fileFilter: (req, file, cb) => {
             const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (allowedMimeTypes.includes(file.mimetype)) {
-                cb(null, true);
-            } else {
+            if (!file) {
+                cb(new ApplicationError('No files provided'));
+            } else if (!allowedMimeTypes.includes(file.mimetype)) {
                 cb(new ApplicationError('Invalid file type. Only JPEG, PNG, and GIF are allowed.'));
+            } else {
+                cb(null, true);
             }
         },
         limits: {
