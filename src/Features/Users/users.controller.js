@@ -84,30 +84,8 @@ export const getUsers = async function(req, res, next){
     const connection = await pool.getConnection();
 
     try {
-        const { mobile, otp } = req.body;
-        const connection = await pool.getConnection();
-        const selectQuery = 'SELECT * FROM users WHERE mobile = ?';
-        const [rows] = await connection.query(selectQuery, [mobile]);
-
-        if (rows.length === 0) {
-            throw new ApplicationError('User not found for given mobile number', 404);
-        }
-
-        const user = rows[0];
-
-        const updatedAtDate = new Date(user.updatedAt);
-        const fiveMin = 5 * 60 * 60 * 1000;
-
-        if (user.otp !== otp) {
-            return await sendError(res, 'Invalid OTP', 400);
-        }
-
-        if (Date.now() < updatedAtDate.getTime() + fiveMin) {
-            const token = createToken(user);
-            return await sendResponse(res, 'Login successful', 201, null, token);
-        } else {
-            return await sendError(res, 'OTP expired', 400);
-        }
+        const [users, userFields] = await connection.query('SELECT * FROM users')
+        
     } catch (error) {
         console.error('Error in login:', error);
         next(error);
