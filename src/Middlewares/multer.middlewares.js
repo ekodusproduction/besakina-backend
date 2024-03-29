@@ -36,7 +36,7 @@ const createStorageMiddleware = (destination) => {
 }
 
 export const fileUpload = (destination) => {
-    const upload = multer({ storage: createStorageMiddleware(destination) }).single('file');
+    const upload = multer({ storage: createStorageMiddleware(destination) }).array('file');
     return (req, res, next) => {
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
