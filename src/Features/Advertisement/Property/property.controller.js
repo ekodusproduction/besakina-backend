@@ -10,6 +10,7 @@ export const addAdvertisement = async (req, res, next) => {
   requestBody.user_id = req.user_id;
   const category = req.params.category;
   const files = req.files;
+  console.log(files)
   const filePaths = files.map(file => file.path);
   const photosJson = JSON.stringify(filePaths);
   requestBody.photos = photosJson;
