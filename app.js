@@ -37,7 +37,7 @@ app.use((req, res, next) => {
     console.log("url", req.url)
     next();
 })
-app.use('/public', express.static('public'));
+app.use('/api/public', express.static('public'));
 // Route definitions
 app.get("/api", (req, res) => {
     res.status(200).send("Welcome to besakina backend server");
