@@ -8,12 +8,13 @@ import { deleteFiles } from "../../../Utility/deleteFiles.js";
 export const addAdvertisement = async (req, res, next) => {
   let requestBody = req.body;
   requestBody.user_id = req.user_id;
-  const category = req.params.category;
-  const files = req.files;
-  console.log("files", files)
-  const filePaths = files.map(file => file.path);
-  const photosJson = JSON.stringify(filePaths);
-  requestBody.photos = photosJson;
+  requestBody.user_id = req.plan_id;
+  // const category = req.params.category;
+  // const files = req.files;
+  // console.log("files", files)
+  // const filePaths = files.map(file => file.path);
+  // const photosJson = JSON.stringify(filePaths);
+  // requestBody.photos = photosJson;
   const connection = await pool.getConnection();
   try {
     const [query, values] = await insertQuery('property', requestBody);
