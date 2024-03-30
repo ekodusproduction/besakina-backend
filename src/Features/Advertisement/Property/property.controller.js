@@ -50,7 +50,7 @@ export const getAdvertisement = async (req, res, next) => {
       advertisement.photos = JSON.parse(advertisement.photos);
       advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
     });
-    return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: rows[0] });
+    return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: req});
   } catch (error) {
     return sendError(res, error.message || "Error fetching advertisement", 500);
   } finally {
