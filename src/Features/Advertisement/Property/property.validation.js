@@ -29,7 +29,7 @@ const propertiesValidationRules = () => {
         body('landmark').isString().withMessage('landmark must be a string'),
         body('city').isString().withMessage('City must be a string'),
         body('state').isString().withMessage('State must be a string'),
-        body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
+        body('pincode').isString().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
     ];
 };
 
