@@ -12,7 +12,7 @@ const propertiesValidationRules = () => {
         body('furnishing').isString().withMessage('Furnishing must be a string').notEmpty().withMessage('Furnishing is required'),
         body('construction_status').isString().withMessage('Construction status must be a string').notEmpty().withMessage('Construction status is required'),
         body('listed_by').isString().withMessage('Listed by must be a string').notEmpty().withMessage('Listed by is required'),
-        body('super_builtup_area').isString().withMessage('Super builtup area must be a decimal'),
+        body('super_builtup_area').isString().withMessage('Super builtup area must be a string'),
         body('carpet_area').isString().withMessage('Carpet area must be a decimal'),
         body('maintenance').isString().withMessage('Maintenance must be a decimal'),
         body('total_rooms').isString().withMessage('Total floors must be an integer').notEmpty().withMessage('Total floors is required'),
