@@ -26,7 +26,8 @@ export const addAdvertisement = async (req, res, next) => {
       return sendError(res, "Error adding advertisement", 400);
     }
     await connection.commit();
-    return sendResponse(res, "Advertisement added successfully", 201, { result: req });
+    const request = JSON.stringify(req)
+    return sendResponse(res, "Advertisement added successfully", 201, { result: request });
   } catch (error) {
     // await deleteFiles(req.files)
     await connection.rollback()
@@ -50,7 +51,7 @@ export const getAdvertisement = async (req, res, next) => {
       advertisement.photos = JSON.parse(advertisement.photos);
       advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
     });
-    return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: req});
+    return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: rows[0] });
   } catch (error) {
     return sendError(res, error.message || "Error fetching advertisement", 500);
   } finally {
