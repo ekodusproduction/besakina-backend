@@ -19,7 +19,6 @@ const propertiesValidationRules = () => {
         body('floor_no').isInt().withMessage('Floor number must be an integer').notEmpty().withMessage('Floor number is required'),
         body('car_parking').isInt().withMessage('Car parking must be an integer').notEmpty().withMessage('Car parking is required'),
         body('price').isDecimal().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
-        // body('images').optional().custom(validateImagesArray),
         body('category').isIn(allowedCategories).withMessage(`Category must be one of: ${allowedCategories.join(', ')}`),
         body('map_location').isString().withMessage('Map location must be a string').notEmpty().withMessage('Map location is required'),
         body('longitude').optional().isString().withMessage('Longitude must be a decimal').notEmpty().withMessage('Longitude is required'),
@@ -70,7 +69,9 @@ export const validationMiddlewarePost = async (req, res, next) => {
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        await deleteFiles(req.files)
+        if (req.files) {
+            await deleteFiles(req.files)
+        }
         return res.status(400).json({
             message: errors.array()[0].msg,
             status: "failed",
