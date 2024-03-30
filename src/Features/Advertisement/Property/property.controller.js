@@ -8,7 +8,7 @@ import { deleteFiles } from "../../../Utility/deleteFiles.js";
 export const addAdvertisement = async (req, res, next) => {
   let requestBody = req.body;
   requestBody.user_id = req.user_id;
-  requestBody.user_id = req.plan_id;
+  requestBody.plan_id = req.plan_id;
   // const category = req.params.category;
   // const files = req.files;
   // console.log("files", files)
