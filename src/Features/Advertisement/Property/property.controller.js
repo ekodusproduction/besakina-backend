@@ -26,7 +26,7 @@ export const addAdvertisement = async (req, res, next) => {
       return sendError(res, "Error adding advertisement", 400);
     }
     await connection.commit();
-    const request = JSON.stringify(req)
+    const request = req.toString()
     return sendResponse(res, "Advertisement added successfully", 201, { result: request });
   } catch (error) {
     // await deleteFiles(req.files)
