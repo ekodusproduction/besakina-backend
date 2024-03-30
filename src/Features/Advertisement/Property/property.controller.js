@@ -27,7 +27,6 @@ export const addAdvertisement = async (req, res, next) => {
       headers: req.headers,
       body: requestBody,
       files: req.files,
-      // Add more properties as needed
     };
 
     // Stringify the extracted information

@@ -37,7 +37,7 @@ const createStorageMiddleware = (destination) => {
 
 export const fileUpload = (destination) => {
     return (req, res, next) => {
-        const upload = multer({ storage: createStorageMiddleware(destination) }).array('images', 20); // 'files' is the field name for the array of files
+        const upload = multer({ storage: createStorageMiddleware(destination) }).any(); // 'files' is the field name for the array of files
         upload(req, res, function (err) {
             if (err instanceof multer.MulterError) {
                 // A Multer error occurred when uploading.
