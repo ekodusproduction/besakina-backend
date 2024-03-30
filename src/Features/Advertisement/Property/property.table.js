@@ -9,7 +9,7 @@ export const createPropertyTable = async function () {
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS property (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            plan_id BIGINT UNSIGNED NOT NULL,        
+            plan_id BIGINT UNSIGNED,        
             user_id BIGINT UNSIGNED NOT NULL,
 
             title VARCHAR(255) NOT NULL,
