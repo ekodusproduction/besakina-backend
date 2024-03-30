@@ -26,7 +26,7 @@ export const addAdvertisement = async (req, res, next) => {
     await connection.commit();
     return sendResponse(res, "Advertisement added successfully", 201, { result: rows.insertId });
   } catch (error) {
-    await deleteFiles(req.files)
+    // await deleteFiles(req.files)
     await connection.rollback()
     next(error)
   } finally {
