@@ -26,7 +26,8 @@ const propertiesValidationRules = () => {
         body('latitude').optional().isString().withMessage('Latitude must be a decimal').notEmpty().withMessage('Latitude is required'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
-        body('address').isString().withMessage('Address must be a string'),
+        body('house_no').isString().withMessage('Address must be a string'),
+        body('landmark').isString().withMessage('Address must be a string'),
         body('city').isString().withMessage('City must be a string'),
         body('state').isString().withMessage('State must be a string'),
         body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),

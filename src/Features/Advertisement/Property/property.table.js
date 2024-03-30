@@ -32,8 +32,8 @@ export const createPropertyTable = async function () {
             
             video VARCHAR(255),
             map_location VARCHAR(255) NOT NULL,
-            latitude DECIMAL(10, 8) NOT NULL,
-            longitude DECIMAL(11, 8) NOT NULL,
+            latitude DECIMAL(10, 8) ,
+            longitude DECIMAL(11, 8) ,
             
             street VARCHAR(50),
             house_no VARCHAR(255),
