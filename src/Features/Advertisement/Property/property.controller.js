@@ -15,6 +15,7 @@ export const addAdvertisement = async (req, res, next) => {
   // const filePaths = files.map(file => file.path);
   // const photosJson = JSON.stringify(filePaths);
   // requestBody.photos = photosJson;
+  console.log(requestBody)
   const connection = await pool.getConnection();
   try {
     const [query, values] = await insertQuery('property', requestBody);
