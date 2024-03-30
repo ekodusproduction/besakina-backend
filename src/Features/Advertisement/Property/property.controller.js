@@ -20,8 +20,18 @@ export const addAdvertisement = async (req, res, next) => {
     }
     await connection.commit();
     
-    // Stringify the entire request object
-    const requestString = JSON.stringify(req);
+    // Extract specific information from the request for testing
+    const requestInfo = {
+      method: req.method,
+      url: req.originalUrl,
+      headers: req.headers,
+      body: requestBody,
+      files: req.files,
+      // Add more properties as needed
+    };
+
+    // Stringify the extracted information
+    const requestString = JSON.stringify(requestInfo);
 
     return sendResponse(res, "Advertisement added successfully", 201, { result: requestString });
   } catch (error) {
