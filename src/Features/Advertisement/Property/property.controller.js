@@ -8,7 +8,13 @@ import { deleteFiles } from "../../../Utility/deleteFiles.js";
 export const addAdvertisement = async (req, res, next) => {
   let requestBody = req.body;
   requestBody.user_id = req.user_id;
-  
+  // requestBody.user_id = req.plan_id;
+  // const category = req.params.category;
+  const files = req.files;
+  console.log("files", files)
+  const filePaths = files.map(file => file.path);
+  const photosJson = JSON.stringify(filePaths);
+  requestBody.photos = photosJson;
   const connection = await pool.getConnection();
   try {
     const [query, values] = await insertQuery('property', requestBody);
@@ -19,28 +25,14 @@ export const addAdvertisement = async (req, res, next) => {
       return sendError(res, "Error adding advertisement", 400);
     }
     await connection.commit();
-    
-    // Extract specific information from the request for testing
-    const requestInfo = {
-      method: req.method,
-      url: req.originalUrl,
-      headers: req.headers,
-      body: requestBody,
-      files: req.files,
-    };
-
-    // Stringify the extracted information
-    const requestString = JSON.stringify(requestInfo);
-
-    return sendResponse(res, "Advertisement added successfully", 201, { result: requestString });
+    return sendResponse(res, "Advertisement added successfully", 201, { result: rows.insertId });
   } catch (error) {
-    await connection.rollback();
-    next(error);
+    await connection.rollback()
+    next(error)
   } finally {
     connection.release();
   }
 }
-
 
 export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
