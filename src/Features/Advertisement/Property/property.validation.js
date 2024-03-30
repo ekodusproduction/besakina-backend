@@ -22,8 +22,8 @@ const propertiesValidationRules = () => {
         body('photos').custom(validateImagesArray),
         body('category').isIn(allowedCategories).withMessage(`Category must be one of: ${allowedCategories.join(', ')}`),
         body('map_location').isString().withMessage('Map location must be a string').notEmpty().withMessage('Map location is required'),
-        body('longitude').isString().withMessage('Longitude must be a decimal').notEmpty().withMessage('Longitude is required'),
-        body('latitude').isString().withMessage('Latitude must be a decimal').notEmpty().withMessage('Latitude is required'),
+        body('longitude').optional().isString().withMessage('Longitude must be a decimal').notEmpty().withMessage('Longitude is required'),
+        body('latitude').optional().isString().withMessage('Latitude must be a decimal').notEmpty().withMessage('Latitude is required'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('address').isString().withMessage('Address must be a string'),

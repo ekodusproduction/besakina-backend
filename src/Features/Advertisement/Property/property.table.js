@@ -36,7 +36,8 @@ export const createPropertyTable = async function () {
             longitude DECIMAL(11, 8) NOT NULL,
             
             street VARCHAR(50),
-            address VARCHAR(255),
+            house_no VARCHAR(255),
+            landmark VARCHAR(255),
             city VARCHAR(20),
             state VARCHAR(25),
             pincode INT NOT NULL,
