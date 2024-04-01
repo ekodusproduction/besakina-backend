@@ -17,7 +17,7 @@ export const addAdvertisement = async (req, res, next) => {
   requestBody.photos = photosJson;
   const connection = await pool.getConnection();
   try {
-    const [query, values] = await insertQuery('education', requestBody);
+    const [query, values] = await insertQuery('doctors', requestBody);
     await connection.beginTransaction();
     const [rows, fields] = await connection.query(query, values);
     if (rows.affectedRows === 0) {
@@ -38,7 +38,7 @@ export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
   try {
     const advertisementID = req.params.id;
-    const [query, values] = await selectQuery('education', [], { id: advertisementID, is_active: 1 });
+    const [query, values] = await selectQuery('doctors', [], { id: advertisementID, is_active: 1 });
     const [rows] = await connection.query(query, values);
 
     if (rows.length === 0) {
@@ -61,7 +61,7 @@ export const getAdvertisement = async (req, res, next) => {
 export const getListAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
   try {
-    const [query, values] = await selectQuery('education', [], { is_active: 1 });
+    const [query, values] = await selectQuery('doctors', [], { is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
       return sendError(res, "Advertisements not found", 404);
@@ -86,7 +86,7 @@ export const filterAdvertisement = async (req, res, next) => {
   try {
     let filter = req.query;
     filter.is_active = true;
-    const [query, values] = await selectQuery('education', [], filter);
+    const [query, values] = await selectQuery('doctors', [], filter);
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
       return sendError(res, "Advertisements not found", 404);
@@ -112,7 +112,7 @@ export const updateAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const filter = req.body;
     // Validate and sanitize the filter object if needed
-    const [query, values] = await updateQuery('education', filter, { id: advertisementID });
+    const [query, values] = await updateQuery('doctors', filter, { id: advertisementID });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
       return sendError(res, "Advertisement not updated. No matching advertisement found for the provided ID.", 404);
@@ -133,7 +133,7 @@ export const deleteAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
   try {
 
-    const [query, values] = await updateQuery('education', { "is_active": 0 }, { id: advertisementID, is_active: 1 });
+    const [query, values] = await updateQuery('doctors', { "is_active": 0 }, { id: advertisementID, is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
     console.log('changed logs')
     if (rows.changedRows === 0) {
@@ -159,7 +159,7 @@ export const addImage = async (req, res, next) => {
   const filePaths = files.map(file => file.path);
   const connection = await pool.getConnection();
   try {
-    const [query1, values1] = await selectQuery('education', ['photos'], { id: advertisementID });
+    const [query1, values1] = await selectQuery('doctors', ['photos'], { id: advertisementID });
     const [results, columns] = await connection.query(query1, values1)
     console.log(results)
     if (results.length === 0) {
@@ -168,7 +168,7 @@ export const addImage = async (req, res, next) => {
     const photos = JSON.parse(results.photos);
     // Convert file paths to a JSON array
     const photosJson = JSON.stringify([...filePaths, ...photos]);
-    const [query, values] = await updateQuery('education', { "photos": photosJson }, { id: advertisementID, is_active: 1 });
+    const [query, values] = await updateQuery('doctors', { "photos": photosJson }, { id: advertisementID, is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
       return sendError(res, "Failed to add images to the advertisement.", 404);
@@ -192,7 +192,7 @@ export const deleteImage = async (req, res, next) => {
   let files = req.body;
   const connection = await pool.getConnection();
   try {
-    const [results] = await selectQuery('education', ['photos'], { id: advertisementID });
+    const [results] = await selectQuery('doctors', ['photos'], { id: advertisementID });
     if (results.length === 0) {
       return sendError(res, "Advertisement not found.", null, 404);
     }
@@ -218,7 +218,7 @@ export const listUserAdvertisement = async (req, res, next) => {
   const user_id = req.user_id;
   let connection = await pool.getConnection();
   try {
-    const [query, values] = await selectQuery('education', [], { user_id: user_id });
+    const [query, values] = await selectQuery('doctors', [], { user_id: user_id });
 
     const [rows, fields] = await connection.query(query, values)
     if (rows.length === 0) {
@@ -245,7 +245,7 @@ export const activateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     // Validate and sanitize the filter object if needed
-    const [query, values] = await updateQuery('education', { is_active: 1 }, { id: advertisementID });
+    const [query, values] = await updateQuery('doctors', { is_active: 1 }, { id: advertisementID });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
       return sendError(res, "Advertisement not updated. No matching advertisement found for the provided ID.", 404);
