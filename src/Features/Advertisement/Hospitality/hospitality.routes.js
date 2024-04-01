@@ -11,7 +11,7 @@ import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middlewar
 const hospitalityRouter = Router()
 
 //protected routes id=> advertisement id
-hospitalityRouter.post("/", jwtAuth,checkPlanValidity, fileUpload("images"), validationMiddlewarePost, addAdvertisement)
+hospitalityRouter.post("/", jwtAuth, fileUpload("images"), validationMiddlewarePost, addAdvertisement)
 
 hospitalityRouter.get("/filter", filterAdvertisement)
 
