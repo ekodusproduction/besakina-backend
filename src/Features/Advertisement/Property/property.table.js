@@ -27,13 +27,9 @@ export const createPropertyTable = async function () {
             total_floors INT,
             car_parking INT  DEFAULT 1,
             price BIGINT UNSIGNED ,
-            images LONGTEXT, 
             category VARCHAR(25) ,
             
-            video VARCHAR(255),
-            map_location VARCHAR(255) ,
-            latitude DECIMAL(10, 8) ,
-            longitude DECIMAL(11, 8) ,
+  
             
             street VARCHAR(50),
             house_no VARCHAR(255),
@@ -42,8 +38,13 @@ export const createPropertyTable = async function () {
             state VARCHAR(25),
             pincode INT ,
 
+            images LONGTEXT,
+            video TEXT,
+            map_location TEXT,
+            latitude DECIMAL(10, 8),
+            longitude DECIMAL(11, 8),
             is_active BOOLEAN DEFAULT 1,
-
+            
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 

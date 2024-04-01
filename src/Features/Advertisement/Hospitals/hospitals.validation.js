@@ -12,7 +12,6 @@ export const hospitalValidationRules = () => {
         body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
         body('price_registration').isDecimal().withMessage('Price registration must be a decimal').notEmpty().withMessage('Price registration is required'),
         body('price_per_visit').isDecimal().withMessage('Price per visit must be a decimal').notEmpty().withMessage('Price per visit is required'),
-        body('images').custom(validateImagesArray),
         body('is_active').isBoolean().optional().withMessage('Is active must be a boolean'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
@@ -20,6 +19,13 @@ export const hospitalValidationRules = () => {
         body('city').isString().withMessage('City must be a string'),
         body('state').isString().withMessage('State must be a string'),
         body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
+
+        body('images').optional(),
+        body('video').optional(),
+
+        body('map_location').optional().withMessage('Map location must be a non-empty string'),
+        body('longitude').optional().withMessage('Longitude must be a non-empty decimal'),
+        body('latitude').optional().withMessage('Latitude must be a non-empty decimal'),
     ];
 };
 export const editHospitalValidationRules = () => {

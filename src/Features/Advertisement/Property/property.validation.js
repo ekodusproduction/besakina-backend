@@ -20,16 +20,20 @@ const propertiesValidationRules = () => {
         body('car_parking').isString().withMessage('Car parking must be an integer').notEmpty().withMessage('Car parking is required'),
         body('price').isString().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
         body('category').isString(allowedCategories).withMessage(`Category must be one of: ${allowedCategories.join(', ')}`),
-        body('map_location').isString().withMessage('Map location must be a string').notEmpty().withMessage('Map location is required'),
-        body('longitude').optional().isString().withMessage('Longitude must be a decimal').notEmpty().withMessage('Longitude is required'),
-        body('latitude').optional().isString().withMessage('Latitude must be a decimal').notEmpty().withMessage('Latitude is required'),
-
+     
         body('street').optional().isString().withMessage('Street must be a string'),
         body('house_no').isString().withMessage('house_no must be a string'),
         body('landmark').isString().withMessage('landmark must be a string'),
         body('city').isString().withMessage('City must be a string'),
         body('state').isString().withMessage('State must be a string'),
         body('pincode').isString().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
+
+        body('images').optional(),
+        body('video').optional(),
+
+        body('map_location').optional().withMessage('Map location must be a non-empty string'),
+        body('longitude').optional().withMessage('Longitude must be a non-empty decimal'),
+        body('latitude').optional().withMessage('Latitude must be a non-empty decimal'),
     ];
 };
 

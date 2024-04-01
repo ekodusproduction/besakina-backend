@@ -19,7 +19,6 @@ export const createVehicleTable = async function () {
             title VARCHAR(255),
             description TEXT,
             price INT,
-            images LONGTEXT,
 
             street VARCHAR(50),
             locality VARCHAR(255),
@@ -27,12 +26,11 @@ export const createVehicleTable = async function () {
             state VARCHAR(25),
             pincode INT ,
 
-            video VARCHAR(255),
-            map_location text,
+            images LONGTEXT,
+            video TEXT,
+            map_location TEXT,
             latitude DECIMAL(10, 8),
             longitude DECIMAL(11, 8),
-
-
             is_active BOOLEAN DEFAULT 1,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

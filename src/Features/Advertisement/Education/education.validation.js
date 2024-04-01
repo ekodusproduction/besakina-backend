@@ -11,12 +11,18 @@ const educationValidationRules = () => {
         body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
         body('price').isString().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
 
-        body('images').optional().isArray().withMessage('Photos must be an array'),
         body('street').isString().withMessage('Street must be a string'),
         body('locality').isString().withMessage('locality must be a string'),
         body('city').isString().withMessage('City must be a string'),
         body('state').isString().withMessage('State must be a string'),
         body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
+        
+        body('images').optional(),
+        body('video').optional(),
+
+        body('map_location').optional().withMessage('Map location must be a non-empty string'),
+        body('longitude').optional().withMessage('Longitude must be a non-empty decimal'),
+        body('latitude').optional().withMessage('Latitude must be a non-empty decimal'),
     ];
 };
 
@@ -29,13 +35,19 @@ const editEducationValidationRules = () => {
         body('ad_title').optional().isString().withMessage('Ad title must be a string'),
         body('description').optional().isString().withMessage('Description must be a string'),
         body('price').optional().isDecimal().withMessage('Price must be a decimal'),
-        body('images').optional().isArray().withMessage('Photos must be an array'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('address').optional().isString().withMessage('Address must be a string'),
         body('city').optional().isString().withMessage('City must be a string'),
         body('state').optional().isString().withMessage('State must be a string'),
         body('pincode').optional().isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
+        
+        body('images').optional(),
+        body('video').optional(),
+
+        body('map_location').optional().withMessage('Map location must be a non-empty string'),
+        body('longitude').optional().withMessage('Longitude must be a non-empty decimal'),
+        body('latitude').optional().withMessage('Latitude must be a non-empty decimal'),
     ];
 };
 

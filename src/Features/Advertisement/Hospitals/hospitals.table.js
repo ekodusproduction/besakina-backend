@@ -21,20 +21,21 @@ export const createHospitalsTable = async function () {
             full_address INT NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
-            
             price_registration DECIMAL(10, 2) NOT NULL,
             price_per_visit DECIMAL(10, 2) NOT NULL,
-            images LONGTEXT,
-            
 
+            images LONGTEXT,
+            video TEXT,
+            map_location TEXT,
+            latitude DECIMAL(10, 8),
+            longitude DECIMAL(11, 8),
+            is_active BOOLEAN DEFAULT 1,
 
             street VARCHAR(50),
             locality VARCHAR(255),
             city VARCHAR(20),
             state VARCHAR(25),
             pincode INT ,
-
-            is_active BOOLEAN DEFAULT 1,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
