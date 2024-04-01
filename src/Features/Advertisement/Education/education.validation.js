@@ -10,7 +10,7 @@ const educationValidationRules = () => {
         body('course_duration').isString().withMessage('Course duration must be a string').notEmpty().withMessage('Course duration is required'),
         body('ad_title').isString().withMessage('Ad title must be a string').notEmpty().withMessage('Ad title is required'),
         body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
-        body('price').isDecimal().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
+        body('price').isString().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
 
         body('images').optional().isArray().withMessage('Photos must be an array'),
         body('street').isString().withMessage('Street must be a string'),
