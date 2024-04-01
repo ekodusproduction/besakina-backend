@@ -58,7 +58,7 @@ app.use("/api/hospitality", hospitalityRouter);
 app.use("/api/education", educationRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/plans", jwtAuth, plansRouter);
-
+ 
 // Error handling middleware
 app.use(async (err, req, res, next) => {
     logger.info(err);

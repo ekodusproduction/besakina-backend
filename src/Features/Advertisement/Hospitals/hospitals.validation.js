@@ -16,7 +16,7 @@ export const hospitalValidationRules = () => {
         body('is_active').isBoolean().optional().withMessage('Is active must be a boolean'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
-        body('area').isString().withMessage('Address must be a string'),
+        body('locality').isString().withMessage('Address must be a string'),
         body('city').isString().withMessage('City must be a string'),
         body('state').isString().withMessage('State must be a string'),
         body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
@@ -37,7 +37,7 @@ export const editHospitalValidationRules = () => {
         body('is_active').optional().isBoolean().withMessage('Is active must be a boolean'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
-        body('address').optional().isString().withMessage('Address must be a string'),
+        body('locality').optional().isString().withMessage('Address must be a string'),
         body('city').optional().isString().withMessage('City must be a string'),
         body('state').optional().isString().withMessage('State must be a string'),
         body('pincode').optional().isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
