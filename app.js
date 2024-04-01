@@ -46,6 +46,11 @@ app.get("/api", (req, res) => {
 app.use("/api/users", userRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/property", propertyRouter);
+app.use("/api/vehicles", propertyRouter);
+app.use("/api/hospitals", propertyRouter);
+app.use("/api/hospitality", propertyRouter);
+app.use("/api/education", propertyRouter);
+app.use("/api/doctors", propertyRouter);
 app.use("/api/plans", jwtAuth, plansRouter);
 
 // Error handling middleware

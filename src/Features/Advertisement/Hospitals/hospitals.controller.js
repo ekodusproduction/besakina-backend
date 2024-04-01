@@ -8,8 +8,10 @@ import { deleteFiles } from "../../../Utility/deleteFiles.js";
 export const addAdvertisement = async (req, res, next) => {
   let requestBody = req.body;
   requestBody.user_id = req.user_id;
-  const category = req.params.category;
+  // requestBody.user_id = req.plan_id;
+  // const category = req.params.category;
   const files = req.files;
+  console.log("files", files)
   const filePaths = files.map(file => file.path);
   const photosJson = JSON.stringify(filePaths);
   requestBody.photos = photosJson;
@@ -25,7 +27,6 @@ export const addAdvertisement = async (req, res, next) => {
     await connection.commit();
     return sendResponse(res, "Advertisement added successfully", 201, { result: rows.insertId });
   } catch (error) {
-    await deleteFiles(req.files)
     await connection.rollback()
     next(error)
   } finally {
@@ -38,10 +39,15 @@ export const getAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const [query, values] = await selectQuery('hospitals', [], { id: advertisementID, is_active: 1 });
-    const rows = await connection.query(query, values);
+    const [rows] = await connection.query(query, values);
+
     if (rows.length === 0) {
       return sendError(res, "Advertisement not found", 404);
     }
+    rows.forEach(advertisement => {
+      advertisement.photos = JSON.parse(advertisement.photos);
+      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+    });
     return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: rows[0] });
   } catch (error) {
     return sendError(res, error.message || "Error fetching advertisement", 500);
@@ -85,6 +91,10 @@ export const filterAdvertisement = async (req, res, next) => {
     if (rows.length === 0) {
       return sendError(res, "Advertisements not found", 404);
     }
+    rows.forEach(advertisement => {
+      advertisement.photos = JSON.parse(advertisement.photos);
+      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+    });
     return sendResponse(res, "Advertisements fetched successfully", 200, { advertisements: rows });
   } catch (error) {
     return sendError(res, error.message || "Error fetching advertisements", 500);
@@ -125,17 +135,17 @@ export const deleteAdvertisement = async (req, res, next) => {
 
     const [query, values] = await updateQuery('hospitals', { "is_active": 0 }, { id: advertisementID, is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
-    if (rows.length === 0) {
-      return sendError(res, "Advertisement not deleted. No matching advertisement found for the provided ID.", null, 404);
+    console.log('changed logs')
+    if (rows.changedRows === 0) {
+      return sendError(res, "Advertisement not deleted. No matching advertisement found for the provided ID.", 404);
     }
     return sendResponse(res, "Advertisements deleted successfully", 200, { advertisements: rows });
   } catch (error) {
     await connection.rollback();
     return sendError(res, error.message || "Error fetching advertisements", 500);
   } finally {
-    if (connection) {
-      connection.release();
-    }
+    connection.release();
+
   }
 }
 
@@ -145,11 +155,13 @@ export const addImage = async (req, res, next) => {
   if (!Array.isArray(files)) {
     files = [files];
   }
+  // console.log(files)
   const filePaths = files.map(file => file.path);
   const connection = await pool.getConnection();
   try {
     const [query1, values1] = await selectQuery('hospitals', ['photos'], { id: advertisementID });
-    const results = await connection.query(query1, values1)
+    const [results, columns] = await connection.query(query1, values1)
+    console.log(results)
     if (results.length === 0) {
       return sendError(res, "Advertisement not found.", 404);
     }
@@ -157,12 +169,13 @@ export const addImage = async (req, res, next) => {
     // Convert file paths to a JSON array
     const photosJson = JSON.stringify([...filePaths, ...photos]);
     const [query, values] = await updateQuery('hospitals', { "photos": photosJson }, { id: advertisementID, is_active: 1 });
-    const [rows] = await connection.query(query, values);
+    const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
       return sendError(res, "Failed to add images to the advertisement.", 404);
     }
     return sendResponse(res, "Images added successfully to the advertisement", 200, { advertisements: rows });
   } catch (error) {
+    console.log(error)
     await deleteFiles(files)
     await connection.rollback();
     return sendError(res, error.message || "Error adding images to the advertisement", 500);
@@ -211,6 +224,10 @@ export const listUserAdvertisement = async (req, res, next) => {
     if (rows.length === 0) {
       return sendError(res, "Advertisement not found.", 404);
     }
+    rows.forEach(advertisement => {
+      advertisement.photos = JSON.parse(advertisement.photos);
+      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+    });
     return sendResponse(res, "User advertisment list", 200, { advertisements: rows });
   } catch (error) {
     return sendError(res, error.message || "Error deleting images to the advertisement", 500);
