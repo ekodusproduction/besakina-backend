@@ -9,7 +9,6 @@ export const hospitalityValidationRules = () => {
         body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
         body('price').isDecimal().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
         body('images').custom(validateImagesArray),
-        body('category').isString().withMessage('category must be a string').notEmpty().withMessage('category is required'),
         body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
         body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
 
