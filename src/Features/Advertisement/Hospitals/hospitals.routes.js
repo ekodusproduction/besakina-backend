@@ -10,7 +10,7 @@ import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitals.validation.js";
 const hospitalsRouter = Router()
 //protected routes id=> advertisement id
-hospitalsRouter.post("/", jwtAuth,checkPlanValidity, fileUpload("images"), validationMiddlewarePost, addAdvertisement)
+hospitalsRouter.post("/", jwtAuth,  fileUpload("hospitals"), validationMiddlewarePost, addAdvertisement)
 
 hospitalsRouter.get("/filter", filterAdvertisement)
 
@@ -25,7 +25,7 @@ hospitalsRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 hospitalsRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
 
-hospitalsRouter.post("/images/:id", jwtAuth, fileUpload("images"), imageValidator, addImage)
+hospitalsRouter.post("/images/:id", jwtAuth, fileUpload("hospitals"), imageValidator, addImage)
 // list user own advertisement //id => user id
 hospitalsRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
