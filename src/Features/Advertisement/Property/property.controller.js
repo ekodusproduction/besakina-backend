@@ -22,10 +22,10 @@ export const addAdvertisement = async (req, res, next) => {
     const [rows, fields] = await connection.query(query, values);
     if (rows.affectedRows === 0) {
       await connection.rollback();
-      return sendError(res, "Error adding advertisement", 400);
+      return sendError(res, "Error adding property", 400);
     }
     await connection.commit();
-    return sendResponse(res, "Advertisement added successfully", 201, { id: rows.insertId });
+    return sendResponse(res, "Property added successfully", 201, { id: rows.insertId });
   } catch (error) {
     await connection.rollback()
     next(error)
@@ -42,15 +42,15 @@ export const getAdvertisement = async (req, res, next) => {
     const [rows] = await connection.query(query, values);
 
     if (rows.length === 0) {
-      return sendError(res, "Advertisement not found", 404);
+      return sendError(res, "property not found", 404);
     }
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
-    return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: rows[0] });
+    return sendResponse(res, "property fetched successfully", 200, { advertisement: rows[0] });
   } catch (error) {
-    return sendError(res, error.message || "Error fetching advertisement", 500);
+    return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     if (connection) {
       connection.release();
@@ -64,15 +64,15 @@ export const getListAdvertisement = async (req, res, next) => {
     const [query, values] = await selectQuery('property', [], { is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
-      return sendError(res, "Advertisements not found", 404);
+      return sendError(res, "property not found", 404);
     }
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
-    return sendResponse(res, "Advertisements fetched successfully", 200, { advertisements: rows });
+    return sendResponse(res, "property fetched successfully", 200, { advertisements: rows });
   } catch (error) {
-    return sendError(res, error.message || "Error fetching advertisements", 500);
+    return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     if (connection) {
       connection.release();
@@ -89,15 +89,15 @@ export const filterAdvertisement = async (req, res, next) => {
     const [query, values] = await selectQuery('property', [], filter);
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
-      return sendError(res, "Advertisements not found", 404);
+      return sendError(res, "Property not found", 404);
     }
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
-    return sendResponse(res, "Advertisements fetched successfully", 200, { advertisements: rows });
+    return sendResponse(res, "Property fetched successfully", 200, { advertisements: rows });
   } catch (error) {
-    return sendError(res, error.message || "Error fetching advertisements", 500);
+    return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     if (connection) {
       connection.release();
@@ -115,12 +115,12 @@ export const updateAdvertisement = async (req, res, next) => {
     const [query, values] = await updateQuery('property', filter, { id: advertisementID });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
-      return sendError(res, "Advertisement not updated. No matching advertisement found for the provided ID.", 404);
+      return sendError(res, "Property not updated. No matching property found for the provided ID.", 404);
     }
-    return sendResponse(res, "Advertisements updated successfully", 200, { advertisements: rows });
+    return sendResponse(res, "Property updated successfully", 200, { advertisements: rows });
   } catch (error) {
     await connection.rollback();
-    return sendError(res, error.message || "Error fetching advertisements", 500);
+    return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     if (connection) {
       connection.release();
@@ -137,12 +137,12 @@ export const deleteAdvertisement = async (req, res, next) => {
     const [rows, fields] = await connection.query(query, values);
     console.log('changed logs')
     if (rows.changedRows === 0) {
-      return sendError(res, "Advertisement not deleted. No matching advertisement found for the provided ID.", 404);
+      return sendError(res, "Property not deleted. No matching property found for the provided ID.", 404);
     }
-    return sendResponse(res, "Advertisements deleted successfully", 200, { advertisements: rows });
+    return sendResponse(res, "Property deleted successfully", 200, { advertisements: rows });
   } catch (error) {
     await connection.rollback();
-    return sendError(res, error.message || "Error fetching advertisements", 500);
+    return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     connection.release();
 
@@ -163,7 +163,7 @@ export const addImage = async (req, res, next) => {
     const [results, columns] = await connection.query(query1, values1)
     console.log(results)
     if (results.length === 0) {
-      return sendError(res, "Advertisement not found.", 404);
+      return sendError(res, "Property not found.", 404);
     }
     const images = JSON.parse(results.images);
     // Convert file paths to a JSON array
@@ -171,14 +171,14 @@ export const addImage = async (req, res, next) => {
     const [query, values] = await updateQuery('property', { "images": photosJson }, { id: advertisementID, is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
-      return sendError(res, "Failed to add images to the advertisement.", 404);
+      return sendError(res, "Failed to add images to the property.", 404);
     }
-    return sendResponse(res, "Images added successfully to the advertisement", 200, { advertisements: rows });
+    return sendResponse(res, "Images added successfully to the property", 200, { advertisements: rows });
   } catch (error) {
     console.log(error)
     await deleteFiles(files)
     await connection.rollback();
-    return sendError(res, error.message || "Error adding images to the advertisement", 500);
+    return sendError(res, error.message || "Error adding images to the property", 500);
   } finally {
     if (connection) {
       connection.release();
@@ -194,20 +194,20 @@ export const deleteImage = async (req, res, next) => {
   try {
     const [results] = await selectQuery('property', ['images'], { id: advertisementID });
     if (results.length === 0) {
-      return sendError(res, "Advertisement not found.", null, 404);
+      return sendError(res, "Property not found.", null, 404);
     }
     let images = JSON.parse(results.images).filter(item => files.indexOf(item) == false);
     const photosJson = JSON.stringify(images);
     const { query, values } = await updateQuery(category, { "images": photosJson }, { id: advertisementID, is_active: 1 });
     const [rows] = await connection.query(query, values);
     if (rows.length === 0) {
-      return sendError(res, "Failed to delete images of the advertisement.", null, 404);
+      return sendError(res, "Failed to delete images of the property.", null, 404);
     }
     await deleteFiles(images)
-    return sendResponse(res, "Images deleted successfully of the advertisement", { advertisements: rows }, 200);
+    return sendResponse(res, "Images deleted successfully of the property", { advertisements: rows }, 200);
   } catch (error) {
     await connection.rollback();
-    return sendError(res, error.message || "Error deleting images to the advertisement", null, 500);
+    return sendError(res, error.message || "Error deleting images to the property", null, 500);
   } finally {
     if (connection) {
       connection.release();
@@ -222,15 +222,15 @@ export const listUserAdvertisement = async (req, res, next) => {
 
     const [rows, fields] = await connection.query(query, values)
     if (rows.length === 0) {
-      return sendError(res, "Advertisement not found.", 404);
+      return sendError(res, "Property not found.", 404);
     }
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
-    return sendResponse(res, "User advertisment list", 200, { advertisements: rows });
+    return sendResponse(res, "User property list", 200, { advertisements: rows });
   } catch (error) {
-    return sendError(res, error.message || "Error deleting images to the advertisement", 500);
+    return sendError(res, error.message || "Error deleting images to the property", 500);
   } finally {
     if (connection) {
       connection.release();
@@ -248,12 +248,12 @@ export const activateAdvertisement = async (req, res, next) => {
     const [query, values] = await updateQuery('property', { is_active: 1 }, { id: advertisementID });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
-      return sendError(res, "Advertisement not updated. No matching advertisement found for the provided ID.", 404);
+      return sendError(res, "property not updated. No matching property found for the provided ID.", 404);
     }
-    return sendResponse(res, "Advertisements updated successfully", 200, { advertisements: rows });
+    return sendResponse(res, "property updated successfully", 200, { advertisements: rows });
   } catch (error) {
     await connection.rollback();
-    return sendError(res, error.message || "Error fetching advertisements", 500);
+    return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     if (connection) {
       connection.release();
