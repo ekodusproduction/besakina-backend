@@ -1,5 +1,6 @@
 import { body } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
+import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
 export const vehiclesValidationRules = () => {
   return [
@@ -8,7 +9,7 @@ export const vehiclesValidationRules = () => {
     body('brand').isString().withMessage('Brand must be a string').notEmpty().withMessage('Brand is required'),
     body('registration_year').isInt().withMessage('Registration year must be an integer').notEmpty().withMessage('Registration year is required'),
     body('kilometer_driven').isInt().withMessage('Kilometer driven must be an integer').notEmpty().withMessage('Kilometer driven is required'),
-    body('ad_title').isString().withMessage('Ad title must be a string').notEmpty().withMessage('Ad title is required'),
+    body('title').isString().withMessage('Ad title must be a string').notEmpty().withMessage('Ad title is required'),
     body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
     body('price').isInt().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
     body('images').optional().custom(validateImagesArray),
@@ -31,7 +32,7 @@ export const editVehiclesValidationRules = () => {
     body('brand').optional().isString().withMessage('Brand must be a string'),
     body('registration_year').optional().isInt().withMessage('Registration year must be an integer'),
     body('kilometer_driven').optional().isInt().withMessage('Kilometer driven must be an integer'),
-    body('ad_title').optional().isString().withMessage('Ad title must be a string'),
+    body('title').optional().isString().withMessage('Ad title must be a string'),
     body('description').optional().isString().withMessage('Description must be a string'),
     body('price').optional().isInt().withMessage('Price must be a decimal'),
     body('map_location').optional().isString().withMessage('Map location must be a string'),
@@ -53,6 +54,9 @@ export const validationMiddlewarePost = async (req, res, next) => {
   await Promise.all(rules.map(rule => rule.run(req)));
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    if (req.files) {
+      await deleteFiles(req.files)
+    }
     return res.status(400).json({
       message: errors.array()[0].msg,
       status: "failed",
@@ -67,6 +71,9 @@ export const validationMiddlewarePut = async (req, res, next) => {
   await Promise.all(rules.map(rule => rule.run(req)));
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    if (req.files) {
+      await deleteFiles(req.files)
+    }
     return res.status(400).json({
       message: errors.array()[0].msg,
       status: "failed",
