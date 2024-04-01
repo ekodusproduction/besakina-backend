@@ -16,6 +16,10 @@ import categoryRouter from './src/Features/Categories/category.routes.js';
 import plansRouter from './src/Features/Plans/plans.routes.js';
 import userRouter from './src/Features/Users/users.routes.js';
 import propertyRouter from './src/Features/Advertisement/Property/property.routes.js';
+import vehiclesRouter from './src/Features/Advertisement/Vehicles/vehicles.routes.js';
+import hospitalsRouter from './src/Features/Advertisement/Hospitals/hospitals.routes.js';
+import hospitalityRouter from './src/Features/Advertisement/Hospitality/hospitality.routes.js';
+import educationRouter from './src/Features/Advertisement/Education/education.routes.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
@@ -46,10 +50,10 @@ app.get("/api", (req, res) => {
 app.use("/api/users", userRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api/property", propertyRouter);
-app.use("/api/vehicles", propertyRouter);
-app.use("/api/hospitals", propertyRouter);
-app.use("/api/hospitality", propertyRouter);
-app.use("/api/education", propertyRouter);
+app.use("/api/vehicles", vehiclesRouter);
+app.use("/api/hospitals", hospitalsRouter);
+app.use("/api/hospitality", hospitalityRouter);
+app.use("/api/education", educationRouter);
 app.use("/api/doctors", propertyRouter);
 app.use("/api/plans", jwtAuth, plansRouter);
 
