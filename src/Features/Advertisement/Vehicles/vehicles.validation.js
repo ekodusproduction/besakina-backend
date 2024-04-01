@@ -4,7 +4,6 @@ import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
 export const vehiclesValidationRules = () => {
   return [
-    body('plan_id').optional().isInt().withMessage('Plan ID must be an integer').notEmpty().withMessage('Plan ID is required'),
     body('type').isString().withMessage('Vehicle type must be a string').notEmpty().withMessage('Vehicle type is required'),
     body('brand').isString().withMessage('Brand must be a string').notEmpty().withMessage('Brand is required'),
     body('registration_year').isInt().withMessage('Registration year must be an integer').notEmpty().withMessage('Registration year is required'),
@@ -22,9 +21,9 @@ export const vehiclesValidationRules = () => {
     body('images').optional(),
     body('video').optional(),
 
-    body('map_location').optional().withMessage('Map location must be a non-empty string'),
-    body('longitude').optional().withMessage('Longitude must be a non-empty decimal'),
-    body('latitude').optional().withMessage('Latitude must be a non-empty decimal'),
+    body('map_location').optional(),
+    body('longitude').optional(),
+    body('latitude').optional(),
   ];
 };
 
