@@ -20,6 +20,7 @@ import vehiclesRouter from './src/Features/Advertisement/Vehicles/vehicles.route
 import hospitalsRouter from './src/Features/Advertisement/Hospitals/hospitals.routes.js';
 import hospitalityRouter from './src/Features/Advertisement/Hospitality/hospitality.routes.js';
 import educationRouter from './src/Features/Advertisement/Education/education.routes.js';
+import doctorRouter from './src/Features/Advertisement/Doctors/doctors.routes.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
@@ -54,7 +55,7 @@ app.use("/api/vehicles", vehiclesRouter);
 app.use("/api/hospitals", hospitalsRouter);
 app.use("/api/hospitality", hospitalityRouter);
 app.use("/api/education", educationRouter);
-app.use("/api/doctors", propertyRouter);
+app.use("/api/doctors", doctorRouter);
 app.use("/api/plans", jwtAuth, plansRouter);
 
 // Error handling middleware
