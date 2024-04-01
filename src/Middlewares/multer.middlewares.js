@@ -38,20 +38,20 @@ const createStorageMiddleware = (destination) => {
 export const fileUpload = (destination) => {
     return (req, res, next) => {
         const upload = multer({ storage: createStorageMiddleware(destination) }).any(); // 'files' is the field name for the array of files
-        upload(req, res, function (err) {
-            if (err instanceof multer.MulterError) {
-                // A Multer error occurred when uploading.
-                next(new ApplicationError(err));
-            } else if (err) {
-                // An unknown error occurred.
-                next(err);
-            } else if (!req.files || req.files.length === 0) {
-                // No files were uploaded.
-                next(new ApplicationError('No files uploaded',400));
-            } else {
-                // Files uploaded successfully.
-                next();
-            }
-        });
+        // upload(req, res, function (err) {
+        //     if (err instanceof multer.MulterError) {
+        //         // A Multer error occurred when uploading.
+        //         next(new ApplicationError(err));
+        //     } else if (err) {
+        //         // An unknown error occurred.
+        //         next(err);
+        //     } else if (!req.files || req.files.length === 0) {
+        //         // No files were uploaded.
+        //         next(new ApplicationError('No files uploaded',400));
+        //     } else {
+        //         // Files uploaded successfully.
+        //         next();
+        //     }
+        // });
     };
 };
