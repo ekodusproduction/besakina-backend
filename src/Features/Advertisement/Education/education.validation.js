@@ -3,11 +3,11 @@ import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 const educationValidationRules = () => {
     return [
-        body('course_type').isString().withMessage('Course type must be a string').notEmpty().withMessage('Course type is required'),
+        body('type').isString().withMessage('Course type must be a string').notEmpty().withMessage('Course type is required'),
         body('domain').isString().withMessage('Domain must be a string').notEmpty().withMessage('Domain is required'),
         body('institution_name').isString().withMessage('Institution name must be a string').notEmpty().withMessage('Institution name is required'),
         body('course_duration').isString().withMessage('Course duration must be a string').notEmpty().withMessage('Course duration is required'),
-        body('ad_title').isString().withMessage('Ad title must be a string').notEmpty().withMessage('Ad title is required'),
+        body('title').isString().withMessage('Ad title must be a string').notEmpty().withMessage('Ad title is required'),
         body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
         body('price').isString().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
 
