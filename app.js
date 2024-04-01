@@ -26,6 +26,7 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
 // Middleware setup
 
+app.set('trust proxy', true);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
