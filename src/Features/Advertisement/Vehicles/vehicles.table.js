@@ -12,13 +12,13 @@ export const createVehicleTable = async function () {
             plan_id BIGINT UNSIGNED ,        
             user_id BIGINT UNSIGNED,
 
-            type VARCHAR(20),
-            brand VARCHAR(20),
+            type VARCHAR(50),
+            brand VARCHAR(50),
             registration_year INT,
             kilometer_driven INT,
             title VARCHAR(255),
             description TEXT,
-            price DECIMAL(10, 2),
+            price INT,
             images LONGTEXT,
 
             street VARCHAR(50),

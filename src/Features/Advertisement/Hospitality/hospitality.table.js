@@ -8,21 +8,25 @@ export const createHospitalityTable = async function () {
         // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS hospitality (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            plan_id BIGINT UNSIGNED NOT NULL,        
-            user_id BIGINT UNSIGNED NOT NULL,
+            plan_id BIGINT UNSIGNED ,        
+            user_id BIGINT UNSIGNED ,
 
-            type VARCHAR(20) NOT NULL,
+            type VARCHAR(50) NOT NULL,
             name VARCHAR(255) NOT NULL,
             full_address VARCHAR(255) NOT NULL,
             ad_title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
-            price DECIMAL(10, 2) NOT NULL,
+            price INT,
             images LONGTEXT, 
             
-            video VARCHAR(255),
-            map_location text,
-            latitude DECIMAL(10, 8) NOT NULL,
-            longitude DECIMAL(11, 8) NOT NULL,
+            street VARCHAR(50),
+            locality VARCHAR(255),
+            city VARCHAR(20),
+            state VARCHAR(25),
+            pincode INT,
+
+            latitude DECIMAL(10, 8) ,
+            longitude DECIMAL(11, 8) ,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

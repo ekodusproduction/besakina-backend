@@ -20,11 +20,15 @@ export const createEducationTable = async function () {
             price DECIMAL(10, 2) NOT NULL,
             images LONGTEXT,
             
-            video VARCHAR(255),
-            map_location text,
-            latitude DECIMAL(10, 8) NOT NULL,
-            longitude DECIMAL(11, 8) NOT NULL,
+            street VARCHAR(50),
+            locality VARCHAR(255),
+            city VARCHAR(20),
+            state VARCHAR(25),
+            pincode INT ,
 
+            latitude DECIMAL(10, 8) ,
+            longitude DECIMAL(11, 8) ,
+            
             is_active BOOLEAN DEFAULT 1,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
