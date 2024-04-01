@@ -13,9 +13,9 @@ export const vehiclesValidationRules = () => {
     body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
     body('price').isInt().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
     body('images').optional().custom(validateImagesArray),
-    body('map_location').optional().isString().withMessage('Map location must be a string').notEmpty().withMessage('Map location is required'),
-    body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal').notEmpty().withMessage('Longitude is required'),
-    body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal').notEmpty().withMessage('Latitude is required'),
+    body('map_location').optional().isString().withMessage('Map location must be a string').withMessage('Map location is required'),
+    body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal').withMessage('Longitude is required'),
+    body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal').withMessage('Latitude is required'),
 
     body('street').optional().isString().withMessage('Street must be a string'),
     body('area').isString().withMessage('area must be a string'),
