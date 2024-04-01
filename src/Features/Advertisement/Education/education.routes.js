@@ -11,7 +11,7 @@ import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middlewar
 const educationRouter = Router()
 
 //protected routes id=> advertisement id
-educationRouter.post("/", jwtAuth, checkPlanValidity,fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
+educationRouter.post("/", jwtAuth, checkPlanValidity,fileUpload("images"), validationMiddlewarePost, addAdvertisement)
 
 educationRouter.get("/filter", filterAdvertisement)
 
@@ -25,7 +25,7 @@ educationRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 educationRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
 
-educationRouter.post("/images/:id", jwtAuth, fileUpload("images").array("images"), imageValidator, addImage)
+educationRouter.post("/images/:id", jwtAuth, fileUpload("images"), imageValidator, addImage)
 // list user own advertisement //id => user id
 educationRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
