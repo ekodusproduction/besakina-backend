@@ -11,7 +11,7 @@ export const createEducationTable = async function () {
             plan_id BIGINT UNSIGNED,        
             user_id BIGINT UNSIGNED NOT NULL,
 
-            course_type VARCHAR(255) NOT NULL,
+            type VARCHAR(255) NOT NULL,
             domain VARCHAR(255) NOT NULL,
             institution_name VARCHAR(255) NOT NULL,
             course_duration VARCHAR(255) NOT NULL,
