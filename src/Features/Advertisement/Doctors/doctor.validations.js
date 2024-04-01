@@ -3,7 +3,6 @@ import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 export const doctorValidationRules = () => {
     return [
-        body('plan_id').isInt().notEmpty(),
         body('expertise').isString().notEmpty(),
         body('name').isString().notEmpty(),
         body('total_experience').isInt().notEmpty(),

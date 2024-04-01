@@ -3,7 +3,6 @@ import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 export const hospitalityValidationRules = () => {
     return [
-        body('plan_id').isInt().withMessage('Plan ID must be an integer').notEmpty().withMessage('Plan ID is required'),
         body('type').isString().withMessage('Type must be a string').notEmpty().withMessage('Type is required'),
         body('name').isString().withMessage('Name must be a string').notEmpty().withMessage('Name is required'),
         body('title').isString().withMessage('Ad title must be a string').notEmpty().withMessage('Ad title is required'),

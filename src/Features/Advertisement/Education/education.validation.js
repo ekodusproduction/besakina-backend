@@ -3,7 +3,6 @@ import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 const educationValidationRules = () => {
     return [
-        body('plan_id').isInt().withMessage('Plan ID must be an integer').notEmpty().withMessage('Plan ID is required'),
         body('user_id').isInt().withMessage('User ID must be an integer').notEmpty().withMessage('User ID is required'),
         body('course_type').isString().withMessage('Course type must be a string').notEmpty().withMessage('Course type is required'),
         body('domain').isString().withMessage('Domain must be a string').notEmpty().withMessage('Domain is required'),

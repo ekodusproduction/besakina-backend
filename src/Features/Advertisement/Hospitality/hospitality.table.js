@@ -9,7 +9,7 @@ export const createHospitalityTable = async function () {
         const createTableQuery = `CREATE TABLE IF NOT EXISTS hospitality (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             plan_id BIGINT UNSIGNED ,        
-            user_id BIGINT UNSIGNED ,
+            user_id BIGINT UNSIGNED NOT NULL,
 
             type VARCHAR(50) NOT NULL,
             name VARCHAR(255) NOT NULL,
@@ -18,7 +18,7 @@ export const createHospitalityTable = async function () {
             price INT,
             images LONGTEXT, 
             category VARCHAR(255),
-            
+
             street VARCHAR(50),
             locality VARCHAR(255),
             city VARCHAR(20),
