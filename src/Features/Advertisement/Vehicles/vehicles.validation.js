@@ -40,7 +40,7 @@ export const editVehiclesValidationRules = () => {
     body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
 
     body('street').optional().isString().withMessage('Street must be a string'),
-    body('address').optional().isString().withMessage('Address must be a string'),
+    body('area').optional().isString().withMessage('Address must be a string'),
     body('city').optional().isString().withMessage('City must be a string'),
     body('state').optional().isString().withMessage('State must be a string'),
     body('pincode').optional().isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
