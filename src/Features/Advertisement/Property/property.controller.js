@@ -45,8 +45,8 @@ export const getAdvertisement = async (req, res, next) => {
       return sendError(res, "Advertisement not found", 404);
     }
     rows.forEach(advertisement => {
-      advertisement.photos = JSON.parse(advertisement.photos);
-      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+      advertisement.images = JSON.parse(advertisement.images);
+      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
     return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: rows[0] });
   } catch (error) {
@@ -67,8 +67,8 @@ export const getListAdvertisement = async (req, res, next) => {
       return sendError(res, "Advertisements not found", 404);
     }
     rows.forEach(advertisement => {
-      advertisement.photos = JSON.parse(advertisement.photos);
-      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+      advertisement.images = JSON.parse(advertisement.images);
+      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
     return sendResponse(res, "Advertisements fetched successfully", 200, { advertisements: rows });
   } catch (error) {
@@ -92,8 +92,8 @@ export const filterAdvertisement = async (req, res, next) => {
       return sendError(res, "Advertisements not found", 404);
     }
     rows.forEach(advertisement => {
-      advertisement.photos = JSON.parse(advertisement.photos);
-      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+      advertisement.images = JSON.parse(advertisement.images);
+      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
     return sendResponse(res, "Advertisements fetched successfully", 200, { advertisements: rows });
   } catch (error) {
@@ -159,16 +159,16 @@ export const addImage = async (req, res, next) => {
   const filePaths = files.map(file => file.path);
   const connection = await pool.getConnection();
   try {
-    const [query1, values1] = await selectQuery('property', ['photos'], { id: advertisementID });
+    const [query1, values1] = await selectQuery('property', ['images'], { id: advertisementID });
     const [results, columns] = await connection.query(query1, values1)
     console.log(results)
     if (results.length === 0) {
       return sendError(res, "Advertisement not found.", 404);
     }
-    const photos = JSON.parse(results.photos);
+    const images = JSON.parse(results.images);
     // Convert file paths to a JSON array
-    const photosJson = JSON.stringify([...filePaths, ...photos]);
-    const [query, values] = await updateQuery('property', { "photos": photosJson }, { id: advertisementID, is_active: 1 });
+    const photosJson = JSON.stringify([...filePaths, ...images]);
+    const [query, values] = await updateQuery('property', { "images": photosJson }, { id: advertisementID, is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
       return sendError(res, "Failed to add images to the advertisement.", 404);
@@ -192,18 +192,18 @@ export const deleteImage = async (req, res, next) => {
   let files = req.body;
   const connection = await pool.getConnection();
   try {
-    const [results] = await selectQuery('property', ['photos'], { id: advertisementID });
+    const [results] = await selectQuery('property', ['images'], { id: advertisementID });
     if (results.length === 0) {
       return sendError(res, "Advertisement not found.", null, 404);
     }
-    let photos = JSON.parse(results.photos).filter(item => files.indexOf(item) == false);
-    const photosJson = JSON.stringify(photos);
-    const { query, values } = await updateQuery(category, { "photos": photosJson }, { id: advertisementID, is_active: 1 });
+    let images = JSON.parse(results.images).filter(item => files.indexOf(item) == false);
+    const photosJson = JSON.stringify(images);
+    const { query, values } = await updateQuery(category, { "images": photosJson }, { id: advertisementID, is_active: 1 });
     const [rows] = await connection.query(query, values);
     if (rows.length === 0) {
       return sendError(res, "Failed to delete images of the advertisement.", null, 404);
     }
-    await deleteFiles(photos)
+    await deleteFiles(images)
     return sendResponse(res, "Images deleted successfully of the advertisement", { advertisements: rows }, 200);
   } catch (error) {
     await connection.rollback();
@@ -225,8 +225,8 @@ export const listUserAdvertisement = async (req, res, next) => {
       return sendError(res, "Advertisement not found.", 404);
     }
     rows.forEach(advertisement => {
-      advertisement.photos = JSON.parse(advertisement.photos);
-      advertisement.photos = advertisement.photos.map(photo => photo.replace(/\\/g, '/'));
+      advertisement.images = JSON.parse(advertisement.images);
+      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
     return sendResponse(res, "User advertisment list", 200, { advertisements: rows });
   } catch (error) {

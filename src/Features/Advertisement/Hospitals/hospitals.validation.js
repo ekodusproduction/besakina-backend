@@ -13,7 +13,7 @@ export const hospitalValidationRules = () => {
         body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
         body('price_registration').isDecimal().withMessage('Price registration must be a decimal').notEmpty().withMessage('Price registration is required'),
         body('price_per_visit').isDecimal().withMessage('Price per visit must be a decimal').notEmpty().withMessage('Price per visit is required'),
-        body('photos').custom(validateImagesArray),
+        body('images').custom(validateImagesArray),
         body('is_active').isBoolean().optional().withMessage('Is active must be a boolean'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
@@ -34,7 +34,7 @@ export const editHospitalValidationRules = () => {
         body('description').optional().isString().withMessage('Description must be a string'),
         body('price_registration').optional().isDecimal().withMessage('Price registration must be a decimal'),
         body('price_per_visit').optional().isDecimal().withMessage('Price per visit must be a decimal'),
-        body('photos').optional().custom(validateImagesArray),
+        body('images').optional().custom(validateImagesArray),
         body('is_active').optional().isBoolean().withMessage('Is active must be a boolean'),
 
         body('street').optional().isString().withMessage('Street must be a string'),

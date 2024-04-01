@@ -1,4 +1,4 @@
-import { body , validationResult} from 'express-validator';
+import { body, validationResult } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 const educationValidationRules = () => {
@@ -12,8 +12,8 @@ const educationValidationRules = () => {
         body('ad_title').isString().withMessage('Ad title must be a string').notEmpty().withMessage('Ad title is required'),
         body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
         body('price').isDecimal().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
-        
-        body('photos').optional().isArray().withMessage('Photos must be an array'),
+
+        body('images').optional().isArray().withMessage('Photos must be an array'),
         body('street').isString().withMessage('Street must be a string'),
         body('address').isString().withMessage('Address must be a string'),
         body('city').isString().withMessage('City must be a string'),
@@ -31,7 +31,7 @@ const editEducationValidationRules = () => {
         body('ad_title').optional().isString().withMessage('Ad title must be a string'),
         body('description').optional().isString().withMessage('Description must be a string'),
         body('price').optional().isDecimal().withMessage('Price must be a decimal'),
-        body('photos').optional().isArray().withMessage('Photos must be an array'),
+        body('images').optional().isArray().withMessage('Photos must be an array'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('address').optional().isString().withMessage('Address must be a string'),

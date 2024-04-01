@@ -1,4 +1,4 @@
-import { body , validationResult} from 'express-validator';
+import { body, validationResult } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 export const doctorValidationRules = () => {
@@ -11,7 +11,7 @@ export const doctorValidationRules = () => {
         body('description').isString().notEmpty(),
         body('price_registration').isDecimal().notEmpty(),
         body('price_per_visit').isDecimal().notEmpty(),
-        body('photos').custom(validateImagesArray),
+        body('images').custom(validateImagesArray),
         body('map_location').isString().withMessage('Map location must be a string').notEmpty().withMessage('Map location is required'),
         body('longitude').isDecimal().withMessage('Longitude must be a decimal').notEmpty().withMessage('Longitude is required'),
         body('latitude').isDecimal().withMessage('Latitude must be a decimal').notEmpty().withMessage('Latitude is required'),
