@@ -5,6 +5,11 @@ export const createHospitalsTable = async function () {
     try {
         const connection = await pool.getConnection();
 
+        // video VARCHAR(255),
+        // map_location text,
+        // latitude DECIMAL(10, 8) ,
+        // longitude DECIMAL(11, 8),
+
         // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS hospitals (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -21,10 +26,13 @@ export const createHospitalsTable = async function () {
             price_per_visit DECIMAL(10, 2) NOT NULL,
             images LONGTEXT,
             
-            video VARCHAR(255),
-            map_location text,
-            latitude DECIMAL(10, 8) NOT NULL,
-            longitude DECIMAL(11, 8) NOT NULL,
+
+
+            street VARCHAR(50),
+            locality VARCHAR(255),
+            city VARCHAR(20),
+            state VARCHAR(25),
+            pincode INT ,
 
             is_active BOOLEAN DEFAULT 1,
 

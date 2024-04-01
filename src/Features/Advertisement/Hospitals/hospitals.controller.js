@@ -25,7 +25,7 @@ export const addAdvertisement = async (req, res, next) => {
       return sendError(res, "Error adding advertisement", 400);
     }
     await connection.commit();
-    return sendResponse(res, "Advertisement added successfully", 201, { result: rows.insertId });
+    return sendResponse(res, "Advertisement added successfully", 201, { id: rows.insertId });
   } catch (error) {
     await connection.rollback()
     next(error)
@@ -250,7 +250,7 @@ export const activateAdvertisement = async (req, res, next) => {
     if (rows.length === 0) {
       return sendError(res, "Advertisement not updated. No matching advertisement found for the provided ID.", 404);
     }
-    return sendResponse(res, "Advertisements updated successfully", 200, { advertisements: rows });
+    return sendResponse(res, "Advertisements updated successfully", 200, { id: rows });
   } catch (error) {
     await connection.rollback();
     return sendError(res, error.message || "Error fetching advertisements", 500);

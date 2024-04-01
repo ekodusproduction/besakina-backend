@@ -22,7 +22,7 @@ export const createVehicleTable = async function () {
             images LONGTEXT,
 
             street VARCHAR(50),
-            area VARCHAR(255),
+            locality VARCHAR(255),
             city VARCHAR(20),
             state VARCHAR(25),
             pincode INT ,
