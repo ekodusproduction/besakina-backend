@@ -18,7 +18,7 @@ export const vehiclesValidationRules = () => {
     body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal').withMessage('Latitude is required'),
 
     body('street').optional().isString().withMessage('Street must be a string'),
-    body('area').isString().withMessage('area must be a string'),
+    body('locality').isString().withMessage('locality must be a string'),
     body('city').isString().withMessage('City must be a string'),
     body('state').isString().withMessage('State must be a string'),
     body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
