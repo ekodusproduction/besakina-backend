@@ -16,10 +16,10 @@ export const createVehicleTable = async function () {
             brand VARCHAR(20),
             registration_year INT,
             kilometer_driven INT,
-            ad_title VARCHAR(255),
+            title VARCHAR(255),
             description TEXT,
             price DECIMAL(10, 2),
-            photos LONGTEXT,
+            images LONGTEXT,
 
             street VARCHAR(50),
             house_no VARCHAR(255),
@@ -30,8 +30,8 @@ export const createVehicleTable = async function () {
 
             video VARCHAR(255),
             map_location text,
-            latitude DECIMAL(10, 8) ,
-            longitude DECIMAL(11, 8) ,
+            latitude DECIMAL(10, 8),
+            longitude DECIMAL(11, 8),
 
 
             is_active BOOLEAN DEFAULT 1,

@@ -27,7 +27,7 @@ export const createPropertyTable = async function () {
             total_floors INT,
             car_parking INT  DEFAULT 1,
             price BIGINT UNSIGNED ,
-            photos LONGTEXT, 
+            images LONGTEXT, 
             category VARCHAR(25) ,
             
             video VARCHAR(255),

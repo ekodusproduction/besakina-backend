@@ -27,7 +27,7 @@
     "dev": "nodemon server.js",
     "start": "node server.js",
     "droptable": "node src/Mysql/mysql.dropTable.js",
-    "migrate": "node src/Mysql/mysql.migrate.js"
+    "migrate": "node src/Mysql/mysql.dropTable.js && node src/Mysql/mysql.migrate.js"
   },
   "keywords": [],
   "author": "",
