@@ -35,9 +35,9 @@ export const editVehiclesValidationRules = () => {
     body('title').optional().isString().withMessage('Ad title must be a string'),
     body('description').optional().isString().withMessage('Description must be a string'),
     body('price').optional().isInt().withMessage('Price must be a decimal'),
-    body('map_location').optional().isString().withMessage('Map location must be a string'),
-    body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
-    body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
+    // body('map_location').optional().isString().withMessage('Map location must be a string'),
+    // body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
+    // body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
 
     body('street').optional().isString().withMessage('Street must be a string'),
     body('area').optional().isString().withMessage('Address must be a string'),
