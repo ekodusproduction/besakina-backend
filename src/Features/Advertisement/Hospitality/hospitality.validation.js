@@ -14,7 +14,7 @@ export const hospitalityValidationRules = () => {
         body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
-        body('address').isString().withMessage('Address must be a string'),
+        body('locality').isString().withMessage('Address must be a string'),
         body('city').isString().withMessage('City must be a string'),
         body('state').isString().withMessage('State must be a string'),
         body('pincode').isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
