@@ -46,6 +46,9 @@ export const validationMiddlewarePost = async (req, res, next) => {
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        if (req.files) {
+            await deleteFiles(req.files)
+        }
         return res.status(400).json({
             message: errors.array()[0].msg,
             status: "failed",
@@ -60,6 +63,9 @@ export const validationMiddlewarePut = async (req, res, next) => {
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+        if (req.files) {
+            await deleteFiles(req.files)
+        }
         return res.status(400).json({
             message: errors.array()[0].msg,
             status: "failed",
