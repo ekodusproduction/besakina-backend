@@ -15,16 +15,16 @@ export const doctorValidationRules = () => {
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('locality').isString().withMessage('Locality must be a string'),
-        body('city').isString().withMessage('City must be a string'),
-        body('state').isString().withMessage('State must be a string'),
-        body('pincode').isInt().notEmpty().withMessage('Pincode must be a non-empty integer'),
+        body('city').isString().trim().notEmpty().withMessage('City must be a string'),
+        body('state').isString().trim().notEmpty().withMessage('State must be a string'),
+        body('pincode').trim().notEmpty().toInt().withMessage('Pincode must be a non-empty integer'),
 
         body('images').optional(),
         body('video').optional(),
 
-        body('map_location').optional().withMessage('Map location must be a non-empty string'),
-        body('longitude').optional().withMessage('Longitude must be a non-empty decimal'),
-        body('latitude').optional().withMessage('Latitude must be a non-empty decimal'),
+        body('map_location').optional(),
+        body('longitude').optional(),
+        body('latitude').optional(),
     ];
 };
 
