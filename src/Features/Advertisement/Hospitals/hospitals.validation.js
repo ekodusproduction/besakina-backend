@@ -1,5 +1,6 @@
 import { body, validationResult } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
+import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
 export const hospitalValidationRules = () => {
     return [
