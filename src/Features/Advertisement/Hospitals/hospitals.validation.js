@@ -21,8 +21,8 @@ export const hospitalValidationRules = () => {
         body('video').optional(),
 
         body('map_location').optional().withMessage('Map location must be a non-empty string'),
-        body('longitude').optional().toFloat().withMessage('Longitude must be a non-empty decimal'),
-        body('latitude').optional().toFloat().withMessage('Latitude must be a non-empty decimal'),
+        body('longitude').optional().withMessage('Longitude must be a non-empty decimal').toFloat(),
+        body('latitude').optional().withMessage('Latitude must be a non-empty decimal').toFloat(),
     ];
 };
 

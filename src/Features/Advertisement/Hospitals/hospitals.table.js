@@ -21,8 +21,8 @@ export const createHospitalsTable = async function () {
             full_address INT NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
-            price_registration DECIMAL(10, 2) NOT NULL,
-            price_per_visit DECIMAL(10, 2) NOT NULL,
+            price_registration INT,
+            price_per_visit INT,
 
             images LONGTEXT,
             video TEXT,
