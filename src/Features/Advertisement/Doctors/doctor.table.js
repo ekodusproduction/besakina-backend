@@ -15,7 +15,6 @@ export const createDoctorsTable = async function () {
             total_experience INT ,
             title VARCHAR(255) ,
             description TEXT,
-            type VARCHAR(255),
 
             price_registration INT ,
             price_per_visit INT,
