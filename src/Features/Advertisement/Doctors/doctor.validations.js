@@ -8,7 +8,6 @@ export const doctorValidationRules = () => {
         body('total_experience').isInt().notEmpty().withMessage('Total experience must be a non-empty integer'),
         body('title').isString().notEmpty().withMessage('Title must be a non-empty string'),
         body('description').isString().notEmpty().withMessage('Description must be a non-empty string'),
-        body('type').isString().notEmpty().withMessage('Type must be a non-empty string'),
 
         body('price_registration').isInt().notEmpty().withMessage('Price registration must be a non-empty integer'),
         body('price_per_visit').isInt().notEmpty().withMessage('Price per visit must be a non-empty integer'),
