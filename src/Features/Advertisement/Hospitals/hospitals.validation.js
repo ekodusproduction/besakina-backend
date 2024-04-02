@@ -53,9 +53,9 @@ export const editHospitalValidationRules = () => {
 };
 
 
-export const validationMiddlewarePost = async (req, res, next) => {
-    const rules = hospitalValidationRules();
+export const validationMiddlewarePost = async (req, res, next) => {    
     console.log(req.body)
+    const rules = hospitalValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
 
     const errors = validationResult(req);
