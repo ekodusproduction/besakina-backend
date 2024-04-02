@@ -8,14 +8,14 @@ export const hospitalValidationRules = () => {
         body('full_address').isString().trim().withMessage('Full address must be a string'),
         body('title').isString().trim().withMessage('Title must be a string'),
         body('description').isString().trim().withMessage('Description must be a string'),
-        body('price_registration').toInt().withMessage('Price registration must be a decimal'),
-        body('price_per_visit').toInt().withMessage('Price per visit must be a decimal'),
+        body('price_registration').isString().withMessage('Price registration must be a decimal').toInt(),
+        body('price_per_visit').isString().withMessage('Price per visit must be a decimal').toInt(),
 
         body('street').optional().isString().trim().withMessage('Street must be a string'),
         body('locality').isString().trim().withMessage('Address must be a string'),
-        body('city').isString().trim().withMessage('City must be a string'),
-        body('state').isString().trim().withMessage('State must be a string'),
-        body('pincode').toInt().withMessage('Pincode must be an integer'),
+        body('city').trim().isString().withMessage('City must be a string'),
+        body('state').trim().isString().withMessage('State must be a string'),
+        body('pincode').isString().withMessage('Pincode must be an integer').toInt(),
 
         body('images').optional(),
         body('video').optional(),
@@ -53,7 +53,7 @@ export const editHospitalValidationRules = () => {
 };
 
 
-export const validationMiddlewarePost = async (req, res, next) => {    
+export const validationMiddlewarePost = async (req, res, next) => {
     console.log(req.body)
     const rules = hospitalValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
