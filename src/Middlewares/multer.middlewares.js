@@ -43,7 +43,7 @@ export const fileUpload = (destination) => {
                 // Handle any upload errors here
                 return next(err); // Pass the error to the error handling middleware
             }
-            
+            console.log("passed file uploads")
             // No errors, proceed to the next middleware
             next();
         });
