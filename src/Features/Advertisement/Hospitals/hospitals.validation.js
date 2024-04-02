@@ -3,16 +3,16 @@ import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 export const hospitalValidationRules = () => {
     return [
-        body('type').isString().trim().withMessage('Type must be a string'),
-        body('name').isString().trim().withMessage('Name must be a string'),
-        body('full_address').isString().trim().withMessage('Full address must be a string'),
-        body('title').isString().trim().withMessage('Title must be a string'),
-        body('description').isString().trim().withMessage('Description must be a string'),
+        body('type').isString().withMessage('Type must be a string').trim().notEmpty(),
+        body('name').trim().isString().withMessage('Name must be a string'),
+        body('full_address').trim().isString().withMessage('Full address must be a string'),
+        body('title').trim().isString().withMessage('Title must be a string'),
+        body('description').trim().isString().withMessage('Description must be a string'),
         body('price_registration').isString().withMessage('Price registration must be a decimal').toInt(),
         body('price_per_visit').isString().withMessage('Price per visit must be a decimal').toInt(),
 
-        body('street').optional().isString().trim().withMessage('Street must be a string'),
-        body('locality').isString().trim().withMessage('Address must be a string'),
+        body('street').optional().trim().isString().withMessage('Street must be a string'),
+        body('locality').trim().isString().withMessage('Address must be a string'),
         body('city').trim().isString().withMessage('City must be a string'),
         body('state').trim().isString().withMessage('State must be a string'),
         body('pincode').isString().withMessage('Pincode must be an integer').toInt(),
