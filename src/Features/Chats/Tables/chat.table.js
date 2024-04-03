@@ -1,5 +1,6 @@
 
-import pool from "../../../Mysql/mysql.database";
+import pool from "../../../Mysql/mysql.database.js";
+
 export const createChatTable = async function () {
     try {
         const connection = await pool.getConnection();
