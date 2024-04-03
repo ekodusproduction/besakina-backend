@@ -44,13 +44,16 @@ app.use((req, res, next) => {
 })
 
 app.use('/api/public', (req, res, next) => {
-    // Set appropriate CORS headers
-    const allowedOrigins = ['http://localhost:5173', "*"];
-    res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
+    // Check if the request origin matches the allowed origin
+    const allowedOrigin = req.headers.origin === 'localhost:5173' ? req.headers.origin : '*';
+    // Set the Access-Control-Allow-Origin header
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    // Set other CORS headers
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
+
 console.log('request before files')
 app.use('/api/public', express.static('public'));
 // Route definitions
