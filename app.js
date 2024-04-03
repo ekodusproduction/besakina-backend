@@ -51,7 +51,7 @@ app.use('/api/public', (req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
-
+console.log('request before files')
 app.use('/api/public', express.static('public'));
 // Route definitions
 app.get("/api", (req, res) => {
