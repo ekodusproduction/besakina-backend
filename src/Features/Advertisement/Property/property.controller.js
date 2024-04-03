@@ -65,7 +65,7 @@ export const getListAdvertisement = async (req, res, next) => {
     const [query, values] = await selectQuery('property', [], { is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
     if (rows.length === 0) {
-      return sendError(res, "property not found", 404);
+      return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
     }
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);

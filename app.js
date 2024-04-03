@@ -30,16 +30,12 @@ const app = express()
 
 app.set('trust proxy', true);
 app.use(cors());
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-// const limiter = rateLimit({
-//     windowMs: 15 * 60 * 1000, // 15 minutes
-//     max: 100 // limit each IP to 100 requests per windowMs
-// });
-// app.use(limiter);
-// Logger middleware
-// app.use(async (req, res, next) => loggerMiddleware(req, res, next));
+
 app.use((req, res, next) => {
     console.log("ip", req.ip)
     console.log("url", req.url)

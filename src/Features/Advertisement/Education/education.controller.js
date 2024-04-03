@@ -42,7 +42,7 @@ export const getAdvertisement = async (req, res, next) => {
     const [rows] = await connection.query(query, values);
 
     if (rows.length === 0) {
-      return sendError(res, "Advertisement not found", 404);
+      return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
     }
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
