@@ -23,3 +23,18 @@ export const planUpdateTrigger = async function () {
         connection.release();
     }
 }
+
+export const dropPlanUpdateTrigger = async function () {
+    const connection = await pool.getConnection();
+    try {
+        const dropTriggerSQL = `
+            DROP TRIGGER IF EXISTS update_plan_date_trigger;
+        `;
+        const [rows, fields] = await connection.query(dropTriggerSQL);
+        console.log('Plan trigger dropped successfully:');
+    } catch (error) {
+        console.log(error);
+    } finally {
+        connection.release();
+    }
+}

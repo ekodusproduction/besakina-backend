@@ -12,15 +12,15 @@ import { dropHospitalsTable } from "../Features/Advertisement/Hospitals/hospital
 import { dropVehicleTable } from "../Features/Advertisement/Vehicles/vehicles.table.js"
 
 
-import { createChatTable } from "../Features/Chats/Tables/chat.table.js";
-import { createChatRoomTable } from "../Features/Chats/Tables/chatroom.table.js";
-
+import { dropChatTable } from "../Features/Chats/Tables/chat.table.js";
+import { dropChatRoomTable } from "../Features/Chats/Tables/chatroom.table.js";
+import { dropPlanUpdateTrigger } from "./mysql.triggers.js";
 async function dropTables() {
     try {
         // Drop tables in reverse order of their dependencies       
-
-        await createChatTable()
-        await createChatRoomTable()
+        await dropPlanUpdateTrigger()
+        await dropChatTable()
+        await dropChatRoomTable()
         await dropOrderTable();
         // await dropCategoryTable();
 
