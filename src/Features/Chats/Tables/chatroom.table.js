@@ -1,5 +1,5 @@
 
-import pool from "./../Mysql/mysql.database.js"
+import pool from "../../../Mysql/mysql.database.js";
 
 export const createChatRoomTable = async function () {
     try {
