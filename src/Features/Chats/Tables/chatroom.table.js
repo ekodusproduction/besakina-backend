@@ -11,7 +11,7 @@ export const createChatRoomTable = async function () {
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         user_id_1 BIGINT UNSIGNED NOT NULL,
         FOREIGN KEY (user_id_1) REFERENCES users(id) ON DELETE CASCADE,
-        user_id_2 BIGINT UNSIGNED NOT NULL,  -- Corrected column name
+        user_id_2 BIGINT UNSIGNED NOT NULL,  -- Corrected column name,
         FOREIGN KEY (user_id_2) REFERENCES users(id) ON DELETE CASCADE
         )
     `;
