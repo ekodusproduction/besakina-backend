@@ -44,7 +44,8 @@ app.use((req, res, next) => {
 
 app.use('/api/public', (req, res, next) => {
     // Set appropriate CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    const allowedOrigins = ['http://localhost:5173', "*"];
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigins);
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
