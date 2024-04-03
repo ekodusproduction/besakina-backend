@@ -49,7 +49,7 @@ app.use((req, res, next) => {
 app.use('/api/public', express.static('public'));
 // Route definitions
 app.get("/api", (req, res) => {
-    res.status(200).send("Welcome to besakina backend server");
+   return res.status(200).send("Welcome to besakina backend server");
 });
 
 app.use("/api/users", userRouter);

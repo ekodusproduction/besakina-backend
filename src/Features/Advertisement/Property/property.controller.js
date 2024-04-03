@@ -27,6 +27,7 @@ export const addAdvertisement = async (req, res, next) => {
     await connection.commit();
     return sendResponse(res, "Property added successfully", 201, { id: rows.insertId });
   } catch (error) {
+    console.log(error)
     await connection.rollback()
     next(error)
   } finally {
