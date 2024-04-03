@@ -16,7 +16,7 @@ const createStorageMiddleware = (destination) => {
             cb(null, destinationPath);
         },
         filename: (req, file, cb) => {
-            const name = `${Date.now()}${Math.floor(Math.random * 1000)}`;
+            const name = `${Date.now()}${Math.floor(Math.random() * 1000)}`;
             cb(null, name);
         },
         fileFilter: (req, file, cb) => {
