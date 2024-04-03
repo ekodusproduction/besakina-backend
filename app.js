@@ -23,6 +23,7 @@ import educationRouter from './src/Features/Advertisement/Education/education.ro
 import doctorRouter from './src/Features/Advertisement/Doctors/doctors.routes.js';
 
 import chatRouter from './src/Features/Chats/chats.routes.js';
+import homeRouter from './src/Features/Home/home.routes.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
@@ -45,7 +46,7 @@ app.use((req, res, next) => {
 
 app.use('/api/public', (req, res, next) => {
     // Check if the request origin matches the allowed origin
-    const allowedOrigin = req.headers.origin === 'localhost:5173' ? req.headers.origin : '*';
+    const allowedOrigin = req.headers.origin === 'http://localhost:5173' ? req.headers.origin : '*';
     // Set the Access-Control-Allow-Origin header
     res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
     // Set other CORS headers
@@ -71,7 +72,7 @@ app.use("/api/education", educationRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/plans", jwtAuth, plansRouter);
 app.use('/api/chat', chatRouter)
-
+app.use("api/home", homeRouter)
 // Error handling middleware
 app.use(async (err, req, res, next) => {
     logger.info(err);
