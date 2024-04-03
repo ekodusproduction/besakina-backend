@@ -11,7 +11,7 @@ import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middlewar
 
 const doctorRouter = Router()
 //protected routes id=> advertisement id
-doctorRouter.post("/", jwtAuth,  fileUpload("doctors"), validationMiddlewarePost, addAdvertisement)
+doctorRouter.post("/add", jwtAuth,  fileUpload("doctors"), validationMiddlewarePost, addAdvertisement)
 doctorRouter.get("/filter", filterAdvertisement)
 doctorRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
 doctorRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
