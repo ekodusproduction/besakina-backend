@@ -12,7 +12,7 @@ const propertyRouter = Router()
 
 //protected routes id=> advertisement id
 // propertyRouter.post("/", jwtAuth, checkPlanValidity, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
-propertyRouter.post("/", jwtAuth, fileUpload("property"), addAdvertisement)
+propertyRouter.post("/add", jwtAuth, fileUpload("property"), addAdvertisement)
 
 propertyRouter.get("/filter", filterAdvertisement)
 

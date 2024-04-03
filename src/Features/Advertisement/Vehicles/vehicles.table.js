@@ -31,6 +31,8 @@ export const createVehicleTable = async function () {
             map_location TEXT,
             latitude DECIMAL(10, 8),
             longitude DECIMAL(11, 8),
+
+            verified BOOLEAN DEFAULT 1,
             is_active BOOLEAN DEFAULT 1,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

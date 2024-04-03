@@ -22,6 +22,8 @@ import hospitalityRouter from './src/Features/Advertisement/Hospitality/hospital
 import educationRouter from './src/Features/Advertisement/Education/education.routes.js';
 import doctorRouter from './src/Features/Advertisement/Doctors/doctors.routes.js';
 
+import chatRouter from './src/Features/Chats/chats.routes.js';
+
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
 // Middleware setup
@@ -43,6 +45,7 @@ app.use((req, res, next) => {
     console.log("url", req.url)
     next();
 })
+
 app.use('/api/public', express.static('public'));
 // Route definitions
 app.get("/api", (req, res) => {
@@ -58,7 +61,8 @@ app.use("/api/hospitality", hospitalityRouter);
 app.use("/api/education", educationRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/plans", jwtAuth, plansRouter);
- 
+app.use('/api/chat', chatRouter)
+
 // Error handling middleware
 app.use(async (err, req, res, next) => {
     logger.info(err);

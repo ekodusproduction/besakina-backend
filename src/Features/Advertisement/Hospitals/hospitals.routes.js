@@ -10,7 +10,7 @@ import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitals.validation.js";
 const hospitalsRouter = Router()
 //protected routes id=> advertisement id
-hospitalsRouter.post("/", jwtAuth,  fileUpload("hospitals"), validationMiddlewarePost, addAdvertisement)
+hospitalsRouter.post("/add", jwtAuth,  fileUpload("hospitals"), validationMiddlewarePost, addAdvertisement)
 
 hospitalsRouter.get("/filter", filterAdvertisement)
 

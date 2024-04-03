@@ -7,8 +7,8 @@ export const createDoctorsTable = async function () {
         // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS doctors (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            plan_id BIGINT UNSIGNED ,        
-            user_id BIGINT UNSIGNED ,
+            plan_id BIGINT UNSIGNED,        
+            user_id BIGINT UNSIGNED,
             
             expertise VARCHAR(50),
             name VARCHAR(255) ,
@@ -29,6 +29,8 @@ export const createDoctorsTable = async function () {
             map_location TEXT,
             latitude DECIMAL(10, 8),
             longitude DECIMAL(11, 8),
+            
+            verified BOOLEAN DEFAULT 1,
             is_active BOOLEAN DEFAULT 1,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

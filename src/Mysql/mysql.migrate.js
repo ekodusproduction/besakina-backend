@@ -11,6 +11,9 @@ import { createHospitalsTable } from "../Features/Advertisement/Hospitals/hospit
 import { createHospitalityTable } from "../Features/Advertisement/Hospitality/hospitality.table.js";
 import { createDoctorsTable } from "../Features/Advertisement/Doctors/doctor.table.js";
 
+import { createChatTable } from "../Features/Chats/Tables/chat.table.js";
+import { createChatRoomTable } from "../Features/Chats/Tables/chatroom.table.js";
+
 // triggers
 import { planUpdateTrigger } from "./mysql.triggers.js";
 
@@ -26,7 +29,8 @@ async function createTables() {
         await createVehicleTable();
         await createDoctorsTable();
         // await createOrderTable();
-
+        await createChatRoomTable();
+        await createChatTable();
         await createTriggers();
     } catch (error) {
         console.error('Error creating tables:', error);

@@ -11,7 +11,7 @@ import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } fro
 const vehiclesRouter = Router()
 
 //protected routes id=> advertisement id
-vehiclesRouter.post("/", jwtAuth, fileUpload("vehicles"), validationMiddlewarePost, addAdvertisement)
+vehiclesRouter.post("/add", jwtAuth, fileUpload("vehicles"), validationMiddlewarePost, addAdvertisement)
 
 vehiclesRouter.get("/filter", filterAdvertisement)
 
