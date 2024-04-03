@@ -39,6 +39,7 @@ app.use(helmet());
 app.use((req, res, next) => {
     console.log("ip", req.ip)
     console.log("url", req.url)
+    console.log('origin', req.headers.origin)
     next();
 })
 
