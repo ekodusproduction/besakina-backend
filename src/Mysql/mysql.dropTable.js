@@ -11,9 +11,16 @@ import { dropHospitalityTable } from "../Features/Advertisement/Hospitality/hosp
 import { dropHospitalsTable } from "../Features/Advertisement/Hospitals/hospitals.table.js";
 import { dropVehicleTable } from "../Features/Advertisement/Vehicles/vehicles.table.js"
 
+
+import { createChatTable } from "../Features/Chats/Tables/chat.table.js";
+import { createChatRoomTable } from "../Features/Chats/Tables/chatroom.table.js";
+
 async function dropTables() {
     try {
-        // Drop tables in reverse order of their dependencies
+        // Drop tables in reverse order of their dependencies       
+
+        await createChatTable()
+        await createChatRoomTable()
         await dropOrderTable();
         // await dropCategoryTable();
 
@@ -26,6 +33,7 @@ async function dropTables() {
 
         await dropUserTable();
         await dropPlanTable();
+
         // await dropDatabase()
     } catch (error) {
         console.error('Error dropping tables:', error);
