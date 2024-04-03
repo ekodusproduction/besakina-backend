@@ -42,10 +42,18 @@ app.use((req, res, next) => {
     next();
 })
 
+app.use('/api/public', (req, res, next) => {
+    // Set appropriate CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
+
 app.use('/api/public', express.static('public'));
 // Route definitions
 app.get("/api", (req, res) => {
-   return res.status(200).send("Welcome to besakina backend server");
+    return res.status(200).send("Welcome to besakina backend server");
 });
 
 app.use("/api/users", userRouter);
