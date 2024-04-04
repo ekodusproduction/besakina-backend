@@ -94,7 +94,7 @@ export const deleteQuery = async (tableName, updateFields, condition) => {
 };
 
 
-export const selectUnionQuery = async (tableName, selectFields, condition, additionalTableName = null, additionalSelectFields = [], additionalCondition = {}) => {
+export const selectJoinQuery = async (tableName, selectFields, condition) => {
   let columns = [];
   let placeholders = [];
   const values = [];
@@ -114,28 +114,12 @@ export const selectUnionQuery = async (tableName, selectFields, condition, addit
 
   const whereClause = columns.length > 0 ? `WHERE ${columns.map(column => `${column} = ?`).join(' AND ')}` : '';
 
-  let query = `SELECT ${selectClause} FROM ${tableName} ${whereClause}`;
-
-  if (additionalTableName && additionalSelectFields.length > 0) {
-    let additionalSelectClause = '*';
-    if (additionalSelectFields.length === 1) {
-      additionalSelectClause = additionalSelectFields[0];
-    } else if (additionalSelectFields.length > 1) {
-      additionalSelectClause = additionalSelectFields.join(', ');
-    }
-
-    const additionalColumns = [];
-    const additionalValues = [];
-    for (const [key, val] of Object.entries(additionalCondition)) {
-      additionalColumns.push(key);
-      additionalValues.push(val);
-    }
-
-    const additionalWhereClause = additionalColumns.length > 0 ? `WHERE ${additionalColumns.map(column => `${column} = ?`).join(' AND ')}` : '';
-
-    query += ` UNION SELECT ${additionalSelectClause} FROM ${additionalTableName} ${additionalWhereClause}`;
-    values.push(...additionalValues);
-  }
+  const query = `
+    SELECT ${selectClause}, users.* 
+    FROM ${tableName}
+    LEFT JOIN users ON ${tableName}.user_id = users.id
+    ${whereClause};
+  `;
 
   return [query, values];
 };
