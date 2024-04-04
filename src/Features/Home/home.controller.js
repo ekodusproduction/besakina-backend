@@ -1,4 +1,5 @@
 import pool from "../../Mysql/mysql.database.js"
+import { sendResponse } from "../../Utility/response.js"
 import { selectLatestAds } from "./sqlQueries.js"
 export const latestAdds = async function (req, res, next) {
     const connection = await pool.getConnection()
