@@ -71,7 +71,7 @@ app.use("/api/education", educationRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/plans", jwtAuth, plansRouter);
 app.use('/api/chat', chatRouter)
-app.use("api/home", homeRouter)
+app.use("/api/home", homeRouter)
 // Error handling middleware
 app.use(async (err, req, res, next) => {
     logger.info(err);
