@@ -10,8 +10,7 @@ export const doctorValidationRules = () => {
         body('title').isString().notEmpty().withMessage('Title must be a non-empty string'),
         body('description').isString().notEmpty().withMessage('Description must be a non-empty string'),
 
-        body('price_registration').isInt().notEmpty().withMessage('Price registration must be a non-empty integer'),
-        body('price_per_visit').isInt().notEmpty().withMessage('Price per visit must be a non-empty integer'),
+        body('price_per_visit').isString().notEmpty().withMessage('Price per visit must be a non-empty integer'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('locality').isString().withMessage('Locality must be a string'),
@@ -37,7 +36,7 @@ export const editDoctorValidationRules = () => {
         body('description').optional().isString().withMessage('Description must be a string'),
         body('type').optional().isString().withMessage('Type must be a string'),
 
-        body('price_per_visit').optional().toInt().withMessage('Price per visit must be an integer'),
+        body('price_per_visit').optional().withMessage('Price per visit must be an integer').toInt(),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('locality').optional().isString().withMessage('Locality must be a string'),
