@@ -38,6 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 
 app.use((req, res, next) => {
+    
     req.headers.origin = req.headers.origin || 'anonymous';
     console.log("ip", req.ip)
     console.log("url", req.url)
