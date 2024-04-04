@@ -16,7 +16,7 @@ export const createDoctorsTable = async function () {
             title VARCHAR(255) ,
             description TEXT,
 
-            price INT,
+            price_per_visit INT,
             street VARCHAR(50),
             locality VARCHAR(255),
             city VARCHAR(20),
