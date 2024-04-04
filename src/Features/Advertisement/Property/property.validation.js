@@ -20,7 +20,8 @@ const propertiesValidationRules = () => {
         body('car_parking').isString().withMessage('Car parking must be an integer').notEmpty().withMessage('Car parking is required'),
         body('price').isString().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
         body('category').isString(allowedCategories).withMessage(`Category must be one of: ${allowedCategories.join(', ')}`),
-     
+        body('description').trim().isString().withMessage(`description must be string`),
+
         body('street').optional().isString().withMessage('Street must be a string'),
         body('house_no').isString().withMessage('house_no must be a string'),
         body('landmark').isString().withMessage('landmark must be a string'),
