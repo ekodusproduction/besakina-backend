@@ -38,6 +38,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 
 app.use((req, res, next) => {
+    req.headers.origin = req.headers.origin || 'anonymous';
     console.log("ip", req.ip)
     console.log("url", req.url)
     console.log('origin', req.headers.origin)
@@ -51,7 +52,7 @@ app.use('/api/public', (req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', "*");
     // Set other CORS headers
     res.setHeader('Access-Control-Allow-Methods', 'GET');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-Forwarded-For, Content-Type, Accept');
     next()
 });
 
