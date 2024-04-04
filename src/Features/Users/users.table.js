@@ -17,9 +17,22 @@ export const createUserTable = async function () {
         otp INT,
         email VARCHAR(255),
         gst_number VARCHAR(50),
-        user_profile VARCHAR(255),
+        aadhar_number VARCHAR(50),
+        pan_number VARCHAR(50),
+
+        gst_file TEXT,
+        aadhar_file TEXT,
+        pan_file TEXT,
+
+        profile_pic VARCHAR(255),
         plan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         contacts_quota INT, 
+
+        state VARCHAR(255),
+        city VARCHAR(255),
+        address VARCHAR(255),
+        pincode VARCHAR(255),
+        about VARCHAR(255),
 
         FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
