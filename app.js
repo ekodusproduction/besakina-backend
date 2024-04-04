@@ -30,7 +30,7 @@ const app = express()
 // Middleware setup
 
 app.set('trust proxy', true);
-app.use(cors());
+app.use(cors({ credentials: true }));
 
 
 app.use(express.json());
