@@ -2,7 +2,7 @@ import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
 import { sendResponse, sendError } from "../../../Utility/response.js";
 import pool from "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
-import { insertQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
+import { insertQuery, selectQuery, updateQuery, selectUnionQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
 
 export const addAdvertisement = async (req, res, next) => {
@@ -36,20 +36,21 @@ export const addAdvertisement = async (req, res, next) => {
 }
 
 export const getAdvertisement = async (req, res, next) => {
-  let connection = await pool.getConnection();;
+  let connection = await pool.getConnection();
   try {
     const advertisementID = req.params.id;
-    const [query, values] = await selectQuery('property', [], { id: advertisementID, is_active: 1 });
+    const [query, values] = await selectUnionQuery('property', [], { id: advertisementID, is_active: 1 }, 'users', ['id', 'firstName', 'lastName', "gst_number", "created_at"], {});
     const [rows] = await connection.query(query, values);
 
     if (rows.length === 0) {
-      return sendError(res, "property not found", 404);
+      return sendError(res, "Property not found", 404);
     }
+
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
-    return sendResponse(res, "property fetched successfully", 200, { advertisement: rows[0] });
+    return sendResponse(res, "Property fetched successfully", 200, { advertisement: rows[0] });
   } catch (error) {
     return sendError(res, error.message || "Error fetching property", 500);
   } finally {

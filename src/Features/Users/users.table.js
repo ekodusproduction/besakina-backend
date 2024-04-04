@@ -16,6 +16,7 @@ export const createUserTable = async function () {
         mobile BIGINT UNSIGNED NOT NULL UNIQUE,
         otp INT,
         email VARCHAR(255),
+        gst_number VARCHAR(50),
         user_profile VARCHAR(255),
         plan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         contacts_quota INT, 

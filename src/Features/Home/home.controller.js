@@ -6,6 +6,10 @@ export const latestAdds = async function (req, res, next) {
     try {
         const [rows, fields] = await connection.query(selectLatestAds)
         console.log(rows)
+        rows.forEach(advertisement => {
+            advertisement.images = JSON.parse(advertisement.images);
+            advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+          });
         return sendResponse(res, "Latest Adds", 200, { advertisements: rows });
     } catch (error) {
         next(error)
