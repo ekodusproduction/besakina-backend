@@ -44,7 +44,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use('/api/public', (req, res, next) => {
+app.use('/api/public', (req, res) => {
     // Check if the request origin matches the allowed origin
     const allowedOrigin = req.headers.origin === 'http://localhost:5173' ? req.headers.origin : '*';
     // Set the Access-Control-Allow-Origin header
@@ -52,7 +52,6 @@ app.use('/api/public', (req, res, next) => {
     // Set other CORS headers
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
 });
 
 console.log('request before files')
