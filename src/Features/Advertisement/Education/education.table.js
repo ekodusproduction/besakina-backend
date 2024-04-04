@@ -17,7 +17,7 @@ export const createEducationTable = async function () {
             course_duration VARCHAR(255) NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
-            price DECIMAL(10, 2) NOT NULL,
+            price INT NOT NULL,
 
 
             street VARCHAR(50),

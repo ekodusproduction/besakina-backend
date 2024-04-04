@@ -1,40 +1,40 @@
 export const selectLatestAds = `(
-    SELECT id, title, description, created_at, 'property' AS category
+    SELECT id, title, price, created_at, images, 'property' AS category
     FROM property
     ORDER BY created_at DESC
     LIMIT 10
 )
 UNION ALL
 (
-    SELECT id, title, description, created_at, 'vehicles' AS category
+    SELECT id, title, price, created_at, images, 'vehicles' AS category
     FROM vehicles
     ORDER BY created_at DESC
     LIMIT 10
 )
 UNION ALL
 (
-    SELECT id, title, description, created_at, 'hospitality' AS category
+    SELECT id, title, price, created_at, images, 'hospitality' AS category
     FROM hospitality
     ORDER BY created_at DESC
     LIMIT 10
 )
 UNION ALL
 (
-    SELECT id, title, description, created_at, 'education' AS category
+    SELECT id, title, price, created_at, images, 'education' AS category
     FROM education
     ORDER BY created_at DESC
     LIMIT 10
 )
 UNION ALL
 (
-    SELECT id, title, description, created_at, 'doctors' AS category
+    SELECT id, title, price, created_at, images, 'doctors' AS category
     FROM doctors
     ORDER BY created_at DESC
     LIMIT 10
 )
 UNION ALL
 (
-    SELECT id, title, description, created_at, 'hospitals' AS category
+    SELECT id, title, price_registration,price_per_visit, created_at, images, 'hospitals' AS category
     FROM hospitals
     ORDER BY created_at DESC
     LIMIT 10
