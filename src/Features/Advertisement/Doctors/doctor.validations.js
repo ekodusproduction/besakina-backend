@@ -37,8 +37,7 @@ export const editDoctorValidationRules = () => {
         body('description').optional().isString().withMessage('Description must be a string'),
         body('type').optional().isString().withMessage('Type must be a string'),
 
-        body('price_registration').optional().isInt().withMessage('Price registration must be an integer'),
-        body('price_per_visit').optional().isInt().withMessage('Price per visit must be an integer'),
+        body('price_per_visit').optional().toInt().withMessage('Price per visit must be an integer'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('locality').optional().isString().withMessage('Locality must be a string'),
