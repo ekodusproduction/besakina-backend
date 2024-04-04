@@ -34,7 +34,7 @@ UNION ALL
 )
 UNION ALL
 (
-    SELECT id, title, price_registration,price_per_visit, created_at, images, 'hospitals' AS category
+    SELECT id, title,price_per_visit, created_at, images, 'hospitals' AS category
     FROM hospitals
     ORDER BY created_at DESC
     LIMIT 10
