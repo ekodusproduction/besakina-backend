@@ -2,7 +2,7 @@ import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
 import { sendResponse, sendError } from "../../../Utility/response.js";
 import pool from "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
-import { insertQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
+import { insertQuery, selectQuery, updateQuery, selectJoinQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
 
 export const addAdvertisement = async (req, res, next) => {
