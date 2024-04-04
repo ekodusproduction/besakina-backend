@@ -39,7 +39,7 @@ export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
   try {
     const advertisementID = req.params.id;
-    const [query, values] = await selectUnionQuery('property', [], { id: advertisementID, is_active: 1 }, 'users', ['id', 'firstName', 'lastName', "gst_number", "created_at"], {});
+    const [query, values] = await selectUnionQuery('property', [], { id: advertisementID, is_active: 1 }, 'users', ['id', 'firstName', 'lastName', "gst_number", "createdAt"], {});
     const [rows] = await connection.query(query, values);
 
     if (rows.length === 0) {
@@ -50,7 +50,7 @@ export const getAdvertisement = async (req, res, next) => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
-    
+
     return sendResponse(res, "Property fetched successfully", 200, { advertisement: rows[0] });
   } catch (error) {
     return sendError(res, error.message || "Error fetching property", 500);
