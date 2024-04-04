@@ -2,7 +2,7 @@ import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
 import { sendResponse, sendError } from "../../../Utility/response.js";
 import pool from "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
-import { insertQuery, selectQuery, updateQuery, selectUnionQuery } from "../../../Utility/sqlQuery.js";
+import { insertQuery, selectQuery, updateQuery, selectJoinQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
 
 export const addAdvertisement = async (req, res, next) => {
@@ -39,7 +39,7 @@ export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
   try {
     const advertisementID = req.params.id;
-    const [query, values] = await selectUnionQuery('property', [], { id: advertisementID, is_active: 1 }, 'users', ['id', 'firstName', 'lastName', "gst_number", "createdAt"], {});
+    const [query, values] = await selectJoinQuery('property', [], { id: advertisementID, is_active: 1 });
     const [rows] = await connection.query(query, values);
 
     if (rows.length === 0) {
