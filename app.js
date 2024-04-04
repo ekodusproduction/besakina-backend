@@ -47,7 +47,6 @@ app.use((req, res, next) => {
 app.use('/api/public', (req, res, next) => {
     // Check if the request origin matches the allowed origin
     req.headers.origin = 'anonymous'
-    const allowedOrigin = req.headers.origin === 'http://localhost:5173' ? req.headers.origin : '*';
     // Set the Access-Control-Allow-Origin header
     res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
     // Set other CORS headers
