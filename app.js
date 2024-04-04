@@ -39,7 +39,6 @@ app.use(helmet());
 
 app.use((req, res, next) => {
     console.log('origin- before', req.headers)
-    req.headers.origin = req.headers.origin || 'http://localhost:5173';
     console.log("ip", req.ip)
     console.log("url", req.url)
     console.log('origin', req.headers.origin)
