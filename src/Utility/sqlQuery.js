@@ -100,16 +100,16 @@ export const selectJoinQuery = async (tableName, selectFields, condition) => {
   const values = [];
 
   for (const [key, val] of Object.entries(condition)) {
-    columns.push(key);
+    columns.push(`${tableName}.${key}`); // Specify table alias for columns in condition
     placeholders.push('?');
     values.push(val);
   }
 
   let selectClause = '*';
   if (selectFields.length === 1) {
-    selectClause = selectFields[0];
+    selectClause = `${tableName}.${selectFields[0]}`; // Specify table alias for select fields
   } else if (selectFields.length > 1) {
-    selectClause = selectFields.join(', ');
+    selectClause = selectFields.map(field => `${tableName}.${field}`).join(', ');
   }
 
   const whereClause = columns.length > 0 ? `WHERE ${columns.map(column => `${column} = ?`).join(' AND ')}` : '';
