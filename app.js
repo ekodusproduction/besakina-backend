@@ -48,7 +48,7 @@ app.use('/api/public', (req, res, next) => {
     // Check if the request origin matches the allowed origin
     req.headers.origin = 'anonymous'
     // Set the Access-Control-Allow-Origin header
-    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+    res.setHeader('Access-Control-Allow-Origin', "*");
     // Set other CORS headers
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
