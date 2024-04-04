@@ -29,8 +29,6 @@ export const createPropertyTable = async function () {
             price BIGINT UNSIGNED ,
             category VARCHAR(25) ,
             
-  
-            
             street VARCHAR(50),
             house_no VARCHAR(255),
             landmark VARCHAR(255),

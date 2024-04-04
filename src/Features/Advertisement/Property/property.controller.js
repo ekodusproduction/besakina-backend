@@ -50,6 +50,7 @@ export const getAdvertisement = async (req, res, next) => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
+    
     return sendResponse(res, "Property fetched successfully", 200, { advertisement: rows[0] });
   } catch (error) {
     return sendError(res, error.message || "Error fetching property", 500);
