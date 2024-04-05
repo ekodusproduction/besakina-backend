@@ -92,7 +92,7 @@ export const filterAdvertisement = async (req, res, next) => {
 
     if (rows.length === 0) {
       return sendError(res, "Doctors not found for given filter", 404);
-    }
+    } 
 
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
