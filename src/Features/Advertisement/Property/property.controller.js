@@ -2,7 +2,7 @@ import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
 import { sendResponse, sendError } from "../../../Utility/response.js";
 import pool from "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
-import { insertQuery, selectQuery, updateQuery, selectJoinQuery } from "../../../Utility/sqlQuery.js";
+import { insertQuery, selectQuery, updateQuery, selectJoinQuery, filterQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
 
 export const addAdvertisement = async (req, res, next) => {
@@ -88,11 +88,11 @@ export const filterAdvertisement = async (req, res, next) => {
 
   try {
     let query = req.query;
-    let condition = { is_active: true, price: { "<": query.maxPrice || 100000000000, ">": query.minPrice || 0 }, ...query };
+    let condition = { is_active: true, ...query };
     delete condition.minPrice;
     delete condition.maxPrice;
-
-    const [sql, values] = await selectQuery('property', [], condition);
+    const rangeCondition = {price:{min:query.minPrice || 0, max: query.maxPrice || 1000000000000}}
+    const [sql, values] = await filterQuery('property', ['id', 'title', 'price', 'images', 'locality', 'city', 'state'], condition);
     console.log("sql", sql);
 
     const [rows, fields] = await connection.query(sql, values);

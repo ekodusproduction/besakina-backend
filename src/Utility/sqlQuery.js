@@ -129,3 +129,41 @@ export const selectJoinQuery = async (tableName, selectFields, condition) => {
 
   return [query, values];
 };
+
+export const filterQuery = async (tableName, selectFields, condition, rangeCondition) => {
+  let columns = [];
+  let placeholders = [];
+  const values = [];
+
+  // Handle regular conditions
+  for (const [key, val] of Object.entries(condition)) {
+    columns.push(`${key} = ?`);
+    values.push(val);
+  }
+
+  // Handle range conditions
+  for (const [key, val] of Object.entries(rangeCondition)) {
+    const { min, max } = val;
+    if (min !== undefined && max !== undefined) {
+      columns.push(`${key} BETWEEN ? AND ?`);
+      values.push(min, max);
+    } else if (min !== undefined) {
+      columns.push(`${key} > ?`);
+      values.push(min);
+    } else if (max !== undefined) {
+      columns.push(`${key} < ?`);
+      values.push(max);
+    }
+  }
+
+  let selectClause = '*';
+  if (selectFields.length === 1) {
+    selectClause = selectFields[0];
+  } else if (selectFields.length > 1) {
+    selectClause = selectFields.join(', ');
+  }
+
+  const whereClause = columns.length > 0 ? `WHERE ${columns.join(' AND ')}` : '';
+  const query = `SELECT ${selectClause} FROM ${tableName} ${whereClause}`;
+  return [query, values];
+};
