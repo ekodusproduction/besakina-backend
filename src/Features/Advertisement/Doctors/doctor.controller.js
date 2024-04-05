@@ -99,10 +99,10 @@ export const filterAdvertisement = async (req, res, next) => {
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
 
-    return sendResponse(res, "Hospitality fetched successfully", 200, { advertisements: rows });
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements: rows });
   } catch (error) {
     console.log(error);
-    return sendError(res, error.message || "Error fetching hospitality", 500);
+    return sendError(res, error.message || "Error fetching doctors", 500);
   } finally {
     if (connection) {
       connection.release();
