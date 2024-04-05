@@ -91,7 +91,7 @@ export const filterAdvertisement = async (req, res, next) => {
     let condition = { is_active: true, ...query };
     delete condition.minPrice;
     delete condition.maxPrice;
-    const rangeCondition = {price:{min:query.minPrice || 0, max: query.maxPrice || 1000000000000}}
+    const rangeCondition = { price: { min: query.minPrice || 0, max: query.maxPrice || 1000000000000 } }
     const [sql, values] = await filterQuery('property', ['id', 'title', 'price', 'images', 'locality', 'city', 'state'], condition);
     console.log("sql", sql);
 
@@ -105,6 +105,7 @@ export const filterAdvertisement = async (req, res, next) => {
     });
     return sendResponse(res, "Property fetched successfully", 200, { advertisements: rows });
   } catch (error) {
+    permittedCrossDomainPolicies.log(error)
     return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     if (connection) {
