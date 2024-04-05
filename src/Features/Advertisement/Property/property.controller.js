@@ -92,7 +92,7 @@ export const filterAdvertisement = async (req, res, next) => {
     delete condition.minPrice;
     delete condition.maxPrice;
     const rangeCondition = { price: { min: query.minPrice || 0, max: query.maxPrice || 1000000000000 } }
-    const [sql, values] = await filterQuery('property', ['id', 'title', 'price', 'images', 'locality', 'city', 'state'], condition);
+    const [sql, values] = await filterQuery('property', ['id', 'title', 'price', 'images', 'locality', 'city', 'state'], condition, rangeCondition);
     console.log("sql", sql);
 
     const [rows, fields] = await connection.query(sql, values);
