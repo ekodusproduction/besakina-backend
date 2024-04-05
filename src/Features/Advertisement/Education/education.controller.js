@@ -82,28 +82,33 @@ export const getListAdvertisement = async (req, res, next) => {
 
 export const filterAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
-  ;
+
   try {
-    let filter = req.query;
-    filter.is_active = true;
-    const [query, values] = await selectQuery('education', [], filter);
-    const [rows, fields] = await connection.query(query, values);
+    const { minPrice, maxPrice } = req.query;
+
+    const filter = `SELECT id, title, price, images, city, state FROM education WHERE is_active = ? AND price BETWEEN ? AND ?`;
+    const [rows, fields] = await connection.query(filter, [true, minPrice || 0, maxPrice || 1000000000000]);
+
     if (rows.length === 0) {
-      return sendError(res, "Advertisements not found", 404);
+      return sendError(res, "Education not found for given filter", 404);
     }
+
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
-    return sendResponse(res, "Advertisements fetched successfully", 200, { advertisements: rows });
+
+    return sendResponse(res, "Education fetched successfully", 200, { advertisements: rows });
   } catch (error) {
-    return sendError(res, error.message || "Error fetching advertisements", 500);
+    console.log(error);
+    return sendError(res, error.message || "Error fetching education", 500);
   } finally {
     if (connection) {
       connection.release();
     }
   }
-}
+};
+
 export const updateAdvertisement = async (req, res, next) => {
   // Implement your logic for updateAdvertisement
   let connection = await pool.getConnection();
