@@ -87,33 +87,31 @@ export const filterAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
 
   try {
-    let query = req.query;
-    let condition = { is_active: true, ...query };
-    delete condition.minPrice;
-    delete condition.maxPrice;
-    const rangeCondition = { price: { min: query.minPrice || 0, max: query.maxPrice || 1000000000000 } }
-    const [sql, values] = await filterQuery('property', ['id', 'title', 'price', 'images',  'city', 'state'], condition, rangeCondition);
-    console.log("sql", sql);
-    console.log("values", values);
+    const { minPrice, maxPrice } = req.query;
 
-    const [rows, fields] = await connection.query(sql, values);
+    const filter = `SELECT id, title, price, images, city, state FROM property WHERE is_active = ? AND price BETWEEN ? AND ?`;
+    const [rows, fields] = await connection.query(filter, [true, minPrice || 0, maxPrice || 1000000000000]);
+
     if (rows.length === 0) {
       return sendError(res, "Property not found", 404);
     }
+
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
     });
+
     return sendResponse(res, "Property fetched successfully", 200, { advertisements: rows });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     if (connection) {
       connection.release();
     }
   }
-}
+};
+
 
 export const updateAdvertisement = async (req, res, next) => {
   // Implement your logic for updateAdvertisement
