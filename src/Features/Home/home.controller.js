@@ -4,7 +4,9 @@ import { selectLatestAds } from "./sqlQueries.js"
 export const latestAdds = async function (req, res, next) {
     const connection = await pool.getConnection()
     try {
-        const [rows, fields] = await connection.query(selectLatestAds)
+        const limit = req.query?.limit || 100;
+
+        const [rows, fields] = await connection.query(selectLatestAds, [limit])
         console.log(rows)
         rows.forEach(advertisement => {
             advertisement.images = JSON.parse(advertisement.images);
