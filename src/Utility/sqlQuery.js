@@ -22,9 +22,15 @@ export const selectQuery = async (tableName, selectFields, condition) => {
   const values = [];
 
   for (const [key, val] of Object.entries(condition)) {
-    columns.push(key);
-    placeholders.push('?');
-    values.push(val);
+    if (typeof val === 'object') {
+      // Handle range conditions
+      const operator = Object.keys(val)[0]; // Get the operator, e.g., '<' or '>'
+      columns.push(`${key} ${operator} ?`);
+      values.push(val[operator]); // Push the value associated with the operator
+    } else {
+      columns.push(`${key} = ?`);
+      values.push(val);
+    }
   }
 
   let selectClause = '*';
@@ -33,10 +39,11 @@ export const selectQuery = async (tableName, selectFields, condition) => {
   } else if (selectFields.length > 1) {
     selectClause = selectFields.join(', ');
   }
-  const whereClause = columns.length > 0 ? `WHERE ${columns.map(column => `${column} = ?`).join(' AND ')}` : '';
+  const whereClause = columns.length > 0 ? `WHERE ${columns.join(' AND ')}` : '';
   const query = `SELECT ${selectClause} FROM ${tableName} ${whereClause}`;
   return [query, values];
 };
+
 
 
 export const updateQuery = async (tableName, updateFields, condition) => {
@@ -92,7 +99,6 @@ export const deleteQuery = async (tableName, updateFields, condition) => {
 
   return [query, values];
 };
-
 
 export const selectJoinQuery = async (tableName, selectFields, condition) => {
   let columns = [];

@@ -85,12 +85,15 @@ export const getListAdvertisement = async (req, res, next) => {
 
 export const filterAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
-  ;
+
   try {
-    let filter = req.query;
-    filter.is_active = true;
-    const [query, values] = await selectQuery('property', [], filter);
-    const [rows, fields] = await connection.query(query, values);
+    let query = req.query;
+    let condition = {is_active:true, price:{"<":query.maxPrice || 100000000000, ">":query.minPrice || 0}, ...query};
+    delete condition.minPrice;
+    delete condition.maxPrice;
+
+    const [sql, values] = await selectQuery('property', [], condition);
+    const [rows, fields] = await connection.query(sql, values);
     if (rows.length === 0) {
       return sendError(res, "Property not found", 404);
     }
