@@ -93,7 +93,7 @@ export const filterAdvertisement = async (req, res, next) => {
     const [rows, fields] = await connection.query(filter, [true, minPrice || 0, maxPrice || 1000000000000]);
 
     if (rows.length === 0) {
-      return sendError(res, "Property not found", 404);
+      return sendResponse(res, "Properties not found for given filter", 200);
     }
 
     rows.forEach(advertisement => {
