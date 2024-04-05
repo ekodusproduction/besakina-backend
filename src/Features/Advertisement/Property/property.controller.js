@@ -105,7 +105,7 @@ export const filterAdvertisement = async (req, res, next) => {
     });
     return sendResponse(res, "Property fetched successfully", 200, { advertisements: rows });
   } catch (error) {
-    permittedCrossDomainPolicies.log(error)
+    console.log(error)
     return sendError(res, error.message || "Error fetching property", 500);
   } finally {
     if (connection) {
