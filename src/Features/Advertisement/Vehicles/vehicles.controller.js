@@ -116,7 +116,7 @@ export const updateAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
 
   try {
-    const advertisementID = req.params.id;
+    const advertisementID = parseInt(req.params.id);
     const filter = req.body;
     // Validate and sanitize the filter object if needed
     const [query, values] = await updateQuery('vehicles', filter, { id: advertisementID });
