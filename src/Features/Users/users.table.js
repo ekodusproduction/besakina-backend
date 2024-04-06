@@ -30,7 +30,7 @@ export const createUserTable = async function () {
 
         state VARCHAR(255),
         city VARCHAR(255),
-        address VARCHAR(255),
+        locality VARCHAR(255),
         pincode VARCHAR(255),
         about VARCHAR(255),
 
