@@ -84,11 +84,9 @@ export const filterAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
 
   try {
-    let { minPrice, maxPrice } = req.query;
-    minPrice = parseInt(minPrice)
-    maxPrice = parseInt(maxPrice)
-    const filter = `SELECT id, title, price, images, city, state FROM doctors WHERE is_active = ? AND price_per_visit BETWEEN ? AND ?`;
-    const [rows, fields] = await connection.query(filter, [true, minPrice || 0, maxPrice || 1000000000000]);
+    let query = req.query;
+    const [sql, values] = await selectQuery("doctors", [], query)
+    const [rows, fields] = await connection.query(sql, values);
 
     if (rows.length === 0) {
       return sendError(res, "Doctors not found for given filter", 404);
