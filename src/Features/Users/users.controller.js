@@ -104,7 +104,8 @@ export const userDetails = async function(req, res,next){
         requestBody.profile_pic = req.files[0].path
         
         const [query, values] = await insertQuery('users', requestBody);
-        return await sendResponse(res, 'User details added.', 201, query, null);
+        const [rows, fields] = await connection.query(query, values);
+        return await sendResponse(res, 'User details added.', 201, rows, null);
     } catch (error) {
         console.error('Error in user details:', error);
         next(error);
