@@ -8,6 +8,6 @@ userRouter.get("/", jwtAuth, getUsers)
 
 userRouter.post("/login", loginValidation, login)
 userRouter.post("/sendotp", mobileValidation, sendOtp)
-userRouter.post("/details", userDetails)
+userRouter.post("/details", ,userDetails)
 
 export default userRouter  
