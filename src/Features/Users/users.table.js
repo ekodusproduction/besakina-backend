@@ -20,9 +20,9 @@ export const createUserTable = async function () {
         aadhar_number VARCHAR(50),
         pan_number VARCHAR(50),
 
-        gst_file TEXT,
-        aadhar_file TEXT,
-        pan_file TEXT,
+        gst_number VARCHAR(255),
+        aadhar_number VARCHAR(255),
+        pan_number VARCHAR(255),
 
         profile_pic VARCHAR(255),
         plan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

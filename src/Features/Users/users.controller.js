@@ -95,3 +95,21 @@ export const getUsers = async function(req, res, next){
         }
     }
 }
+
+export const userDetails = async function(req, res,next){
+    const connection = await pool.getConnection();
+    try {
+        let requestBody = req.body
+        requestBody.profile_pic = req.files[0].path
+        
+        const [query, values] = await insertQuery('users', requestBody);
+        return await sendResponse(res, 'User details added.', 201, query, null);
+    } catch (error) {
+        console.error('Error in user details:', error);
+        next(error);
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+}

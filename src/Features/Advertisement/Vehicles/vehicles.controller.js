@@ -88,6 +88,7 @@ export const filterAdvertisement = async (req, res, next) => {
     minPrice = parseInt(minPrice)
     maxPrice = parseInt(maxPrice)
     const filter = `SELECT id, title, price, images, city, state FROM vehicles WHERE is_active = ? AND price BETWEEN ? AND ?`;
+
     const [rows, fields] = await connection.query(filter, [true, minPrice || 0, maxPrice || 1000000000000]);
 
     if (rows.length === 0) {
