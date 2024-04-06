@@ -5,6 +5,7 @@ dotenv.config();
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
+import { insertQuery } from "../../Utility/sqlQuery.js";
 
 export const sendOtp = async (req, res, next) => {
     const { mobile } = req.body;
