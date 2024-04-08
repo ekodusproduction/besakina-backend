@@ -19,7 +19,8 @@ export const createVehicleTable = async function () {
             title VARCHAR(255),
             description TEXT,
             price VARCHAR(255),
-
+            category VARCHAR(255),
+            
             street VARCHAR(50),
             locality VARCHAR(255),
             city VARCHAR(20),
