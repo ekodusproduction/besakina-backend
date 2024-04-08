@@ -15,12 +15,12 @@ export const createHospitalityTable = async function () {
             name VARCHAR(255) NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
-            price INT,
+            price VARCHAR(255),
             street VARCHAR(50),
             locality VARCHAR(255),
             city VARCHAR(20),
             state VARCHAR(25),
-            pincode INT,
+            pincode VARCHAR(255),
 
             images LONGTEXT,
             video TEXT,
@@ -34,7 +34,7 @@ export const createHospitalityTable = async function () {
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            FULLTEXT(title,name, type, description,  city, state, locality, price,category, pincode),
+            FULLTEXT(title,name, type, description,  city, state, locality, category, pincode),
 
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

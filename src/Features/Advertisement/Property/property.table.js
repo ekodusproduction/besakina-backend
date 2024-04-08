@@ -26,7 +26,7 @@ export const createPropertyTable = async function () {
             floor_no INT,
             total_floors INT,
             car_parking INT DEFAULT 1,
-            price BIGINT UNSIGNED,
+            price VARCHAR(255),
             category VARCHAR(25),
             description TEXT,
             
@@ -35,7 +35,7 @@ export const createPropertyTable = async function () {
             landmark VARCHAR(255),
             city VARCHAR(20),
             state VARCHAR(25),
-            pincode INT,
+            pincode VARCHAR(255),
             
             images LONGTEXT,
             video TEXT,
@@ -52,7 +52,7 @@ export const createPropertyTable = async function () {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-            FULLTEXT(title, city, state,bedrooms, bathrooms,landmark, total_rooms, category, price, pincode),
+            FULLTEXT(title, city, state, landmark, total_rooms, category, price, pincode),
             
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

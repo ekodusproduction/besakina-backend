@@ -16,12 +16,12 @@ export const createDoctorsTable = async function () {
             title VARCHAR(255) ,
             description TEXT,
 
-            price_per_visit INT,
+            price_per_visit VARCHAR(255),
             street VARCHAR(50),
             locality VARCHAR(255),
             city VARCHAR(20),
             state VARCHAR(25),
-            pincode INT ,
+            pincode VARCHAR(255) ,
 
             images LONGTEXT,
             video TEXT,
@@ -37,7 +37,7 @@ export const createDoctorsTable = async function () {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-            FULLTEXT(title,expertise, type, description,price_per_visit, street, city, locality, pincode),
+            FULLTEXT(title,expertise,  description,price_per_visit, street, city, locality, pincode),
 
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

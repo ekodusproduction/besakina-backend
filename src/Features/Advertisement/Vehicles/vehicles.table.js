@@ -14,17 +14,17 @@ export const createVehicleTable = async function () {
 
             type VARCHAR(50),
             brand VARCHAR(50),
-            registration_year INT,
-            kilometer_driven INT,
+            registration_year VARCHAR(255),
+            kilometer_driven VARCHAR(255),
             title VARCHAR(255),
             description TEXT,
-            price INT,
+            price VARCHAR(255),
 
             street VARCHAR(50),
             locality VARCHAR(255),
             city VARCHAR(20),
             state VARCHAR(25),
-            pincode INT ,
+            pincode VARCHAR(255),
 
             images LONGTEXT,
             video TEXT,

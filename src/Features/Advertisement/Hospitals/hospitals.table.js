@@ -36,7 +36,7 @@ export const createHospitalsTable = async function () {
             locality VARCHAR(255),
             city VARCHAR(20),
             state VARCHAR(25),
-            pincode INT ,
+            pincode VARCHAR(255),
 
             seen_by INT,
 

@@ -17,14 +17,14 @@ export const createEducationTable = async function () {
             course_duration VARCHAR(255) NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
-            price INT NOT NULL,
+            price VARCHAR(255) NULL,
 
 
             street VARCHAR(50),
             locality VARCHAR(255),
             city VARCHAR(50),
             state VARCHAR(25),
-            pincode INT ,
+            pincode VARCHAR(255),
 
             images LONGTEXT,
             video TEXT,
