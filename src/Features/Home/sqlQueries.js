@@ -40,5 +40,19 @@ UNION ALL
     LIMIT 10
 )
 ORDER BY FIELD(category, 'property', 'vehicles', 'hospitality', 'education', 'doctors', 'hospitals'), created_at DESC
-LIMIT ?;
+LIMIT ? OFFSET ?;
+`
+
+
+export const searchAdd = `SELECT id, 'doctors' AS type, title, description,images FROM doctors WHERE MATCH(title, expertise, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+UNION ALL
+SELECT id, 'education' AS type, title, description, images FROM education WHERE MATCH(title, domain, institution_name, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+UNION ALL
+SELECT id, 'hospitality' AS type, title, description ,images FROM hospitality WHERE MATCH(title, name, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+UNION ALL
+SELECT id, 'hospitals' AS type, title, description, images FROM hospitals WHERE MATCH(title, name, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+UNION ALL
+SELECT id, 'property' AS type, title, description, images FROM property WHERE MATCH(title, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+UNION ALL
+SELECT id, 'vehicles' AS type, title, description, images FROM vehicles WHERE MATCH(title, brand, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
 `
