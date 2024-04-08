@@ -33,7 +33,7 @@ async function dropTables() {
 
         await dropUserTable();
         await dropPlanTable();
-
+        await dropPlanUpdateTrigger()
         // await dropDatabase()
     } catch (error) {
         console.error('Error dropping tables:', error);
