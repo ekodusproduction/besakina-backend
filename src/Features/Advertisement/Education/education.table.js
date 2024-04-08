@@ -34,10 +34,13 @@ export const createEducationTable = async function () {
             
             verified BOOLEAN DEFAULT 1,
             is_active BOOLEAN DEFAULT 1,
+            seen_by INT,
 
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+            FULLTEXT(title,domain,institution_name, type, description, street, city, locality, price, pincode),
 
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

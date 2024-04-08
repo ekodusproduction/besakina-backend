@@ -84,7 +84,7 @@ export const filterAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();
 
   try {
-    const { minPrice, maxPrice } = req.query;
+    let { minPrice, maxPrice } = req.query;
     minPrice = parseInt(minPrice)
     maxPrice = parseInt(maxPrice)
     const filter = `SELECT id, title, price, images, city, state FROM hospitality WHERE is_active = ? AND price BETWEEN ? AND ?`;

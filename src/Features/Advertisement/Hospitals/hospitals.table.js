@@ -18,7 +18,6 @@ export const createHospitalsTable = async function () {
             
             type VARCHAR(50) NOT NULL,
             name VARCHAR(255) NOT NULL,
-            full_address TEXT NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
             price_registration INT,
@@ -39,8 +38,12 @@ export const createHospitalsTable = async function () {
             state VARCHAR(25),
             pincode INT ,
 
+            seen_by INT,
+
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+            FULLTEXT(title,name, type, description, street, city, state, locality, category, pincode),
 
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

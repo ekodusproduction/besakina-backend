@@ -44,13 +44,15 @@ export const createPropertyTable = async function () {
             latitude DECIMAL(10, 8),
             longitude DECIMAL(11, 8),
             
+            seen_by INT,
+
             verified BOOLEAN DEFAULT 1,
             is_active BOOLEAN DEFAULT 1,
             
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-            FULLTEXT(title, description, street, city, state,bedrooms, bathrooms, total_rooms, category, price),
+            FULLTEXT(title, description, street, city, state,bedrooms, bathrooms,landmark, total_rooms, category, price, pincode),
             
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
