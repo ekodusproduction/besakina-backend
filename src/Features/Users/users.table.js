@@ -11,12 +11,10 @@ export const createUserTable = async function () {
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         plan_id BIGINT UNSIGNED,
         
-        firstName VARCHAR(25),
-        lastName VARCHAR(25),
+        fullname VARCHAR(255),
         mobile BIGINT UNSIGNED NOT NULL UNIQUE,
         otp INT,
         email VARCHAR(255),
-        gst_number VARCHAR(50),
         aadhar_number VARCHAR(50),
         pan_number VARCHAR(50),
 
