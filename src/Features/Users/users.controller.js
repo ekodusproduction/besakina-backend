@@ -101,8 +101,9 @@ export const userDetails = async function(req, res,next){
     const connection = await pool.getConnection();
     try {
         let requestBody = req.body
-        requestBody.profile_pic = req.files[0].path
-        
+        requestBody.profile_pic = req.files.filter( item => item.fieldname === "image")
+        requestBody.doc_file = req.files.filter( item => item.fieldname === "doc_file")
+
         const [query, values] = await insertQuery('users', requestBody);
         const [rows, fields] = await connection.query(query, values);
         return await sendResponse(res, 'User details added.', 201, rows.insertId, null);
