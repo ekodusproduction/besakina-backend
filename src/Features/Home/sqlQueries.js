@@ -52,7 +52,7 @@ SELECT id, 'hospitality' AS type, title, description ,images FROM hospitality WH
 UNION ALL
 SELECT id, 'hospitals' AS type, title, description, images FROM hospitals WHERE MATCH(title, name, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
 UNION ALL
-SELECT id, 'property' AS type, title, description, images FROM property WHERE MATCH(title, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+SELECT id, 'property' AS type, title, description, images FROM property WHERE MATCH(title, type, description,street, city, house_no, pincode) AGAINST (? IN BOOLEAN MODE)
 UNION ALL
 SELECT id, 'vehicles' AS type, title, description, images FROM vehicles WHERE MATCH(title, brand, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
 `
