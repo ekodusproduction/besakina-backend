@@ -28,6 +28,7 @@ export const addAdvertisement = async (req, res, next) => {
     return sendResponse(res, "Advertisement added successfully", 201, { id: rows.insertId });
   } catch (error) {
     await connection.rollback()
+    console.log("error", error)
     next(error)
   } finally {
     connection.release();
