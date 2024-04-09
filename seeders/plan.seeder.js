@@ -44,7 +44,7 @@ export const addPlans = async () => {
             business_profile: '1'
         }
     ];
-
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInBsYW5faWQiOm51bGwsImlhdCI6MTcxMjY0NzQ1NiwiZXhwIjoxNzEyNzMzODU2fQ.6nOnuhz58kCcoRdY4EOE4ShwyKS2QSkowmqwbiGvUoM'
     try {
         for (const data of plansData) {
             let formData = new FormData();
