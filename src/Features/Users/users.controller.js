@@ -143,7 +143,7 @@ export const getUserAdds = async function (req, res, next) {
         // Execute the query
         const [rows, fields] = await connection.query(query);
 
-        return await sendResponse(res, 'User details added.', 201, rows.insertId, null);
+        return await sendResponse(res, 'User details added.', 201, rows, null);
     } catch (error) {
         console.error('Error in user details:', error);
         next(error);
