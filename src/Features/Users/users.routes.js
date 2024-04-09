@@ -10,5 +10,6 @@ userRouter.get("/", jwtAuth, getUsers)
 userRouter.post("/login", loginValidation, login)
 userRouter.post("/sendotp", mobileValidation, sendOtp)
 userRouter.post("/details", fileUpload("users"),userDetails)
+userRouter.get("/myads",)
 
 export default userRouter  
