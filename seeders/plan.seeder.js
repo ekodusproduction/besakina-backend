@@ -9,7 +9,7 @@ export const addPlans = async () => {
     const plansData = [
         {
             contact_limit: '200',
-            images: fs.createReadStream(path.join(__dirname, 'images', 'mobile app-silver.png')),
+            images: fs.createReadStream(path.resolve( 'seeders','images', "plans", 'app-silver.png')),
             search_priority: '1',
             verification_badge: '1',
             validity: '30',
@@ -21,7 +21,7 @@ export const addPlans = async () => {
         },
         {
             contact_limit: '1000000',
-            images: fs.createReadStream(path.join(__dirname, 'images', 'mobile app-platinum.png')),
+            images: fs.createReadStream(path.resolve('seeders','images', 'plans', 'app-platinum.png')),
             search_priority: '3',
             verification_badge: '1',
             validity: '30',
@@ -33,7 +33,7 @@ export const addPlans = async () => {
         },
         {
             contact_limit: '600',
-            images: fs.createReadStream(path.join(__dirname, 'images', 'mobile app-gold.png')),
+            images: fs.createReadStream(path.resolve('seeders', 'images', 'plans', 'app-gold.png')),
             search_priority: '2',
             verification_badge: '1',
             validity: '30',
