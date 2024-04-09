@@ -44,7 +44,7 @@ LIMIT ? OFFSET ?;
 `
 
 
-export const searchAdd = `SELECT id, 'doctors' AS type, title, description,images FROM doctors WHERE MATCH(title, expertise, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+export const searchAdd = `SELECT id, 'doctors' AS type, title, description,images FROM doctors WHERE MATCH(title,type, expertise, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
 UNION ALL
 SELECT id, 'education' AS type, title, description, images FROM education WHERE MATCH(title, domain, institution_name, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
 UNION ALL
