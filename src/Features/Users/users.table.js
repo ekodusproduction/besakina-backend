@@ -25,7 +25,8 @@ export const createUserTable = async function () {
         profile_pic VARCHAR(255),
         plan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         contacts_quota INT, 
-
+        business_image TEXT,
+        
         state VARCHAR(255),
         city VARCHAR(255),
         locality VARCHAR(255),
