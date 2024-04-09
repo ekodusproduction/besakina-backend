@@ -47,6 +47,7 @@ export const searchAdds = async function (req, res, next) {
         });
         return sendResponse(res, "Latest Adds", 200, { advertisements: rows });
     } catch (error) {
+        console.log(error)
         next(error);
     } finally {
         connection.release();
