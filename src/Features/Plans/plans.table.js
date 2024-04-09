@@ -21,7 +21,7 @@ export const createPlanTable = async function () {
         contact_limit INT,
         no_images INT,
         business_profile BOOLEAN,
-        images_business_profile
+        images_business_profile,
 
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
