@@ -13,8 +13,7 @@ export const createUserTable = async function () {
             mobile BIGINT UNSIGNED NOT NULL UNIQUE,
             otp INT,
             email VARCHAR(255),
-            aadhar_number VARCHAR(50),
-            pan_number VARCHAR(50),
+       
             doc_number VARCHAR(255),
             doc_type VARCHAR(255),
             doc_file VARCHAR(255),

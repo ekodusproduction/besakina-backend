@@ -7,14 +7,14 @@ import { addProperties } from "./property.seeder.js";
 import { addVehicles } from "./vehicles.seeder.js";
 export const seeder = async () => {
     try {
-
-        await addPlans();
-        await addProperties();
-        await addVehicles()
-        await addDoctors()
-        await addEducation()
-        await addHospitality()
-        await addHospitals()
+        const token = 
+        await addPlans(token);
+        await addProperties(token);
+        await addVehicles(token)
+        await addDoctors(token)
+        await addEducation(token)
+        await addHospitality(token)
+        await addHospitals(token)
         console.log("Seeder completed successfully.");
     } catch (error) {
         console.error("Error in seeder:", error);
