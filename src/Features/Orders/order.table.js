@@ -21,7 +21,7 @@ export const createOrderTable = async function () {
 
         FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-      )`;
+      );`;
 
         // Execute the query
         const [results, fields] = await connection.query(createTableQuery);

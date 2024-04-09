@@ -35,7 +35,7 @@ export const createUserTable = async function () {
         FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      )
+      );
     `;
 
         // Execute the query

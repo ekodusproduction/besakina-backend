@@ -11,7 +11,7 @@ export const createCategoryTable = async function () {
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(50),
         category VARCHAR(20)
-        )`;
+        );`;
 
         // Execute the query
         const [results, fields] = await connection.query(createTableQuery);

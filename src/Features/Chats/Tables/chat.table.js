@@ -14,7 +14,7 @@ export const createChatTable = async function () {
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         chat_room_id BIGINT UNSIGNED NOT NULL,
         FOREIGN KEY (chat_room_id) REFERENCES chat_room(id) ON DELETE CASCADE
-        )
+        );
     `;
     
         // Execute the query

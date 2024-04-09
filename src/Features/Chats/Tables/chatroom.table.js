@@ -13,7 +13,7 @@ export const createChatRoomTable = async function () {
         FOREIGN KEY (user_id_1) REFERENCES users(id) ON DELETE CASCADE,
         user_id_2 BIGINT UNSIGNED NOT NULL,  -- Corrected column name,
         FOREIGN KEY (user_id_2) REFERENCES users(id) ON DELETE CASCADE
-        )
+        );
     `;
 
         // Execute the query

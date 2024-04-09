@@ -25,7 +25,7 @@ export const createPlanTable = async function () {
 
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      )
+      );
     `;
 
         // Execute the query
