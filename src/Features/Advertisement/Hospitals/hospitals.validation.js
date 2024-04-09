@@ -6,7 +6,6 @@ export const hospitalValidationRules = () => {
     return [
         body('type').isString().withMessage('Type must be a string').trim().notEmpty(),
         body('name').trim().isString().withMessage('Name must be a string'),
-        body('full_address').trim().isString().withMessage('Full address must be a string'),
         body('title').trim().isString().withMessage('Title must be a string'),
         body('description').trim().isString().withMessage('Description must be a string'),
         body('price_registration').isString().withMessage('Price registration must be a decimal').toInt(),
@@ -23,7 +22,7 @@ export const hospitalValidationRules = () => {
 
         body('verified').isString().withMessage('verified must be a boolean'),
         body('seen_by').isString().withMessage('seen_by must be a string'),
-        
+
         body('map_location').optional(),
         body('longitude').optional().toFloat(),
         body('latitude').optional().toFloat(),
