@@ -57,7 +57,7 @@ export const addPlans = async () => {
                 maxBodyLength: Infinity,
                 url: 'http://139.59.92.146/api/plans',
                 headers: {
-                    'Authorization': 'Bearer YOUR_TOKEN_HERE',
+                    'Authorization': `Bearer ${token}`,
                     ...formData.getHeaders()
                 },
                 data: formData

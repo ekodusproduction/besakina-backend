@@ -97,15 +97,28 @@ export const getUsers = async function(req, res, next){
     }
 }
 
-export const userDetails = async function(req, res,next){
+
+export const userDetails = async function(req, res, next) {
     const connection = await pool.getConnection();
     try {
-        let requestBody = req.body
-        requestBody.profile_pic = req.files.filter( item => item.fieldname === "image")
-        requestBody.doc_file = req.files.filter( item => item.fieldname === "doc_file")
+        const requestBody = req.body;
+        const profilePic = req.files.find(item => item.fieldname === "image");
+        const docFile = req.files.find(item => item.fieldname === "doc_file");
 
+        // Add profile_pic and doc_file paths to requestBody
+        if (profilePic) {
+            requestBody.profile_pic = profilePic.path;
+        }
+        if (docFile) {
+            requestBody.doc_file = docFile.path;
+        }
+
+        // Construct the INSERT query
         const [query, values] = await insertQuery('users', requestBody);
+
+        // Execute the query
         const [rows, fields] = await connection.query(query, values);
+        
         return await sendResponse(res, 'User details added.', 201, rows.insertId, null);
     } catch (error) {
         console.error('Error in user details:', error);
