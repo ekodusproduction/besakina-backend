@@ -7,7 +7,7 @@ import { addProperties } from "./property.seeder.js";
 import { addVehicles } from "./vehicles.seeder.js";
 export const seeder = async () => {
     try {
-        const token = 
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInBsYW5faWQiOm51bGwsImlhdCI6MTcxMjY2MzQwNywiZXhwIjoxNzEyNzQ5ODA3fQ.J-oN_KlNED3HkazHYatoVqtdRRlH35Aa-j1lTNkhME8'
         await addPlans(token);
         await addProperties(token);
         await addVehicles(token)

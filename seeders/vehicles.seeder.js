@@ -6,7 +6,7 @@ import path from 'path';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 
-export const addVehicles = async () => {
+export const addVehicles = async (token) => {
     const propertyDataArray = [{
         type: 'car',
         brand: 'BMW',
@@ -115,7 +115,6 @@ export const addVehicles = async () => {
                     data.append(key, value.toString());
                 }
             }
-            const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInBsYW5faWQiOm51bGwsImlhdCI6MTcxMjY0NzQ1NiwiZXhwIjoxNzEyNzMzODU2fQ.6nOnuhz58kCcoRdY4EOE4ShwyKS2QSkowmqwbiGvUoM'
 
             const config = {
                 method: 'post',
