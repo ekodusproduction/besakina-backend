@@ -41,7 +41,7 @@ export const addProperties = async () => {
             latitude: 26.1445,
             longitude: 91.7362,
             seen_by: 0,
-            verified: true,
+            verified: 1,
         },
         {
             title: 'Luxury Villa',
@@ -74,7 +74,7 @@ export const addProperties = async () => {
             latitude: 26.1445,
             longitude: 91.7362,
             seen_by: 0,
-            verified: true,
+            verified: 1,
         },
         {
             title: 'Luxury Villa for rent',
@@ -109,7 +109,7 @@ export const addProperties = async () => {
             latitude: 26.1445,
             longitude: 91.7362,
             seen_by: 100,
-            verified: true,
+            verified: 1,
         },
         {
             title: 'Luxury Villa for rent',
@@ -143,7 +143,7 @@ export const addProperties = async () => {
             latitude: 26.1445,
             longitude: 91.7362,
             seen_by: 100,
-            verified: true
+            verified: 1
         },
         {
             title: 'Luxury Villa for rent',
@@ -177,7 +177,7 @@ export const addProperties = async () => {
             latitude: 26.1445,
             longitude: 91.7362,
             seen_by: 100,
-            verified: true
+            verified: 1
         },
     ];
 

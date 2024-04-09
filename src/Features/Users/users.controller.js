@@ -81,7 +81,7 @@ const createToken = (result) => {
     });
 }
 
-export const getUsers = async function(req, res, next){
+export const getUsers = async function (req, res, next) {
     const connection = await pool.getConnection();
 
     try {
@@ -98,7 +98,7 @@ export const getUsers = async function(req, res, next){
 }
 
 
-export const userDetails = async function(req, res, next) {
+export const userDetails = async function (req, res, next) {
     const connection = await pool.getConnection();
     try {
         const requestBody = req.body;
@@ -106,19 +106,22 @@ export const userDetails = async function(req, res, next) {
         const docFile = req.files.find(item => item.fieldname === "doc_file");
 
         // Add profile_pic and doc_file paths to requestBody
+
+        if (requestBody.docType == "aadhar") {
+            requestBody.doc_file = docFile.path;
+            const docFileBack = req.files.find(item => item.fieldname === "doc_file_back");
+            requestBody.doc_file_back = docFileBack.path;
+        }
+
         if (profilePic) {
             requestBody.profile_pic = profilePic.path;
         }
-        if (docFile) {
-            requestBody.doc_file = docFile.path;
-        }
-
         // Construct the INSERT query
         const [query, values] = await insertQuery('users', requestBody);
 
         // Execute the query
         const [rows, fields] = await connection.query(query, values);
-        
+
         return await sendResponse(res, 'User details added.', 201, rows.insertId, null);
     } catch (error) {
         console.error('Error in user details:', error);

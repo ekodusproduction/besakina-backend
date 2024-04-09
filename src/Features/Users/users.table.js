@@ -18,6 +18,8 @@ export const createUserTable = async function () {
             doc_number VARCHAR(255),
             doc_type VARCHAR(255),
             doc_file VARCHAR(255),
+            doc_file_back VARCHAR(255),
+
             profile_pic VARCHAR(255),
             plan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             contacts_quota INT, 
