@@ -6,6 +6,7 @@ import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 import { insertQuery } from "../../Utility/sqlQuery.js";
+import { getAllPosts } from "./sql.js";
 
 export const sendOtp = async (req, res, next) => {
     const { mobile } = req.body;
@@ -121,6 +122,26 @@ export const userDetails = async function (req, res, next) {
 
         // Execute the query
         const [rows, fields] = await connection.query(query, values);
+
+        return await sendResponse(res, 'User details added.', 201, rows.insertId, null);
+    } catch (error) {
+        console.error('Error in user details:', error);
+        next(error);
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+}
+
+export const getUserAdds = async function (req, res, next) {
+    const connection = await pool.getConnection();
+    try {
+        const userId = req.userId;
+        // Construct the INSERT query
+        let query = getAllPosts.replaceAll('?', userId)
+        // Execute the query
+        const [rows, fields] = await connection.query(query);
 
         return await sendResponse(res, 'User details added.', 201, rows.insertId, null);
     } catch (error) {
