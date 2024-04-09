@@ -72,4 +72,4 @@ export const addPlans = async () => {
 }
 
 // Call the addPlans function
-addPlans();
+// addPlans();
