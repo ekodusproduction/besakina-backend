@@ -146,7 +146,14 @@ export const getUserAdds = async function (req, res, next) {
         let query = getAllPosts.replaceAll('?', userId)
         // Execute the query
         const [rows, fields] = await connection.query(query);
-
+        if (rows.length === 0) {
+            return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
+          }
+          rows.forEach(advertisement => {
+            advertisement.images = JSON.parse(advertisement.images);
+            advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+          });
+          
         return await sendResponse(res, 'User details', 201, rows, null);
     } catch (error) {
         console.error('Error in user details:', error);
