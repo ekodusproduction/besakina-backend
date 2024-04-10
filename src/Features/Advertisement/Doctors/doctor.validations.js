@@ -21,8 +21,6 @@ export const doctorValidationRules = () => {
         body('images').optional(),
         body('video').optional(),
 
-        body('verified').isString().withMessage('verified must be a boolean'),
-
         body('map_location').optional(),
         body('longitude').optional(),
         body('latitude').optional(),
