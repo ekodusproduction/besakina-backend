@@ -105,20 +105,26 @@ export const userDetails = async function (req, res, next) {
         const requestBody = req.body;
         const profilePic = req.files.find(item => item.fieldname === "image");
         const docFile = req.files.find(item => item.fieldname === "doc_file");
-        console.log("body", req.body)
-        console.log("files", req.files)
+        const docFileBack = req.files.find(item => item.fieldname === "doc_file_back");
+        
+        console.log("body", req.body);
+        console.log("files", req.files);
 
-        // Add profile_pic and doc_file paths to requestBody
-
-        if (requestBody.docType == "aadhar") {
-            requestBody.doc_file = docFile.path;
-            const docFileBack = req.files.find(item => item.fieldname === "doc_file_back");
-            requestBody.doc_file_back = docFileBack.path;
-        }
-
+        // Add profile_pic path to requestBody
         if (profilePic) {
             requestBody.profile_pic = profilePic.path;
         }
+
+        // Add doc_file path to requestBody if docType is "aadhar"
+        if (requestBody.docType === "aadhar" && docFile) {
+            requestBody.doc_file = docFile.path;
+        }
+
+        // Add doc_file_back path to requestBody if docType is "aadhar" and docFileBack exists
+        if (requestBody.docType === "aadhar" && docFileBack) {
+            requestBody.doc_file_back = docFileBack.path;
+        }
+
         // Construct the INSERT query
         const [query, values] = await insertQuery('users', requestBody);
 
@@ -135,6 +141,7 @@ export const userDetails = async function (req, res, next) {
         }
     }
 }
+
 
 export const getUserAdds = async function (req, res, next) {
     const connection = await pool.getConnection();
