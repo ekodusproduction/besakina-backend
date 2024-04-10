@@ -106,7 +106,7 @@ export const userDetails = async function (req, res, next) {
         const profilePic = req.files.find(item => item.fieldname == "profile_pic");
         const docFile = req.files.find(item => item.fieldname == "doc_file");
         const docFileBack = req.files.find(item => item.fieldname == "doc_file_back");
-        
+
         console.log("body", req.body);
         console.log("files", req.files);
         console.log("docFile", docFile);
@@ -114,18 +114,12 @@ export const userDetails = async function (req, res, next) {
         console.log("docFileBack", docFileBack);
 
         // Add profile_pic path to requestBody
-        if (profilePic) {
-            requestBody.profile_pic = profilePic.path;
-        }
+        requestBody.profile_pic = profilePic.path || null;
 
         // Add doc_file path to requestBody if docType is "aadhar"
-        if (requestBody.docType == "aadhar" || docFile) {
-            requestBody.doc_file = docFile.path;
-        }
+        requestBody.doc_file = docFile.path || null;
 
-        // Add doc_file_back path to requestBody if docType is "aadhar" and docFileBack exists
-            requestBody.doc_file_back = docFileBack.path || null;
-        
+        requestBody.doc_file_back = docFileBack.path || null;
 
         // Construct the INSERT query
         const [query, values] = await insertQuery('users', requestBody);
@@ -143,7 +137,6 @@ export const userDetails = async function (req, res, next) {
         }
     }
 }
-
 
 export const getUserAdds = async function (req, res, next) {
     const connection = await pool.getConnection();
