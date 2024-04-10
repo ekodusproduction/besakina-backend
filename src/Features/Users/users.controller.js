@@ -114,12 +114,12 @@ export const userDetails = async function (req, res, next) {
         console.log("docFileBack", docFileBack);
 
         // Add profile_pic path to requestBody
-        requestBody.profile_pic = profilePic.path || null;
+        requestBody.profile_pic = profilePic?.path || null;
 
         // Add doc_file path to requestBody if docType is "aadhar"
-        requestBody.doc_file = docFile.path || null;
+        requestBody.doc_file = docFile?.path || null;
 
-        requestBody.doc_file_back = docFileBack.path || null;
+        requestBody.doc_file_back = docFileBack?.path || null;
 
         // Construct the INSERT query
         const [query, values] = await insertQuery('users', requestBody);
