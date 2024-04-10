@@ -46,7 +46,6 @@ const editEducationValidationRules = () => {
         body('video').optional(),
 
         body('verified').isString().withMessage('verified must be a boolean'),
-        body('seen_by').isString().withMessage('seen_by must be a string'),
 
         body('map_location').optional().withMessage('Map location must be a non-empty string'),
         body('longitude').optional().withMessage('Longitude must be a non-empty decimal'),

@@ -32,7 +32,7 @@ export const createDoctorsTable = async function () {
             verified BOOLEAN DEFAULT 1,
             is_active BOOLEAN DEFAULT 1,
 
-            seen_by INT,
+            seen_by INT DEFAULT 0,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -25,7 +25,6 @@ export const vehiclesValidationRules = () => {
     body('pincode').isString().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
 
     body('verified').isString().withMessage('verified must be a boolean'),
-    body('seen_by').isString().withMessage('seen_by must be a string'),
 
     body('images').optional(),
     body('video').optional(),

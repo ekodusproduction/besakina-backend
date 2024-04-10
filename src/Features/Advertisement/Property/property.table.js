@@ -44,7 +44,7 @@ export const createPropertyTable = async function () {
             latitude DECIMAL(10, 8),
             longitude DECIMAL(11, 8),
             
-            seen_by INT,
+            seen_by INT DEFAULT 0,
 
             verified BOOLEAN DEFAULT 1,
             is_active BOOLEAN DEFAULT 1,

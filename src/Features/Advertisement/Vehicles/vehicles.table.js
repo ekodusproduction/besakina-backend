@@ -35,14 +35,14 @@ export const createVehicleTable = async function () {
 
             verified BOOLEAN DEFAULT 1,
             is_active BOOLEAN DEFAULT 1,
-            seen_by INT,
+            seen_by INT DEFAULT 0,
             
             fuel VARCHAR(255),
             second_hand BOOLEAN,
             model VARCHAR(255),
             transmission VARCHAR(255),
             variant VARCHAR(255),
-            
+
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             
