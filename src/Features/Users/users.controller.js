@@ -103,9 +103,9 @@ export const userDetails = async function (req, res, next) {
     const connection = await pool.getConnection();
     try {
         const requestBody = req.body;
-        const profilePic = req.files.find(item => item.fieldname === "image");
-        const docFile = req.files.find(item => item.fieldname === "doc_file");
-        const docFileBack = req.files.find(item => item.fieldname === "doc_file_back");
+        const profilePic = req.files.find(item => item.fieldname == "image");
+        const docFile = req.files.find(item => item.fieldname == "doc_file");
+        const docFileBack = req.files.find(item => item.fieldname == "doc_file_back");
         
         console.log("body", req.body);
         console.log("files", req.files);
@@ -119,7 +119,7 @@ export const userDetails = async function (req, res, next) {
         }
 
         // Add doc_file path to requestBody if docType is "aadhar"
-        if (requestBody.docType === "aadhar" && docFile) {
+        if (requestBody.docType === "aadhar" || docFile) {
             requestBody.doc_file = docFile.path;
         }
 
