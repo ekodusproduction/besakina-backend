@@ -39,7 +39,7 @@ export const searchAdds = async function (req, res, next) {
             LIMIT ${limit} OFFSET ${offset}
         `;
 
-        const [rows, fields] = await connection.query(query); 
+        const [rows, fields] = await connection.query(query);
         console.log(rows);
         rows.forEach(advertisement => {
             advertisement.images = JSON.parse(advertisement.images);
