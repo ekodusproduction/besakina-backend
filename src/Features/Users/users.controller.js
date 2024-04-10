@@ -103,7 +103,7 @@ export const userDetails = async function (req, res, next) {
     const connection = await pool.getConnection();
     try {
         const requestBody = req.body;
-        const profilePic = req.files.find(item => item.fieldname == "image");
+        const profilePic = req.files.find(item => item.fieldname == "profile_pic");
         const docFile = req.files.find(item => item.fieldname == "doc_file");
         const docFileBack = req.files.find(item => item.fieldname == "doc_file_back");
         
