@@ -4,7 +4,7 @@ SELECT id, 'education' AS type, title, description,price,city,state, images FROM
 UNION ALL
 SELECT id, 'hospitality' AS type, title, description,price,city,state, images FROM hospitality WHERE user_id = ?
 UNION ALL
-SELECT id, 'hospitals' AS type, title, description,price,city,state, images FROM hospitals WHERE user_id = ?
+SELECT id, 'hospitals' AS type, title, description,name,city,state, images FROM hospitals WHERE user_id = ?
 UNION ALL
 SELECT id, 'property' AS type, title, description,price,city,state, images FROM property WHERE user_id = ?
 UNION ALL
