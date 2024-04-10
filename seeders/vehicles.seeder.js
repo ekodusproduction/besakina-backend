@@ -26,9 +26,12 @@ export const addVehicles = async (token) => {
         map_location: '',
         latitude: 26.1445,
         longitude: 91.7362,
-        verified: 1,
-        is_active: 1,
-        seen_by: 0,
+       
+        fuel:'petrol',
+        transmission:'automatic',
+        model:"thar",
+        variant:'plus',
+        second_hand:1,
     },
     {
         type: 'car',
@@ -49,9 +52,12 @@ export const addVehicles = async (token) => {
         map_location: '',
         latitude: 26.1765,
         longitude: 91.7578,
-        verified: 1,
-        is_active: 1,
-        seen_by: 0,
+      
+        fuel:'petrol',
+        transmission:'automatic',
+        model:"thar",
+        variant:'plus',
+        second_hand:1,
     },
     {
         type: 'car',
@@ -72,9 +78,12 @@ export const addVehicles = async (token) => {
         map_location: '',
         latitude: 26.1765,
         longitude: 91.7578,
-        verified: 1,
-        is_active: 1,
-        seen_by: 0,
+
+        fuel:'petrol',
+        transmission:'automatic',
+        model:"thar",
+        variant:'plus',
+        second_hand:1,
     },
     {
         type: 'car',
@@ -95,16 +104,14 @@ export const addVehicles = async (token) => {
         model:"thar",
         variant:'plus',
         second_hand:1,
-        
+
         pincode: '781005',
         images: ['thar.jpg'],
         video: '',
         map_location: '',
         latitude: 26.1765,
         longitude: 91.7578,
-        verified: 1,
-        is_active: 1,
-        seen_by: 0,
+  
     }
     ];
 
