@@ -44,6 +44,7 @@ export const fileUpload = (destination) => {
                 return next(err); // Pass the error to the error handling middleware
             }
             console.log("passed file uploads")
+            console.log(req.files)
             // No errors, proceed to the next middleware
             next();
         });

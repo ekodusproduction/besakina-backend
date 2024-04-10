@@ -89,6 +89,13 @@ export const addVehicles = async (token) => {
         locality: 'Pan Bazaar',
         city: 'Guwahati',
         state: 'Assam',
+        
+        fuel:'petrol',
+        transmission:'automatic',
+        model:"thar",
+        variant:'plus',
+        second_hand:1,
+        
         pincode: '781005',
         images: ['thar.jpg'],
         video: '',
