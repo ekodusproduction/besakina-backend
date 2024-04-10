@@ -35,11 +35,11 @@ export const searchAdds = async function (req, res, next) {
         const offset = (pageNumber - 1) * limit;
 
         const query = `
-            ${searchAdd.replaceAll('?', search)}
+            ${searchAdd}
             LIMIT ${limit} OFFSET ${offset}
         `;
 
-        const [rows, fields] = await connection.query(query);
+        const [rows, fields] = await connection.query(query, [search, search, search, search, search, search]);
         console.log(rows);
         rows.forEach(advertisement => {
             advertisement.images = JSON.parse(advertisement.images);
