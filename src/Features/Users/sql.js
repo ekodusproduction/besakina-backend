@@ -4,13 +4,13 @@ WHERE user_id = ?
 
 UNION ALL
 
-SELECT id, 'education' AS type, title, description, name AS education_name, city, state, images 
+SELECT id, 'education' AS type, title, description, institution_name , city, state, images 
 FROM education 
 WHERE user_id = ?
 
 UNION ALL
 
-SELECT id, 'hospitality' AS type, title, description, name AS hospitality_name, city, state, images 
+SELECT id, 'hospitality' AS type, title, description,name AS hospitality_name, city, state, images 
 FROM hospitality 
 WHERE user_id = ?
 
