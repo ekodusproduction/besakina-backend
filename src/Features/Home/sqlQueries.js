@@ -44,15 +44,25 @@ LIMIT ? OFFSET ?;
 `
 
 
-export const searchAdd = `SELECT id, 'doctors' AS type, title, description,images FROM doctors WHERE MATCH(title, expertise, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+export const searchAdd = `(SELECT id, 'doctors' AS type, title, description,images FROM doctors WHERE MATCH(title, expertise, description,street, city, locality, pincode) AGAINST ? 
+)
 UNION ALL
-SELECT id, 'education' AS type, title, description, images FROM education WHERE MATCH(title, domain, institution_name, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+(
+SELECT id, 'education' AS type, title, description, images FROM education WHERE MATCH(title, domain, institution_name, description,street, city, locality, pincode) AGAINST ? 
+)
 UNION ALL
-SELECT id, 'hospitality' AS type, title, description ,images FROM hospitality WHERE MATCH(title, name, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+(
+    SELECT id, 'hospitality' AS type, title, description ,images FROM hospitality WHERE MATCH(title, name, type, description,street, city, locality, pincode) AGAINST ? 
+)
 UNION ALL
-SELECT id, 'hospitals' AS type, title, description, images FROM hospitals WHERE MATCH(title, name, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+(
+    SELECT id, 'hospitals' AS type, title, description, images FROM hospitals WHERE MATCH(title, name, type, description,street, city, locality, pincode) AGAINST ? 
+)
 UNION ALL
-SELECT id, 'property' AS type, title, description, images FROM property WHERE MATCH(title, type, street, city, house_no, pincode) AGAINST (? IN BOOLEAN MODE)
+(
+    SELECT id, 'property' AS type, title, description, images FROM property WHERE MATCH(title, type, street, city, house_no, pincode) AGAINST ? 
+)
 UNION ALL  
-SELECT id, 'vehicles' AS type, title, description, images FROM vehicles WHERE MATCH(title, brand, type, description,street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
-`       
+(
+    SELECT id, 'vehicles' AS type, title, description, images FROM vehicles WHERE MATCH(title, brand, type, description,street, city, locality, pincode) AGAINST ?
+)`       
