@@ -109,9 +109,9 @@ export const userDetails = async function (req, res, next) {
         
         console.log("body", req.body);
         console.log("files", req.files);
-        console.log("docFile", req.docFile);
-        console.log("files", req.docFile);
-        console.log("profilePic", req.docFile);
+        console.log("docFile", docFile);
+        console.log("profilePic", profilePic);
+        console.log("docFileBack", docFileBack);
 
         // Add profile_pic path to requestBody
         if (profilePic) {
