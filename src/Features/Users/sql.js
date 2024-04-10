@@ -1,4 +1,4 @@
-export const getAllPosts = `SELECT id, 'doctors' AS type, title, description, images FROM doctors WHERE user_id = ?
+export const getAllPosts = `SELECT id, 'doctors' AS type, title, description,price,city,state, images FROM doctors WHERE user_id = ?
 UNION ALL
 SELECT id, 'education' AS type, title, description, images FROM education WHERE user_id = ?
 UNION ALL
