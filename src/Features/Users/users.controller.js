@@ -119,14 +119,13 @@ export const userDetails = async function (req, res, next) {
         }
 
         // Add doc_file path to requestBody if docType is "aadhar"
-        if (requestBody.docType === "aadhar" || docFile) {
+        if (requestBody.docType == "aadhar" || docFile) {
             requestBody.doc_file = docFile.path;
         }
 
         // Add doc_file_back path to requestBody if docType is "aadhar" and docFileBack exists
-        if (requestBody.docType === "aadhar" && docFileBack) {
-            requestBody.doc_file_back = docFileBack.path;
-        }
+            requestBody.doc_file_back = docFileBack.path || null;
+        
 
         // Construct the INSERT query
         const [query, values] = await insertQuery('users', requestBody);
