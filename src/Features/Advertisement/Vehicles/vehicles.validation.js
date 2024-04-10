@@ -6,11 +6,17 @@ export const vehiclesValidationRules = () => {
   return [
     body('type').isString().withMessage('Vehicle type must be a string').notEmpty().withMessage('Vehicle type is required'),
     body('brand').isString().withMessage('Brand must be a string').notEmpty().withMessage('Brand is required'),
-    body('registration_year').isInt().withMessage('Registration year must be an integer').notEmpty().withMessage('Registration year is required'),
-    body('kilometer_driven').isInt().withMessage('Kilometer driven must be an integer').notEmpty().withMessage('Kilometer driven is required'),
-    body('title').isString().withMessage('Ad title must be a string').notEmpty().withMessage('Ad title is required'),
-    body('description').isString().withMessage('Description must be a string').notEmpty().withMessage('Description is required'),
-    body('price').isInt().withMessage('Price must be a decimal').notEmpty().withMessage('Price is required'),
+    body('registration_year').optional().isString().withMessage('Registration year must be an integer'),
+    body('kilometer_driven').optional().isString().withMessage('Kilometer driven must be an string'),
+    body('title').isString().withMessage('Ad title must be a string').trim().notEmpty().withMessage('Ad title is required'),
+    body('description').isString().withMessage('Description must be a string').trim().notEmpty().withMessage('Description is required'),
+    body('price').isString().withMessage('Price must be a integer').notEmpty().withMessage('Price is required'),
+
+    body('fuel').isString().withMessage('fuel must be a string'),
+    body('second_hand').isString().withMessage('second_hand must be a string'),
+    body('model').isString().withMessage('model must be a string'),
+    body('transmission').isString().withMessage('transmission must be a string'),
+    body('variant').isString().withMessage('variant must be a string'),
 
     body('street').optional().isString().withMessage('Street must be a string'),
     body('locality').isString().withMessage('locality must be a string'),

@@ -57,7 +57,7 @@ export const getAdvertisement = async (req, res, next) => {
     }
   }
 }
-
+ 
 export const getListAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
   try {
