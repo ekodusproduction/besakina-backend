@@ -45,8 +45,6 @@ const editEducationValidationRules = () => {
         body('images').optional(),
         body('video').optional(),
 
-        body('verified').isString().withMessage('verified must be a boolean'),
-
         body('map_location').optional().withMessage('Map location must be a non-empty string'),
         body('longitude').optional().withMessage('Longitude must be a non-empty decimal'),
         body('latitude').optional().withMessage('Latitude must be a non-empty decimal'),

@@ -22,7 +22,7 @@ const propertiesValidationRules = () => {
         body('category').isString(allowedCategories).withMessage(`Category must be one of: ${allowedCategories.join(', ')}`),
         body('description').trim().isString().withMessage(`description must be string`),
 
-        body('verified').isString().withMessage('verified must be a boolean'),
+        // body('verified').isString().withMessage('verified must be a boolean'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('house_no').isString().withMessage('house_no must be a string'),

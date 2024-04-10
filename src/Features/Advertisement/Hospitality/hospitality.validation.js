@@ -33,7 +33,7 @@ export const editHospitalityValidationRules = () => {
         body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
         body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
 
-        body('verified').isString().withMessage('verified must be a boolean'),
+        // body('verified').isString().withMessage('verified must be a boolean'),
         body('seen_by').isString().withMessage('seen_by must be a string'),
         
         body('street').optional().isString().withMessage('Street must be a string'),

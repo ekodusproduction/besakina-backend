@@ -20,7 +20,7 @@ export const hospitalValidationRules = () => {
         body('images').optional(),
         body('video').optional(),
 
-        body('verified').isString().withMessage('verified must be a boolean'),
+        // body('verified').isString().withMessage('verified must be a boolean'),
 
         body('map_location').optional(),
         body('longitude').optional().toFloat(),
