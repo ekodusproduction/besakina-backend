@@ -105,6 +105,8 @@ export const userDetails = async function (req, res, next) {
         const requestBody = req.body;
         const profilePic = req.files.find(item => item.fieldname === "image");
         const docFile = req.files.find(item => item.fieldname === "doc_file");
+        console.log("body", req.body)
+        console.log("files", req.files)
 
         // Add profile_pic and doc_file paths to requestBody
 
