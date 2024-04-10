@@ -11,6 +11,7 @@ export const createUserTable = async function () {
             plan_id BIGINT UNSIGNED,
             fullname VARCHAR(255),
             mobile BIGINT UNSIGNED NOT NULL UNIQUE,
+            alternate_mobile BIGINT UNSIGNED UNIQUE,
             otp INT,
             email VARCHAR(255),
        

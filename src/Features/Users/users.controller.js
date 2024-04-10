@@ -5,7 +5,7 @@ dotenv.config();
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
-import { insertQuery } from "../../Utility/sqlQuery.js";
+import { insertQuery, updateQuery } from "../../Utility/sqlQuery.js";
 import { getAllPosts } from "./sql.js";
 
 export const sendOtp = async (req, res, next) => {
@@ -122,7 +122,7 @@ export const userDetails = async function (req, res, next) {
         requestBody.doc_file_back = docFileBack?.path || null;
 
         // Construct the INSERT query
-        const [query, values] = await insertQuery('users', requestBody);
+        const [query, values] = await updateQuery('users', requestBody,{id:req.user_id});
 
         // Execute the query
         const [rows, fields] = await connection.query(query, values);
