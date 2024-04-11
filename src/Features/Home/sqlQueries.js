@@ -121,5 +121,4 @@ UNION ALL
     ORDER BY created_at DESC
     LIMIT 10
 )
-ORDER BY FIELD(category, 'property', 'vehicles', 'hospitality', 'education', 'doctors', 'hospitals'), created_at DESC
-LIMIT ? OFFSET ?;`
+ORDER BY FIELD(category, 'property', 'vehicles', 'hospitality', 'education', 'doctors', 'hospitals'), created_at DESC;`
