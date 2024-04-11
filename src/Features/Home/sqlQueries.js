@@ -71,7 +71,7 @@ LIMIT ? OFFSET ?;
 export const searchAdd = `(
     SELECT id, title, price, created_at, images, city, state, 'property' AS category
     FROM property
-    WHERE MATCH(title, type, street, city, house_no, pincode) AGAINST ?
+    WHERE MATCH (title, type, street, city, house_no, pincode) AGAINST ?
     ORDER BY created_at DESC
     LIMIT 10
 )
@@ -79,7 +79,7 @@ UNION ALL
 (
     SELECT id, title, price, created_at, images, city, state, 'vehicles' AS category
     FROM vehicles
-    WHERE MATCH(title, brand, type, description, street, city, locality, pincode) AGAINST ?
+    WHERE MATCH (title, brand, type, description, street, city, locality, pincode) AGAINST ?
     ORDER BY created_at DESC
     LIMIT 10
 )
@@ -87,7 +87,7 @@ UNION ALL
 (
     SELECT id, title, price, created_at, images, city, state, 'hospitality' AS category
     FROM hospitality
-    WHERE MATCH(title, name, type, description, street, city, locality, pincode) AGAINST ?
+    WHERE MATCH (title, name, type, description, street, city, locality, pincode) AGAINST ?
     ORDER BY created_at DESC
     LIMIT 10
 )
@@ -95,7 +95,7 @@ UNION ALL
 (
     SELECT id, title, price, created_at, images, city, state, 'education' AS category
     FROM education
-    WHERE MATCH(title, domain, institution_name, description, street, city, locality, pincode) AGAINST ?
+    WHERE MATCH (title, domain, institution_name, description, street, city, locality, pincode) AGAINST ?
     ORDER BY created_at DESC
     LIMIT 10
 )
@@ -103,7 +103,7 @@ UNION ALL
 (
     SELECT id, title, price_per_visit, created_at, images, city, state, 'doctors' AS category
     FROM doctors
-    WHERE MATCH(title, expertise, description, street, city, locality, pincode) AGAINST ?
+    WHERE MATCH (title, expertise, description, street, city, locality, pincode) AGAINST ?
     ORDER BY created_at DESC
     LIMIT 10
 )
@@ -111,7 +111,7 @@ UNION ALL
 (
     SELECT id, title, price_registration, created_at, images, city, state, 'hospitals' AS category
     FROM hospitals
-    WHERE MATCH(title, name, type, description, street, city, locality, pincode) AGAINST ?
+    WHERE MATCH (title, name, type, description, street, city, locality, pincode) AGAINST ?
     ORDER BY created_at DESC
     LIMIT 10
 )
