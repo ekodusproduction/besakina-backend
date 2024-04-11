@@ -25,7 +25,7 @@ export const addAdvertisement = async (req, res, next) => {
       return sendError(res, "Error adding advertisement", 400);
     }
     await connection.commit();
-    return sendResponse(res, "Advertisement added successfully", 201, { id: rows.insertId });
+    return sendResponse(res, "Hospitals added successfully", 201, { id: rows.insertId });
   } catch (error) {
     await connection.rollback()
     console.log("error", error)
