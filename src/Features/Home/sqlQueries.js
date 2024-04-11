@@ -68,9 +68,7 @@ LIMIT ? OFFSET ?;
 //     SELECT id, 'vehicles' AS type, title, description, images FROM vehicles WHERE MATCH(title, brand, type, description,street, city, locality, pincode) AGAINST ?
 // )`       
 
-export const searchAdd = `(
-SELECT id, title, price, created_at, images, city, state, 'property' AS category FROM property WHERE MATCH (title, type, street, city, house_no, pincode) AGAINST ? ORDER BY created_at DESC LIMIT 10
-)
+export const searchAdd = `SELECT id, title, price, created_at, images, city, state, 'property' AS category FROM property WHERE MATCH (title, type, street, city, house_no, pincode) AGAINST ? ORDER BY created_at DESC LIMIT 10
 UNION ALL
 (
     SELECT id, title, price, created_at, images, city, state, 'vehicles' AS category FROM vehicles WHERE MATCH (title, brand, type, description, street, city, locality, pincode) AGAINST ? ORDER BY created_at DESC LIMIT 10
