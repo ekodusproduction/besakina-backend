@@ -6,7 +6,7 @@ import path from 'path';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 
-export const addVehicles = async (token) => {
+export const addVehicles = async (token, baseUrl) => {
     const propertyDataArray = [{
         type: 'car',
         brand: 'BMW',
@@ -21,17 +21,17 @@ export const addVehicles = async (token) => {
         city: 'Guwahati',
         state: 'Assam',
         pincode: '781001',
-        images: [ 'red.jpg'],
+        images: ['red.jpg'],
         video: '',
         map_location: '',
         latitude: 26.1445,
         longitude: 91.7362,
-       
-        fuel:'petrol',
-        transmission:'automatic',
-        model:"thar",
-        variant:'plus',
-        second_hand:1,
+
+        fuel: 'petrol',
+        transmission: 'automatic',
+        model: "thar",
+        variant: 'plus',
+        second_hand: 1,
     },
     {
         type: 'car',
@@ -52,12 +52,12 @@ export const addVehicles = async (token) => {
         map_location: '',
         latitude: 26.1765,
         longitude: 91.7578,
-      
-        fuel:'petrol',
-        transmission:'automatic',
-        model:"thar",
-        variant:'plus',
-        second_hand:1,
+
+        fuel: 'petrol',
+        transmission: 'automatic',
+        model: "thar",
+        variant: 'plus',
+        second_hand: 1,
     },
     {
         type: 'car',
@@ -79,11 +79,11 @@ export const addVehicles = async (token) => {
         latitude: 26.1765,
         longitude: 91.7578,
 
-        fuel:'petrol',
-        transmission:'automatic',
-        model:"thar",
-        variant:'plus',
-        second_hand:1,
+        fuel: 'petrol',
+        transmission: 'automatic',
+        model: "thar",
+        variant: 'plus',
+        second_hand: 1,
     },
     {
         type: 'car',
@@ -98,12 +98,12 @@ export const addVehicles = async (token) => {
         locality: 'Pan Bazaar',
         city: 'Guwahati',
         state: 'Assam',
-        
-        fuel:'petrol',
-        transmission:'automatic',
-        model:"thar",
-        variant:'plus',
-        second_hand:1,
+
+        fuel: 'petrol',
+        transmission: 'automatic',
+        model: "thar",
+        variant: 'plus',
+        second_hand: 1,
 
         pincode: '781005',
         images: ['thar.jpg'],
@@ -111,7 +111,7 @@ export const addVehicles = async (token) => {
         map_location: '',
         latitude: 26.1765,
         longitude: 91.7578,
-  
+
     }
     ];
 
@@ -133,7 +133,7 @@ export const addVehicles = async (token) => {
             const config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://139.59.92.146/api/vehicles/add',
+                url: `http://${baseUrl}/api/vehicles/add`,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...data.getHeaders()

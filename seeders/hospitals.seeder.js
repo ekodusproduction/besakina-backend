@@ -6,7 +6,7 @@ import path from 'path';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 
-export const addHospitals = async (token) => {
+export const addHospitals = async (token, baseUrl) => {
     const propertyDataArray = [
         {
             type: 'Hospital',
@@ -59,7 +59,7 @@ export const addHospitals = async (token) => {
             description: 'City Hospital provides comprehensive medical care with state-of-the-art facilities.',
             price_registration: 1000,
             price_per_visit: 500,
-            images: ['untitled.jpg'],
+            images: ['x12.jpg'],
             video: '',
             map_location: '',
             latitude: 26.1445,
@@ -116,7 +116,7 @@ export const addHospitals = async (token) => {
             const config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://139.59.92.146/api/hospitals/add',
+                url: `http://${baseUrl}/api/hospitals/add`,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...data.getHeaders()

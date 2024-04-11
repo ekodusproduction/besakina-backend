@@ -36,7 +36,7 @@ export const createHospitalityTable = async function () {
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            FULLTEXT(title,name, type, description,  city, state, locality, category, pincode),
+            FULLTEXT INDEX hospitality(title,name, type, description,  city, state, locality, category, pincode),
 
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

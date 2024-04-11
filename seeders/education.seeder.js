@@ -6,7 +6,7 @@ import path from 'path';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 
-export const addEducation = async (token) => {
+export const addEducation = async (token, baseUrl) => {
     const propertyDataArray = [
         {
             type: 'Graduate',
@@ -116,7 +116,7 @@ export const addEducation = async (token) => {
             const config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://139.59.92.146/api/education/add',
+                url: `http://${baseUrl}/api/education/add`,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...data.getHeaders()

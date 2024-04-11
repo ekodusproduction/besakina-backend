@@ -6,7 +6,7 @@ import path from 'path';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 
-export const addDoctors = async (token) => {
+export const addDoctors = async (token, baseUrl) => {
     const propertyDataArray = [
         {
             expertise: 'Cardiologist',
@@ -112,7 +112,7 @@ export const addDoctors = async (token) => {
             const config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://139.59.92.146/api/doctors/add',
+                url: `http://${baseUrl}/api/doctors/add`,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...data.getHeaders()

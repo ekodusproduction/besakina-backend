@@ -6,7 +6,7 @@ import path from 'path';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 
-export const addProperties = async () => {
+export const addProperties = async (token, baseUrl) => {
     const propertyDataArray = [
         {
             title: 'Luxury Villa in borbari',
@@ -200,7 +200,7 @@ export const addProperties = async () => {
             const config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://139.59.92.146/api/property/add',
+                url: `http://${baseUrl}/api/property/add`,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...data.getHeaders()

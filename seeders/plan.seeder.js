@@ -5,7 +5,7 @@ import path from 'path';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-export const addPlans = async (token) => {
+export const addPlans = async (token, baseUrl) => {
     const plansData = [
         {
             contact_limit: '200',
@@ -55,7 +55,7 @@ export const addPlans = async (token) => {
             const config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://139.59.92.146/api/plans',
+                url: `http://${baseUrl}/api/plans`,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...formData.getHeaders()
