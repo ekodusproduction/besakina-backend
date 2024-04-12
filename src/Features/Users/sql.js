@@ -1,23 +1,21 @@
 export const getAllPosts = `(
     SELECT id, title, price, created_at, images,city, state,is_active, 'property' AS category
-    FROM property
+    FROM property WHERE user_id = ?
 )
 UNION ALL
 (
     SELECT id, title, price, created_at, images,city, state,is_active, 'vehicles' AS category
-    FROM vehicles
+    FROM vehicles WHERE user_id = ?
 )
 UNION ALL
 (
     SELECT id, title, price, created_at, images,city, state,is_active, 'hospitality' AS category
-    FROM hospitality
-    
+    FROM hospitality WHERE user_id = ?
 )
 UNION ALL
 (
     SELECT id, title, price, created_at, images,city, state,is_active, 'education' AS category
-    FROM education
-    
+    FROM education WHERE user_id = ?
 )
 UNION ALL
 (
