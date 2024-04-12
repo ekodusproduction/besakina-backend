@@ -96,9 +96,18 @@ export const indexVehiclesTable = async function () {
         ALTER TABLE vehicles ADD INDEX vehicles_idx_created_at (created_at);`;
 
         // Execute the query
-        const [results, fields] = await connection.query(dropTableQuery);
+        const fulltext = `ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode);`
+        // Execute the query
+        await connection.query(fulltext);
+        console.log("vehicles fulltext index created")
 
-        console.log('Property Table dropped successfully:');
+        const compound = `ALTER TABLE vehicles ADD INDEX vehicles_idx_is_active_created_at (is_active, created_at);`
+        await connection.query(compound);
+        console.log('vehicles compound index created:');
+
+        const created_at_index = `ALTER TABLE vehicles ADD INDEX vehicles_idx_created_at (created_at);`
+        await connection.query(created_at_index);
+        console.log('vehicles index created:');
 
         // Release the connection back to the pool
         connection.release();

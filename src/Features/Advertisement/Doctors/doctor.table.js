@@ -80,16 +80,19 @@ export const indexDoctorsTable = async function () {
         const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
-        const dropTableQuery = `
-        ALTER TABLE doctors ADD FULLTEXT INDEX doctors_idx_fulltext (title, expertise, description, price_per_visit, street, city, locality, pincode);
-        ALTER TABLE doctors ADD INDEX doctors_idx_is_active_created_at (is_active, created_at);
-        ALTER TABLE doctors ADD INDEX doctors_idx_created_at (created_at);
-    `;
-
+  
+        const fulltext = ` ALTER TABLE doctors ADD FULLTEXT INDEX doctors_idx_fulltext (title, expertise, description, price_per_visit, street, city, locality, pincode);`
         // Execute the query
-        const [results, fields] = await connection.query(dropTableQuery);
+        await connection.query(fulltext);
+        console.log("doctors fulltext index created")
 
-        console.log('Property Table indexed successfully:');
+        const compound = `ALTER TABLE doctors ADD INDEX compound (is_active, created_at);`
+        await connection.query(compound);
+        console.log('doctors compound index created:');
+
+        const created_at_index = `ALTER TABLE doctors ADD INDEX (created_at);`
+        await connection.query(created_at_index);
+        console.log('doctors index created:');
 
         // Release the connection back to the pool
         connection.release();

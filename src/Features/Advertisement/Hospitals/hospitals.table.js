@@ -94,9 +94,18 @@ export const indexHospitalsTable = async function () {
         ALTER TABLE hospitals ADD INDEX hospitals_idx_created_at (created_at);`;
 
         // Execute the query
-        const [results, fields] = await connection.query(dropTableQuery);
+        const fulltext = `ALTER TABLE hospitals ADD FULLTEXT INDEX hospitals_idx_fulltext (title,name, type, description, street, city, state, locality, category, pincode);`
+        // Execute the query
+        await connection.query(fulltext);
+        console.log("hospitals fulltext index created")
 
-        console.log('Property Table dropped successfully:');
+        const compound = `ALTER TABLE hospitals ADD INDEX hospitals_idx_is_active_created_at (is_active, created_at);`
+        await connection.query(compound);
+        console.log('hospitals compound index created:');
+
+        const created_at_index = `ALTER TABLE hospitals ADD INDEX hospitals_idx_created_at (created_at);`
+        await connection.query(created_at_index);
+        console.log('hospitals index created:');
 
         // Release the connection back to the pool
         connection.release();
