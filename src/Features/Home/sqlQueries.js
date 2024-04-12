@@ -298,5 +298,5 @@ export const searchAdd = `(
       'doctors',
       'hospitals'
     ),
-    created_at DESC
+    created_at DESC 
   `
