@@ -83,8 +83,8 @@ export const indexHospitalityTable = async function () {
         // Define your DROP TABLE query
         const dropTableQuery = `
         ALTER TABLE hospitality ADD FULLTEXT INDEX hospitality_idx_fulltext (title, name, type, description, city, state, locality, category, pincode);
-        ALTER TABLE hospitality ADD INDEX hospitality_idx_is_active_created_at ('is_active', 'created_at');
-        ALTER TABLE hospitality ADD INDEX hospitality_idx_created_at ('created_at');
+        ALTER TABLE hospitality ADD INDEX hospitality_idx_is_active_created_at (is_active, created_at);
+        ALTER TABLE hospitality ADD INDEX hospitality_idx_created_at (created_at);
     `;
 
         // Execute the query

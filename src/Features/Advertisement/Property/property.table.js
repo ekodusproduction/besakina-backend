@@ -99,11 +99,11 @@ export const indexPropertyTable = async function () {
         // Define your DROP TABLE query
         const dropTableQuery = `
         ALTER TABLE property ADD FULLTEXT INDEX property_idx_fulltext (title,type, city, state, landmark, category, price, pincode)
-        ALTER TABLE property ADD INDEX property_idx_is_active_created_at ('is_active','created_at');
-        ALTER TABLE property ADD INDEX property_idx_created_at ('created_at');`;
+        ALTER TABLE property ADD INDEX property_idx_is_active_created_at (is_active, created_at);
+        ALTER TABLE property ADD INDEX property_idx_created_at (created_at);`;
 
         // Execute the query
-        const [results, fields] = await connection.execute(dropTableQuery);
+        const [results, fields] = await connection.query(dropTableQuery);
 
         console.log('Property Table dropped successfully:');
 

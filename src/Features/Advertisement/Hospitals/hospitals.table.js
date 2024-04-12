@@ -90,11 +90,11 @@ export const indexHospitalsTable = async function () {
         // Define your DROP TABLE query
         const dropTableQuery = `
         ALTER TABLE hospitals ADD FULLTEXT INDEX hospitals_idx_fulltext (title,name, type, description, street, city, state, locality, category, pincode);
-        ALTER TABLE hospitals ADD INDEX hospitals_idx_is_active_created_at ('is_active','created_at');
-        ALTER TABLE hospitals ADD INDEX hospitals_idx_created_at ('created_at');`;
+        ALTER TABLE hospitals ADD INDEX hospitals_idx_is_active_created_at (is_active, created_at);
+        ALTER TABLE hospitals ADD INDEX hospitals_idx_created_at (created_at);`;
 
         // Execute the query
-        const [results, fields] = await connection.execute(dropTableQuery);
+        const [results, fields] = await connection.query(dropTableQuery);
 
         console.log('Property Table dropped successfully:');
 
