@@ -81,9 +81,9 @@ export const indexDoctorsTable = async function () {
 
         // Define your DROP TABLE query
         const dropTableQuery = `
-        ALTER TABLE 'doctors' ADD FULLTEXT INDEX 'doctors_idx_fulltext' (title, expertise, description, price_per_visit, street, city, locality, pincode);
-        ALTER TABLE 'doctors' ADD INDEX 'doctors_idx_is_active_created_at' ('is_active', 'created_at');
-        ALTER TABLE 'doctors' ADD INDEX 'doctors_idx_created_at' ('created_at');
+        ALTER TABLE doctors ADD FULLTEXT INDEX doctors_idx_fulltext (title, expertise, description, price_per_visit, street, city, locality, pincode);
+        ALTER TABLE doctors ADD INDEX doctors_idx_is_active_created_at (is_active, created_at);
+        ALTER TABLE doctors ADD INDEX doctors_idx_created_at (created_at);
     `;
 
         // Execute the query
