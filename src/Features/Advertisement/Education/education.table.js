@@ -84,7 +84,7 @@ export const indexEducationTable = async function () {
         const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
-        const fulltext = `ALTER TABLE education ADD FULLTEXT INDEX education_idx_fulltext (title, domain, institution_name, type, description, street, city, locality, price, pincode);`
+        const fulltext = `ALTER TABLE education ADD FULLTEXT INDEX education_idx_fulltext (title, domain, institution_name, type, description,  city, locality,  pincode);`
         // Execute the query
         await connection.query(fulltext);
         console.log("education fulltext index created")

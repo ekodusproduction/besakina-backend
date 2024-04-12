@@ -83,7 +83,10 @@ export const searchAdd = `(
         property.type,
         property.street,
         property.city,
-        property.house_no,
+        property.state,
+        property.landmark,
+        property.category,
+        property.price,
         property.pincode
       ) AGAINST (? IN BOOLEAN MODE)
     LIMIT
@@ -124,6 +127,9 @@ export const searchAdd = `(
         vehicles.street,
         vehicles.city,
         vehicles.locality,
+        vehicles.variant,
+        vehicles.model,
+        vehicles.transmission,
         vehicles.pincode
       ) AGAINST (? IN BOOLEAN MODE)
     LIMIT
@@ -161,7 +167,7 @@ export const searchAdd = `(
         hospitality.name,
         hospitality.type,
         hospitality.description,
-        hospitality.street,
+        hospitality.category,
         hospitality.city,
         hospitality.locality,
         hospitality.pincode
@@ -201,7 +207,7 @@ export const searchAdd = `(
         education.domain,
         education.institution_name,
         education.description,
-        education.street,
+        education.type,
         education.city,
         education.locality,
         education.pincode
@@ -270,7 +276,7 @@ export const searchAdd = `(
         ORDER BY
           hospitals.created_at DESC
         LIMIT
-          10
+          10 
       ) AS hospitals_inner_subselect
       INNER JOIN hospitals ON hospitals_inner_subselect.id = hospitals.id
     WHERE

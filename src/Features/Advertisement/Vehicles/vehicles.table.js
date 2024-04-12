@@ -91,12 +91,12 @@ export const indexVehiclesTable = async function () {
 
         // Define your DROP TABLE query
         const dropTableQuery = `
-        ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode);
+        ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode,model, variant, transmission);
         ALTER TABLE vehicles ADD INDEX vehicles_idx_is_active_created_at (is_active, created_at);
         ALTER TABLE vehicles ADD INDEX vehicles_idx_created_at (created_at);`;
 
         // Execute the query
-        const fulltext = `ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode);`
+        const fulltext = `ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode,model, variant, transmission);`
         // Execute the query
         await connection.query(fulltext);
         console.log("vehicles fulltext index created")
