@@ -93,7 +93,7 @@ export const indexDoctorsTable = async function () {
         // Release the connection back to the pool
         connection.release();
     } catch (error) {
-        console.error('Error dropping table:', error);
+        console.error('Error creating index:', error);
     }
     return
 }
