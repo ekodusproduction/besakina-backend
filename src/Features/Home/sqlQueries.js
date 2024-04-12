@@ -190,7 +190,7 @@ export const searchAdd = `(
               ORDER BY
                 education.created_at DESC
               LIMIT
-                10 AS education_inner_subselect
+                10) AS education_inner_subselect
                 INNER JOIN education ON education_inner_subselect.id = education.id
               WHERE
                 1 = 1
