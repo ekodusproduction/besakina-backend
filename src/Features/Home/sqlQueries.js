@@ -169,44 +169,45 @@ export const searchAdd = `(
       LIMIT
         10
       UNION ALL
-        (
-          SELECT
-            education.id,
+      (
+        SELECT
+          education.id,
+          education.title,
+          education.price,
+          education.created_at,
+          education.images,
+          education.city,
+          education.state,
+          'education' AS category
+        FROM
+          (
+            SELECT
+              id
+            FROM
+              education
+            WHERE
+              education.is_active = 1
+            ORDER BY
+              education.created_at DESC
+            LIMIT
+              10
+          ) AS education_inner_subselect
+          INNER JOIN education ON education_inner_subselect.id = education.id
+        WHERE
+          1 = 1
+          AND MATCH (
             education.title,
-            education.price,
-            education.created_at,
-            education.images,
+            education.domain,
+            education.institution_name,
+            education.description,
+            education.street,
             education.city,
-            education.state,
-            'education' AS category
-          FROM
-            (
-              SELECT
-                id
-              FROM
-                education
-              WHERE
-                education.is_active = 1
-              ORDER BY
-                education.created_at DESC
-              LIMIT
-                10) AS education_inner_subselect
-                INNER JOIN education ON education_inner_subselect.id = education.id
-              WHERE
-                1 = 1
-                AND MATCH (
-                  education.title,
-                  education.domain,
-                  education.institution_name,
-                  education.description,
-                  education.street,
-                  education.city,
-                  education.locality,
-                  education.pincode
-                ) AGAINST (? IN BOOLEAN MODE)
-              LIMIT
-                10
-            )
+            education.locality,
+            education.pincode
+          ) AGAINST (? IN BOOLEAN MODE)
+        LIMIT
+          10
+      )
           UNION ALL
             (
               SELECT
