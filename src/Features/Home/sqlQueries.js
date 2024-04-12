@@ -310,97 +310,99 @@ export const searchAdd = `(
     created_at DESC 
   `
 
-//   export const searchAdd = `SELECT 
-//   id,
-//   title,
-//   price,
-//   created_at,
-//   images,
-//   city,
-//   state,
-//   'property' AS category
-// FROM 
-//   property
-// WHERE 
-//   MATCH (title, type, city, street, state, landmark, category, price, pincode) AGAINST (?) IN BOOLEAN MODE
-
-// UNION ALL
-
-// SELECT 
-//   id,
-//   title,
-//   price,
-//   created_at,
-//   images,
-//   city,
-//   state,
-//   'vehicles' AS category
-// FROM 
-//   vehicles
-// WHERE 
-//   MATCH (title, brand, type, city, kilometer_driven, registration_year, locality, category, price, pincode, model, variant, transmission) AGAINST (?) IN BOOLEAN MODE
-
-// UNION ALL
-
-// SELECT 
-//   id,
-//   title,
-//   price,
-//   created_at,
-//   images,
-//   city,
-//   state,
-//   'hospitality' AS category
-// FROM 
-//   hospitality
-// WHERE 
-//   MATCH (title, name, type, description, city, state, locality, category, pincode) AGAINST (?) IN BOOLEAN MODE
-
-// UNION ALL
-
-// SELECT 
-//   id,
-//   title,
-//   price,
-//   created_at,
-//   images,
-//   city,
-//   state,
-//   'hospitals' AS category
-// FROM 
-//   hospitals
-// WHERE 
-//   MATCH (title, name, type, description, street, city, state, locality, category, pincode) AGAINST (?) IN BOOLEAN MODE
-
-// UNION ALL
-
-// SELECT 
-//   id,
-//   title,
-//   price,
-//   created_at,
-//   images,
-//   city,
-//   state,
-//   'education' AS category
-// FROM 
-//   education
-// WHERE 
-//   MATCH (title, domain, institution_name, type, description, city, locality, pincode) AGAINST (?) IN BOOLEAN MODE
-
-// UNION ALL
-
-// SELECT 
-//   id,
-//   title,
-//   price_per_visit AS price,
-//   created_at,
-//   images,
-//   city,
-//   state,
-//   'doctors' AS category
-// FROM 
-//   doctors
-// WHERE 
-//   MATCH (title, expertise, description, street, city, locality, pincode) AGAINST (?) IN BOOLEAN MODE;
-// `
+//   export const searchAdd = `(
+    SELECT 
+    property.id,
+    property.title,
+    property.price,
+    property.created_at,
+    property.images,
+    property.city,
+    property.state,
+    'property' AS category
+FROM 
+    property
+WHERE 
+    MATCH (title, type, city, street, state, landmark, category, price, pincode) AGAINST (?) IN BOOLEAN MODE
+)
+UNION ALL
+(
+SELECT 
+    vehicles.id,
+    vehicles.title,
+    vehicles.price,
+    vehicles.created_at,
+    vehicles.images,
+    vehicles.city,
+    vehicles.state,
+    'vehicles' AS category
+FROM 
+    vehicles
+WHERE 
+    MATCH (title, brand, type, city, kilometer_driven, registration_year, locality, category, price, pincode, model, variant, transmission) AGAINST (?) IN BOOLEAN MODE
+)
+UNION ALL
+(
+SELECT 
+    hospitality.id,
+    hospitality.title,
+    hospitality.price,
+    hospitality.created_at,
+    hospitality.images,
+    hospitality.city,
+    hospitality.state,
+    'hospitality' AS category
+FROM 
+    hospitality
+WHERE 
+    MATCH (title, name, type, description, city, state, locality, category, pincode) AGAINST (?) IN BOOLEAN MODE
+)
+UNION ALL
+(
+SELECT 
+    hospitals.id,
+    hospitals.title,
+    hospitals.price_registration AS price,
+    hospitals.created_at,
+    hospitals.images,
+    hospitals.city,
+    hospitals.state,
+    'hospitals' AS category
+FROM 
+    hospitals
+WHERE 
+    MATCH (title, name, type, description, street, city, state, locality, category, pincode) AGAINST (?) IN BOOLEAN MODE
+)
+UNION ALL
+(
+SELECT 
+    education.id,
+    education.title,
+    education.price,
+    education.created_at,
+    education.images,
+    education.city,
+    education.state,
+    'education' AS category
+FROM 
+    education
+WHERE 
+    MATCH (title, domain, institution_name, type, description, city, locality, pincode) AGAINST (?) IN BOOLEAN MODE
+)
+UNION ALL
+(
+SELECT 
+    doctors.id,
+    doctors.title,
+    doctors.price_per_visit AS price,
+    doctors.created_at,
+    doctors.images,
+    doctors.city,
+    doctors.state,
+    'doctors' AS category
+FROM 
+    doctors
+WHERE 
+    MATCH (title, expertise, description, street, city, locality, pincode) AGAINST (?) IN BOOLEAN MODE
+);
+`
