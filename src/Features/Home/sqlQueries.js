@@ -52,7 +52,7 @@ LIMIT ? OFFSET ?;
 
 // export const searchAdd = `(SELECT CAST(CONCAT('{"columns": [',IFNULL(@cols,''),'], "indexes": [',IFNULL(@indexes,''),'], "tables":[',IFNULL(@tbls,''),'], "server_name": "', @@hostname, '", "version": "', VERSION(), '"}') AS CHAR) as '' FROM (SELECT (@cols:=NULL), (SELECT (0) FROM information_schema.columns cols WHERE table_schema LIKE IFNULL(NULL, '%') and table_schema = DATABASE() AND (0x00) IN (@cols:=CONCAT_WS(',', @cols, CONCAT('{"schema":"',cols.table_schema,'","table":"',cols.table_name,'","name":"', replace(cols.column_name,'"', '\\"'), '","type":"', cols.column_type, '","nullable":', IF(cols.IS_NULLABLE = 'YES', 'true', 'false'), ',"collation":"', IFNULL(cols.COLLATION_NAME, ''), '"}')))) ) cols, (SELECT (@indexes:=NULL), (SELECT (0) FROM information_schema.statistics indexes WHERE table_schema LIKE IFNULL(NULL, '%') and table_schema = DATABASE() AND (0x00) IN (@indexes:=CONCAT_WS(',', @indexes, CONCAT('{"schema":"',indexes.table_schema,'","table":"',indexes.table_name,'","name":"', indexes.index_name, '","size":"', 0, '","column":"', indexes.column_name, '","index_type":"', LOWER(indexes.index_type), '","cardinality":', indexes.cardinality,',"direction":"', (CASE WHEN indexes.collation = 'D' THEN 'desc' ELSE 'asc' END), '","unique":', IF(indexes.non_unique = 1, 'false', 'true'), '}')))) ) indexes, (SELECT (@tbls:=NULL), (SELECT (0) FROM information_schema.tables tbls WHERE table_schema LIKE IFNULL(NULL, '%') and table_schema = DATABASE() AND (0x00) IN (@tbls:=CONCAT_WS(',', @tbls, CONCAT('{', '"schema":"', `TABLE_SCHEMA`, '",', '"table":"', `TABLE_NAME`, '",', '"rows":', IFNULL(`TABLE_ROWS`, 0), ', "type":"', IFNULL(`TABLE_TYPE`, ''), '",', '"engine":"', IFNULL(`ENGINE`, ''), '",', '"collation":"', IFNULL(`TABLE_COLLATION`, ''), '"}')))) tbls) x);`       
 
-export const searchAdd = `SELECT
+export const searchAdd = `(SELECT
 property.id,
 property.title,
 property.price,
@@ -76,8 +76,8 @@ property
 WHERE
 1 = 1 
 AND MATCH (property.title,property.type,property.street,property.city,property.house_no,property.pincode) AGAINST (? IN BOOLEAN MODE) LIMIT 10 
-UNION
-ALL SELECT
+)UNION
+ALL (SELECT
 vehicles.id,
 vehicles.title,
 vehicles.price,
@@ -101,8 +101,8 @@ vehicles
 WHERE
 1 = 1 
 AND MATCH (vehicles.title,vehicles.brand,vehicles.type,vehicles.description,vehicles.street,vehicles.city,vehicles.locality,vehicles.pincode) AGAINST (? IN BOOLEAN MODE) LIMIT 10 
-UNION
-ALL SELECT
+)UNION
+ALL (SELECT
 hospitality.id,
 hospitality.title,
 hospitality.price,
@@ -151,8 +151,8 @@ education
 WHERE
 1 = 1 
 AND MATCH (education.title,education.domain,education.institution_name,education.description,education.street,education.city,education.locality,education.pincode) AGAINST (? IN BOOLEAN MODE) LIMIT 10 
-UNION
-ALL SELECT
+)UNION
+ALL (SELECT
 doctors.id,
 doctors.title,
 doctors.price_per_visit,
@@ -176,8 +176,8 @@ doctors
 WHERE
 1 = 1 
 AND MATCH (doctors.title,doctors.expertise,doctors.description,doctors.street,doctors.city,doctors.locality,doctors.pincode) AGAINST (? IN BOOLEAN MODE) LIMIT 10 
-UNION
-ALL SELECT
+)UNION
+ALL (SELECT
 hospitals.id,
 hospitals.title,
 hospitals.price_registration,
@@ -208,5 +208,5 @@ FIELD(category,
 'hospitality',
 'education',
 'doctors',
-'hospitals'),
+'hospitals',
 created_at DESC;`
