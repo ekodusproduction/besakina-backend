@@ -16,7 +16,7 @@ import { createChatRoomTable } from "../Features/Chats/Tables/chatroom.table.js"
 
 // triggers
 import { planUpdateTrigger } from "./mysql.triggers.js";
-
+import { addIndexes } from "./mysql.indexes.js";
 async function createTables() {
     try {
         await createPlanTable();
@@ -31,6 +31,9 @@ async function createTables() {
         // await createOrderTable();
         await createChatRoomTable();
         await createChatTable();
+
+
+        await addIndexes()
         await createTriggers();
     } catch (error) {
         console.error('Error creating tables:', error);

@@ -53,16 +53,15 @@ export const createPropertyTable = async function () {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-            FULLTEXT INDEX property (title,type, city, state, landmark, category, price, pincode),
             
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );`
-
         // Execute the query
-        const [results, fields] = await connection.query(createTableQuery);
-
+        const [results, fields] = await connection.query(createTableQuery);        
         console.log('Property Table created successfully:');
+ 
+
 
         // Release the connection back to the pool
         connection.release();
@@ -80,6 +79,28 @@ export const dropPropertyTable = async function () {
         const dropTableQuery = `
         DROP TABLE IF EXISTS property
       `;
+
+        // Execute the query
+        const [results, fields] = await connection.query(dropTableQuery);
+
+        console.log('Property Table dropped successfully:');
+
+        // Release the connection back to the pool
+        connection.release();
+    } catch (error) {
+        console.error('Error dropping table:', error);
+    }
+    return
+}
+export const indexPropertyTable = async function () {
+    try {
+        const connection = await pool.getConnection();
+
+        // Define your DROP TABLE query
+        const dropTableQuery = `
+        ALTER TABLE 'property' ADD FULLTEXT INDEX 'property_idx_fulltext' (title,type, city, state, landmark, category, price, pincode)
+        ALTER TABLE 'property' ADD INDEX 'property_idx_is_active_created_at' ('is_active','created_at');
+        ALTER TABLE 'property' ADD INDEX 'property_idx_created_at' ('created_at');`;
 
         // Execute the query
         const [results, fields] = await connection.query(dropTableQuery);

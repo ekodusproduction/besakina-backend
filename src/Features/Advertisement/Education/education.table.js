@@ -80,3 +80,26 @@ export const dropEducationTable = async function () {
     }
     return
 }
+
+export const indexEducationTable = async function () {
+    try {
+        const connection = await pool.getConnection();
+
+        // Define your DROP TABLE query
+        const dropTableQuery = `
+        ALTER TABLE 'education' ADD FULLTEXT INDEX 'education_idx_fulltext' (title,domain,institution_name, type, description, street, city, locality, price, pincode);
+        ALTER TABLE 'education' ADD INDEX 'education_idx_is_active_created_at' ('is_active','created_at');
+        ALTER TABLE 'education' ADD INDEX 'education_idx_created_at' ('created_at');`;
+
+        // Execute the query
+        const [results, fields] = await connection.query(dropTableQuery);
+
+        console.log('Property Table indexed successfully:');
+
+        // Release the connection back to the pool
+        connection.release();
+    } catch (error) {
+        console.error('Error dropping table:', error);
+    }
+    return
+}

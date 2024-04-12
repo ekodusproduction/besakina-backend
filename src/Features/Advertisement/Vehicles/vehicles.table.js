@@ -86,3 +86,26 @@ export const dropVehicleTable = async function () {
     }
     return
 }
+
+export const indexVehiclesTable = async function () {
+    try {
+        const connection = await pool.getConnection();
+
+        // Define your DROP TABLE query
+        const dropTableQuery = `
+        ALTER TABLE 'vehicles' ADD FULLTEXT INDEX 'vehicles_idx_fulltext' (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode);
+        ALTER TABLE 'vehicles' ADD INDEX 'vehicles_idx_is_active_created_at' ('is_active','created_at');
+        ALTER TABLE 'vehicles' ADD INDEX 'vehicles_idx_created_at' ('created_at');`;
+
+        // Execute the query
+        const [results, fields] = await connection.query(dropTableQuery);
+
+        console.log('Property Table dropped successfully:');
+
+        // Release the connection back to the pool
+        connection.release();
+    } catch (error) {
+        console.error('Error dropping table:', error);
+    }
+    return
+}

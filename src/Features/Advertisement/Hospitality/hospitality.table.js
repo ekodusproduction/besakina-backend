@@ -36,7 +36,6 @@ export const createHospitalityTable = async function () {
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            FULLTEXT INDEX hospitality(title,name, type, description,  city, state, locality, category, pincode),
 
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -68,6 +67,29 @@ export const dropHospitalityTable = async function () {
         const [results, fields] = await connection.query(dropTableQuery);
 
         console.log('Hospitality Table dropped successfully:');
+
+        // Release the connection back to the pool
+        connection.release();
+    } catch (error) {
+        console.error('Error dropping table:', error);
+    }
+    return
+}
+
+export const indexHospitalityTable = async function () {
+    try {
+        const connection = await pool.getConnection();
+
+        // Define your DROP TABLE query
+        const dropTableQuery = `
+        ALTER TABLE 'hospitality' ADD FULLTEXT INDEX 'hospitality_idx_fulltext' (title,name, type, description,  city, state, locality, category, pincode);
+        ALTER TABLE 'hospitality' ADD INDEX 'hospitality_idx_is_active_created_at' ('is_active','created_at');
+        ALTER TABLE 'hospitality' ADD INDEX 'hospitality_idx_created_at' ('created_at');`;
+
+        // Execute the query
+        const [results, fields] = await connection.query(dropTableQuery);
+
+        console.log('Property Table indexed successfully:');
 
         // Release the connection back to the pool
         connection.release();
