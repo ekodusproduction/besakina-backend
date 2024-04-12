@@ -90,211 +90,213 @@ export const searchAdd = `(
       10
   )
   UNION ALL
-    (
-      SELECT
-        vehicles.id,
-        vehicles.title,
-        vehicles.price,
-        vehicles.created_at,
-        vehicles.images,
-        vehicles.city,
-        vehicles.state,
-        'vehicles' AS category
-      FROM
-        (
-          SELECT
-            id
-          FROM
-            vehicles
-          WHERE
-            vehicles.is_active = 1
-          ORDER BY
-            vehicles.created_at DESC
-          LIMIT
-            10
-        ) AS vehicles_inner_subselect
-        INNER JOIN vehicles ON vehicles_inner_subselect.id = vehicles.id
-      WHERE
-        1 = 1
-        AND MATCH (
-          vehicles.title,
-          vehicles.brand,
-          vehicles.type,
-          vehicles.description,
-          vehicles.street,
-          vehicles.city,
-          vehicles.locality,
-          vehicles.pincode
-        ) AGAINST (? IN BOOLEAN MODE)
-      LIMIT
-        10
-    )
-  UNION ALL
-    (
-      SELECT
-        hospitality.id,
-        hospitality.title,
-        hospitality.price,
-        hospitality.created_at,
-        hospitality.images,
-        hospitality.city,
-        hospitality.state,
-        'hospitality' AS category
-      FROM
-        (
-          SELECT
-            id
-          FROM
-            hospitality
-          WHERE
-            hospitality.is_active = 1
-          ORDER BY
-            hospitality.created_at DESC
-          LIMIT
-            10
-        ) AS hospitality_inner_subselect
-        INNER JOIN hospitality ON hospitality_inner_subselect.id = hospitality.id
-      WHERE
-        1 = 1
-        AND MATCH (
-          hospitality.title,
-          hospitality.name,
-          hospitality.type,
-          hospitality.description,
-          hospitality.street,
-          hospitality.city,
-          hospitality.locality,
-          hospitality.pincode
-        ) AGAINST (? IN BOOLEAN MODE)
-      LIMIT
-        10
-      UNION ALL
+  (
+    SELECT
+      vehicles.id,
+      vehicles.title,
+      vehicles.price,
+      vehicles.created_at,
+      vehicles.images,
+      vehicles.city,
+      vehicles.state,
+      'vehicles' AS category
+    FROM
       (
         SELECT
-          education.id,
-          education.title,
-          education.price,
-          education.created_at,
-          education.images,
-          education.city,
-          education.state,
-          'education' AS category
+          id
         FROM
-          (
-            SELECT
-              id
-            FROM
-              education
-            WHERE
-              education.is_active = 1
-            ORDER BY
-              education.created_at DESC
-            LIMIT
-              10
-          ) AS education_inner_subselect
-          INNER JOIN education ON education_inner_subselect.id = education.id
+          vehicles
         WHERE
-          1 = 1
-          AND MATCH (
-            education.title,
-            education.domain,
-            education.institution_name,
-            education.description,
-            education.street,
-            education.city,
-            education.locality,
-            education.pincode
-          ) AGAINST (? IN BOOLEAN MODE)
+          vehicles.is_active = 1
+        ORDER BY
+          vehicles.created_at DESC
         LIMIT
           10
-      )
-          UNION ALL
-            (
-              SELECT
-                doctors.id,
-                doctors.title,
-                doctors.price_per_visit,
-                doctors.created_at,
-                doctors.images,
-                doctors.city,
-                doctors.state,
-                'doctors' AS category
-              FROM
-                (
-                  SELECT
-                    id
-                  FROM
-                    doctors
-                  WHERE
-                    doctors.is_active = 1
-                  ORDER BY
-                    doctors.created_at DESC
-                  LIMIT
-                    10
-                ) AS doctors_inner_subselect
-                INNER JOIN doctors ON doctors_inner_subselect.id = doctors.id
-              WHERE
-                1 = 1
-                AND MATCH (
-                  doctors.title,
-                  doctors.expertise,
-                  doctors.description,
-                  doctors.street,
-                  doctors.city,
-                  doctors.locality,
-                  doctors.pincode
-                ) AGAINST (? IN BOOLEAN MODE)
-              LIMIT
-                10
-            )
-          UNION ALL
-            (
-              SELECT
-                hospitals.id,
-                hospitals.title,
-                hospitals.price_registration,
-                hospitals.created_at,
-                hospitals.images,
-                hospitals.city,
-                hospitals.state,
-                'hospitals' AS category
-              FROM
-                (
-                  SELECT
-                    id
-                  FROM
-                    hospitals
-                  WHERE
-                    hospitals.is_active = 1
-                  ORDER BY
-                    hospitals.created_at DESC
-                  LIMIT
-                    10
-                ) AS hospitals_inner_subselect
-                INNER JOIN hospitals ON hospitals_inner_subselect.id = hospitals.id
-              WHERE
-                1 = 1
-                AND MATCH (
-                  hospitals.title,
-                  hospitals.name,
-                  hospitals.type,
-                  hospitals.description,
-                  hospitals.street,
-                  hospitals.city,
-                  hospitals.locality,
-                  hospitals.pincode
-                ) AGAINST (? IN BOOLEAN MODE)
-              LIMIT
-                10
-            )
-          ORDER BY
-            FIELD(
-              category,
-              'property',
-              'vehicles',
-              'hospitality',
-              'education',
-              'doctors',
-              'hospitals'),
-              created_at DESC;
+      ) AS vehicles_inner_subselect
+      INNER JOIN vehicles ON vehicles_inner_subselect.id = vehicles.id
+    WHERE
+      1 = 1
+      AND MATCH (
+        vehicles.title,
+        vehicles.brand,
+        vehicles.type,
+        vehicles.description,
+        vehicles.street,
+        vehicles.city,
+        vehicles.locality,
+        vehicles.pincode
+      ) AGAINST (? IN BOOLEAN MODE)
+    LIMIT
+      10
+  )
+  UNION ALL
+  (
+    SELECT
+      hospitality.id,
+      hospitality.title,
+      hospitality.price,
+      hospitality.created_at,
+      hospitality.images,
+      hospitality.city,
+      hospitality.state,
+      'hospitality' AS category
+    FROM
+      (
+        SELECT
+          id
+        FROM
+          hospitality
+        WHERE
+          hospitality.is_active = 1
+        ORDER BY
+          hospitality.created_at DESC
+        LIMIT
+          10
+      ) AS hospitality_inner_subselect
+      INNER JOIN hospitality ON hospitality_inner_subselect.id = hospitality.id
+    WHERE
+      1 = 1
+      AND MATCH (
+        hospitality.title,
+        hospitality.name,
+        hospitality.type,
+        hospitality.description,
+        hospitality.street,
+        hospitality.city,
+        hospitality.locality,
+        hospitality.pincode
+      ) AGAINST (? IN BOOLEAN MODE)
+    LIMIT
+      10
+  )
+  UNION ALL
+  (
+    SELECT
+      education.id,
+      education.title,
+      education.price,
+      education.created_at,
+      education.images,
+      education.city,
+      education.state,
+      'education' AS category
+    FROM
+      (
+        SELECT
+          id
+        FROM
+          education
+        WHERE
+          education.is_active = 1
+        ORDER BY
+          education.created_at DESC
+        LIMIT
+          10
+      ) AS education_inner_subselect
+      INNER JOIN education ON education_inner_subselect.id = education.id
+    WHERE
+      1 = 1
+      AND MATCH (
+        education.title,
+        education.domain,
+        education.institution_name,
+        education.description,
+        education.street,
+        education.city,
+        education.locality,
+        education.pincode
+      ) AGAINST (? IN BOOLEAN MODE)
+    LIMIT
+      10
+  )
+  UNION ALL
+  (
+    SELECT
+      doctors.id,
+      doctors.title,
+      doctors.price_per_visit,
+      doctors.created_at,
+      doctors.images,
+      doctors.city,
+      doctors.state,
+      'doctors' AS category
+    FROM
+      (
+        SELECT
+          id
+        FROM
+          doctors
+        WHERE
+          doctors.is_active = 1
+        ORDER BY
+          doctors.created_at DESC
+        LIMIT
+          10
+      ) AS doctors_inner_subselect
+      INNER JOIN doctors ON doctors_inner_subselect.id = doctors.id
+    WHERE
+      1 = 1
+      AND MATCH (
+        doctors.title,
+        doctors.expertise,
+        doctors.description,
+        doctors.street,
+        doctors.city,
+        doctors.locality,
+        doctors.pincode
+      ) AGAINST (? IN BOOLEAN MODE)
+    LIMIT
+      10
+  )
+  UNION ALL
+  (
+    SELECT
+      hospitals.id,
+      hospitals.title,
+      hospitals.price_registration,
+      hospitals.created_at,
+      hospitals.images,
+      hospitals.city,
+      hospitals.state,
+      'hospitals' AS category
+    FROM
+      (
+        SELECT
+          id
+        FROM
+          hospitals
+        WHERE
+          hospitals.is_active = 1
+        ORDER BY
+          hospitals.created_at DESC
+        LIMIT
+          10
+      ) AS hospitals_inner_subselect
+      INNER JOIN hospitals ON hospitals_inner_subselect.id = hospitals.id
+    WHERE
+      1 = 1
+      AND MATCH (
+        hospitals.title,
+        hospitals.name,
+        hospitals.type,
+        hospitals.description,
+        hospitals.street,
+        hospitals.city,
+        hospitals.locality,
+        hospitals.pincode
+      ) AGAINST (? IN BOOLEAN MODE)
+    LIMIT
+      10
+  )
+  ORDER BY
+    FIELD(
+      category,
+      'property',
+      'vehicles',
+      'hospitality',
+      'education',
+      'doctors',
+      'hospitals'
+    ),
+    created_at DESC;
   `
