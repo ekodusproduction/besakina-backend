@@ -142,8 +142,10 @@ export const getUserAdds = async function (req, res, next) {
     const connection = await pool.getConnection();
     try {
         const userId = req.user_id;
+        console.log(userId)
         // Construct the INSERT query
         let query = getAllPosts.replaceAll('?', userId)
+        console.log(query)
         // Execute the query
         const [rows, fields] = await connection.query(query);
         if (rows.length === 0) {
