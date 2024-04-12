@@ -85,9 +85,10 @@ export const indexEducationTable = async function () {
 
         // Define your DROP TABLE query
         const dropTableQuery = `
-        ALTER TABLE 'education' ADD FULLTEXT INDEX 'education_idx_fulltext' (title,domain,institution_name, type, description, street, city, locality, price, pincode);
-        ALTER TABLE 'education' ADD INDEX 'education_idx_is_active_created_at' ('is_active','created_at');
-        ALTER TABLE 'education' ADD INDEX 'education_idx_created_at' ('created_at');`;
+        ALTER TABLE \`education\` ADD FULLTEXT INDEX \`education_idx_fulltext\` (title, domain, institution_name, type, description, street, city, locality, price, pincode);
+        ALTER TABLE \`education\` ADD INDEX \`education_idx_is_active_created_at\` (\`is_active\`, \`created_at\`);
+        ALTER TABLE \`education\` ADD INDEX \`education_idx_created_at\` (\`created_at\`);
+    `;
 
         // Execute the query
         const [results, fields] = await connection.query(dropTableQuery);
