@@ -36,7 +36,6 @@ export const searchAdds = async function (req, res, next) {
 
         const query = `
             ${searchAdd}
-            LIMIT ${limit};
         `;
         console.log("query ", query)
         const [rows, fields] = await connection.execute(query, [search, search, search, search, search, search]);
