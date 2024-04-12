@@ -169,6 +169,7 @@ export const searchAdd = `(
         hospitality.description,
         hospitality.category,
         hospitality.city,
+        hospitality.state,
         hospitality.locality,
         hospitality.pincode
       ) AGAINST (? IN BOOLEAN MODE)
@@ -288,7 +289,9 @@ export const searchAdd = `(
         hospitals.description,
         hospitals.street,
         hospitals.city,
+        hospitals.category,
         hospitals.locality,
+        hospitals.state,
         hospitals.pincode
       ) AGAINST (? IN BOOLEAN MODE)
     LIMIT

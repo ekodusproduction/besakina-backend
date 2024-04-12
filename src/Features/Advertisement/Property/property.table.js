@@ -103,7 +103,7 @@ export const indexPropertyTable = async function () {
         ALTER TABLE property ADD INDEX property_idx_created_at (created_at);`;
 
         // Execute the query
-        const fulltext = `ALTER TABLE property ADD FULLTEXT INDEX property_idx_fulltext (title,type, city, state, landmark, category, price, pincode);`
+        const fulltext = `ALTER TABLE property ADD FULLTEXT INDEX property_idx_fulltext (title,type, city,street, state, landmark, category, price, pincode);`
         // Execute the query
         await connection.query(fulltext);
         console.log("property fulltext index created")
