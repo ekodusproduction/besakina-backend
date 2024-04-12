@@ -81,7 +81,7 @@ export const indexDoctorsTable = async function () {
 
         // Define your DROP TABLE query
   
-        const fulltext = ` ALTER TABLE doctors ADD FULLTEXT INDEX doctors_idx_fulltext (title, expertise, description,  street, city, locality, pincode);`
+        const fulltext = `ALTER TABLE doctors ADD FULLTEXT INDEX doctors_idx_fulltext (title, expertise, description,  street, city, locality, pincode);`
         // Execute the query
         await connection.query(fulltext);
         console.log("doctors fulltext index created")
