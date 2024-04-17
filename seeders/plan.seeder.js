@@ -9,7 +9,7 @@ export const addPlans = async (token, baseUrl) => {
     const plansData = [
         {
             contact_limit: '200',
-            images: fs.createReadStream(path.resolve( 'seeders','images', "plans", 'app-silver.png')),
+            images: fs.createReadStream(path.resolve('seeders', 'images', "plans", 'app-silver.png')),
             search_priority: '1',
             verification_badge: '1',
             validity: '30',
@@ -19,18 +19,7 @@ export const addPlans = async (token, baseUrl) => {
             images_business_profile: '0',
             business_profile: '0'
         },
-        {
-            contact_limit: '1000000',
-            images: fs.createReadStream(path.resolve('seeders','images', 'plans', 'app-platinum.png')),
-            search_priority: '3',
-            verification_badge: '1',
-            validity: '30',
-            price: '4999',
-            no_of_ads: '7',
-            type: 'Platinum',
-            images_business_profile: '25',
-            business_profile: '1'
-        },
+
         {
             contact_limit: '600',
             images: fs.createReadStream(path.resolve('seeders', 'images', 'plans', 'app-gold.png')),
@@ -42,9 +31,20 @@ export const addPlans = async (token, baseUrl) => {
             type: 'Gold',
             images_business_profile: '15',
             business_profile: '1'
-        }
+        }, {
+            contact_limit: '1000000',
+            images: fs.createReadStream(path.resolve('seeders', 'images', 'plans', 'app-platinum.png')),
+            search_priority: '3',
+            verification_badge: '1',
+            validity: '30',
+            price: '4999',
+            no_of_ads: '7',
+            type: 'Platinum',
+            images_business_profile: '25',
+            business_profile: '1'
+        },
     ];
-    
+
     try {
         for (const data of plansData) {
             let formData = new FormData();

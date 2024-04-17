@@ -7,9 +7,9 @@ import { addProperties } from "./property.seeder.js";
 import { addVehicles } from "./vehicles.seeder.js";
 export const seeder = async () => {
     try {
-        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInBsYW5faWQiOm51bGwsImlhdCI6MTcxMjkxNDQxOCwiZXhwIjoxNzEzMDAwODE4fQ.88IwYCh0KsbobN_zExG3tQiBhDibxeK8u0HVpUF5G-8'
+        const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInBsYW5faWQiOm51bGwsImlhdCI6MTcxMzMzNDQxNywiZXhwIjoxNzEzNDIwODE3fQ.kBRgDATPDVtrmsYWHWr8qhbUpVEi2dvbLV4XRapiENA`
         const baseUrl = '167.71.235.196'
-        // await addPlans(token, baseUrl);
+        await addPlans(token, baseUrl);
         await addProperties(token, baseUrl);
         await addVehicles(token, baseUrl)
         await addDoctors(token, baseUrl)
