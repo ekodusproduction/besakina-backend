@@ -30,14 +30,13 @@ export const searchAdds = async function (req, res, next) {
     try {
         const limit = req.query?.limit || 100;
         const page = req.query?.page || 1;
-        const search = req.query?.search || '';
+        let search = req.query?.search || '';
         const pageNumber = parseInt(page) || 1;
         const offset = (pageNumber - 1) * limit;
-
+        search = `+${search}*`
         const query = `
             ${searchAdd}
         `;
-        console.log("query ", query)
         const [rows, fields] = await connection.execute(query, [search, search, search, search, search, search]);
         console.log(rows);
         rows.forEach(advertisement => {

@@ -249,7 +249,7 @@ SELECT
     doctors.city,
     doctors.state,
     doctors.created_at,
-    'doctors' AS category
+    'doctors' AS category 
 FROM
     doctors
 WHERE
