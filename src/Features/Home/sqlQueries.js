@@ -168,7 +168,7 @@ export const searchAdd = `(
 FROM
     property
 WHERE
-    MATCH (title, type, city, street, state, landmark, category, price, pincode) AGAINST ('?*' IN BOOLEAN MODE)
+    MATCH (title, type, city, street, state, landmark, category, price, pincode) AGAINST (? IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -185,7 +185,7 @@ SELECT
 FROM
     vehicles
 WHERE
-    MATCH (title, brand, type, city, kilometer_driven, registration_year, locality, category, price, pincode, model, variant, transmission) AGAINST ('?*' IN BOOLEAN MODE)
+    MATCH (title, brand, type, city, kilometer_driven, registration_year, locality, category, price, pincode, model, variant, transmission) AGAINST (? IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -202,7 +202,7 @@ SELECT
 FROM
     hospitality
 WHERE
-    MATCH (title, name, type, description, city, state, locality, category, pincode) AGAINST ('?*' IN BOOLEAN MODE)
+    MATCH (title, name, type, description, city, state, locality, category, pincode) AGAINST (? IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -219,7 +219,7 @@ SELECT
 FROM
     hospitals
 WHERE
-    MATCH (title, name, type, description, street, city, state, locality, category, pincode) AGAINST ('?*' IN BOOLEAN MODE)
+    MATCH (title, name, type, description, street, city, state, locality, category, pincode) AGAINST (? IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -236,7 +236,7 @@ SELECT
 FROM
     education
 WHERE
-    MATCH (title, domain, institution_name, type, description, city, locality, pincode) AGAINST ('?*' IN BOOLEAN MODE)
+    MATCH (title, domain, institution_name, type, description, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -253,6 +253,6 @@ SELECT
 FROM
     doctors
 WHERE
-    MATCH (title, expertise, description, street, city, locality, pincode) AGAINST ('?*' IN BOOLEAN MODE)
+    MATCH (title, expertise, description, street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
 );
 `
