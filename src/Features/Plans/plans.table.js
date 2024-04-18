@@ -22,7 +22,8 @@ export const createPlanTable = async function () {
         no_images INT,
         business_profile BOOLEAN,
         images_business_profile INT,
-
+        offer_price INT, 
+        
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       );`;

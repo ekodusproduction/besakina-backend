@@ -15,7 +15,9 @@ export const addPlans = async (token, baseUrl) => {
             validity: '30',
             price: '999',
             no_of_ads: '1',
+            "no_images": 5,
             type: 'Silver',
+            offer_price: 99,
             images_business_profile: '0',
             business_profile: '0'
         },
@@ -29,6 +31,9 @@ export const addPlans = async (token, baseUrl) => {
             price: '2999',
             no_of_ads: '3',
             type: 'Gold',
+            "no_images": 15,
+            offer_price: 299,
+
             images_business_profile: '15',
             business_profile: '1'
         }, {
@@ -40,6 +45,8 @@ export const addPlans = async (token, baseUrl) => {
             price: '4999',
             no_of_ads: '7',
             type: 'Platinum',
+            "no_images": 25,
+            offer_price: 499,
             images_business_profile: '25',
             business_profile: '1'
         },
