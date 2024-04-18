@@ -159,11 +159,11 @@ export const searchAdd = `(
     property.id,
     property.title,
     property.price,
-    property.type,
-    property.created_at,
+    property.type,    
     property.images,
     property.city,
-    property.state,
+    property.state,    
+    property.created_at,
     'property' AS category
 FROM
     property
