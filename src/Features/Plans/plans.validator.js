@@ -24,6 +24,8 @@ export const addPlanValidator = async (req, res, next) => {
             .optional().isString().withMessage('Membership badge must be a string')
             .isLength({ max: 255 }).withMessage('Membership badge must not exceed 255 characters'),
         body('contact_limit')
+            .optional().isInt({ min: 0 }).withMessage('Contact limit must be a non-negative integer'),
+        body('offer_price')
             .optional().isInt({ min: 0 }).withMessage('Contact limit must be a non-negative integer')
     ];
     await Promise.all(rules.map(rule => rule.run(req)));
