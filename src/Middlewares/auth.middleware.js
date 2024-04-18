@@ -7,7 +7,7 @@ export const jwtAuth = function (req, res, next) {
     const token = req.headers.authorization;
 
     if (!token) {
-        return sendError(res, 'No token provided', 401);
+        return sendError(res, 'No token provided. Please login', 401);
     }
 
     try {
@@ -21,6 +21,6 @@ export const jwtAuth = function (req, res, next) {
         next();
     } catch (error) {
         // If token is invalid or expired, send an error response
-        return sendError(res, 'Invalid token', 401);
+        return sendError(res, 'Invalid token. Please login again', 401);
     }
 };
