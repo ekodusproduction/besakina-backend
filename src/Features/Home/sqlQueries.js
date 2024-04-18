@@ -143,7 +143,7 @@ SELECT
     doctors.images,
     doctors.city,
     doctors.state,
-     doctora.created_at,
+     doctors.created_at,
     'doctors' AS category
 FROM
     doctors
