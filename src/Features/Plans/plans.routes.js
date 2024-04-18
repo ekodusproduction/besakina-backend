@@ -8,7 +8,7 @@ const plansRouter = Router()
 
 plansRouter.get("/", getPlan)
 plansRouter.post("/", jwtAuth, fileUpload('images'), addPlanValidator, addPlan)
-plansRouter.delete("/id/:id", deletePlan)
+plansRouter.delete("/id/:id", jwtAuth,deletePlan)
 
 
 export default plansRouter  
