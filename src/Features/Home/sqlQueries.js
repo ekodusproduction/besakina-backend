@@ -168,7 +168,7 @@ export const searchAdd = `(
 FROM
     property
 WHERE
-    MATCH (title, type, city, street, state, landmark, category, price, pincode) AGAINST (? IN BOOLEAN MODE)
+    MATCH (title, type, city, street, state, landmark, category, price, pincode) AGAINST ('*?*' IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -185,7 +185,7 @@ SELECT
 FROM
     vehicles
 WHERE
-    MATCH (title, brand, type, city, kilometer_driven, registration_year, locality, category, price, pincode, model, variant, transmission) AGAINST (? IN BOOLEAN MODE)
+    MATCH (title, brand, type, city, kilometer_driven, registration_year, locality, category, price, pincode, model, variant, transmission) AGAINST ('*?*' IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -197,12 +197,12 @@ SELECT
     hospitality.images,
     hospitality.city,
     hospitality.state,
-     hospitality.created_at,
+    hospitality.created_at,
     'hospitality' AS category
 FROM
     hospitality
 WHERE
-    MATCH (title, name, type, description, city, state, locality, category, pincode) AGAINST (? IN BOOLEAN MODE)
+    MATCH (title, name, type, description, city, state, locality, category, pincode) AGAINST ('*?*' IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -214,12 +214,12 @@ SELECT
     hospitals.images,
     hospitals.city,
     hospitals.state,
-     hospitals.created_at,
+    hospitals.created_at,
     'hospitals' AS category
 FROM
     hospitals
 WHERE
-    MATCH (title, name, type, description, street, city, state, locality, category, pincode) AGAINST (? IN BOOLEAN MODE)
+    MATCH (title, name, type, description, street, city, state, locality, category, pincode) AGAINST ('*?*' IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -231,12 +231,12 @@ SELECT
     education.images,
     education.city,
     education.state,
-     education.created_at,
+    education.created_at,
     'education' AS category
 FROM
     education
 WHERE
-    MATCH (title, domain, institution_name, type, description, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+    MATCH (title, domain, institution_name, type, description, city, locality, pincode) AGAINST ('*?*' IN BOOLEAN MODE)
 )
 UNION ALL
 (
@@ -248,11 +248,11 @@ SELECT
     doctors.images,
     doctors.city,
     doctors.state,
-     doctors.created_at,
+    doctors.created_at,
     'doctors' AS category
 FROM
     doctors
 WHERE
-    MATCH (title, expertise, description, street, city, locality, pincode) AGAINST (? IN BOOLEAN MODE)
+    MATCH (title, expertise, description, street, city, locality, pincode) AGAINST ('*?*' IN BOOLEAN MODE)
 );
 `
