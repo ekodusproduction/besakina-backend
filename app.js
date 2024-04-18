@@ -73,7 +73,7 @@ app.use("/api/hospitals", hospitalsRouter);
 app.use("/api/hospitality", hospitalityRouter);
 app.use("/api/education", educationRouter);
 app.use("/api/doctors", doctorRouter);
-app.use("/api/plans", jwtAuth, plansRouter);
+app.use("/api/plans", plansRouter);
 app.use('/api/chat', chatRouter)
 app.use("/api/home", homeRouter)
 // Error handling middleware
