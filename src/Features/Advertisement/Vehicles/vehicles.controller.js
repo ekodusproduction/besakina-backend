@@ -37,7 +37,7 @@ export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
   try {
     const advertisementID = req.params.id;
-    const [query, values] = await selectJoinQuery('vehicles', ['vehicles.*', 'users.*'], 'users', 'vehicles.user_id = users.id', { 'vehicles.id': advertisementID, 'vehicles.is_active': 1 });
+    const [query, values] = await selectJoinQuery('vehicles', ['vehicles.*', 'users.*'], 'users', 'vehicles.user_id = users.id', { 'id': advertisementID, 'is_active': 1 });
     const [rows] = await connection.query(query, values);
 
     if (rows.length === 0) {
