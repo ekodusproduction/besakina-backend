@@ -161,7 +161,9 @@ export const getUserDetails = async function (req, res, next) {
     try {
         const userId = req.user_id;
 
-        const [query, values] = await selectJoinQuery('users', ['*'], 'plans', 'users.plan_id = plans.id', { 'users.id': userId }); const [rows, fields] = await connection.query(query, values);
+        const [query, values] = await selectJoinQuery('users', ['*'], 'plans', 'users.plan_id = plans.id', { 'users.id': userId });
+        const [rows, fields] = await connection.query(query, values);
+        console.log("query ", query);
         if (rows.length === 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
         }

@@ -106,30 +106,37 @@ export const selectJoinQuery = async (primaryTableName, selectFields, joinTableN
   let placeholders = [];
   const values = [];
 
+  // Construct columns and values for the WHERE clause based on the primary table
   for (const [key, val] of Object.entries(condition)) {
     primaryColumns.push(`${primaryTableName}.${key}`);
     placeholders.push('?');
     values.push(val);
   }
 
+  // Construct columns and values for the join condition based on the join table
   for (const [key, val] of Object.entries(joinCondition)) {
     joinColumns.push(`${joinTableName}.${key}`);
     placeholders.push('?');
     values.push(val);
   }
 
-  let selectClause = '*';
-  if (selectFields.length === 1) {
-    selectClause = `${primaryTableName}.${selectFields[0]}`;
-  } else if (selectFields.length > 1) {
+  // Construct the SELECT clause
+  let selectClause = '';
+  if (selectFields.length > 0) {
     selectClause = selectFields.map(field => `${primaryTableName}.${field}`).join(', ');
+  } else {
+    selectClause = `${primaryTableName}.*`;
   }
 
-  const whereClause = primaryColumns.length > 0 ? `WHERE ${primaryColumns.map(column => `${column} = ?`).join(' AND ')}` : '';
-  const joinClause = joinColumns.length > 0 ? `LEFT JOIN ${joinTableName} ON ${joinCondition}` : '';
+  // Construct the JOIN clause
+  const joinClause = `LEFT JOIN ${joinTableName} ON ${joinCondition}`;
 
+  // Construct the WHERE clause
+  const whereClause = primaryColumns.length > 0 ? `WHERE ${primaryColumns.map(column => `${column} = ?`).join(' AND ')}` : '';
+
+  // Construct the complete query
   const query = `
-      SELECT ${selectClause}, ${joinTableName}.* 
+      SELECT ${selectClause}
       FROM ${primaryTableName}
       ${joinClause}
       ${whereClause};
