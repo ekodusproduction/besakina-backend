@@ -161,7 +161,7 @@ export const getUserDetails = async function (req, res, next) {
     try {
         const userId = req.user_id;
 
-        const [query, values] = await selectJoinQuery('users', ['*'], 'plans', 'users.plan_id = plans.id', { 'users.id': userId });
+        const [query, values] = await selectJoinQuery('users', ['*'], 'plans', 'users.plan_id = plans.id', { id: userId });
         const [rows, fields] = await connection.query(query, values);
         console.log("query ", query);
         if (rows.length === 0) {
