@@ -6,7 +6,7 @@ import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 import { insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../Utility/sqlQuery.js";
-import { getAllPosts } from "./sql.js";
+import { getAllPosts, getUserAndPlan } from "./sql.js";
 
 export const sendOtp = async (req, res, next) => {
     const { mobile } = req.body;
@@ -161,8 +161,7 @@ export const getUserDetails = async function (req, res, next) {
     try {
         const userId = req.user_id;
 
-        const [query, values] = await selectJoinQuery('users', ['*'], 'plans', 'users.plan_id = plans.id', { id: userId });
-        const [rows, fields] = await connection.query(query, values);
+        const [rows, fields] = await connection.query(getUserAndPlan, [userId]);
         console.log("query ", query);
         if (rows.length === 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
