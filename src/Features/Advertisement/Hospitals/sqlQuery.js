@@ -15,6 +15,6 @@ JSON_OBJECT(
      'pincode', p.pincode,
      'about', p.about
 ) AS user
-FROM hsopitals AS u
+FROM hospitals AS u
 LEFT JOIN users AS p ON u.user_id = p.id
 WHERE u.id = ?;`;

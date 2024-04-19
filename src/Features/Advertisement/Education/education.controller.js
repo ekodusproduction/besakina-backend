@@ -5,6 +5,7 @@ import pool from "../../../Mysql/mysql.database.js";
 import { insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
 import { getUserAndHospitals } from "../Hospitals/sqlQuery.js";
+import { getUserAndEducation } from "./sqlQuery.js";
 
 export const addAdvertisement = async (req, res, next) => {
   let requestBody = req.body;
@@ -38,7 +39,7 @@ export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
   try {
     const advertisementID = req.params.id;
-    const [rows] = await connection.query(getUserAndHospitals, [advertisementID]);
+    const [rows] = await connection.query(getUserAndEducation, [advertisementID]);
 
     if (rows.length === 0) {
       return sendError(res, "Education not found", 404);
