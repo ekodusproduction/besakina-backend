@@ -31,7 +31,7 @@ ORDER BY FIELD(category, 'property', 'vehicles', 'hospitality', 'education', 'do
 LIMIT 100 OFFSET 0;`
 
 
-export const getUserAndPlan = `SELECT u.*, p.* AS 'plans'
+export const getUserAndPlan = `SELECT u.*, p.*
 FROM users AS u
 LEFT JOIN plans AS p ON u.plan_id = p.id
 WHERE u.id = ?;
