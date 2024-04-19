@@ -167,10 +167,10 @@ export const getUserDetails = async function (req, res, next) {
         if (rows.length === 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
         }
-        rows.forEach(advertisement => {
-            advertisement.images = JSON.parse(advertisement.images);
-            advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
-        });
+        // rows.forEach(advertisement => {
+        //     advertisement.images = JSON.parse(advertisement.images);
+        //     advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+        // });
 
         return await sendResponse(res, 'User details', 201, rows, null);
     } catch (error) {
