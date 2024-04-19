@@ -4,6 +4,7 @@ import pool from "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
 import { insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
+import { getUserAndHospitals } from "./sqlQuery.js";
 
 export const addAdvertisement = async (req, res, next) => {
   let requestBody = req.body;
@@ -37,13 +38,13 @@ export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
   try {
     const advertisementID = req.params.id;
-    const [query, values] = await selectJoinQuery('hospitals', ['*'], 'users', 'hospitals.user_id = users.id', { id: advertisementID, is_active: 1 });
-
-    const [rows] = await connection.query(query, values);
+    const [rows] = await connection.query(getUserAndHospitals, [advertisementID]);
 
     if (rows.length === 0) {
-      return sendError(res, "Advertisement not found", 404);
+      return sendError(res, "Hospitals not found", 404);
     }
+    rows[0].user = JSON.parse(rows[0].user);
+
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
       advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));

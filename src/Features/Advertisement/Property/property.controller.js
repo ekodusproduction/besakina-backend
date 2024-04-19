@@ -4,7 +4,7 @@ import pool from "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
 import { insertQuery, selectQuery, updateQuery, selectJoinQuery, filterQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
-import { selectUserProperty } from "./sqlQuery.js";
+import { getUserAndProperty, selectUserProperty } from "./sqlQuery.js";
 
 export const addAdvertisement = async (req, res, next) => {
   let requestBody = req.body;
@@ -38,11 +38,12 @@ export const getAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
 
-    const [rows, fields] = await connection.query(selectUserProperty, [advertisementID]);
+    const [rows] = await connection.query(getUserAndProperty, [advertisementID]);
 
     if (rows.length === 0) {
       return sendError(res, "Property not found", 404);
     }
+    rows[0].user = JSON.parse(rows[0].user);
 
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);
