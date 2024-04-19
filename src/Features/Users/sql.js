@@ -37,4 +37,24 @@ LIMIT 100 OFFSET 0;`
 // WHERE u.id = ?;`
 
 
-export const getUserAndPlan = ``
+export const getUserAndPlan = `SELECT u.*, 
+(SELECT 
+     p.id AS plan_id, 
+     p.type AS plan_type, 
+     p.no_of_ads AS plan_no_of_ads, 
+     p.price AS plan_price, 
+     p.validity AS plan_validity, 
+     p.verification_badge AS plan_verification_badge, 
+     p.search_priority AS plan_search_priority, 
+     p.membership_badge AS plan_membership_badge, 
+     p.contact_limit AS plan_contact_limit, 
+     p.no_images AS plan_no_images, 
+     p.business_profile AS plan_business_profile, 
+     p.images_business_profile AS plan_images_business_profile, 
+     p.offer_price AS plan_offer_price
+ FROM plans AS p
+ WHERE p.id = u.plan_id
+) AS plan
+FROM users AS u
+WHERE u.id = ?;
+`
