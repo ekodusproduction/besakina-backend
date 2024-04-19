@@ -13,7 +13,7 @@ export const createPropertyTable = async function () {
             user_id BIGINT UNSIGNED,
 
             title VARCHAR(255),
-            type VARCHAR(50),
+            type VARCHAR(250),
             bedrooms INT,
             bathrooms INT,
             furnishing VARCHAR(20),
@@ -58,9 +58,9 @@ export const createPropertyTable = async function () {
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );`
         // Execute the query
-        const [results, fields] = await connection.query(createTableQuery);        
+        const [results, fields] = await connection.query(createTableQuery);
         console.log('Property Table created successfully:');
- 
+
 
 
         // Release the connection back to the pool
