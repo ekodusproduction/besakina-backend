@@ -1,0 +1,1 @@
+export const selectUserProperty = `SELECT * FROM property AS property LEFT JOIN users AS users ON property.user_id = users.id WHERE property.id = ? AND property.is_active = 1;`
