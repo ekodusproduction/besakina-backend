@@ -4,7 +4,7 @@ import pool from "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
 import { insertQuery, selectQuery, updateQuery, selectJoinQuery, filterQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
-import { getUserAndProperty, selectUserProperty } from "./sqlQuery.js";
+import { getUserAndProperty } from "./sqlQuery.js";
 
 export const addAdvertisement = async (req, res, next) => {
   let requestBody = req.body;
