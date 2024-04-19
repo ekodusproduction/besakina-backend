@@ -129,7 +129,7 @@ export const selectJoinQuery = async (primaryTableName, selectFields, joinTableN
       } else if (field.startsWith(joinTableName)) {
         return field;
       } else {
-        return `${primaryTableName}.${field}`;
+        return `${primaryTableName}.${field} AS ${field}`;
       }
     }).join(', ');
   } else {
