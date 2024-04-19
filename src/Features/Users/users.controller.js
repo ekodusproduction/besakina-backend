@@ -5,7 +5,7 @@ dotenv.config();
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
-import { insertQuery, updateQuery } from "../../Utility/sqlQuery.js";
+import { insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../Utility/sqlQuery.js";
 import { getAllPosts } from "./sql.js";
 
 export const sendOtp = async (req, res, next) => {
@@ -99,7 +99,7 @@ export const getUsers = async function (req, res, next) {
 }
 
 
-export const userDetails = async function (req, res, next) {
+export const addUserDetails = async function (req, res, next) {
     const connection = await pool.getConnection();
     try {
         const requestBody = req.body;
@@ -122,7 +122,7 @@ export const userDetails = async function (req, res, next) {
         requestBody.doc_file_back = docFileBack?.path || null;
 
         // Construct the INSERT query
-        const [query, values] = await updateQuery('users', requestBody,{id:req.user_id});
+        const [query, values] = await updateQuery('users', requestBody, { id: req.user_id });
 
         // Execute the query
         const [rows, fields] = await connection.query(query, values);
@@ -150,12 +150,38 @@ export const getUserAdds = async function (req, res, next) {
         const [rows, fields] = await connection.query(query);
         if (rows.length === 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
-          }
-          rows.forEach(advertisement => {
+        }
+        rows.forEach(advertisement => {
             advertisement.images = JSON.parse(advertisement.images);
             advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
-          });
-          
+        });
+
+        return await sendResponse(res, 'User details', 201, rows, null);
+    } catch (error) {
+        console.error('Error in user details:', error);
+        next(error);
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+}
+
+
+export const getUserDetails = async function (req, res, next) {
+    const connection = await pool.getConnection();
+    try {
+        const userId = req.user_id;
+
+        const [query, values] = await selectJoinQuery('users', ['*'], 'plans', 'users.plan_id = plans.id', { 'users.id': userId }); const [rows, fields] = await connection.query(query, values);
+        if (rows.length === 0) {
+            return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
+        }
+        rows.forEach(advertisement => {
+            advertisement.images = JSON.parse(advertisement.images);
+            advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+        });
+
         return await sendResponse(res, 'User details', 201, rows, null);
     } catch (error) {
         console.error('Error in user details:', error);

@@ -36,10 +36,11 @@ export const addAdvertisement = async (req, res, next) => {
 
 export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
-  try { 
+  try {
     const advertisementID = req.params.id;
-    const [query, values] = await selectJoinQuery('doctors', [], { id: advertisementID, is_active: 1 });
-    const [rows] = await connection.query(query, values);
+    const [query, values] = await selectJoinQuery('doctors', ['*'], 'users', 'doctors.user_id = users.id', { id: advertisementID, is_active: 1 });
+
+    const [rows, fields] = await connection.query(query, values);
 
     if (rows.length === 0) {
       return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
@@ -90,7 +91,7 @@ export const filterAdvertisement = async (req, res, next) => {
 
     if (rows.length === 0) {
       return sendError(res, "Doctors not found for given filter", 404);
-    } 
+    }
 
     rows.forEach(advertisement => {
       advertisement.images = JSON.parse(advertisement.images);

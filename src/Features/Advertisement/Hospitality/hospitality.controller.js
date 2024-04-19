@@ -38,7 +38,8 @@ export const getAdvertisement = async (req, res, next) => {
   let connection = await pool.getConnection();;
   try {
     const advertisementID = req.params.id;
-    const [query, values] = await selectJoinQuery('hospitality', [], { id: advertisementID, is_active: 1 });
+    const [query, values] = await selectJoinQuery('hospitality', ['*'], 'users', 'hospitality.user_id = users.id', { id: advertisementID, is_active: 1 });
+
     const [rows] = await connection.query(query, values);
 
     if (rows.length === 0) {

@@ -100,31 +100,39 @@ export const deleteQuery = async (tableName, updateFields, condition) => {
   return [query, values];
 };
 
-export const selectJoinQuery = async (tableName, selectFields, condition) => {
+export const selectJoinQuery = async (tableName, selectFields, joinTable, joinCondition, condition) => {
   let columns = [];
+  let joinColumns = [];
   let placeholders = [];
   const values = [];
 
   for (const [key, val] of Object.entries(condition)) {
-    columns.push(`${tableName}.${key}`); // Specify table alias for columns in condition
-    placeholders.push('?');
-    values.push(val);
+      columns.push(`${tableName}.${key}`);
+      placeholders.push('?');
+      values.push(val);
+  }
+
+  for (const [key, val] of Object.entries(joinCondition)) {
+      joinColumns.push(`${joinTable}.${key}`);
+      placeholders.push('?');
+      values.push(val);
   }
 
   let selectClause = '*';
   if (selectFields.length === 1) {
-    selectClause = `${tableName}.${selectFields[0]}`; // Specify table alias for select fields
+      selectClause = `${tableName}.${selectFields[0]}`;
   } else if (selectFields.length > 1) {
-    selectClause = selectFields.map(field => `${tableName}.${field}`).join(', ');
+      selectClause = selectFields.map(field => `${tableName}.${field}`).join(', ');
   }
 
   const whereClause = columns.length > 0 ? `WHERE ${columns.map(column => `${column} = ?`).join(' AND ')}` : '';
+  const joinClause = joinColumns.length > 0 ? `LEFT JOIN ${joinTable} ON ${joinTable}.${joinCondition}` : '';
 
   const query = `
-    SELECT ${selectClause}, users.* 
-    FROM ${tableName}
-    LEFT JOIN users ON ${tableName}.user_id = users.id
-    ${whereClause};
+      SELECT ${selectClause}, ${joinTable}.* 
+      FROM ${tableName}
+      ${joinClause}
+      ${whereClause};
   `;
 
   return [query, values];
