@@ -38,7 +38,7 @@ LIMIT 100 OFFSET 0;`
 
 
 export const getUserAndPlan = `SELECT u.*, 
-JSON_VALUE(
+JSON_OBJECT(
      'id', p.id,
      'type', p.type,
      'no_of_ads', p.no_of_ads,
