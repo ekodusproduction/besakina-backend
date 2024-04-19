@@ -12,7 +12,6 @@ export const getChatRooms = async function (req, res, next) {
         const [rows, fields] = await connection.query(selectQuery, [userId]);
         res.json(rows);
     } catch (error) {
-        console.error("Error getting chat rooms:", error);
         res.status(500).json({ success: false, error: "Internal server error" });
     } finally {
         connection.release();
@@ -36,7 +35,6 @@ export const getMessagesInChatRoom = async function (req, res, next) {
         const [rows, fields] = await connection.query(selectQuery, [chatRoomId]);
         res.json(rows);
     } catch (error) {
-        console.error("Error getting messages in chat room:", error);
         res.status(500).json({ success: false, error: "Internal server error" });
     } finally {
         connection.release();

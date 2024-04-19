@@ -11,7 +11,6 @@ export const addAdvertisement = async (req, res, next) => {
   // requestBody.user_id = req.plan_id;
   // const category = req.params.category;
   const files = req.files;
-  console.log("files", files)
   const filePaths = files.map(file => file.path);
   const photosJson = JSON.stringify(filePaths);
   requestBody.images = photosJson;
@@ -102,7 +101,6 @@ export const filterAdvertisement = async (req, res, next) => {
 
     return sendResponse(res, "Hospitality fetched successfully", 200, { advertisements: rows });
   } catch (error) {
-    console.log(error);
     return sendError(res, error.message || "Error fetching hospitality", 500);
   } finally {
     if (connection) {
@@ -142,7 +140,6 @@ export const deleteAdvertisement = async (req, res, next) => {
 
     const [query, values] = await updateQuery('hospitality', { "is_active": 0 }, { id: advertisementID, is_active: 1 });
     const [rows, fields] = await connection.query(query, values);
-    console.log('changed logs')
     if (rows.changedRows === 0) {
       return sendError(res, "Advertisement not deleted. No matching advertisement found for the provided ID.", 404);
     }
@@ -162,13 +159,11 @@ export const addImage = async (req, res, next) => {
   if (!Array.isArray(files)) {
     files = [files];
   }
-  // console.log(files)
   const filePaths = files.map(file => file.path);
   const connection = await pool.getConnection();
   try {
     const [query1, values1] = await selectQuery('hospitality', ['images'], { id: advertisementID });
     const [results, columns] = await connection.query(query1, values1)
-    console.log(results)
     if (results.length === 0) {
       return sendError(res, "Advertisement not found.", 404);
     }
@@ -182,7 +177,6 @@ export const addImage = async (req, res, next) => {
     }
     return sendResponse(res, "Images added successfully to the advertisement", 200, { advertisements: rows });
   } catch (error) {
-    console.log(error)
     await deleteFiles(files)
     await connection.rollback();
     return sendError(res, error.message || "Error adding images to the advertisement", 500);

@@ -62,7 +62,6 @@ export const login = async (req, res, next) => {
             return await sendError(res, 'OTP expired', 400);
         }
     } catch (error) {
-        console.error('Error in login:', error);
         next(error);
     } finally {
         if (connection) {
@@ -76,7 +75,6 @@ const createToken = (result) => {
     // Convert BigInt id to string or regular number before including it in the payload
     const userId = result.id; // Convert BigInt to string
     const plan_id = result.plan_id;
-    console.log('plan_id', plan_id)
     return jwt.sign({ userId: userId, plan_id: plan_id }, process.env.JWT_SECRET, {
         expiresIn: '1d',
     });
@@ -89,7 +87,6 @@ export const getUsers = async function (req, res, next) {
         const [users, userFields] = await connection.query('SELECT * FROM users')
         return await sendResponse(res, 'Login successful', 201, users, null);
     } catch (error) {
-        console.error('Error in login:', error);
         next(error);
     } finally {
         if (connection) {
@@ -107,11 +104,6 @@ export const addUserDetails = async function (req, res, next) {
         const docFile = req.files.find(item => item.fieldname == "doc_file");
         const docFileBack = req.files.find(item => item.fieldname == "doc_file_back");
 
-        console.log("body", req.body);
-        console.log("files", req.files);
-        console.log("docFile", docFile);
-        console.log("profilePic", profilePic);
-        console.log("docFileBack", docFileBack);
 
         // Add profile_pic path to requestBody
         requestBody.profile_pic = profilePic?.path || null;
@@ -129,7 +121,6 @@ export const addUserDetails = async function (req, res, next) {
 
         return await sendResponse(res, 'User details added.', 201, rows.insertId, null);
     } catch (error) {
-        console.error('Error in user details:', error);
         next(error);
     } finally {
         if (connection) {
@@ -142,10 +133,8 @@ export const getUserAdds = async function (req, res, next) {
     const connection = await pool.getConnection();
     try {
         const userId = req.user_id;
-        console.log(userId)
         // Construct the INSERT query
         let query = getAllPosts.replaceAll('?', userId)
-        console.log(query)
         // Execute the query
         const [rows, fields] = await connection.query(query);
         if (rows.length === 0) {
@@ -158,7 +147,6 @@ export const getUserAdds = async function (req, res, next) {
 
         return await sendResponse(res, 'User details', 201, rows, null);
     } catch (error) {
-        console.error('Error in user details:', error);
         next(error);
     } finally {
         if (connection) {
@@ -184,7 +172,7 @@ export const getUserDetails = async function (req, res, next) {
 
         return await sendResponse(res, 'User details', 201, rows, null);
     } catch (error) {
-        console.error('Error in user details:', error);
+        console.log('Error in fetching details ', error)
         next(error);
     } finally {
         if (connection) {

@@ -100,43 +100,44 @@ export const deleteQuery = async (tableName, updateFields, condition) => {
   return [query, values];
 };
 
-export const selectJoinQuery = async (tableName, selectFields, joinTable, joinCondition, condition) => {
-  let columns = [];
+export const selectJoinQuery = async (primaryTableName, selectFields, joinTableName, joinCondition, condition) => {
+  let primaryColumns = [];
   let joinColumns = [];
   let placeholders = [];
   const values = [];
 
   for (const [key, val] of Object.entries(condition)) {
-      columns.push(`${tableName}.${key}`);
-      placeholders.push('?');
-      values.push(val);
+    primaryColumns.push(`${primaryTableName}.${key}`);
+    placeholders.push('?');
+    values.push(val);
   }
 
   for (const [key, val] of Object.entries(joinCondition)) {
-      joinColumns.push(`${joinTable}.${key}`);
-      placeholders.push('?');
-      values.push(val);
+    joinColumns.push(`${joinTableName}.${key}`);
+    placeholders.push('?');
+    values.push(val);
   }
 
   let selectClause = '*';
   if (selectFields.length === 1) {
-      selectClause = `${tableName}.${selectFields[0]}`;
+    selectClause = `${primaryTableName}.${selectFields[0]}`;
   } else if (selectFields.length > 1) {
-      selectClause = selectFields.map(field => `${tableName}.${field}`).join(', ');
+    selectClause = selectFields.map(field => `${primaryTableName}.${field}`).join(', ');
   }
 
-  const whereClause = columns.length > 0 ? `WHERE ${columns.map(column => `${column} = ?`).join(' AND ')}` : '';
-  const joinClause = joinColumns.length > 0 ? `LEFT JOIN ${joinTable} ON ${joinTable}.${joinCondition}` : '';
+  const whereClause = primaryColumns.length > 0 ? `WHERE ${primaryColumns.map(column => `${column} = ?`).join(' AND ')}` : '';
+  const joinClause = joinColumns.length > 0 ? `LEFT JOIN ${joinTableName} ON ${joinCondition}` : '';
 
   const query = `
-      SELECT ${selectClause}, ${joinTable}.* 
-      FROM ${tableName}
+      SELECT ${selectClause}, ${joinTableName}.* 
+      FROM ${primaryTableName}
       ${joinClause}
       ${whereClause};
   `;
 
   return [query, values];
 };
+
 
 export const filterQuery = async (tableName, selectFields, condition, rangeCondition) => {
   let columns = [];

@@ -12,7 +12,6 @@ export const latestAdds = async function (req, res, next) {
         const offset = (pageNumber - 1) * limit;
 
         const [rows, fields] = await connection.query(selectLatestAds, [limit, offset])
-        console.log(rows)
         rows.forEach(advertisement => {
             advertisement.images = JSON.parse(advertisement.images);
             advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
@@ -38,14 +37,12 @@ export const searchAdds = async function (req, res, next) {
             ${searchAdd}
         `;
         const [rows, fields] = await connection.execute(query, [search, search, search, search, search, search]);
-        console.log(rows);
         rows.forEach(advertisement => {
             advertisement.images = JSON.parse(advertisement.images);
             advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
         });
         return sendResponse(res, "Latest Adds", 200, { advertisements: rows });
     } catch (error) {
-        console.log(error)
         next(error);
     } finally {
         connection.release();
