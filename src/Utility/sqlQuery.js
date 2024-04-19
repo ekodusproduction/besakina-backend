@@ -123,7 +123,15 @@ export const selectJoinQuery = async (primaryTableName, selectFields, joinTableN
   // Construct the SELECT clause
   let selectClause = '';
   if (selectFields.length > 0) {
-    selectClause = selectFields.map(field => `${primaryTableName}.${field}`).join(', ');
+    selectClause = selectFields.map(field => {
+      if (field.startsWith(primaryTableName)) {
+        return field;
+      } else if (field.startsWith(joinTableName)) {
+        return field;
+      } else {
+        return `${primaryTableName}.${field}`;
+      }
+    }).join(', ');
   } else {
     selectClause = `${primaryTableName}.*`;
   }
@@ -144,7 +152,6 @@ export const selectJoinQuery = async (primaryTableName, selectFields, joinTableN
 
   return [query, values];
 };
-
 
 export const filterQuery = async (tableName, selectFields, condition, rangeCondition) => {
   let columns = [];
