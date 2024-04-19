@@ -17,7 +17,7 @@ export const createPropertyTable = async function () {
             bedrooms INT,
             bathrooms INT,
             furnishing VARCHAR(20),
-            construction_status VARCHAR(20),
+            construction_status VARCHAR(255),
             listed_by VARCHAR(20),
             super_builtup_area INT,
             carpet_area INT,
@@ -28,7 +28,7 @@ export const createPropertyTable = async function () {
             total_floors INT,
             car_parking INT DEFAULT 1,
             price VARCHAR(255),
-            category VARCHAR(25),
+            category VARCHAR(255),
             description TEXT,
             
             street VARCHAR(50),
