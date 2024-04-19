@@ -40,19 +40,19 @@ LIMIT 100 OFFSET 0;`
 export const getUserAndPlan = `SELECT u.*, 
 (SELECT 
      JSON_OBJECT(
-         'id', p.id,
-         'type', p.type,
-         'no_of_ads', p.no_of_ads,
-         'price', p.price,
-         'validity', p.validity,
-         'verification_badge', p.verification_badge,
-         'search_priority', p.search_priority,
-         'membership_badge', p.membership_badge,
-         'contact_limit', p.contact_limit,
-         'no_images', p.no_images,
-         'business_profile', p.business_profile,
-         'images_business_profile', p.images_business_profile,
-         'offer_price', p.offer_price
+          p.id,
+        p.type,
+          p.no_of_ads,
+          p.price,
+          p.validity,
+       p.verification_badge,
+          p.search_priority,
+         p.membership_badge,
+          p.contact_limit,
+       p.no_images,
+          p.business_profile,
+          p.images_business_profile,
+          p.offer_price
      ) AS plan
  FROM plans AS p
  WHERE p.id = u.plan_id
