@@ -162,7 +162,7 @@ export const getUserDetails = async function (req, res, next) {
         const userId = req.user_id;
 
         const [rows, fields] = await connection.query(getUserAndPlan, [userId]);
-        console.log("query ", query);
+        // console.log("query ", query);
         if (rows.length === 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
         }
