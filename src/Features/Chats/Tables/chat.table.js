@@ -13,7 +13,8 @@ export const createChatTable = async function () {
         user_id BIGINT UNSIGNED NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         chat_room_id BIGINT UNSIGNED NOT NULL,
-        FOREIGN KEY (chat_room_id) REFERENCES chat_room(id) ON DELETE CASCADE
+        FOREIGN KEY (chat_room_id) REFERENCES chat_room(id) ON DELETE CASCADE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     `;
     

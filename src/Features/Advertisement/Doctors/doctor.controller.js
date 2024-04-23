@@ -1,263 +1,127 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
 import { sendResponse, sendError } from "../../../Utility/response.js";
 import pool from "../../../Mysql/mysql.database.js";
-// import path from 'path';  // Import path module
-import { insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
 import { deleteFiles } from "../../../Utility/deleteFiles.js";
-import { getUserAndDoctors } from "./sqlQuery.js";
+import { logger } from "../../../Middlewares/logger.middleware.js";
+import repository from "./repository.js";
+
 
 export const addAdvertisement = async (req, res, next) => {
-  let requestBody = req.body;
-  requestBody.user_id = req.user_id;
-  // requestBody.user_id = req.plan_id;
-  // const category = req.params.category;
-  const files = req.files;
-  const filePaths = files.map(file => file.path);
-  const photosJson = JSON.stringify(filePaths);
-  requestBody.images = photosJson;
-  const connection = await pool.getConnection();
   try {
-    const [query, values] = await insertQuery('doctors', requestBody);
-    await connection.beginTransaction();
-    const [rows, fields] = await connection.query(query, values);
-    if (rows.affectedRows === 0) {
-      await connection.rollback();
-      return sendError(res, "Error adding advertisement", 400);
+    const result = await repository.addAdvertisement(req.body, req.files);
+    if (result.error) {
+      return sendError(res, result.message, 400);
     }
-    await connection.commit();
-    return sendResponse(res, "Doctor added successfully", 201, { id: rows.insertId });
+    return sendResponse(res, result.message, 201, { id: result.id });
   } catch (error) {
-    await connection.rollback()
-    next(error)
-  } finally {
-    connection.release();
+    logger(err)
+    next(error);
   }
 }
 
 export const getAdvertisement = async (req, res, next) => {
-  let connection = await pool.getConnection();;
   try {
     const advertisementID = req.params.id;
-    const [rows] = await connection.query(getUserAndDoctors, [advertisementID]);
-
-    if (rows.length === 0) {
+    const advertisement = await repository.getAdvertisement(advertisementID);
+    if (!advertisement) {
       return sendError(res, "Doctors not found", 404);
     }
-    rows[0].user = JSON.parse(rows[0].user);
-
-    rows.forEach(advertisement => {
-      advertisement.images = JSON.parse(advertisement.images);
-      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
-    });
-    return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: rows[0] });
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisement });
   } catch (error) {
-    return sendError(res, error.message || "Error fetching advertisement", 500);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
-}
-
-export const getListAdvertisement = async (req, res, next) => {
-  let connection = await pool.getConnection();;
-  try {
-    const [query, values] = await selectQuery('doctors', [], { is_active: 1 });
-    const [rows, fields] = await connection.query(query, values);
-    if (rows.length === 0) {
-      return sendError(res, "Advertisements not found", 404);
-    }
-    rows.forEach(advertisement => {
-      advertisement.images = JSON.parse(advertisement.images);
-      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
-    });
-    return sendResponse(res, "Advertisements fetched successfully", 200, { advertisements: rows });
-  } catch (error) {
-    return sendError(res, error.message || "Error fetching advertisements", 500);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
-}
-
-export const filterAdvertisement = async (req, res, next) => {
-  let connection = await pool.getConnection();
-
-  try {
-    let query = req.query;
-    const [sql, values] = await selectQuery("doctors", [], query)
-    const [rows, fields] = await connection.query(sql, values);
-
-    if (rows.length === 0) {
-      return sendError(res, "Doctors not found for given filter", 404);
-    }
-
-    rows.forEach(advertisement => {
-      advertisement.images = JSON.parse(advertisement.images);
-      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
-    });
-
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements: rows });
-  } catch (error) {
-    return sendError(res, error.message || "Error fetching doctors", 500);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
+    logger(error); // Log the error using logger utility
+    return sendError(res, error.message || "Error fetching Doctors", 500);
   }
 };
 
+export const getListAdvertisement = async (req, res, next) => {
+  try {
+    const advertisements = await repository.getListAdvertisement();
+    if (!advertisements) {
+      return sendError(res, "Doctors not found", 404);
+    }
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+  } catch (error) {
+    logger(error); // Log the error using logger utility
+    return sendError(res, error.message || "Error fetching Doctors", 500);
+  }
+};
+
+export const filterAdvertisement = async (req, res, next) => {
+  try {
+    const query = req.query;
+    const advertisements = await repository.filterAdvertisement(query);
+
+    if (advertisements.length === 0) {
+      return sendError(res, "Doctors not found for given filter", 404);
+    }
+
+    advertisements.forEach(advertisement => {
+      advertisement.images = JSON.parse(advertisement.images);
+      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+    });
+
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+  } catch (error) {
+    return sendError(res, error.message || "Error fetching doctors", 500);
+  }
+};
 
 export const updateAdvertisement = async (req, res, next) => {
-  // Implement your logic for updateAdvertisement
-  let connection = await pool.getConnection();
-
   try {
     const advertisementID = req.params.id;
     const filter = req.body;
-    // Validate and sanitize the filter object if needed
-    const [query, values] = await updateQuery('doctors', filter, { id: advertisementID });
-    const [rows, fields] = await connection.query(query, values);
-    if (rows.length === 0) {
-      return sendError(res, "Advertisement not updated. No matching advertisement found for the provided ID.", 404);
-    }
-    return sendResponse(res, "Advertisements updated successfully", 200, { advertisements: rows });
+    const result = await repository.updateAdvertisement(advertisementID, filter);
+    return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
   } catch (error) {
-    await connection.rollback();
-    return sendError(res, error.message || "Error fetching advertisements", 500);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
+    return sendError(res, error.message || "Error updating doctors", 500);
   }
-}
+};
+
 export const deleteAdvertisement = async (req, res, next) => {
-  // Implement your logic for deleteAdvertisement
-  const advertisementID = req.params.id;
-  let connection = await pool.getConnection();;
   try {
-
-    const [query, values] = await updateQuery('doctors', { "is_active": 0 }, { id: advertisementID, is_active: 1 });
-    const [rows, fields] = await connection.query(query, values);
-    if (rows.changedRows === 0) {
-      return sendError(res, "Advertisement not deleted. No matching advertisement found for the provided ID.", 404);
-    }
-    return sendResponse(res, "Advertisements deleted successfully", 200, { advertisements: rows });
+    const advertisementID = req.params.id;
+    const result = await repository.deleteAdvertisement(advertisementID);
+    return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
   } catch (error) {
-    await connection.rollback();
-    return sendError(res, error.message || "Error fetching advertisements", 500);
-  } finally {
-    connection.release();
-
+    return sendError(res, error.message || "Error deleting doctors", 500);
   }
 }
 
 export const addImage = async (req, res, next) => {
-  const advertisementID = req.params.id;
-  let files = req.files;
-  if (!Array.isArray(files)) {
-    files = [files];
-  }
-  const filePaths = files.map(file => file.path);
-  const connection = await pool.getConnection();
-  try {
-    const [query1, values1] = await selectQuery('doctors', ['images'], { id: advertisementID });
-    const [results, columns] = await connection.query(query1, values1)
-    if (results.length === 0) {
-      return sendError(res, "Advertisement not found.", 404);
-    }
-    const images = JSON.parse(results.images);
-    // Convert file paths to a JSON array
-    const photosJson = JSON.stringify([...filePaths, ...images]);
-    const [query, values] = await updateQuery('doctors', { "images": photosJson }, { id: advertisementID, is_active: 1 });
-    const [rows, fields] = await connection.query(query, values);
-    if (rows.length === 0) {
-      return sendError(res, "Failed to add images to the advertisement.", 404);
-    }
-    return sendResponse(res, "Images added successfully to the advertisement", 200, { advertisements: rows });
-  } catch (error) {
-    await deleteFiles(files)
-    await connection.rollback();
-    return sendError(res, error.message || "Error adding images to the advertisement", 500);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
-}
-
-// soft delete
-export const deleteImage = async (req, res, next) => {
-  const advertisementID = req.params.id;
-  let files = req.body;
-  const connection = await pool.getConnection();
-  try {
-    const [results] = await selectQuery('doctors', ['images'], { id: advertisementID });
-    if (results.length === 0) {
-      return sendError(res, "Advertisement not found.", null, 404);
-    }
-    let images = JSON.parse(results.images).filter(item => files.indexOf(item) == false);
-    const photosJson = JSON.stringify(images);
-    const { query, values } = await updateQuery(category, { "images": photosJson }, { id: advertisementID, is_active: 1 });
-    const [rows] = await connection.query(query, values);
-    if (rows.length === 0) {
-      return sendError(res, "Failed to delete images of the advertisement.", null, 404);
-    }
-    await deleteFiles(images)
-    return sendResponse(res, "Images deleted successfully of the advertisement", { advertisements: rows }, 200);
-  } catch (error) {
-    await connection.rollback();
-    return sendError(res, error.message || "Error deleting images to the advertisement", null, 500);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
-}
-export const listUserAdvertisement = async (req, res, next) => {
-  const user_id = req.user_id;
-  let connection = await pool.getConnection();
-  try {
-    const [query, values] = await selectQuery('doctors', [], { user_id: user_id });
-
-    const [rows, fields] = await connection.query(query, values)
-    if (rows.length === 0) {
-      return sendError(res, "Advertisement not found.", 404);
-    }
-    rows.forEach(advertisement => {
-      advertisement.images = JSON.parse(advertisement.images);
-      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
-    });
-    return sendResponse(res, "User advertisment list", 200, { advertisements: rows });
-  } catch (error) {
-    return sendError(res, error.message || "Error deleting images to the advertisement", 500);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
-  }
-}
-
-// activate deleted adv again
-export const activateAdvertisement = async (req, res, next) => {
-  let connection = await pool.getConnection();
-
   try {
     const advertisementID = req.params.id;
-    // Validate and sanitize the filter object if needed
-    const [query, values] = await updateQuery('doctors', { is_active: 1 }, { id: advertisementID });
-    const [rows, fields] = await connection.query(query, values);
-    if (rows.length === 0) {
-      return sendError(res, "Advertisement not updated. No matching advertisement found for the provided ID.", 404);
-    }
-    return sendResponse(res, "Advertisements updated successfully", 200, { advertisements: rows });
+    const result = await repository.addImage(advertisementID, req.files);
+    return sendResponse(res, result.message, 200);
   } catch (error) {
-    await connection.rollback();
-    return sendError(res, error.message || "Error fetching advertisements", 500);
-  } finally {
-    if (connection) {
-      connection.release();
-    }
+    return sendError(res, error.message || "Error adding images to the doctors", 500);
   }
-}
+};
+
+export const deleteImage = async (req, res, next) => {
+  try {
+    const advertisementID = req.params.id;
+    const result = await repository.deleteImage(advertisementID, req.body);
+    return sendResponse(res, result.message, 200);
+  } catch (error) {
+    return sendError(res, error.message || "Error deleting images from the doctors", 500);
+  }
+};
+
+export const listUserAdvertisement = async (req, res, next) => {
+  try {
+    const result = await repository.listUserAdvertisement(req.user_id);
+    return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
+  } catch (error) {
+    return sendError(res, error.message || "Error fetching user doctors", 500);
+  }
+};
+
+export const activateAdvertisement = async (req, res, next) => {
+  try {
+    const advertisementID = req.params.id;
+    const result = await repository.activateAdvertisement(advertisementID);
+    return sendResponse(res, result.message, 200);
+  } catch (error) {
+    return sendError(res, error.message || "Error activating doctors", 500);
+  }
+};

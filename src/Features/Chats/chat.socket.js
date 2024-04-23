@@ -1,14 +1,16 @@
-import pool from "./src/Mysql/mysql.database.js";
+import pool from "../../Mysql/mysql.database.js";
 import { Server } from "socket.io";
 
 export const chatSocket = (server) => {
-    const io = new Server(server, cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
+    const io = new Server(server, {
+        cors: {
+            origin: "*",
+            methods: ["GET", "POST"]
+        }
     });
 
     io.on("connection", (socket) => {
-        console.log("A user connected");
+        console.log("Connection established");
 
         socket.on("sendMessage", async (messageData) => {
             try {

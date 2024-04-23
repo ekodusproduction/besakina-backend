@@ -40,7 +40,7 @@ export const selectQuery = async (tableName, selectFields, condition) => {
     selectClause = selectFields.join(', ');
   }
   const whereClause = columns.length > 0 ? `WHERE ${columns.join(' AND ')}` : '';
-  const query = `SELECT ${selectClause} FROM ${tableName} ${whereClause}`;
+  const query = `SELECT ${selectClause} FROM ${tableName} ${whereClause} ORDER BY created_at DESC`;
   return [query, values];
 };
 
@@ -147,7 +147,8 @@ export const selectJoinQuery = async (primaryTableName, selectFields, joinTableN
       SELECT ${selectClause}
       FROM ${primaryTableName}
       ${joinClause}
-      ${whereClause};
+      ${whereClause}
+      ORDER BY created_at DESC;
   `;
 
   return [query, values];
@@ -187,6 +188,6 @@ export const filterQuery = async (tableName, selectFields, condition, rangeCondi
   }
 
   const whereClause = columns.length > 0 ? `WHERE ${columns.join(' AND ')}` : '';
-  const query = `SELECT ${selectClause} FROM ${tableName} ${whereClause}`;
+  const query = `SELECT ${selectClause} FROM ${tableName} ${whereClause} ORDER BY created_at DESC`;
   return [query, values];
 };
