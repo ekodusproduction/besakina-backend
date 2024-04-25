@@ -1,23 +1,19 @@
 import knex from 'knex';
 import dotenv from 'dotenv';
+import config from '../../knexfile.js';
 
+// Load environment variables from .env file
 dotenv.config();
 
-const knexConfig = {
-    client: 'mysql',
-    connection: {
-        host: process.env.MYSQL_HOST,
-        port: process.env.MYSQL_PORT,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: process.env.MYSQL_DATABASE || 'besakina',
-    },
-    pool: {
-        min: 0,
-        max: 100,
-    },
-};
+// Determine the environment (development, production, etc.)
+const environment = process.env.NODE_ENV || 'development';
 
-const pool = knex(knexConfig);
+// Ensure that the environment configuration exists in the knexfile
+if (!config[environment]) {
+    throw new Error(`Environment '${environment}' not found in knexfile.js`);
+}
+
+// Create a Knex instance with the appropriate configuration
+const pool = knex(config[environment]);
 
 export default pool;

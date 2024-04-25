@@ -67,11 +67,7 @@ const getListAdvertisement = async () => {
             return null;
         }
 
-        // Assuming 'images' field is stored as a stringified JSON
-        advertisements.forEach(ad => {
-            ad.images = JSON.parse(ad.images);
-            ad.images = ad.images.map(photo => photo.replace(/\\/g, '/'));
-        });
+        const data = await parseImages(advertisements)
 
         return advertisements;
     } catch (error) {
@@ -85,16 +81,19 @@ const filterAdvertisement = async (query) => {
         // Define the rangeCondition object based on the query parameters
         const minPrice = query.minPrice ? parseInt(query.minPrice) : undefined;
         const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
-        const rangeCondition = {
-            price: { min: minPrice, max: maxPrice }
-        };
+        const rangeCondition = minPrice !== undefined && maxPrice !== undefined ? { price: { min: minPrice, max: maxPrice } } : {};
+
+        // Remove minPrice and maxPrice from query object
+        if (query?.minPrice) delete query.minPrice;
+        if (query?.maxPrice) delete query.maxPrice;
 
         // Call filterQuery with the correct rangeCondition
-        const [sql, values] = await filterQuery("vehicles", [], { is_active: 1 }, rangeCondition);
-        console.log("sql", values)
-        const advertisements = await pool.raw(sql, values);
+        const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
+        const [rows, fields] = await pool.raw(sql, values);
+        const data = await parseImages(rows);
+        return data;
 
-        return advertisements[0];
+
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);

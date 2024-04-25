@@ -57,21 +57,18 @@ const getAdvertisement = async (advertisementID) => {
 
 const getListAdvertisement = async () => {
     try {
-        const advertisements = await pool('property')
+
+        const rows = await pool('property')
             .select('*')
             .where({ is_active: 1 });
 
-        if (advertisements.length === 0) {
-            return null;
+        if (rows.length === 0) {
+            console.log("trsd")
+
+            throw new ApplicationError("No property found.", 404);
         }
-
-        // Assuming 'images' field is stored as a stringified JSON
-        advertisements.forEach(ad => {
-            ad.images = JSON.parse(ad.images);
-            ad.images = ad.images.map(photo => photo.replace(/\\/g, '/'));
-        });
-
-        return advertisements;
+        const data = await parseImages(rows)
+        return data;
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
@@ -83,16 +80,18 @@ const filterAdvertisement = async (query) => {
         // Define the rangeCondition object based on the query parameters
         const minPrice = query.minPrice ? parseInt(query.minPrice) : undefined;
         const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
-        const rangeCondition = {
-            price: { min: minPrice, max: maxPrice }
-        };
-
+        const rangeCondition = minPrice !== undefined && maxPrice !== undefined ? { price: { min: minPrice, max: maxPrice } } : {};
+        
+        // Remove minPrice and maxPrice from query object
+        if (query?.minPrice) delete query.minPrice;
+        if (query?.maxPrice) delete query.maxPrice;
+        
         // Call filterQuery with the correct rangeCondition
-        const [sql, values] = await filterQuery("property", [], { is_active: 1 }, rangeCondition);
-        console.log("sql", values)
-        const advertisements = await pool.raw(sql, values);
-
-        return advertisements[0];
+        const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
+        const [rows, fields] = await pool.raw(sql, values);
+        const data = await parseImages(rows);
+        return data;
+        
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);

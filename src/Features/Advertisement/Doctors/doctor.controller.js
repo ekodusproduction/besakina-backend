@@ -58,10 +58,6 @@ export const filterAdvertisement = async (req, res, next) => {
       return sendError(res, "Doctors not found for given filter", 404);
     }
 
-    advertisements.forEach(advertisement => {
-      advertisement.images = JSON.parse(advertisement.images);
-      advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
-    });
 
     return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
   } catch (error) {

@@ -17,7 +17,7 @@ doctorRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisemen
 doctorRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 doctorRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 doctorRouter.get("/id/:id", getAdvertisement)
-// images
+// images 
 //id =>advertisement id
 doctorRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
 doctorRouter.post("/images/:id", jwtAuth, fileUpload("doctors"), imageValidator, addImage)

@@ -294,3 +294,25 @@
 {"code":500,"level":"info","service":"request-logging"}
 {"code":"ER_BAD_FIELD_ERROR","errno":1054,"index":0,"level":"info","service":"request-logging","sql":"INSERT INTO property (title, type, brand, category, description, registration_year, kilometer_driven, price, model, second_hand, fuel, street, locality, city, state, pincode, transmission, variant, plan_id, user_id, images) VALUES ('Cars in good shape', 'cars', 'Maruti', 'electirc', 'Buy 2 year cars at just 2000$', '2022', '15000', '2000', 'c++', '0, ', 'petrol', 'Vip road', 'Borbari', 'Guwahati', 'Assam', '781022', 'auto', 'cfebof', '1', 1, '[\\\"public\\\\\\\\vehicles\\\\\\\\1714026171065601.jpeg\\\"]')","sqlMessage":"Unknown column 'brand' in 'field list'","sqlState":"42S22"}
 {"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
+{"level":"info","service":"request-logging"}
+{"code":500,"level":"info","service":"request-logging"}
