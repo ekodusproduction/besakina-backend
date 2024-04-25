@@ -24,9 +24,9 @@ const addAdvertisement = async (requestBody, files) => {
 
         const [rows, field] = await pool('hospitality').insert(requestBody);
         if (rows == null) {
-            return { error: true, message: "Error adding property" };
+            return { error: true, message: "Error adding hospitality" };
         }
-        return { error: false, message: "property added successfully", id: rows };
+        return { error: false, message: "hospitality added successfully", id: rows };
     } catch (error) {
         logger.info(error)
         throw new ApplicationError("Internal server error", 500);
@@ -57,7 +57,7 @@ const getAdvertisement = async (advertisementID) => {
 
 const getListAdvertisement = async () => {
     try {
-        const advertisements = await pool('property')
+        const advertisements = await pool('hospitality')
             .select('*')
             .where({ is_active: 1 });
 
@@ -88,7 +88,7 @@ const filterAdvertisement = async (query) => {
         };
 
         // Call filterQuery with the correct rangeCondition
-        const [sql, values] = await filterQuery("property", [], { is_active: 1 }, rangeCondition);
+        const [sql, values] = await filterQuery("hospitality", [], { is_active: 1 }, rangeCondition);
         console.log("sql", values)
         const advertisements = await pool.raw(sql, values);
 
@@ -108,15 +108,15 @@ export const updateAdvertisement = async (advertisementID, filter) => {
         if (!filter || typeof filter !== 'object') {
             throw new ApplicationError("Invalid filter object provided", 400);
         }
-        const [sql, values] = await updateQuery("property", filter, { "id": advertisementID })
+        const [sql, values] = await updateQuery("hospitality", filter, { "id": advertisementID })
         console.log("sql", sql)
         const [rows, field] = await pool.raw(sql, values)
 
         if (!rows) {
-            throw new ApplicationError("Property not updated. No matching property found for the provided ID.", 404);
+            throw new ApplicationError("hospitality not updated. No matching hospitality found for the provided ID.", 404);
         }
 
-        return { error: false, message: "property updated successfully", "advertisements": rows };
+        return { error: false, message: "hospitality updated successfully", "advertisements": rows };
     } catch (error) {
         console.log("error in catch", error)
 
@@ -127,12 +127,12 @@ export const updateAdvertisement = async (advertisementID, filter) => {
 
 export const deactivateAdvertisement = async (advertisementID) => {
     try {
-        const sql = `UPDATE property SET is_active = 0 WHERE id = ?`
+        const sql = `UPDATE hospitality SET is_active = 0 WHERE id = ?`
         const [rows, fields] = await pool.raw(sql, [advertisementID]);
         if (rows.affectedRows === 0) {
-            throw new ApplicationError("property not deactivated. No matching property found for the provided ID.", 404);
+            throw new ApplicationError("hospitality not deactivated. No matching hospitality found for the provided ID.", 404);
         }
-        return { error: false, message: "property deactivated successfully", advertisements: rows };
+        return { error: false, message: "hospitality deactivated successfully", advertisements: rows };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
@@ -141,16 +141,16 @@ export const deactivateAdvertisement = async (advertisementID) => {
 
 export const addImage = async (advertisementID, files) => {
     try {
-        const [advertisement] = await pool('property').where('id', advertisementID).select('images');
+        const [advertisement] = await pool('hospitality').where('id', advertisementID).select('images');
         console.log("advertisement", advertisement)
         if (!advertisement) {
-            throw new ApplicationError("property not found.", 404);
+            throw new ApplicationError("hospitality not found.", 404);
         }
         const images = JSON.parse(advertisement.images || '[]');
         const filePaths = files.map(file => file.path);
         const photosJson = JSON.stringify([...filePaths, ...images]);
-        await pool('property').where('id', advertisementID).update({ images: photosJson });
-        return { error: false, message: "Images added successfully to the property" };
+        await pool('hospitality').where('id', advertisementID).update({ images: photosJson });
+        return { error: false, message: "Images added successfully to the hospitality" };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
@@ -160,24 +160,24 @@ export const addImage = async (advertisementID, files) => {
 export const deleteImage = async (advertisementID, files) => {
     try {
         console.log("add files", files)
-        const sql = `SELECT * FROM property WHERE id = ?`
+        const sql = `SELECT * FROM hospitality WHERE id = ?`
         const [rows, fields] = await pool.raw(sql, [advertisementID])
         console.log("add rows after db req", rows)
 
         if (rows[0].length == null) {
-            new ApplicationError("property not found.", 404);
+            new ApplicationError("hospitality not found.", 404);
         }
         if (rows[0].images == []) {
-            return { error: false, message: "Images deleted successfully from the property" };
+            return { error: false, message: "Images deleted successfully from the hospitality" };
         }
         let images = JSON.parse(rows[0].images || []).filter(item => !files.includes(item));
 
         const photosJson = images ? JSON.stringify(images) : [];
         console.log("add photosJson after db req", photosJson)
-        const updateSql = `UPDATE property SET images =? WHERE id = ?`
+        const updateSql = `UPDATE hospitality SET images =? WHERE id = ?`
         await pool.raw(updateSql, [photosJson, advertisementID])
 
-        return { error: false, message: "Images deleted successfully from the property" };
+        return { error: false, message: "Images deleted successfully from the hospitality" };
     } catch (error) {
         console.log("erro in catch", error)
         logger.info(error);
@@ -187,7 +187,7 @@ export const deleteImage = async (advertisementID, files) => {
 
 export const listUserAdvertisement = async (userID) => {
     try {
-        const advertisements = await pool('property').where('user_id', userID);
+        const advertisements = await pool('hospitality').where('user_id', userID);
         return { error: false, message: "User advertisement list", advertisements };
     } catch (error) {
         logger.info(error);
@@ -197,12 +197,12 @@ export const listUserAdvertisement = async (userID) => {
 
 export const activateAdvertisement = async (advertisementID) => {
     try {
-        const [advertisement] = await pool('property').where('id', advertisementID).select('is_active');
+        const [advertisement] = await pool('hospitality').where('id', advertisementID).select('is_active');
         if (!advertisement) {
-            throw new ApplicationError("property not found.", 404);
+            throw new ApplicationError("hospitality not found.", 404);
         }
-        await pool('property').where('id', advertisementID).update({ is_active: 1 });
-        return { error: false, message: "property activated successfully" };
+        await pool('hospitality').where('id', advertisementID).update({ is_active: 1 });
+        return { error: false, message: "hospitality activated successfully" };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
