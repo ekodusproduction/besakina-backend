@@ -1,179 +1,134 @@
 import jwt from "jsonwebtoken";
-import dotenv from 'dotenv';
-dotenv.config();
-
-import pool from "../../Mysql/mysql.database.js";
+import dotenv, { parse } from 'dotenv';
+import db from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
-import { insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../Utility/sqlQuery.js";
 import { getAllPosts, getUserAndPlan } from "./sql.js";
+dotenv.config();
+
+const parseImages = async (advertisements) => {
+    return advertisements.map(advertisement => {
+        advertisement.images = JSON.parse(advertisement.images);
+        advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+        return advertisement;
+    });
+};
 
 export const sendOtp = async (req, res, next) => {
     const { mobile } = req.body;
     const otp = Math.floor(Math.random() * 8999 + 1000);
-    const connection = await pool.getConnection();
+
     try {
-        const checkQuery = 'SELECT id FROM users WHERE mobile = ?';
-        const [rows, fields] = await connection.query(checkQuery, [mobile]);
-        if (rows.length > 0) {
-            const updateQuery = 'UPDATE users SET otp = ? WHERE mobile = ?';
-            await connection.query(updateQuery, [otp, mobile]);
+        const user = await db('users').where('mobile', mobile).first();
+
+        if (user) {
+            await db('users').where('mobile', mobile).update({ otp });
         } else {
-            const insertQuery = 'INSERT INTO users (mobile, otp) VALUES (?, ?)';
-            await connection.query(insertQuery, [mobile, otp]);
+            await db('users').insert({ mobile, otp });
         }
-        return await sendResponse(res, 'Otp sent successfully', 201, { otp }, null);
+
+        return sendResponse(res, 'Otp sent successfully', 201, { otp }, null);
     } catch (error) {
         next(error);
-        // return await sendError(res, 'OTP expired', 400);
-    } finally {
-        if (connection) {
-            connection.release();
-        }
     }
 }
 
 export const login = async (req, res, next) => {
-    const connection = await pool.getConnection();
+    const { mobile, otp } = req.body;
 
     try {
-        const { mobile, otp } = req.body;
-        const connection = await pool.getConnection();
-        const selectQuery = 'SELECT * FROM users WHERE mobile = ?';
-        const [rows] = await connection.query(selectQuery, [mobile]);
+        const user = await db('users').where('mobile', mobile).first();
 
-        if (rows.length === 0) {
+        if (!user) {
             throw new ApplicationError('User not found for given mobile number', 404);
         }
 
-        const user = rows[0];
-
-        const updatedAtDate = new Date(user.updatedAt);
-        const fiveMin = 5 * 60 * 60 * 1000;
-
         if (user.otp !== otp) {
-            return await sendError(res, 'Invalid OTP', 400);
+            return sendError(res, 'Invalid OTP', 400);
         }
+
+        const fiveMin = 5 * 60 * 1000;
+        const updatedAtDate = new Date(user.updatedAt);
 
         if (Date.now() < updatedAtDate.getTime() + fiveMin) {
             const token = createToken(user);
-            return await sendResponse(res, 'Login successful', 201, null, token);
+            return sendResponse(res, 'Login successful', 201, null, token);
         } else {
-            return await sendError(res, 'OTP expired', 400);
+            return sendError(res, 'OTP expired', 400);
         }
     } catch (error) {
         next(error);
-    } finally {
-        if (connection) {
-            connection.release();
-        }
     }
 }
 
-
-const createToken = (result) => {
-    // Convert BigInt id to string or regular number before including it in the payload
-    const userId = result.id; // Convert BigInt to string
-    const plan_id = result.plan_id;
-    return jwt.sign({ userId: userId, plan_id: plan_id }, process.env.JWT_SECRET, {
+const createToken = (user) => {
+    return jwt.sign({ userId: user.id, plan_id: user.plan_id }, process.env.JWT_SECRET, {
         expiresIn: '1d',
     });
 }
 
 export const getUsers = async function (req, res, next) {
-    const connection = await pool.getConnection();
-
     try {
-        const [users, userFields] = await connection.query('SELECT * FROM users')
-        return await sendResponse(res, 'Login successful', 201, users, null);
+        const users = await db('users').select('*');
+        return sendResponse(res, 'Login successful', 201, users, null);
     } catch (error) {
         next(error);
-    } finally {
-        if (connection) {
-            connection.release();
-        }
     }
 }
 
-
 export const addUserDetails = async function (req, res, next) {
-    const connection = await pool.getConnection();
+    const { user_id } = req;
+    const { body: requestBody, files } = req;
+
     try {
-        const requestBody = req.body;
-        const profilePic = req.files.find(item => item.fieldname == "profile_pic");
-        const docFile = req.files.find(item => item.fieldname == "doc_file");
-        const docFileBack = req.files.find(item => item.fieldname == "doc_file_back");
+        const profilePic = files.find(item => item.fieldname === "profile_pic")?.path;
+        const docFile = files.find(item => item.fieldname === "doc_file")?.path;
+        const docFileBack = files.find(item => item.fieldname === "doc_file_back")?.path;
 
+        requestBody.profile_pic = profilePic || null;
+        requestBody.doc_file = docFile || null;
+        requestBody.doc_file_back = docFileBack || null;
 
-        // Add profile_pic path to requestBody
-        requestBody.profile_pic = profilePic?.path || null;
+        const updatedUser = await db('users').where('id', user_id).update(requestBody);
 
-        // Add doc_file path to requestBody if docType is "aadhar"
-        requestBody.doc_file = docFile?.path || null;
-
-        requestBody.doc_file_back = docFileBack?.path || null;
-
-        // Construct the INSERT query
-        const [query, values] = await updateQuery('users', requestBody, { id: req.user_id });
-
-        // Execute the query
-        const [rows, fields] = await connection.query(query, values);
-
-        return await sendResponse(res, 'User details added.', 201, rows.insertId, null);
+        return sendResponse(res, 'User details added.', 201, updatedUser.insertId, null);
     } catch (error) {
+
         next(error);
-    } finally {
-        if (connection) {
-            connection.release();
-        }
     }
 }
 
 export const getUserAdds = async function (req, res, next) {
-    const connection = await pool.getConnection();
+    const { user_id } = req;
+
     try {
-        const userId = req.user_id;
-        // Construct the INSERT query
-        let query = getAllPosts.replaceAll('?', userId)
-        // Execute the query
-        const [rows, fields] = await connection.query(query);
-        if (rows.length === 0) {
+        const [rows, fields] = await db.raw(getAllPosts.replaceAll('?', user_id));
+        console.log("ads", rows)
+        if (rows == undefined) {
             return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
         }
-        rows.forEach(advertisement => {
-            advertisement.images = JSON.parse(advertisement.images);
-            advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
-        });
 
-        return await sendResponse(res, 'User details', 201, rows, null);
+        const data = await parseImages(rows)
+        return sendResponse(res, 'User adds', 200, data, null);
     } catch (error) {
         next(error);
-    } finally {
-        if (connection) {
-            connection.release();
-        }
     }
 }
 
-
 export const getUserDetails = async function (req, res, next) {
-    const connection = await pool.getConnection();
-    try {
-        const userId = req.user_id;
+    const { user_id } = req;
 
-        let [rows, fields] = await connection.query(getUserAndPlan, [userId]);
-        // console.log("query ", query);
-        if (rows.length === 0) {
+    try {
+        const [userDetails, fields] = await db.raw(getUserAndPlan, [user_id]);
+
+        if (userDetails.length === 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
         }
-        rows[0].plan = JSON.parse(rows[0].plan);
-        return await sendResponse(res, 'User details', 201, rows[0], null);
+        console.log(userDetails)
+        userDetails[0].plan = JSON.parse(userDetails[0].plan);
+
+        return sendResponse(res, 'User details', 201, userDetails[0], null);
     } catch (error) {
-        console.log('Error in fetching details ', error)
         next(error);
-    } finally {
-        if (connection) {
-            connection.release();
-        }
     }
 }

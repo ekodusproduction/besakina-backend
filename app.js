@@ -40,27 +40,16 @@ app.use(helmet({
 }));
 
 app.use((req, res, next) => {
-    console.log('origin- before', req.headers)
-    console.log("ip", req.ip)
-    console.log("url", req.url)
-    console.log('origin', req.headers.origin)
+    // console.log('origin- before', req.headers)
+    // console.log("ip", req.ip)
+    // console.log("url", req.url)
+    // console.log('origin', req.headers.origin)
     next();
 })
 
-// app.use('/api/public', (req, res, next) => {
-//     // Check if the request origin matches the allowed origin
-//     req.headers.origin = 'anonymous'
-//     // Set the Access-Control-Allow-Origin header
-//     res.setHeader('Access-Control-Allow-Origin', "*");
-//     // Set other CORS headers
-//     res.setHeader('Access-Control-Allow-Methods', 'GET');
-//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, X-Forwarded-For, Content-Type, Accept');
-//     next()
-// });
-
 console.log('request before files')
 app.use('/api/public', express.static('public'));
-// Route definitions
+
 app.get("/api", (req, res) => {
     return res.status(200).send("Welcome to besakina backend server");
 });
@@ -76,16 +65,17 @@ app.use("/api/doctors", doctorRouter);
 app.use("/api/plans", plansRouter);
 app.use('/api/chat', chatRouter)
 app.use("/api/home", homeRouter)
-// Error handling middleware
+
 app.use(async (err, req, res, next) => {
-    logger.info(err);
+    // logger.info(err);
+    console.log("err in global middleware", err)
+
     if (err instanceof ApplicationError) {
         return await sendError(res, err.message, err.code);
     }
     return await sendError(res, err.message, 500);
 });
 
-// Catch-all route for undefined routes
 app.all("*", (req, res) => {
     return res.status(404).send({
         "message": "URL not found",

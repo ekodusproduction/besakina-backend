@@ -3,7 +3,6 @@ import pool from "../../../Mysql/mysql.database.js";
 
 export const createChatTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your CREATE TABLE query
         const createTableQuery = `
@@ -17,14 +16,13 @@ export const createChatTable = async function () {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     `;
-    
+
         // Execute the query
-        const [results, fields] = await connection.query(createTableQuery);
+        const [results, fields] = await pool.raw(createTableQuery);
 
         console.log('Chat Table created successfully:');
 
         // Release the connection back to the pool
-        connection.release();
 
     } catch (error) {
         console.error('Error creating table:', error);
@@ -33,7 +31,6 @@ export const createChatTable = async function () {
 
 export const dropChatTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
         const dropTableQuery = `
@@ -41,12 +38,11 @@ export const dropChatTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await connection.query(dropTableQuery);
+        const [results, fields] = await pool.raw(dropTableQuery);
 
         console.log('Chat Table dropped successfully:');
 
         // Release the connection back to the pool
-        connection.release();
     } catch (error) {
         console.error('Error dropping table:', error);
     }

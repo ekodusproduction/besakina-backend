@@ -37,9 +37,6 @@ async function createTables() {
         await createTriggers();
     } catch (error) {
         console.error('Error creating tables:', error);
-    } finally {
-        // Ensure the connection is always released, even if an error occurs
-        pool.end();
     }
 }
 

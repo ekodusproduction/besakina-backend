@@ -3,52 +3,56 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
 import pool from "../../../Mysql/mysql.database.js";
-import { getUserAndDoctors } from "./sqlQuery.js";
+import { deleteFiles } from "../../../Utility/deleteFiles.js";
+import { filterQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
+import { getUserAndProperty } from "./sqlQuery.js";
+
+const parseImages = async (advertisements) => {
+    return advertisements.map(advertisement => {
+        advertisement.images = JSON.parse(advertisement.images);
+        advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+        return advertisement;
+    });
+};
 
 const addAdvertisement = async (requestBody, files) => {
     try {
-        requestBody.user_id = req.user_id;
+
         const filePaths = files.map(file => file.path);
         const photosJson = JSON.stringify(filePaths);
         requestBody.images = photosJson;
 
-        const [rows] = await pool('property').insert(requestBody);
-        if (!rows.length) {
+        const [rows, field] = await pool('property').insert(requestBody);
+        if (rows == null) {
             return { error: true, message: "Error adding property" };
         }
-        return { error: false, message: "property added successfully", id: rows[0] };
+        return { error: false, message: "property added successfully", id: rows };
     } catch (error) {
-        logger(error)
+        logger.info(error)
         throw new ApplicationError("Internal server error", 500);
     }
 };
 
 const getAdvertisement = async (advertisementID) => {
     try {
-        const advertisement = await pool('property')
-            .select(
-                'property.*',
-                pool.raw(getUserAndDoctors))
-            .leftJoin('users', 'property.user_id', 'users.id')
-            .where('property.id', advertisementID);
-
-        if (advertisement.length === 0) {
+        const [rows, field] = await pool.raw(getUserAndProperty, [advertisementID])
+        console.log("error", rows[0])
+        if (rows.length === 0) {
             return null;
         }
 
-        // advertisement[0].user = JSON.parse(advertisement[0].user);
+        const data = await parseImages(rows)
+        console.log("rows after modificatgion", rows)
 
-        advertisement.forEach(ad => {
-            ad.images = JSON.parse(ad.images);
-            ad.images = ad.images.map(photo => photo.replace(/\\/g, '/'));
-        });
-
-        return advertisement[0];
+        return data;
     } catch (error) {
-        logger(error);
+        console.log("catch", error)
+
+        logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     }
 };
+
 
 
 const getListAdvertisement = async () => {
@@ -69,45 +73,68 @@ const getListAdvertisement = async () => {
 
         return advertisements;
     } catch (error) {
-        logger(error);
+        logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     }
 };
 
 const filterAdvertisement = async (query) => {
     try {
-        const { sql, values } = await selectQuery("property", [], query);
+        // Define the rangeCondition object based on the query parameters
+        const minPrice = query.minPrice ? parseInt(query.minPrice) : undefined;
+        const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
+        const rangeCondition = {
+            price: { min: minPrice, max: maxPrice }
+        };
+
+        // Call filterQuery with the correct rangeCondition
+        const [sql, values] = await filterQuery("property", [], { is_active: 1 }, rangeCondition);
+        console.log("sql", values)
         const advertisements = await pool.raw(sql, values);
 
         return advertisements[0];
     } catch (error) {
-        logger(error);
+        logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     }
 };
+
 
 export const updateAdvertisement = async (advertisementID, filter) => {
     try {
-        const [rows] = await pool('property').where('id', advertisementID).update(filter);
-        if (rows === 0) {
-            throw new ApplicationError("property not updated. No matching property found for the provided ID.", 404);
+        console.log("Updating advertisement with ID:", advertisementID);
+        console.log("Filter:", filter);
+
+        if (!filter || typeof filter !== 'object') {
+            throw new ApplicationError("Invalid filter object provided", 400);
         }
-        return { error: false, message: "property updated successfully", advertisements: rows };
+        const [sql, values] = await updateQuery("property", filter, { "id": advertisementID })
+        console.log("sql", sql)
+        const [rows, field] = await pool.raw(sql, values)
+
+        if (!rows) {
+            throw new ApplicationError("Property not updated. No matching property found for the provided ID.", 404);
+        }
+
+        return { error: false, message: "property updated successfully", "advertisements": rows };
     } catch (error) {
-        logger(error);
+        console.log("error in catch", error)
+
+        logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     }
 };
 
-export const deleteAdvertisement = async (advertisementID) => {
+export const deactivateAdvertisement = async (advertisementID) => {
     try {
-        const [rows] = await pool('property').where('id', advertisementID).update({ "is_active": 0 });
-        if (rows.changedRows === 0) {
-            throw new ApplicationError("property not deleted. No matching property found for the provided ID.", 404);
+        const sql = `UPDATE property SET is_active = 0 WHERE id = ?`
+        const [rows, fields] = await pool.raw(sql, [advertisementID]);
+        if (rows.affectedRows === 0) {
+            throw new ApplicationError("property not deactivated. No matching property found for the provided ID.", 404);
         }
-        return { error: false, message: "property deleted successfully", advertisements: rows };
+        return { error: false, message: "property deactivated successfully", advertisements: rows };
     } catch (error) {
-        logger(error);
+        logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     }
 };
@@ -115,6 +142,7 @@ export const deleteAdvertisement = async (advertisementID) => {
 export const addImage = async (advertisementID, files) => {
     try {
         const [advertisement] = await pool('property').where('id', advertisementID).select('images');
+        console.log("advertisement", advertisement)
         if (!advertisement) {
             throw new ApplicationError("property not found.", 404);
         }
@@ -124,24 +152,36 @@ export const addImage = async (advertisementID, files) => {
         await pool('property').where('id', advertisementID).update({ images: photosJson });
         return { error: false, message: "Images added successfully to the property" };
     } catch (error) {
-        logger(error);
+        logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     }
 };
 
 export const deleteImage = async (advertisementID, files) => {
     try {
-        const [advertisement] = await pool('property').where('id', advertisementID).select('images');
-        if (!advertisement) {
-            throw new ApplicationError("property not found.", 404);
+        console.log("add files", files)
+        const sql = `SELECT * FROM property WHERE id = ?`
+        const [rows, fields] = await pool.raw(sql, [advertisementID])
+        console.log("add rows after db req", rows)
+
+        if (rows[0].length == null) {
+            new ApplicationError("property not found.", 404);
         }
-        let images = JSON.parse(advertisement.images || '[]').filter(item => !files.includes(item));
-        const photosJson = JSON.stringify(images);
-        await pool('property').where('id', advertisementID).update({ images: photosJson });
+        if (rows[0].images == []) {
+            return { error: false, message: "Images deleted successfully from the property" };
+        }
+        let images = JSON.parse(rows[0].images || []).filter(item => !files.includes(item));
+
+        const photosJson = images ? JSON.stringify(images) : [];
+        console.log("add photosJson after db req", photosJson)
+        const updateSql = `UPDATE property SET images =? WHERE id = ?`
+        await pool.raw(updateSql, [photosJson, advertisementID])
+
         return { error: false, message: "Images deleted successfully from the property" };
     } catch (error) {
-        logger(error);
-        throw new ApplicationError("Internal server error", 500);
+        console.log("erro in catch", error)
+        logger.info(error);
+        new ApplicationError("Internal server error", 500);
     }
 };
 
@@ -150,7 +190,7 @@ export const listUserAdvertisement = async (userID) => {
         const advertisements = await pool('property').where('user_id', userID);
         return { error: false, message: "User advertisement list", advertisements };
     } catch (error) {
-        logger(error);
+        logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     }
 };
@@ -164,7 +204,7 @@ export const activateAdvertisement = async (advertisementID) => {
         await pool('property').where('id', advertisementID).update({ is_active: 1 });
         return { error: false, message: "property activated successfully" };
     } catch (error) {
-        logger(error);
+        logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     }
 };
@@ -174,7 +214,7 @@ export default {
     getAdvertisement,
     getListAdvertisement,
     filterAdvertisement,
-    deleteAdvertisement,
+    deactivateAdvertisement,
     updateAdvertisement,
     addImage,
     activateAdvertisement,

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./hospitality.controller.js"
 
@@ -18,7 +18,7 @@ hospitalityRouter.get("/filter", filterAdvertisement)
 hospitalityRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
 hospitalityRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
-hospitalityRouter.delete("/deactivate/id/:id", jwtAuth, deleteAdvertisement)
+hospitalityRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 
 hospitalityRouter.get("/id/:id", getAdvertisement)
 // images

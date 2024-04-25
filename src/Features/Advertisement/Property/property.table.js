@@ -3,7 +3,6 @@ import pool from "../../../Mysql/mysql.database.js";
 
 export const createPropertyTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your CREATE TABLE query
         const createTableQuery = `
@@ -58,13 +57,9 @@ export const createPropertyTable = async function () {
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );`
         // Execute the query
-        const [results, fields] = await connection.query(createTableQuery);
+        const [results, fields] = await pool.raw(createTableQuery);
         console.log('Property Table created successfully:');
-
-
-
         // Release the connection back to the pool
-        connection.release();
 
     } catch (error) {
         console.error('Error creating table:', error);
@@ -73,7 +68,6 @@ export const createPropertyTable = async function () {
 
 export const dropPropertyTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
         const dropTableQuery = `
@@ -81,12 +75,11 @@ export const dropPropertyTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await connection.query(dropTableQuery);
+        const [results, fields] = await pool.raw(dropTableQuery);
 
         console.log('Property Table dropped successfully:');
 
         // Release the connection back to the pool
-        connection.release();
     } catch (error) {
         console.error('Error dropping table:', error);
     }
@@ -94,7 +87,6 @@ export const dropPropertyTable = async function () {
 }
 export const indexPropertyTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
         const dropTableQuery = `
@@ -105,19 +97,18 @@ export const indexPropertyTable = async function () {
         // Execute the query
         const fulltext = `ALTER TABLE property ADD FULLTEXT INDEX property_idx_fulltext (title,type, city,street, state, landmark, category, price, pincode);`
         // Execute the query
-        await connection.query(fulltext);
+        await pool.raw(fulltext);
         console.log("property fulltext index created")
 
         const compound = `ALTER TABLE property ADD INDEX property_idx_is_active_created_at (is_active, created_at);`
-        await connection.query(compound);
+        await pool.raw(compound);
         console.log('property compound index created:');
 
         const created_at_index = `ALTER TABLE property ADD INDEX property_idx_created_at (created_at);`
-        await connection.query(created_at_index);
+        await pool.raw(created_at_index);
         console.log('property index created:');
 
         // Release the connection back to the pool
-        connection.release();
     } catch (error) {
         console.error('Error creating index:', error);
     }

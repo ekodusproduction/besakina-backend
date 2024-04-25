@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./doctor.controller.js"
 
@@ -11,11 +11,11 @@ import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middlewar
 
 const doctorRouter = Router()
 //protected routes id=> advertisement id
-doctorRouter.post("/add", jwtAuth,  fileUpload("doctors"), validationMiddlewarePost, addAdvertisement)
+doctorRouter.post("/add", jwtAuth, fileUpload("doctors"), validationMiddlewarePost, addAdvertisement)
 doctorRouter.get("/filter", filterAdvertisement)
 doctorRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
 doctorRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
-doctorRouter.delete("/deactivate/id/:id", jwtAuth, deleteAdvertisement)
+doctorRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 doctorRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id

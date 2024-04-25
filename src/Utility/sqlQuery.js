@@ -154,7 +154,7 @@ export const selectJoinQuery = async (primaryTableName, selectFields, joinTableN
   return [query, values];
 };
 
-export const filterQuery = async (tableName, selectFields, condition, rangeCondition) => {
+export const filterQuery = async (tableName, selectFields, condition, rangeCondition = {}) => {
   let columns = [];
   let placeholders = [];
   const values = [];
@@ -166,17 +166,19 @@ export const filterQuery = async (tableName, selectFields, condition, rangeCondi
   }
 
   // Handle range conditions
-  for (const [key, val] of Object.entries(rangeCondition)) {
-    const { min, max } = val;
-    if (min !== undefined && max !== undefined) {
-      columns.push(`${key} BETWEEN ? AND ?`);
-      values.push(min, max);
-    } else if (min !== undefined) {
-      columns.push(`${key} > ?`);
-      values.push(min);
-    } else if (max !== undefined) {
-      columns.push(`${key} < ?`);
-      values.push(max);
+  if (rangeCondition) {
+    for (const [key, val] of Object.entries(rangeCondition)) {
+      const { min, max } = val;
+      if (min !== undefined && max !== undefined) {
+        columns.push(`${key} BETWEEN ? AND ?`);
+        values.push(min, max);
+      } else if (min !== undefined) {
+        columns.push(`${key} > ?`);
+        values.push(min);
+      } else if (max !== undefined) {
+        columns.push(`${key} < ?`);
+        values.push(max);
+      }
     }
   }
 

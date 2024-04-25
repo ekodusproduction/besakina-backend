@@ -3,7 +3,6 @@ import pool from "../../../Mysql/mysql.database.js";
 
 export const createHospitalityTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS hospitality (
@@ -42,12 +41,11 @@ export const createHospitalityTable = async function () {
             );`;
 
         // Execute the query
-        const [results, fields] = await connection.query(createTableQuery);
+        const [results, fields] = await pool.raw(createTableQuery);
 
         console.log('Hospitality Table created successfully:');
 
         // Release the connection back to the pool
-        connection.release();
 
     } catch (error) {
         console.error('Error creating table:', error);
@@ -56,7 +54,6 @@ export const createHospitalityTable = async function () {
 
 export const dropHospitalityTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
         const dropTableQuery = `
@@ -64,21 +61,19 @@ export const dropHospitalityTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await connection.query(dropTableQuery);
+        const [results, fields] = await pool.raw(dropTableQuery);
 
         console.log('Hospitality Table dropped successfully:');
 
         // Release the connection back to the pool
-        connection.release();
     } catch (error) {
         console.error('Error dropping table:', error);
     }
     return
-}
+} 
 
 export const indexHospitalityTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
         const dropTableQuery = `
@@ -90,19 +85,18 @@ export const indexHospitalityTable = async function () {
         // Execute the query
         const fulltext = `ALTER TABLE hospitality ADD FULLTEXT INDEX hospitality_idx_fulltext (title, name, type, description, city, state, locality, category, pincode);`
         // Execute the query
-        await connection.query(fulltext);
+        await pool.raw(fulltext);
         console.log("hospitality fulltext index created")
 
         const compound = `ALTER TABLE hospitality ADD INDEX hospitality_idx_is_active_created_at (is_active, created_at);`
-        await connection.query(compound);
+        await pool.raw(compound);
         console.log('hospitality compound index created:');
 
         const created_at_index = `ALTER TABLE hospitality ADD INDEX hospitality_idx_created_at (created_at);`
-        await connection.query(created_at_index);
+        await pool.raw(created_at_index);
         console.log('hospitality index created:');
 
         // Release the connection back to the pool
-        connection.release();
     } catch (error) {
         console.error('Error creating index:', error);
     }

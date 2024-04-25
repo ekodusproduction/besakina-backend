@@ -15,12 +15,10 @@ export const chatSocket = (server) => {
                 const { message, userId, chatRoomId } = messageData;
 
                 // Store message in the database
-                const connection = await pool.getConnection();
-                await connection.query(
+                await pool.raw(
                     "INSERT INTO chat (message, user_id, chat_room_id) VALUES (?, ?, ?)",
                     [message, userId, chatRoomId]
                 );
-                connection.release();
 
                 // Broadcast the message to all users in the chat room
                 io.to(chatRoomId).emit("newMessage", messageData);

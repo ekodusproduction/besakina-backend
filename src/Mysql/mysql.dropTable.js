@@ -34,22 +34,21 @@ async function dropTables() {
         await dropUserTable();
         await dropPlanTable();
         // await dropDatabase()
+        return
     } catch (error) {
         console.error('Error dropping tables:', error);
-    } finally {
-        // Ensure the connection is always released, even if an error occurs
-        pool.end();
     }
 }
 
 async function dropDatabase() {
     try {
         const query = "DROP DATABASE IF EXISTS besakina";
-        await pool.query(query);
+        await pool.raw(query);
         console.log("Database 'besakina' dropped successfully");
+        return
     } catch (error) {
         console.error("Error dropping database 'besakina':", error);
     }
 }
 // Call the function to drop the tables
-dropTables();
+await dropTables();

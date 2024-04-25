@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./vehicles.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
@@ -18,7 +18,7 @@ vehiclesRouter.get("/filter", filterAdvertisement)
 vehiclesRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
 vehiclesRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
-vehiclesRouter.delete("/deactivate/id/:id", jwtAuth, deleteAdvertisement)
+vehiclesRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 
 vehiclesRouter.get("/id/:id", getAdvertisement)
 // images

@@ -21,12 +21,11 @@ const countAdds = `
 `;
 
 export const checkPlanValidity = async function (req, res, next) {
-    const connection = await pool.getConnection();
     try {
         const user_id = req.user_id;
 
         // Fetch user information
-        const [users, userFields] = await connection.query('SELECT * FROM users WHERE id = ?', [user_id]);
+        const [users, userFields] = await pool.raw('SELECT * FROM users WHERE id = ?', [user_id]);
         const user = users[0]; // Assuming user is unique by ID
 
         if (!user) {
@@ -39,7 +38,7 @@ export const checkPlanValidity = async function (req, res, next) {
         }
 
         // Fetch plan information
-        const [plans, planFields] = await connection.query('SELECT * FROM plans WHERE id = ?', [plan_id]);
+        const [plans, planFields] = await pool.raw('SELECT * FROM plans WHERE id = ?', [plan_id]);
         const plan = plans[0]; // Assuming plan is unique by ID
 
         if (!plan) {
@@ -57,12 +56,10 @@ export const checkPlanValidity = async function (req, res, next) {
         // Replace placeholders with user_id in the SQL query
         const dynamicQuery = countAdds.replaceAll('?', user_id);
 
-        const [count, postFields] = await connection.query(dynamicQuery);
-        
+        const [count, postFields] = await pool.raw(dynamicQuery);
+
         next();
     } catch (error) {
         next(error);
-    } finally {
-        connection.release();
-    }
+    } 
 };

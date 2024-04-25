@@ -102,7 +102,7 @@ export const addVehicles = async (token, baseUrl) => {
         fuel: 'petrol',
         transmission: 'automatic',
         model: "thar",
-        variant: 'plus',
+        variant: 'plus', 
         second_hand: 1,
 
         pincode: '781005',

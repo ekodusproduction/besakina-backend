@@ -3,7 +3,6 @@ import pool from "../../../Mysql/mysql.database.js";
 
 export const createVehicleTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your CREATE TABLE query
         const createTableQuery = `
@@ -12,8 +11,8 @@ export const createVehicleTable = async function () {
             plan_id BIGINT UNSIGNED ,        
             user_id BIGINT UNSIGNED,
 
-            type VARCHAR(50),
-            brand VARCHAR(50),
+            type VARCHAR(250),
+            brand text,
             registration_year VARCHAR(255),
             kilometer_driven VARCHAR(255),
             title VARCHAR(255),
@@ -51,12 +50,11 @@ export const createVehicleTable = async function () {
         );`;
 
         // Execute the query
-        const [results, fields] = await connection.query(createTableQuery);
+        const [results, fields] = await pool.raw(createTableQuery);
 
         console.log('Vehicle Table created successfully:');
 
         // Release the connection back to the pool
-        connection.release();
 
     } catch (error) {
         console.error('Error creating table:', error);
@@ -65,7 +63,6 @@ export const createVehicleTable = async function () {
 
 export const dropVehicleTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
         const dropTableQuery = `
@@ -73,12 +70,11 @@ export const dropVehicleTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await connection.query(dropTableQuery);
+        const [results, fields] = await pool.raw(dropTableQuery);
 
         console.log('Vehicle Table dropped successfully:');
 
         // Release the connection back to the pool
-        connection.release();
     } catch (error) {
         console.error('Error dropping table:', error);
     }
@@ -87,30 +83,28 @@ export const dropVehicleTable = async function () {
 
 export const indexVehiclesTable = async function () {
     try {
-        const connection = await pool.getConnection();
 
         // Define your DROP TABLE query
         const dropTableQuery = `
-        ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode,model, variant, transmission);
+        ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, fuel, category, price, second_hand,model, variant, transmission);
         ALTER TABLE vehicles ADD INDEX vehicles_idx_is_active_created_at (is_active, created_at);
         ALTER TABLE vehicles ADD INDEX vehicles_idx_created_at (created_at);`;
 
         // Execute the query
         const fulltext = `ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode,model, variant, transmission);`
         // Execute the query
-        await connection.query(fulltext);
+        await pool.raw(fulltext);
         console.log("vehicles fulltext index created")
 
         const compound = `ALTER TABLE vehicles ADD INDEX vehicles_idx_is_active_created_at (is_active, created_at);`
-        await connection.query(compound);
+        await pool.raw(compound);
         console.log('vehicles compound index created:');
 
         const created_at_index = `ALTER TABLE vehicles ADD INDEX vehicles_idx_created_at (created_at);`
-        await connection.query(created_at_index);
+        await pool.raw(created_at_index);
         console.log('vehicles index created:');
 
         // Release the connection back to the pool
-        connection.release();
     } catch (error) {
         console.error('Error creating index:', error);
     }

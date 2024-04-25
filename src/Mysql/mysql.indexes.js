@@ -13,7 +13,7 @@ export const addIndexes = async () => {
         await indexHospitalsTable()
         await indexPropertyTable()
         await indexVehiclesTable()
-    } catch(error){
+    } catch (error) {
         console.log(error)
     }
 }

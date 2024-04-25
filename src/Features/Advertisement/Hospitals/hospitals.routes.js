@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./hospitals.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
@@ -10,7 +10,7 @@ import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitals.validation.js";
 const hospitalsRouter = Router()
 //protected routes id=> advertisement id
-hospitalsRouter.post("/add", jwtAuth,  fileUpload("hospitals"), validationMiddlewarePost, addAdvertisement)
+hospitalsRouter.post("/add", jwtAuth, fileUpload("hospitals"), validationMiddlewarePost, addAdvertisement)
 
 hospitalsRouter.get("/filter", filterAdvertisement)
 
@@ -18,7 +18,7 @@ hospitalsRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertise
 
 hospitalsRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
-hospitalsRouter.delete("/deactivate/id/:id", jwtAuth, deleteAdvertisement)
+hospitalsRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 
 hospitalsRouter.get("/id/:id", getAdvertisement)
 // images

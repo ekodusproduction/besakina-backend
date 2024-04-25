@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deleteAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./property.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
@@ -20,15 +20,15 @@ propertyRouter.get("/id/:id", getAdvertisement)
 propertyRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
 
 propertyRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
-propertyRouter.delete("/deactivate/id/:id", jwtAuth, deleteAdvertisement)
+propertyRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 
 
 // images
 //id =>advertisement id
-propertyRouter.post("/images/:id", jwtAuth, fileUpload("images"), imageValidator, addImage)
+propertyRouter.post("/images/id/:id", jwtAuth, fileUpload("property"), imageValidator, addImage)
 
 
-propertyRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
+propertyRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
 
 // list user own advertisement //id => user id
 propertyRouter.get("/list", getListAdvertisement)
