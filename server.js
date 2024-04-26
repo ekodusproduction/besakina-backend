@@ -7,6 +7,13 @@ import { chatSocket } from "./src/Features/Chats/chat.socket.js"
 // import { initializeSocketIO } from './socket.js';
 
 const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+});
+
 chatSocket(server);
 
 const port = process.env.PORT || 3000;

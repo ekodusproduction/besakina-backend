@@ -127,7 +127,7 @@ export const getUserAdds = async function (req, res, next) {
         const [rows, fields] = await pool.query(sql);
         console.log("ads", rows)
         if (rows.length == 0) {
-            return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
+            return sendResponse(res, "Advertisement fetched successfully", 200, []);
         }
 
         const data = await parseImages(rows)
