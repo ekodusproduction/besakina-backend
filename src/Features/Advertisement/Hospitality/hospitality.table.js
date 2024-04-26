@@ -61,7 +61,7 @@ export const dropHospitalityTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await pool.raw(dropTableQuery);
+        await pool.raw(dropTableQuery);
 
         console.log('Hospitality Table dropped successfully:');
 

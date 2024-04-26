@@ -27,7 +27,7 @@ export const createPlanTable = async function () {
       );`;
 
         // Execute the query
-        const [results, fields] = await pool.raw(createTableQuery);
+        await pool.raw(createTableQuery);
 
         console.log('Plan Table created successfully:');
 
@@ -45,7 +45,7 @@ export const dropPlanTable = async function () {
             DROP TABLE IF EXISTS plans
         `;
         // Execute the query
-        const [results, fields] = await pool.raw(dropTableQuery);
+        await pool.raw(dropTableQuery);
 
         console.log('Plan Table dropped successfully:');
         return

@@ -75,7 +75,7 @@ export const dropPropertyTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await pool.raw(dropTableQuery);
+        await pool.raw(dropTableQuery);
 
         console.log('Property Table dropped successfully:');
 

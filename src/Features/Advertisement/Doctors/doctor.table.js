@@ -61,7 +61,7 @@ export const dropDoctorsTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await pool.raw(dropTableQuery);
+        await pool.raw(dropTableQuery);
 
         console.log('Doctors Table dropped successfully:');
 

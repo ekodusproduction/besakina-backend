@@ -50,7 +50,7 @@ export const createVehicleTable = async function () {
         );`;
 
         // Execute the query
-        const [results, fields] = await pool.raw(createTableQuery);
+        await pool.raw(createTableQuery);
 
         console.log('Vehicle Table created successfully:');
 

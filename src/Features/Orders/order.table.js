@@ -23,7 +23,7 @@ export const createOrderTable = async function () {
       );`;
 
         // Execute the query
-        const [results, fields] = await pool.raw(createTableQuery);
+        await pool.raw(createTableQuery);
 
         console.log('Order Table created successfully:');
 
