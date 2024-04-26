@@ -15,18 +15,17 @@ export const createCategoryTable = async function () {
         );`;
 
         // Execute the query
-        await pool(createTableQuery);
+        await connection.query(createTableQuery);
 
         console.log('Category Table created successfully:');
 
-        // Release the connection back to the pool
+        // Release the connection back to the connection.query
 
     } catch (error) {
         console.error('Error creating table:', error);
     } finally {
-        if (connection) {
-            connection.release(); // Release the connection back to the pool
-        }
+        connection.release(); // Release the connection back to the connection.query
+
     }
 }
 
@@ -39,17 +38,16 @@ export const dropCategoryTable = async function () {
       `;
 
         // Execute the query
-        await pool(dropTableQuery);
+        await connection.query(dropTableQuery);
 
         console.log('Category Table dropped successfully:');
 
-        // Release the connection back to the pool
+        // Release the connection back to the connection.query
     } catch (error) {
         console.error('Error dropping table:', error);
     } finally {
-        if (connection) {
-            connection.release(); // Release the connection back to the pool
-        }
+        connection.release(); // Release the connection back to the connection.query
+
     }
 
 }

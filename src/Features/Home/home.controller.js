@@ -11,22 +11,29 @@ const parseImages = async (advertisements) => {
 };
 
 export const latestAdds = async function (req, res, next) {
+    let connection = await pool.getConnection();
+
     try {
         const limit = req.query?.limit || 100;
         const page = req.query?.page || 1;
         const pageNumber = parseInt(page) || 1;
         const offset = (pageNumber - 1) * limit;
 
-        const rows = await pool.raw(selectLatestAds, [limit, offset]);
+        const rows = await connection.query(selectLatestAds, [limit, offset]);
         const advertisements = await parseImages(rows[0]);
 
         return sendResponse(res, "Latest Adds", 200, { advertisements });
     } catch (error) {
         next(error);
+    } finally {
+        connection.release(); // Release the connection back to the connection.query
+
     }
 };
 
 export const searchAdds = async function (req, res, next) {
+    let connection = await pool.getConnection();
+
     try {
         const limit = req.query?.limit || 100;
         const page = req.query?.page || 1;
@@ -35,11 +42,14 @@ export const searchAdds = async function (req, res, next) {
         const offset = (pageNumber - 1) * limit;
         search = `+${search}*`;
 
-        const rows = await pool.raw(searchAdd, [search, search, search, search, search, search]);
+        const rows = await connection.query(searchAdd, [search, search, search, search, search, search]);
         const advertisements = await parseImages(rows[0]);
 
         return sendResponse(res, "Search Results", 200, { advertisements });
     } catch (error) {
         next(error);
+    } finally {
+        connection.release(); // Release the connection back to the connection.query
+
     }
 };

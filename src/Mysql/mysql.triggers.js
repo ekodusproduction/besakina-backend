@@ -1,6 +1,7 @@
 import pool from "./mysql.database.js";
 
 export const planUpdateTrigger = async function () {
+    let connection = await pool.getConnection()
     try {
         const addTriggerSQL = `
         CREATE TRIGGER update_plan_date_trigger 
@@ -14,23 +15,30 @@ export const planUpdateTrigger = async function () {
             END IF;
         END
       `;
-        const [rows, fields] = await pool.raw(addTriggerSQL);
+        await connection.query(addTriggerSQL);
         console.log('Plan trigger added successfully:');
         return
     } catch (error) {
         console.log(error);
     }
+    finally {
+        connection.release()
+    }
 }
 
 export const dropPlanUpdateTrigger = async function () {
+    let connection = await pool.getConnection()
+
     try {
         const dropTriggerSQL = `
             DROP TRIGGER IF EXISTS update_plan_date_trigger;
         `;
-        const [rows, fields] = await pool.raw(dropTriggerSQL);
+        await connection.query(dropTriggerSQL);
         console.log('Plan trigger dropped successfully:');
         return
     } catch (error) {
         console.log(error);
+    } finally {
+        connection.release()
     }
 }

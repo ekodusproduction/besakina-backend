@@ -59,12 +59,14 @@ export const createPropertyTable = async function () {
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );`
         // Execute the query
-        await pool.raw(createTableQuery);
+        await connection.query(createTableQuery);
         console.log('Property Table created successfully:');
-        // Release the connection back to the pool
+        // Release the connection back to the connection.query
 
     } catch (error) {
         console.error('Error creating table:', error);
+    } finally {
+        connection.release();
     }
 }
 
@@ -79,15 +81,17 @@ export const dropPropertyTable = async function () {
       `;
 
         // Execute the query
-        await pool.raw(dropTableQuery);
+        await connection.query(dropTableQuery);
 
         console.log('Property Table dropped successfully:');
 
-        // Release the connection back to the pool
+        // Release the connection back to the connection.query
     } catch (error) {
         console.error('Error dropping table:', error);
+    } finally {
+        connection.release();
     }
-    return
+
 }
 export const indexPropertyTable = async function () {
     let connection = await pool.getConnection();
@@ -103,20 +107,22 @@ export const indexPropertyTable = async function () {
         // Execute the query
         const fulltext = `ALTER TABLE property ADD FULLTEXT INDEX property_idx_fulltext (title,type, city,street, state, landmark, category, price, pincode);`
         // Execute the query
-        await pool(fulltext);
+        await connection.query(fulltext);
         console.log("property fulltext index created")
 
         const compound = `ALTER TABLE property ADD INDEX property_idx_is_active_created_at (is_active, created_at);`
-        await pool(compound);
+        await connection.query(compound);
         console.log('property compound index created:');
 
         const created_at_index = `ALTER TABLE property ADD INDEX property_idx_created_at (created_at);`
-        await pool(created_at_index);
+        await connection.query(created_at_index);
         console.log('property index created:');
 
-        // Release the connection back to the pool
+        // Release the connection back to the connection.query
     } catch (error) {
         console.error('Error creating index:', error);
+    } finally {
+        connection.release();
     }
-    return
+
 }

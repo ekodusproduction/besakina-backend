@@ -13,6 +13,13 @@ const parseImages = async (advertisements) => {
         return advertisement;
     });
 };
+const parseUser = async (advertisements) => {
+    return advertisements.map(advertisement => {
+        advertisement.user = JSON.parse(advertisement.user);
+        advertisement.user = advertisement.user.map(photo => photo.replace(/\\/g, '/'));
+        return advertisement;
+    });
+};
 
 const addAdvertisement = async (requestBody, files) => {
     let connection = await pool.getConnection();
@@ -24,17 +31,17 @@ const addAdvertisement = async (requestBody, files) => {
         requestBody.images = photosJson;
         console.log("request", requestBody)
         const [query, values] = await insertQuery("hospitality", requestBody)
-        const [rows, field] = await pool.raw(query, values);
+        const [rows, field] = await connection.query(query, values);
         if (rows == null) {
             return { error: true, message: "Error adding hospitality" };
         }
-        return { error: false, message: "hospitality added successfully", id: rows };
+        return { error: false, message: "hospitality added successfully", id: rows.insertId };
     } catch (error) {
         console.log(error)
         logger.info(error)
         throw new ApplicationError("Internal server error", 500);
     } finally {
-        connection.release(); // Release the connection back to the pool
+        connection.release(); // Release the connection back to the connection.query
 
     }
 };
@@ -43,23 +50,23 @@ const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
     try {
-        const [rows, field] = await pool.raw(getUserAndHospitality, [advertisementID])
+        const [rows, field] = await connection.query(getUserAndHospitality, [advertisementID])
         console.log("error", rows[0])
         if (rows.length === 0) {
             return null;
         }
 
-        const data = await parseImages(rows)
-        console.log("rows after modificatgion", rows)
+        let data = await parseImages(rows)
+        data[0].user = await JSON.parse(data[0].user)
 
-        return data;
+        return data[0];
     } catch (error) {
         console.log("catch", error)
 
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {
-        connection.release(); // Release the connection back to the pool
+        connection.release(); // Release the connection back to the connection.query
 
     }
 };
@@ -70,9 +77,9 @@ const getListAdvertisement = async () => {
     let connection = await pool.getConnection();
 
     try {
-        const advertisements = await pool('hospitality')
-            .select('*')
-            .where({ is_active: 1 });
+        const [query, values] = await selectQuery("hospitality", {}, { is_active: 1 })
+        console.log("sdq", query)
+        const [advertisements, fields] = await connection.query(query, values)
 
         if (advertisements.length === 0) {
             return null;
@@ -82,6 +89,7 @@ const getListAdvertisement = async () => {
 
         return advertisements;
     } catch (error) {
+        console.log("wrr", error)
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {
@@ -103,11 +111,13 @@ const filterAdvertisement = async (query) => {
         if (query?.maxPrice) delete query.maxPrice;
 
         // Call filterQuery with the correct rangeCondition
-        const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
-        const [rows, fields] = await pool.raw(sql, values);
+        const [sql, values] = await filterQuery("hospitality", [], { is_active: 1, ...query }, rangeCondition);
+        console.log("filer ", sql)
+        console.log("filer ", values)
+        const [rows, fields] = await connection.query(sql, values);
+        console.log("data", rows)
         const data = await parseImages(rows);
         return data;
-
 
     } catch (error) {
         logger.info(error);
@@ -129,8 +139,7 @@ export const updateAdvertisement = async (advertisementID, filter) => {
             throw new ApplicationError("Invalid filter object provided", 400);
         }
         const [sql, values] = await updateQuery("hospitality", filter, { "id": advertisementID })
-        console.log("sql", sql)
-        const [rows, field] = await pool.raw(sql, values)
+        const [rows, field] = await connection.query(sql, values)
 
         if (!rows) {
             throw new ApplicationError("hospitality not updated. No matching hospitality found for the provided ID.", 404);
@@ -138,8 +147,6 @@ export const updateAdvertisement = async (advertisementID, filter) => {
 
         return { error: false, message: "hospitality updated successfully", "advertisements": rows };
     } catch (error) {
-        console.log("error in catch", error)
-
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {
@@ -152,7 +159,7 @@ export const deactivateAdvertisement = async (advertisementID) => {
 
     try {
         const sql = `UPDATE hospitality SET is_active = 0 WHERE id = ?`
-        const [rows, fields] = await pool.raw(sql, [advertisementID]);
+        const [rows, fields] = await connection.query(sql, [advertisementID]);
         if (rows.affectedRows === 0) {
             throw new ApplicationError("hospitality not deactivated. No matching hospitality found for the provided ID.", 404);
         }
@@ -169,17 +176,25 @@ export const addImage = async (advertisementID, files) => {
     let connection = await pool.getConnection();
 
     try {
-        const [advertisement] = await pool('hospitality').where('id', advertisementID).select('images');
+        const [query, values] = await selectQuery("hospitality", {}, { id: advertisementID })
+        const [advertisement, field] = await connection.query(query, values);
         console.log("advertisement", advertisement)
-        if (!advertisement) {
+        if (advertisement.length == 0) {
             throw new ApplicationError("hospitality not found.", 404);
         }
-        const images = JSON.parse(advertisement.images || '[]');
+        const images = JSON.parse(advertisement[0].images || '[]');
+        console.log("images", images)
+
         const filePaths = files.map(file => file.path);
         const photosJson = JSON.stringify([...filePaths, ...images]);
-        await pool('hospitality').where('id', advertisementID).update({ images: photosJson });
-        return { error: false, message: "Images added successfully to the hospitality" };
+        console.log("photosJson", photosJson)
+
+        const [update, updateValues] = await updateQuery("hospitality", { images: photosJson }, { id: advertisementID })
+
+        const [rows] = await connection.query(update, updateValues);
+        return { error: false, message: "Images added successfully to the hospitality", data: rows };
     } catch (error) {
+        console.log(error)
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {
@@ -193,7 +208,7 @@ export const deleteImage = async (advertisementID, files) => {
     try {
         console.log("add files", files)
         const sql = `SELECT * FROM hospitality WHERE id = ?`
-        const [rows, fields] = await pool.raw(sql, [advertisementID])
+        const [rows, fields] = await connection.query(sql, [advertisementID])
         console.log("add rows after db req", rows)
 
         if (rows[0].length == null) {
@@ -207,7 +222,7 @@ export const deleteImage = async (advertisementID, files) => {
         const photosJson = images ? JSON.stringify(images) : [];
         console.log("add photosJson after db req", photosJson)
         const updateSql = `UPDATE hospitality SET images =? WHERE id = ?`
-        await pool.raw(updateSql, [photosJson, advertisementID])
+        await connection.query.raw(updateSql, [photosJson, advertisementID])
 
         return { error: false, message: "Images deleted successfully from the hospitality" };
     } catch (error) {
@@ -223,7 +238,7 @@ export const listUserAdvertisement = async (userID) => {
     let connection = await pool.getConnection();
 
     try {
-        const advertisements = await pool('hospitality').where('user_id', userID);
+        const advertisements = await connection.query('hospitality').where('user_id', userID);
         return { error: false, message: "User advertisement list", advertisements };
     } catch (error) {
         logger.info(error);
@@ -237,12 +252,16 @@ export const activateAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
     try {
-        const [advertisement] = await pool('hospitality').where('id', advertisementID).select('is_active');
-        if (!advertisement) {
+
+        const [query, values] = await updateQuery('hospitality', { is_active: 1 }, { id: advertisementID })
+        const [advertisement] = await connection.query(query, values);
+
+        if (advertisement.length == 0) {
             throw new ApplicationError("hospitality not found.", 404);
         }
-        await pool('hospitality').where('id', advertisementID).update({ is_active: 1 });
-        return { error: false, message: "hospitality activated successfully" };
+        const [update, updateValues] = await updateQuery('hospitality', { is_active: 1 }, { id: advertisementID })
+        const [rows] = await connection.query(update, updateValues);
+        return { error: false, message: "hospitality activated successfully", data: rows };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);

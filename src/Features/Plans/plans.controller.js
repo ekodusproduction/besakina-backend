@@ -1,5 +1,6 @@
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
+import { deleteQuery, insertQuery, selectQuery } from "../../Utility/sqlQuery.js";
 
 export const addPlan = async function (req, res, next) {
     let connection = await pool.getConnection();
@@ -7,34 +8,36 @@ export const addPlan = async function (req, res, next) {
     try {
         const requestBody = req.body;
         const membership_badge = req.files[0].path;
-        const [plan] = await pool('plans').insert({ ...requestBody, membership_badge });
 
-        return sendResponse(res, "Plan added successfully", 201, { id: plan }, null);
+        const [query, values] = await insertQuery('plans', { ...requestBody, membership_badge: membership_badge })
+        console.log("queri in polan", query)
+        console.log("queri in polan", values)
+        const [rows, fields] = await connection.query(query, values);
+
+        return sendResponse(res, "Plan added successfully", 201, { id: rows.insertId }, null);
     } catch (error) {
         next(error);
     } finally {
-        if (connection) {
-            connection.release(); // Release the connection back to the pool
-        }
+        connection.release(); // Release the connection back to the connection.query
+
     }
 }
 
 export const getPlan = async function (req, res, next) {
     let connection = await pool.getConnection();
-
     try {
-        const plans = await pool('plans').select('*');
-        if (plans.length === 0) {
+        const [query, values] = await selectQuery("plans", {}, {})
+        const [rows, fields] = await connection.query(query);
+        if (rows.length === 0) {
             return sendError(res, "No plan found", 404);
         }
 
-        return sendResponse(res, "Plan List", 200, { plans });
+        return sendResponse(res, "Plan List", 200, rows);
     } catch (error) {
         next(error);
     } finally {
-        if (connection) {
-            connection.release(); // Release the connection back to the pool
-        }
+        connection.release(); // Release the connection back to the connection.query
+
     }
 }
 
@@ -43,7 +46,8 @@ export const deletePlan = async function (req, res, next) {
 
     try {
         const id = req.params.id;
-        const deletedCount = await pool('plans').where('id', id).del();
+        const sql = `DELETE FROM plans WHERE id = ?`
+        const deletedCount = await connection.query(sql, id);
 
         if (deletedCount === 0) {
             return sendError(res, "No plan found", 404);
@@ -53,9 +57,8 @@ export const deletePlan = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        if (connection) {
-            connection.release(); // Release the connection back to the pool
-        }
+        connection.release(); // Release the connection back to the connection.query
+
     }
 };
 

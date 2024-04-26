@@ -1,10 +1,11 @@
-import pool from '../../Mysql/mysql.database.js';
+import pool from
+    '../../Mysql/mysql.database.js';
 import { sendError, sendResponse } from '../../Utility/response.js';
 
 export const createCategory = async (req, res, next) => {
     try {
         let requestBody = req.body;
-        const [result] = await pool('category').insert(requestBody);
+        const [result] = await connection.query('category').insert(requestBody);
         if (!result) {
             return sendError(res, 'Error adding advertisement', 400);
         }
@@ -16,7 +17,7 @@ export const createCategory = async (req, res, next) => {
 
 export const listCategory = async (req, res, next) => {
     try {
-        const categories = await pool('category').where({ is_active: 1 });
+        const categories = await connection.query('category').where({ is_active: 1 });
         if (!categories.length) {
             return sendError(res, 'Advertisements not found', 404);
         }

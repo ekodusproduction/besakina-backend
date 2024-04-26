@@ -1,4 +1,5 @@
-import pool from "./src/Mysql/mysql.database.js";
+import pool from
+    "./src/Mysql/mysql.database.js";
 import { Server } from "socket.io";
 
 export const chatSocket = (server) => {
@@ -15,7 +16,7 @@ export const chatSocket = (server) => {
                 const { message, userId, chatRoomId } = messageData;
 
                 // Store message in the database
-                await pool.raw(
+                await connection.query.raw(
                     "INSERT INTO chat (message, user_id, chat_room_id) VALUES (?, ?, ?)",
                     [message, userId, chatRoomId]
                 );

@@ -35,6 +35,8 @@ async function createTables() {
 
         await addIndexes()
         await createTriggers();
+        process.exit(0);
+
     } catch (error) {
         console.error('Error creating tables:', error);
     }

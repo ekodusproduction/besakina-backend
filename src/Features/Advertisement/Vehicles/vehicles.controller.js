@@ -1,6 +1,7 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
 import { sendResponse, sendError } from "../../../Utility/response.js";
-import pool from "../../../Mysql/mysql.database.js";
+import pool from
+  "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
 import { insertQuery, selectQuery, updateQuery, selectJoinQuery, filterQuery } from "../../../Utility/sqlQuery.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
@@ -27,9 +28,9 @@ export const getAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const advertisement = await repository.getAdvertisement(advertisementID);
     if (!advertisement) {
-      return sendError(res, "Doctors not found", 404);
+      return sendError(res, "Vehicles not found", 404);
     }
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisement });
+    return sendResponse(res, "Vehicles fetched successfully", 200, { advertisement });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -40,9 +41,9 @@ export const getListAdvertisement = async (req, res, next) => {
   try {
     const advertisements = await repository.getListAdvertisement(req.params.id);
     if (!advertisements) {
-      return sendError(res, "Doctors not found", 404);
+      return sendError(res, "vehicles not found", 404);
     }
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+    return sendResponse(res, "vehicles fetched successfully", 200, { advertisements });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -55,10 +56,10 @@ export const filterAdvertisement = async (req, res, next) => {
     const advertisements = await repository.filterAdvertisement(query);
 
     if (advertisements.length === 0) {
-      return sendError(res, "Doctors not found for given filter", 404);
+      return sendError(res, "vehicles not found for given filter", 404);
     }
 
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+    return sendResponse(res, "vehicles fetched successfully", 200, { advertisements });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -71,7 +72,7 @@ export const updateAdvertisement = async (req, res, next) => {
     const filter = req.body;
     const result = await repository.updateAdvertisement(advertisementID, filter);
     if (result.length === 0) {
-      return sendError(res, "Doctors not found for given filter", 404);
+      return sendError(res, "vehicles not found for given filter", 404);
     }
     return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
   } catch (error) {
@@ -95,7 +96,7 @@ export const addImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const result = await repository.addImage(advertisementID, req.files);
-    return sendResponse(res, result.message, 200);
+    return sendResponse(res, result.message, 200, result.data);
   } catch (error) {
     logger.info(error)
     next(error);

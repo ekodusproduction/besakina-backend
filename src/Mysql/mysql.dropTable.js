@@ -34,7 +34,7 @@ async function dropTables() {
         await dropUserTable();
         await dropPlanTable();
         // await dropDatabase()
-        return
+        process.exit(0);
     } catch (error) {
         console.error('Error dropping tables:', error);
     }
@@ -43,7 +43,7 @@ async function dropTables() {
 async function dropDatabase() {
     try {
         const query = "DROP DATABASE IF EXISTS besakina";
-        await pool.raw(query);
+        await connection.query(query);
         console.log("Database 'besakina' dropped successfully");
         return
     } catch (error) {

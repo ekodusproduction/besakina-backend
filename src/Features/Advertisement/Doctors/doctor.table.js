@@ -1,6 +1,9 @@
-import pool from "../../../Mysql/mysql.database.js";
+import pool from
+    "../../../Mysql/mysql.database.js";
 
 export const createDoctorsTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your CREATE TABLE query
@@ -41,14 +44,16 @@ export const createDoctorsTable = async function () {
         );`;
 
         // Execute the query
-        await pool(createTableQuery);
+        await connection.query(createTableQuery);
 
         console.log('Doctor Table created successfully:');
 
-        // Release the connection back to the pool
+        // Release the connection back to the connection.query
 
     } catch (error) {
         console.error('Error creating table:', error);
+    } finally {
+        connection.release();
     }
 }
 
@@ -63,15 +68,17 @@ export const dropDoctorsTable = async function () {
       `;
 
         // Execute the query
-        await pool(dropTableQuery);
+        await connection.query(dropTableQuery);
 
         console.log('Doctors Table dropped successfully:');
 
-        // Release the connection back to the pool
+        // Release the connection back to the connection.query
     } catch (error) {
         console.error('Error dropping table:', error);
     }
-    return
+    finally {
+        connection.release();
+    }
 }
 export const indexDoctorsTable = async function () {
     let connection = await pool.getConnection();
@@ -82,20 +89,22 @@ export const indexDoctorsTable = async function () {
 
         const fulltext = `ALTER TABLE doctors ADD FULLTEXT INDEX doctors_idx_fulltext (title, expertise, description,  street, city, locality, pincode);`
         // Execute the query
-        await pool(fulltext);
+        await connection.query(fulltext);
         console.log("doctors fulltext index created")
 
         const compound = `ALTER TABLE doctors ADD INDEX compound (is_active, created_at);`
-        await pool(compound);
+        await connection.query(compound);
         console.log('doctors compound index created:');
 
         const created_at_index = `ALTER TABLE doctors ADD INDEX (created_at);`
-        await pool(created_at_index);
+        await connection.query(created_at_index);
         console.log('doctors index created:');
 
-        // Release the connection back to the pool
+        // Release the connection back to the connection.query
     } catch (error) {
         console.error('Error creating index:', error);
     }
-    return
+    finally {
+        connection.release();
+    }
 }

@@ -1,6 +1,7 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
 import { sendResponse, sendError } from "../../../Utility/response.js";
-import pool from "../../../Mysql/mysql.database.js";
+import pool from
+  "../../../Mysql/mysql.database.js";
 // import path from 'path';  // Import path module
 import { insertQuery, selectQuery, updateQuery, selectJoinQuery, filterQuery } from "../../../Utility/sqlQuery.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
@@ -58,7 +59,7 @@ export const filterAdvertisement = async (req, res, next) => {
       return sendError(res, "Doctors not found for given filter", 404);
     }
 
- 
+
     return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
   } catch (error) {
     logger.info(error)
