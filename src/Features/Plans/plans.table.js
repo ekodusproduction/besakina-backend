@@ -1,7 +1,7 @@
-
 import pool from "../../Mysql/mysql.database.js"
 
 export const createPlanTable = async function () {
+    let connection = await pool.getConnection();
     try {
 
         // Define your CREATE TABLE query
@@ -26,30 +26,39 @@ export const createPlanTable = async function () {
         updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       );`;
 
-        // Execute the query
-        await pool.raw(createTableQuery);
+        await pool(createTableQuery);
 
         console.log('Plan Table created successfully:');
 
-        // Release the connection back to the pool
         return
     } catch (error) {
         console.error('Error creating table:', error);
+    } finally {
+        if (connection) {
+            connection.release(); // Release the connection back to the pool
+        }
     }
 }
 
 export const dropPlanTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
+        console.log(pool)
         // Define your DROP TABLE query
         const dropTableQuery = `
             DROP TABLE IF EXISTS plans
         `;
         // Execute the query
-        await pool.raw(dropTableQuery);
+        await pool(dropTableQuery);
 
         console.log('Plan Table dropped successfully:');
         return
     } catch (error) {
         console.error('Error dropping table:', error);
-    }
+    }finally {
+        if (connection) {
+          connection.release(); // Release the connection back to the pool
+        }
+      }
 };

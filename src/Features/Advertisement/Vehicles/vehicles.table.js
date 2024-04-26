@@ -2,6 +2,8 @@
 import pool from "../../../Mysql/mysql.database.js";
 
 export const createVehicleTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your CREATE TABLE query
@@ -50,7 +52,7 @@ export const createVehicleTable = async function () {
         );`;
 
         // Execute the query
-        await pool.raw(createTableQuery);
+        await pool(createTableQuery);
 
         console.log('Vehicle Table created successfully:');
 
@@ -58,10 +60,16 @@ export const createVehicleTable = async function () {
 
     } catch (error) {
         console.error('Error creating table:', error);
+    } finally {
+        if (connection) {
+            connection.release(); // Release the connection back to the pool
+        }
     }
 }
 
 export const dropVehicleTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -70,18 +78,24 @@ export const dropVehicleTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await pool.raw(dropTableQuery);
+        await pool(dropTableQuery);
 
         console.log('Vehicle Table dropped successfully:');
 
         // Release the connection back to the pool
     } catch (error) {
         console.error('Error dropping table:', error);
+    } finally {
+        if (connection) {
+            connection.release(); // Release the connection back to the pool
+        }
     }
-    return
+
 }
 
 export const indexVehiclesTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -93,20 +107,24 @@ export const indexVehiclesTable = async function () {
         // Execute the query
         const fulltext = `ALTER TABLE vehicles ADD FULLTEXT INDEX vehicles_idx_fulltext (title,brand, type, city,  kilometer_driven, registration_year, locality, category, price, pincode,model, variant, transmission);`
         // Execute the query
-        await pool.raw(fulltext);
+        await pool(fulltext);
         console.log("vehicles fulltext index created")
 
         const compound = `ALTER TABLE vehicles ADD INDEX vehicles_idx_is_active_created_at (is_active, created_at);`
-        await pool.raw(compound);
+        await pool(compound);
         console.log('vehicles compound index created:');
 
         const created_at_index = `ALTER TABLE vehicles ADD INDEX vehicles_idx_created_at (created_at);`
-        await pool.raw(created_at_index);
+        await pool(created_at_index);
         console.log('vehicles index created:');
 
         // Release the connection back to the pool
     } catch (error) {
         console.error('Error creating index:', error);
+    } finally {
+        if (connection) {
+            connection.release(); // Release the connection back to the pool
+        }
     }
-    return
+
 }

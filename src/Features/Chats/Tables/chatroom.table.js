@@ -17,7 +17,7 @@ export const createChatRoomTable = async function () {
     `;
 
         // Execute the query
-        await pool.raw(createTableQuery);
+        await pool(createTableQuery);
 
         console.log('Chat room Table created successfully:');
 
@@ -25,6 +25,10 @@ export const createChatRoomTable = async function () {
 
     } catch (error) {
         console.error('Error creating table:', error);
+    } finally {
+        if (connection) {
+            connection.release(); // Release the connection back to the pool
+        }
     }
 }
 
@@ -44,6 +48,10 @@ export const dropChatRoomTable = async function () {
         // Release the connection back to the pool
     } catch (error) {
         console.error('Error dropping table:', error);
+    } finally {
+        if (connection) {
+            connection.release(); // Release the connection back to the pool
+        }
     }
-    return
+
 }

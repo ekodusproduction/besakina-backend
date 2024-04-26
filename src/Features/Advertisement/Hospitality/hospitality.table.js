@@ -2,6 +2,8 @@
 import pool from "../../../Mysql/mysql.database.js";
 
 export const createHospitalityTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your CREATE TABLE query
@@ -41,7 +43,7 @@ export const createHospitalityTable = async function () {
             );`;
 
         // Execute the query
-        const [results, fields] = await pool.raw(createTableQuery);
+        await pool(createTableQuery);
 
         console.log('Hospitality Table created successfully:');
 
@@ -53,6 +55,8 @@ export const createHospitalityTable = async function () {
 }
 
 export const dropHospitalityTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -61,7 +65,7 @@ export const dropHospitalityTable = async function () {
       `;
 
         // Execute the query
-        await pool.raw(dropTableQuery);
+        await pool(dropTableQuery);
 
         console.log('Hospitality Table dropped successfully:');
 
@@ -70,9 +74,11 @@ export const dropHospitalityTable = async function () {
         console.error('Error dropping table:', error);
     }
     return
-} 
+}
 
 export const indexHospitalityTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -85,15 +91,15 @@ export const indexHospitalityTable = async function () {
         // Execute the query
         const fulltext = `ALTER TABLE hospitality ADD FULLTEXT INDEX hospitality_idx_fulltext (title, name, type, description, city, state, locality, category, pincode);`
         // Execute the query
-        await pool.raw(fulltext);
+        await pool(fulltext);
         console.log("hospitality fulltext index created")
 
         const compound = `ALTER TABLE hospitality ADD INDEX hospitality_idx_is_active_created_at (is_active, created_at);`
-        await pool.raw(compound);
+        await pool(compound);
         console.log('hospitality compound index created:');
 
         const created_at_index = `ALTER TABLE hospitality ADD INDEX hospitality_idx_created_at (created_at);`
-        await pool.raw(created_at_index);
+        await pool(created_at_index);
         console.log('hospitality index created:');
 
         // Release the connection back to the pool

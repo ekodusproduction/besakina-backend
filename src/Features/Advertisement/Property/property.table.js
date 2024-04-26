@@ -2,6 +2,8 @@
 import pool from "../../../Mysql/mysql.database.js";
 
 export const createPropertyTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your CREATE TABLE query
@@ -57,7 +59,7 @@ export const createPropertyTable = async function () {
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
         );`
         // Execute the query
-        const [results, fields] = await pool.raw(createTableQuery);
+        await pool.raw(createTableQuery);
         console.log('Property Table created successfully:');
         // Release the connection back to the pool
 
@@ -67,6 +69,8 @@ export const createPropertyTable = async function () {
 }
 
 export const dropPropertyTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -86,6 +90,8 @@ export const dropPropertyTable = async function () {
     return
 }
 export const indexPropertyTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -97,15 +103,15 @@ export const indexPropertyTable = async function () {
         // Execute the query
         const fulltext = `ALTER TABLE property ADD FULLTEXT INDEX property_idx_fulltext (title,type, city,street, state, landmark, category, price, pincode);`
         // Execute the query
-        await pool.raw(fulltext);
+        await pool(fulltext);
         console.log("property fulltext index created")
 
         const compound = `ALTER TABLE property ADD INDEX property_idx_is_active_created_at (is_active, created_at);`
-        await pool.raw(compound);
+        await pool(compound);
         console.log('property compound index created:');
 
         const created_at_index = `ALTER TABLE property ADD INDEX property_idx_created_at (created_at);`
-        await pool.raw(created_at_index);
+        await pool(created_at_index);
         console.log('property index created:');
 
         // Release the connection back to the pool

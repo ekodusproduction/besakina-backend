@@ -3,8 +3,7 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
 import pool from "../../../Mysql/mysql.database.js";
-import { deleteFiles } from "../../../Utility/deleteFiles.js";
-import { filterQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
+import { filterQuery, insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
 import { getUserAndProperty } from "./sqlQuery.js";
 
 const parseImages = async (advertisements) => {
@@ -16,24 +15,33 @@ const parseImages = async (advertisements) => {
 };
 
 const addAdvertisement = async (requestBody, files) => {
+    let connection = await pool.getConnection();
+
     try {
 
         const filePaths = files.map(file => file.path);
         const photosJson = JSON.stringify(filePaths);
         requestBody.images = photosJson;
-
-        const [rows, field] = await pool('property').insert(requestBody);
+        console.log("request", requestBody)
+        const [query, values] = await insertQuery("property", requestBody)
+        const [rows, field] = await pool.raw(query, values);
         if (rows == null) {
             return { error: true, message: "Error adding property" };
         }
         return { error: false, message: "property added successfully", id: rows };
     } catch (error) {
+        console.log(error)
         logger.info(error)
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release(); // Release the connection back to the pool
+
     }
 };
 
 const getAdvertisement = async (advertisementID) => {
+    let connection = await pool.getConnection();
+
     try {
         const [rows, field] = await pool.raw(getUserAndProperty, [advertisementID])
         console.log("error", rows[0])
@@ -50,56 +58,69 @@ const getAdvertisement = async (advertisementID) => {
 
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release(); // Release the connection back to the pool
+
     }
 };
 
 
 
 const getListAdvertisement = async () => {
-    try {
+    let connection = await pool.getConnection();
 
-        const rows = await pool('property')
+    try {
+        const advertisements = await pool('property')
             .select('*')
             .where({ is_active: 1 });
 
-        if (rows.length === 0) {
-            console.log("trsd")
-
-            throw new ApplicationError("No property found.", 404);
+        if (advertisements.length === 0) {
+            return null;
         }
-        const data = await parseImages(rows)
-        return data;
+
+        const data = await parseImages(advertisements)
+
+        return advertisements;
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release();
     }
 };
 
 const filterAdvertisement = async (query) => {
+    let connection = await pool.getConnection();
+
     try {
         // Define the rangeCondition object based on the query parameters
         const minPrice = query.minPrice ? parseInt(query.minPrice) : undefined;
         const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
         const rangeCondition = minPrice !== undefined && maxPrice !== undefined ? { price: { min: minPrice, max: maxPrice } } : {};
-        
+
         // Remove minPrice and maxPrice from query object
         if (query?.minPrice) delete query.minPrice;
         if (query?.maxPrice) delete query.maxPrice;
-        
+
         // Call filterQuery with the correct rangeCondition
         const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await pool.raw(sql, values);
         const data = await parseImages(rows);
         return data;
-        
+
+
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release();
     }
 };
 
 
 export const updateAdvertisement = async (advertisementID, filter) => {
+    let connection = await pool.getConnection();
+
     try {
         console.log("Updating advertisement with ID:", advertisementID);
         console.log("Filter:", filter);
@@ -112,7 +133,7 @@ export const updateAdvertisement = async (advertisementID, filter) => {
         const [rows, field] = await pool.raw(sql, values)
 
         if (!rows) {
-            throw new ApplicationError("Property not updated. No matching property found for the provided ID.", 404);
+            throw new ApplicationError("property not updated. No matching property found for the provided ID.", 404);
         }
 
         return { error: false, message: "property updated successfully", "advertisements": rows };
@@ -121,10 +142,14 @@ export const updateAdvertisement = async (advertisementID, filter) => {
 
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release();
     }
 };
 
 export const deactivateAdvertisement = async (advertisementID) => {
+    let connection = await pool.getConnection();
+
     try {
         const sql = `UPDATE property SET is_active = 0 WHERE id = ?`
         const [rows, fields] = await pool.raw(sql, [advertisementID]);
@@ -135,10 +160,14 @@ export const deactivateAdvertisement = async (advertisementID) => {
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release();
     }
 };
 
 export const addImage = async (advertisementID, files) => {
+    let connection = await pool.getConnection();
+
     try {
         const [advertisement] = await pool('property').where('id', advertisementID).select('images');
         console.log("advertisement", advertisement)
@@ -153,10 +182,14 @@ export const addImage = async (advertisementID, files) => {
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release();
     }
 };
 
 export const deleteImage = async (advertisementID, files) => {
+    let connection = await pool.getConnection();
+
     try {
         console.log("add files", files)
         const sql = `SELECT * FROM property WHERE id = ?`
@@ -181,20 +214,28 @@ export const deleteImage = async (advertisementID, files) => {
         console.log("erro in catch", error)
         logger.info(error);
         new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release();
     }
 };
 
 export const listUserAdvertisement = async (userID) => {
+    let connection = await pool.getConnection();
+
     try {
         const advertisements = await pool('property').where('user_id', userID);
         return { error: false, message: "User advertisement list", advertisements };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release();
     }
 };
 
 export const activateAdvertisement = async (advertisementID) => {
+    let connection = await pool.getConnection();
+
     try {
         const [advertisement] = await pool('property').where('id', advertisementID).select('is_active');
         if (!advertisement) {
@@ -205,6 +246,8 @@ export const activateAdvertisement = async (advertisementID) => {
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
+    } finally {
+        connection.release();
     }
 };
 

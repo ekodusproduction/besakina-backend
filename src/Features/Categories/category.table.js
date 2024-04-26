@@ -2,6 +2,8 @@
 import pool from "../../Mysql/mysql.database.js"
 
 export const createCategoryTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your CREATE TABLE query
@@ -13,7 +15,7 @@ export const createCategoryTable = async function () {
         );`;
 
         // Execute the query
-         await pool.raw(createTableQuery);
+        await pool(createTableQuery);
 
         console.log('Category Table created successfully:');
 
@@ -21,6 +23,10 @@ export const createCategoryTable = async function () {
 
     } catch (error) {
         console.error('Error creating table:', error);
+    } finally {
+        if (connection) {
+            connection.release(); // Release the connection back to the pool
+        }
     }
 }
 
@@ -33,13 +39,17 @@ export const dropCategoryTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await pool.raw(dropTableQuery);
+        await pool(dropTableQuery);
 
         console.log('Category Table dropped successfully:');
 
         // Release the connection back to the pool
     } catch (error) {
         console.error('Error dropping table:', error);
+    } finally {
+        if (connection) {
+            connection.release(); // Release the connection back to the pool
+        }
     }
-    return
+
 }

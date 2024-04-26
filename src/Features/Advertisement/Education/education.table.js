@@ -2,6 +2,8 @@
 import pool from "../../../Mysql/mysql.database.js";
 
 export const createEducationTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your CREATE TABLE query
@@ -44,7 +46,7 @@ export const createEducationTable = async function () {
         );`;
 
         // Execute the query
-        await pool.raw(createTableQuery);
+        await pool(createTableQuery);
 
         console.log('Education Table created successfully:');
 
@@ -56,6 +58,8 @@ export const createEducationTable = async function () {
 }
 
 export const dropEducationTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -64,7 +68,7 @@ export const dropEducationTable = async function () {
       `;
 
         // Execute the query
-        const [results, fields] = await pool.raw(dropTableQuery);
+        await pool.raw(dropTableQuery);
 
         console.log('Education Table dropped successfully:');
 
@@ -76,20 +80,22 @@ export const dropEducationTable = async function () {
 }
 
 export const indexEducationTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
         const fulltext = `ALTER TABLE education ADD FULLTEXT INDEX education_idx_fulltext (title, domain, institution_name, type, description,  city, locality,  pincode);`
         // Execute the query
-        await pool.raw(fulltext);
+        await pool(fulltext);
         console.log("education fulltext index created")
 
         const compound = `ALTER TABLE education ADD INDEX compound (is_active, created_at)`
-        await pool.raw(compound);
+        await pool(compound);
         console.log('education compound index created:');
 
         const created_at_index = `ALTER TABLE education ADD INDEX (created_at);`
-        await pool.raw(created_at_index);
+        await pool(created_at_index);
         console.log('education index created:');
         // Execute the query
 

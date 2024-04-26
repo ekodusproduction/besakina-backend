@@ -2,6 +2,8 @@
 import pool from "../../../Mysql/mysql.database.js";
 
 export const createHospitalsTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // video VARCHAR(255),
@@ -48,7 +50,7 @@ export const createHospitalsTable = async function () {
         );`;
 
         // Execute the query
-        await pool.raw(createTableQuery);
+        await pool(createTableQuery);
 
         console.log('Hospitals Table created successfully:');
 
@@ -60,6 +62,8 @@ export const createHospitalsTable = async function () {
 }
 
 export const dropHospitalsTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -80,6 +84,8 @@ export const dropHospitalsTable = async function () {
 }
 
 export const indexHospitalsTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -91,15 +97,15 @@ export const indexHospitalsTable = async function () {
         // Execute the query
         const fulltext = `ALTER TABLE hospitals ADD FULLTEXT INDEX hospitals_idx_fulltext (title,name, type, description, street, city, state, locality, category, pincode);`
         // Execute the query
-        await pool.raw(fulltext);
+        await pool(fulltext);
         console.log("hospitals fulltext index created")
 
         const compound = `ALTER TABLE hospitals ADD INDEX hospitals_idx_is_active_created_at (is_active, created_at);`
-        await pool.raw(compound);
+        await pool(compound);
         console.log('hospitals compound index created:');
 
         const created_at_index = `ALTER TABLE hospitals ADD INDEX hospitals_idx_created_at (created_at);`
-        await pool.raw(created_at_index);
+        await pool(created_at_index);
         console.log('hospitals index created:');
 
         // Release the connection back to the pool

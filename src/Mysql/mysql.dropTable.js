@@ -11,10 +11,10 @@ import { dropHospitalityTable } from "../Features/Advertisement/Hospitality/hosp
 import { dropHospitalsTable } from "../Features/Advertisement/Hospitals/hospitals.table.js";
 import { dropVehicleTable } from "../Features/Advertisement/Vehicles/vehicles.table.js"
 
-
 import { dropChatTable } from "../Features/Chats/Tables/chat.table.js";
 import { dropChatRoomTable } from "../Features/Chats/Tables/chatroom.table.js";
 import { dropPlanUpdateTrigger } from "./mysql.triggers.js";
+
 async function dropTables() {
     try {
         // Drop tables in reverse order of their dependencies       

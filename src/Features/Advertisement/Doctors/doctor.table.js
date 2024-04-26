@@ -41,7 +41,7 @@ export const createDoctorsTable = async function () {
         );`;
 
         // Execute the query
-        const [results, fields] = await pool.raw(createTableQuery);
+        await pool(createTableQuery);
 
         console.log('Doctor Table created successfully:');
 
@@ -53,6 +53,8 @@ export const createDoctorsTable = async function () {
 }
 
 export const dropDoctorsTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
@@ -61,7 +63,7 @@ export const dropDoctorsTable = async function () {
       `;
 
         // Execute the query
-        await pool.raw(dropTableQuery);
+        await pool(dropTableQuery);
 
         console.log('Doctors Table dropped successfully:');
 
@@ -72,21 +74,23 @@ export const dropDoctorsTable = async function () {
     return
 }
 export const indexDoctorsTable = async function () {
+    let connection = await pool.getConnection();
+
     try {
 
         // Define your DROP TABLE query
 
         const fulltext = `ALTER TABLE doctors ADD FULLTEXT INDEX doctors_idx_fulltext (title, expertise, description,  street, city, locality, pincode);`
         // Execute the query
-        await pool.raw(fulltext);
+        await pool(fulltext);
         console.log("doctors fulltext index created")
 
         const compound = `ALTER TABLE doctors ADD INDEX compound (is_active, created_at);`
-        await pool.raw(compound);
+        await pool(compound);
         console.log('doctors compound index created:');
 
         const created_at_index = `ALTER TABLE doctors ADD INDEX (created_at);`
-        await pool.raw(created_at_index);
+        await pool(created_at_index);
         console.log('doctors index created:');
 
         // Release the connection back to the pool
