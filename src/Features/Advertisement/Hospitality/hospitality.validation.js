@@ -2,7 +2,7 @@ import { body, validationResult } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
 import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
-export const hospitalityValidationRules = () => {
+export const hospitalityValidationRules = async() => {
     return [
         body('type').isString().trim().withMessage('Type must be a string'),
         body('name').isString().withMessage('Name must be a string'),
@@ -21,14 +21,14 @@ export const hospitalityValidationRules = () => {
     ];
 };
 
-export const editHospitalityValidationRules = () => {
+export const editHospitalityValidationRules = async() => {
     return [
         body('type').isString().withMessage('Type must be a string'),
         body('name').isString().withMessage('Name must be a string'),
         body('full_address').isString().withMessage('Full address must be a string'),
         body('ad_title').isString().withMessage('Ad title must be a string'),
         body('description').isString().withMessage('Description must be a string'),
-        body('price').isDecimal().withMessage('Price must be a decimal'),
+        body('price').isString().withMessage('Price must be a decimal'),
         body('map_location').optional().isString().withMessage('Map location must be a string'),
         body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
         body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
@@ -40,13 +40,13 @@ export const editHospitalityValidationRules = () => {
         body('address').optional().isString().withMessage('Address must be a string'),
         body('city').optional().isString().withMessage('City must be a string'),
         body('state').optional().isString().withMessage('State must be a string'),
-        body('pincode').optional().isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
+        body('pincode').optional().isString().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
     ];
 };
 
 
 export const validationMiddlewarePost = async (req, res, next) => {
-    const rules = hospitalityValidationRules();
+    const rules = await hospitalityValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -63,7 +63,7 @@ export const validationMiddlewarePost = async (req, res, next) => {
 };
 
 export const validationMiddlewarePut = async (req, res, next) => {
-    const rules = editHospitalityValidationRules();
+    const rules = await editHospitalityValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
