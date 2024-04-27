@@ -124,7 +124,7 @@ export const updateAdvertisement = async (advertisementID, body) => {
 
     try {
 
-        if (!body || typeof body !== 'object') {
+        if (!body || typeof body !== 'object' || body == {}) {
             throw new ApplicationError("Invalid filter object provided", 400);
         }
         const [sql, values] = await updateQuery("hospitality", body, { "id": advertisementID })
