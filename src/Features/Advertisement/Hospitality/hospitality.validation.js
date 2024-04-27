@@ -23,18 +23,18 @@ export const hospitalityValidationRules = () => {
 
 export const editHospitalityValidationRules = () => {
     return [
-        body('type').isString().withMessage('Type must be a string'),
-        body('name').isString().withMessage('Name must be a string'),
-        body('full_address').isString().withMessage('Full address must be a string'),
-        body('ad_title').isString().withMessage('Ad title must be a string'),
-        body('description').isString().withMessage('Description must be a string'),
-        body('price').isString().withMessage('Price must be a decimal'),
+        body('type').optional().isString().withMessage('Type must be a string'),
+        body('name').optional().isString().withMessage('Name must be a string'),
+        body('full_address').optional().isString().withMessage('Full address must be a string'),
+        body('ad_title').optional().isString().withMessage('Ad title must be a string'),
+        body('description').optional().isString().withMessage('Description must be a string'),
+        body('price').optional().isString().withMessage('Price must be a decimal'),
         body('map_location').optional().isString().withMessage('Map location must be a string'),
         body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
         body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
 
         // body('verified').isString().withMessage('verified must be a boolean'),
-        body('seen_by').isString().withMessage('seen_by must be a string'),
+        body('seen_by').optional().isString().withMessage('seen_by must be a string'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('address').optional().isString().withMessage('Address must be a string'),
