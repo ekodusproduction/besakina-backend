@@ -15,7 +15,7 @@ hospitalityRouter.post("/add", jwtAuth, fileUpload("hospitality"), validationMid
 
 hospitalityRouter.get("/filter", filterAdvertisement)
 
-hospitalityRouter.post("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
+hospitalityRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
 hospitalityRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
 hospitalityRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
