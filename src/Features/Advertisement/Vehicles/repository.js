@@ -212,7 +212,7 @@ export const deleteImage = async (advertisementID, files) => {
         const [rows, fields] = await connection.query(sql, [advertisementID])
         console.log("add rows after db req", rows)
 
-        if (rows[0].length == null) {
+        if (rows[0].length == 0) {
             return new ApplicationError("vehicles not found.", 404);
         }
         if (rows[0].images == []) {
