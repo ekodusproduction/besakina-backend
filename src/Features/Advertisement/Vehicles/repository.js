@@ -122,7 +122,6 @@ const filterAdvertisement = async (query) => {
 
 export const updateAdvertisement = async (advertisementID, filter) => {
     let connection = await pool.getConnection();
-
     try {
        
         if (!filter || typeof filter !== 'object') {

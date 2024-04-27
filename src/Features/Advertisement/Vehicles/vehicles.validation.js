@@ -77,6 +77,8 @@ export const validationMiddlewarePost = async (req, res, next) => {
 };
 
 export const validationMiddlewarePut = async (req, res, next) => {
+  console.log("inside edit vehiclkes", req.body)
+
   const rules = editVehiclesValidationRules();
   await Promise.all(rules.map(rule => rule.run(req)));
   const errors = validationResult(req);
