@@ -218,12 +218,21 @@ export const deleteImage = async (advertisementID, files) => {
         if (rows[0].images == []) {
             return { error: false, message: "Images deleted successfully from the vehicles" };
         }
-        let images = JSON.parse(rows[0].images || []).filter(item => !files.includes(item));
 
-        const photosJson = images ? JSON.stringify(images) : [];
-        console.log("add photosJson after db req", photosJson)
+        const parsedImages = JSON.parse(rows[0].images || []);
+
+        const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
+
+        const filteredImages = normalizedImages.filter(image => !files.includes(image));
+
+        let images = filteredImages;
+
+        const photosJson = JSON.stringify(images);
+
+        console.log("add photosJson after db req", images)
         const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
-        await connection.query.raw(updateSql, [photosJson, advertisementID])
+
+        await connection.query(updateSql, [photosJson, advertisementID])
 
         return { error: false, message: "Images deleted successfully from the vehicles" };
     } catch (error) {
