@@ -147,6 +147,7 @@ export const updateAdvertisement = async (advertisementID, filter) => {
 
         return { error: false, message: "hospitality updated successfully", "advertisements": rows };
     } catch (error) {
+        console.log("error in update", error)
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {

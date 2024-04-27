@@ -76,6 +76,7 @@ export const updateAdvertisement = async (req, res, next) => {
     }
     return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
   } catch (error) {
+    console.log("error in update", error)
     logger.info(error)
     next(error);
   }
