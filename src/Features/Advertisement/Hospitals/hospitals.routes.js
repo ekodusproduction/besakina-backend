@@ -23,9 +23,9 @@ hospitalsRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 hospitalsRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-hospitalsRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
+hospitalsRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
 
-hospitalsRouter.post("/images/:id", jwtAuth, fileUpload("hospitals"), imageValidator, addImage)
+hospitalsRouter.post("/images/id/:id", jwtAuth, fileUpload("hospitals"), imageValidator, addImage)
 // list user own advertisement //id => user id
 hospitalsRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties

@@ -23,9 +23,9 @@ educationRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 educationRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-educationRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
+educationRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
 
-educationRouter.post("/images/:id", jwtAuth, fileUpload("education"), imageValidator, addImage)
+educationRouter.post("/images/id/:id", jwtAuth, fileUpload("education"), imageValidator, addImage)
 // list user own advertisement //id => user id
 educationRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties

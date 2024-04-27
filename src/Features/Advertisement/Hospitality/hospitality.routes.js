@@ -23,9 +23,9 @@ hospitalityRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 hospitalityRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-hospitalityRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
+hospitalityRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
 
-hospitalityRouter.post("/images/:id", jwtAuth, fileUpload("hospitality"), imageValidator, addImage)
+hospitalityRouter.post("/images/id/:id", jwtAuth, fileUpload("hospitality"), imageValidator, addImage)
 // list user own advertisement //id => user id
 hospitalityRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties

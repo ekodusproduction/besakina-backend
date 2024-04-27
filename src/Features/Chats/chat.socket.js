@@ -1,24 +1,16 @@
-import pool from
-    "../../Mysql/mysql.database.js";
+import pool from "../../Mysql/mysql.database.js";
 import { Server } from "socket.io";
 
-export const chatSocket = (server) => {
-    const io = new Server(server, {
-        cors: {
-            origin: "*",
-            methods: ["GET", "POST"]
-        }
-    });
-
+export const chatSocket = (io) => {
     io.on("connection", (socket) => {
         console.log("Connection established");
-
         socket.on("sendMessage", async (messageData) => {
+            let connection = await pool.getConnection()
             try {
                 const { message, userId, chatRoomId } = messageData;
 
                 // Store message in the database
-                await connection.query.raw(
+                await connection.query(
                     "INSERT INTO chat (message, user_id, chat_room_id) VALUES (?, ?, ?)",
                     [message, userId, chatRoomId]
                 );

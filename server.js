@@ -3,18 +3,21 @@ dotenv.config();
 import app from './app.js';
 import http from 'http';
 import { Server } from "socket.io";
-import { chatSocket } from "./src/Features/Chats/chat.socket.js"
 // import { initializeSocketIO } from './socket.js';
-
+import { jwtAuth } from './src/Middlewares/auth.middleware.js';
+// import { socket } from './socket.js';
+import { chatSocket } from './src/Features/Chats/chat.socket.js';
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "*",
         methods: ["GET", "POST"]
     }
-});
+})
+// io.on("connection", (socket) => {
+//     console.log("Connection established");
+// })
 
-chatSocket(server);
+// chatSocket(server);
 
 const port = process.env.PORT || 3000;
 

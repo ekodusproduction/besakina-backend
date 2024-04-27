@@ -180,6 +180,7 @@ export const addImage = async (advertisementID, files) => {
         const [query, values] = await selectQuery("property", {}, { id: advertisementID })
         const [advertisement, field] = await connection.query(query, values);
         console.log("advertisement", advertisement)
+        
         if (advertisement.length == 0) {
             throw new ApplicationError("property not found.", 404);
         }
@@ -193,7 +194,7 @@ export const addImage = async (advertisementID, files) => {
         const [update, updateValues] = await updateQuery("property", { images: photosJson }, { id: advertisementID })
 
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, message: "Images added successfully to the property", data: rows };
+        return { error: false, message: "Images added successfully to the property", data: photosJson };
     } catch (error) {
         console.log(error)
         logger.info(error);

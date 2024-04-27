@@ -3,25 +3,38 @@ dotenv.config();
 import jwt, { decode } from 'jsonwebtoken';
 import { sendError } from "../Utility/response.js";
 
-export const jwtAuth = function (req, res, next) {
+export const verifyToken = (token) => {
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return {
+            isValid: true,
+            decoded: decoded
+        };
+    } catch (error) {
+        return {
+            isValid: false,
+            error: error.message
+        };
+    }
+};
+
+export const jwtAuth = (req, res, next) => {
     // Extract the token from the request headers
     const token = req.headers.authorization;
-    console.log("received in jwt")
+    console.log("received in jwt");
     if (!token) {
         return sendError(res, 'No token provided. Please login', 401);
     }
 
-    try {
-        // Verify the token
-        const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
+    const { isValid, decoded, error } = verifyToken(token.split(" ")[1]);
+    if (isValid) {
         // If token is valid, attach user information to the request object
-        console.log("decoded", decoded)
+        console.log("decoded", decoded);
         req.user_id = decoded.userId;
         req.plan_id = decoded.plan_id;
-
         next();
-    } catch (error) {
+    } else {
         // If token is invalid or expired, send an error response
-        return sendError(res, 'Invalid token. Please login again', 401);
+        return sendError(res, `Invalid token. ${error}`, 401);
     }
 };
