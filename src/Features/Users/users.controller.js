@@ -99,10 +99,8 @@ export const addUserDetails = async function (req, res, next) {
         requestBody.profile_pic = profilePic || null;
         requestBody.doc_file = docFile || null;
         requestBody.doc_file_back = docFileBack || null;
-        console.log("user i d", req.user_id)
         const [update, updateValues] = await updateQuery("users", requestBody, { id: req.user_id })
-        console.log("update", update)
-        console.log("updateValues", updateValues)
+        
 
         const [updatedUser, field] = await connection.query(update, updateValues)
 
@@ -121,11 +119,8 @@ export const getUserAdds = async function (req, res, next) {
     let connection = await pool.getConnection();
 
     try {
-        console.log("user id", user_id)
         const sql = getAllPosts.replaceAll('?', user_id)
-        console.log("user", sql)
         const [rows, fields] = await pool.query(sql);
-        console.log("ads", rows)
         if (rows.length == 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, []);
         }
@@ -150,7 +145,6 @@ export const getUserDetails = async function (req, res, next) {
         if (userDetails.length === 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
         }
-        console.log(userDetails)
         userDetails[0].plan = JSON.parse(userDetails[0].plan);
 
         return sendResponse(res, 'User details', 201, userDetails[0], null);

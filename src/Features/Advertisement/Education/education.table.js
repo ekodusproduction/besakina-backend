@@ -49,7 +49,6 @@ export const createEducationTable = async function () {
         // Execute the query
         await connection.query(createTableQuery);
 
-        console.log('Education Table created successfully:');
 
         // Release the connection back to the connection.query
 

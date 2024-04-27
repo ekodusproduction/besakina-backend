@@ -47,7 +47,6 @@ app.use(helmet({
 
 
 
-console.log('request before files')
 app.use('/api/public', express.static('public'));
 
 app.get("/api", (req, res) => {

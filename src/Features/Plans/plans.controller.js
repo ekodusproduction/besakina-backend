@@ -10,8 +10,7 @@ export const addPlan = async function (req, res, next) {
         const membership_badge = req.files[0].path;
 
         const [query, values] = await insertQuery('plans', { ...requestBody, membership_badge: membership_badge })
-        console.log("queri in polan", query)
-        console.log("queri in polan", values)
+      
         const [rows, fields] = await connection.query(query, values);
 
         return sendResponse(res, "Plan added successfully", 201, { id: rows.insertId }, null);

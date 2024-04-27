@@ -10,7 +10,6 @@ import repository from "./repository.js";
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user_id = req.user_id
-    console.log("req", "received")
 
     const result = await repository.addAdvertisement(req.body, req.files);
     if (result.error) {
@@ -76,7 +75,6 @@ export const updateAdvertisement = async (req, res, next) => {
     }
     return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
   } catch (error) {
-    console.log("error in update", error)
     logger.info(error)
     next(error);
   }

@@ -30,7 +30,6 @@ const addAdvertisement = async (requestBody, files) => {
         const filePaths = files.map(file => file.path);
         const photosJson = JSON.stringify(filePaths);
         requestBody.images = photosJson;
-        console.log("request", requestBody)
         const [query, values] = await insertQuery("education", requestBody)
         const [rows, field] = await connection.query(query, values);
         if (rows == null) {
@@ -38,7 +37,6 @@ const addAdvertisement = async (requestBody, files) => {
         }
         return { error: false, message: "education added successfully", id: rows.insertId };
     } catch (error) {
-        console.log(error)
         logger.info(error)
         throw new ApplicationError("Internal server error", 500);
     } finally {
@@ -52,7 +50,6 @@ const getAdvertisement = async (advertisementID) => {
 
     try {
         const [rows, field] = await connection.query(getUserAndEducation, [advertisementID])
-        console.log("error", rows[0])
         if (rows.length === 0) {
             return null;
         }
@@ -62,7 +59,6 @@ const getAdvertisement = async (advertisementID) => {
 
         return data[0];
     } catch (error) {
-        console.log("catch", error)
 
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
@@ -79,7 +75,6 @@ const getListAdvertisement = async () => {
 
     try {
         const [query, values] = await selectQuery("education", {}, { is_active: 1 })
-        console.log("sdq", query)
         const [advertisements, fields] = await connection.query(query, values)
 
         if (advertisements.length === 0) {
@@ -90,7 +85,6 @@ const getListAdvertisement = async () => {
 
         return advertisements;
     } catch (error) {
-        console.log("wrr", error)
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {
@@ -113,10 +107,8 @@ const filterAdvertisement = async (query) => {
 
         // Call filterQuery with the correct rangeCondition
         const [sql, values] = await filterQuery("education", [], { is_active: 1, ...query }, rangeCondition);
-        console.log("filer ", sql)
-        console.log("filer ", values)
+
         const [rows, fields] = await connection.query(sql, values);
-        console.log("data", rows)
         const data = await parseImages(rows);
         return data;
 
@@ -133,8 +125,7 @@ export const updateAdvertisement = async (advertisementID, filter) => {
     let connection = await pool.getConnection();
 
     try {
-        console.log("Updating advertisement with ID:", advertisementID);
-        console.log("Filter:", filter);
+       
 
         if (!filter || typeof filter !== 'object') {
             throw new ApplicationError("Invalid filter object provided", 400);
@@ -179,23 +170,19 @@ export const addImage = async (advertisementID, files) => {
     try {
         const [query, values] = await selectQuery("education", {}, { id: advertisementID })
         const [advertisement, field] = await connection.query(query, values);
-        console.log("advertisement", advertisement)
         if (advertisement.length == 0) {
             throw new ApplicationError("education not found.", 404);
         }
         const images = JSON.parse(advertisement[0].images || '[]');
-        console.log("images", images)
 
         const filePaths = files.map(file => file.path);
         const photosJson = JSON.stringify([...filePaths, ...images]);
-        console.log("photosJson", photosJson)
 
         const [update, updateValues] = await updateQuery("education", { images: photosJson }, { id: advertisementID })
 
         const [rows] = await connection.query(update, updateValues);
         return { error: false, message: "Images added successfully to the education", data: filePaths };
     } catch (error) {
-        console.log(error)
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {
@@ -207,10 +194,8 @@ export const deleteImage = async (advertisementID, files) => {
     let connection = await pool.getConnection();
 
     try {
-        console.log("add files", files)
         const sql = `SELECT * FROM vehicles WHERE id = ?`
         const [rows, fields] = await connection.query(sql, [advertisementID])
-        console.log("add rows after db req", rows)
 
         if (rows[0].length == 0) {
             return new ApplicationError("vehicles not found.", 404);
@@ -229,14 +214,12 @@ export const deleteImage = async (advertisementID, files) => {
 
         const photosJson = JSON.stringify(images);
 
-        console.log("add photosJson after db req", images)
         const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
 
         await connection.query(updateSql, [photosJson, advertisementID])
 
         return { error: false, message: "Images deleted successfully from the vehicles" };
     } catch (error) {
-        console.log("erro in catch", error)
         logger.info(error);
         new ApplicationError("Internal server error", 500);
     } finally {

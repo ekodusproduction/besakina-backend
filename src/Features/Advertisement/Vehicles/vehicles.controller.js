@@ -10,7 +10,6 @@ import repository from "./repository.js";
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user_id = req.user_id
-    console.log("req", "received", req.user_id)
 
     const result = await repository.addAdvertisement(req.body, req.files);
     if (result.error) {
@@ -106,7 +105,6 @@ export const addImage = async (req, res, next) => {
 export const deleteImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    console.log("body", req.body)
     const result = await repository.deleteImage(advertisementID, req.body.images);
     return sendResponse(res, result.message, 200);
   } catch (error) {
