@@ -23,7 +23,7 @@ vehiclesRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 vehiclesRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-vehiclesRouter.put("/image/delete/:id", jwtAuth, deleteImage)
+vehiclesRouter.put("/image/delete/id/:id", jwtAuth, deleteImage)
 
 vehiclesRouter.post("/images/id/:id", jwtAuth, fileUpload("vehicles"), imageValidator, addImage)
 // list user own advertisement //id => user id
