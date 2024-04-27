@@ -193,7 +193,7 @@ export const addImage = async (advertisementID, files) => {
         const [update, updateValues] = await updateQuery("doctors", { images: photosJson }, { id: advertisementID })
 
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, message: "Images added successfully to the doctors", data: rows };
+        return { error: false, message: "Images added successfully to the doctors", data: filePaths };
     } catch (error) {
         console.log(error)
         logger.info(error);
