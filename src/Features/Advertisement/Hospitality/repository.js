@@ -119,15 +119,15 @@ const filterAdvertisement = async (query) => {
 };
 
 
-export const updateAdvertisement = async (advertisementID, filter) => {
+export const updateAdvertisement = async (advertisementID, body) => {
     let connection = await pool.getConnection();
 
     try {
 
-        if (!filter || typeof filter !== 'object') {
+        if (!body || typeof body !== 'object') {
             throw new ApplicationError("Invalid filter object provided", 400);
         }
-        const [sql, values] = await updateQuery("hospitality", filter, { "id": advertisementID })
+        const [sql, values] = await updateQuery("hospitality", body, { "id": advertisementID })
         const [rows, field] = await connection.query(sql, values)
 
         if (!rows) {

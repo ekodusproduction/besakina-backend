@@ -35,7 +35,7 @@ export const editHospitalityValidationRules = () => {
 
         // body('verified').isString().withMessage('verified must be a boolean'),
         body('seen_by').isString().withMessage('seen_by must be a string'),
-        
+
         body('street').optional().isString().withMessage('Street must be a string'),
         body('address').optional().isString().withMessage('Address must be a string'),
         body('city').optional().isString().withMessage('City must be a string'),
@@ -46,7 +46,7 @@ export const editHospitalityValidationRules = () => {
 
 
 export const validationMiddlewarePost = async (req, res, next) => {
-    const rules =  hospitalityValidationRules();
+    const rules = hospitalityValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -63,7 +63,8 @@ export const validationMiddlewarePost = async (req, res, next) => {
 };
 
 export const validationMiddlewarePut = async (req, res, next) => {
-    const rules = await editHospitalityValidationRules();
+    console.log("inside edit hospitality", req.body)
+    const rules = editHospitalityValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
