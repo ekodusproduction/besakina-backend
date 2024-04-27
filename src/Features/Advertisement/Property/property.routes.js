@@ -28,7 +28,7 @@ propertyRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 propertyRouter.post("/images/id/:id", jwtAuth, fileUpload("property"), imageValidator, addImage)
 
 
-propertyRouter.put("/image/delete/id/:id", jwtAuth, deleteImage)
+propertyRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
 
 // list user own advertisement //id => user id
 propertyRouter.get("/list", getListAdvertisement)

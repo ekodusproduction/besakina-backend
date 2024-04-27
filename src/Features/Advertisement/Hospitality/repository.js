@@ -208,24 +208,33 @@ export const deleteImage = async (advertisementID, files) => {
 
     try {
         console.log("add files", files)
-        const sql = `SELECT * FROM hospitality WHERE id = ?`
+        const sql = `SELECT * FROM vehicles WHERE id = ?`
         const [rows, fields] = await connection.query(sql, [advertisementID])
         console.log("add rows after db req", rows)
 
-        if (rows[0].length == null) {
-            new ApplicationError("hospitality not found.", 404);
+        if (rows[0].length == 0) {
+            return new ApplicationError("vehicles not found.", 404);
         }
         if (rows[0].images == []) {
-            return { error: false, message: "Images deleted successfully from the hospitality" };
+            return { error: false, message: "Images deleted successfully from the vehicles" };
         }
-        let images = JSON.parse(rows[0].images || []).filter(item => !files.includes(item));
 
-        const photosJson = images ? JSON.stringify(images) : [];
-        console.log("add photosJson after db req", photosJson)
-        const updateSql = `UPDATE hospitality SET images =? WHERE id = ?`
-        await connection.query.raw(updateSql, [photosJson, advertisementID])
+        const parsedImages = JSON.parse(rows[0].images || []);
 
-        return { error: false, message: "Images deleted successfully from the hospitality" };
+        const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
+
+        const filteredImages = normalizedImages.filter(image => !files.includes(image));
+
+        let images = filteredImages;
+
+        const photosJson = JSON.stringify(images);
+
+        console.log("add photosJson after db req", images)
+        const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
+
+        await connection.query(updateSql, [photosJson, advertisementID])
+
+        return { error: false, message: "Images deleted successfully from the vehicles" };
     } catch (error) {
         console.log("erro in catch", error)
         logger.info(error);

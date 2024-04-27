@@ -23,7 +23,7 @@ educationRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 educationRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-educationRouter.put("/image/delete/id/:id", jwtAuth, deleteImage)
+educationRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
 
 educationRouter.post("/images/id/:id", jwtAuth, fileUpload("education"), imageValidator, addImage)
 // list user own advertisement //id => user id
