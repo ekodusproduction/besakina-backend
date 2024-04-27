@@ -213,7 +213,7 @@ export const deleteImage = async (advertisementID, files) => {
         console.log("add rows after db req", rows)
 
         if (rows[0].length == null) {
-            new ApplicationError("vehicles not found.", 404);
+            return new ApplicationError("vehicles not found.", 404);
         }
         if (rows[0].images == []) {
             return { error: false, message: "Images deleted successfully from the vehicles" };

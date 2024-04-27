@@ -2,7 +2,7 @@ import { body, validationResult } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
 import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
-export const hospitalityValidationRules = async() => {
+export const hospitalityValidationRules = () => {
     return [
         body('type').isString().trim().withMessage('Type must be a string'),
         body('name').isString().withMessage('Name must be a string'),
@@ -21,7 +21,7 @@ export const hospitalityValidationRules = async() => {
     ];
 };
 
-export const editHospitalityValidationRules = async() => {
+export const editHospitalityValidationRules = () => {
     return [
         body('type').isString().withMessage('Type must be a string'),
         body('name').isString().withMessage('Name must be a string'),
@@ -46,7 +46,7 @@ export const editHospitalityValidationRules = async() => {
 
 
 export const validationMiddlewarePost = async (req, res, next) => {
-    const rules = await hospitalityValidationRules();
+    const rules =  hospitalityValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
