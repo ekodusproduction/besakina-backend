@@ -41,7 +41,6 @@ app.use(helmet({
 }));
 
 app.use((req, res, next) => {
-    console.log('origin- before', req.headers)
     console.log("ip", req.ip)
     console.log("url", req.url)
     console.log('origin', req.headers.origin)
@@ -68,7 +67,7 @@ app.use('/api/chat', chatRouter)
 app.use("/api/home", homeRouter)
 
 app.use(async (err, req, res, next) => {
-    // logger.info(err);
+    logger.info(err);
     console.log("err in global middleware", err)
 
     if (err instanceof ApplicationError) {

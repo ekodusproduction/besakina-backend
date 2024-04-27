@@ -25,7 +25,7 @@ vehiclesRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 vehiclesRouter.delete("/image/delete/:id", jwtAuth, deleteImage)
 
-vehiclesRouter.post("/images/id/:id", jwtAuth, fileUpload("images"), imageValidator, addImage)
+vehiclesRouter.post("/images/id/:id", jwtAuth, fileUpload("vehicles"), imageValidator, addImage)
 // list user own advertisement //id => user id
 vehiclesRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
