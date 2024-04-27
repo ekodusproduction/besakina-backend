@@ -29,7 +29,12 @@ import homeRouter from './src/Features/Home/home.routes.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
 // Middleware setup
-
+app.use((req, res, next) => {
+    console.log("ip", req.ip)
+    console.log("url", req.url)
+    console.log('origin', req.headers.origin)
+    next();
+})
 app.set('trust proxy', true);
 app.use(cors({ credentials: true }));
 
@@ -40,12 +45,7 @@ app.use(helmet({
     crossOriginResourcePolicy: false,
 }));
 
-app.use((req, res, next) => {
-    console.log("ip", req.ip)
-    console.log("url", req.url)
-    console.log('origin', req.headers.origin)
-    next();
-})
+
 
 console.log('request before files')
 app.use('/api/public', express.static('public'));
