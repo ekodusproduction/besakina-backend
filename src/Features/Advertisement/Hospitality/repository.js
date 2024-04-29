@@ -194,7 +194,7 @@ export const deleteImage = async (advertisementID, files) => {
         const sql = `SELECT * FROM vehicles WHERE id = ?`
         const [rows, fields] = await connection.query(sql, [advertisementID])
 
-        if (rows[0].length == "") {
+        if (rows[0].length == 0) {
             throw new ApplicationError("vehicles not found.", 404);
         }
         if (rows[0].images == []) {
@@ -207,7 +207,9 @@ export const deleteImage = async (advertisementID, files) => {
 
         const filteredImages = normalizedImages.filter(image => !files.includes(image));
 
-        const photosJson = JSON.stringify(filteredImages) || "";
+        let images = filteredImages;
+
+        const photosJson = JSON.stringify(images);
 
         const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
 
@@ -221,7 +223,6 @@ export const deleteImage = async (advertisementID, files) => {
         connection.release();
     }
 };
-
 
 export const listUserAdvertisement = async (userID) => {
     let connection = await pool.getConnection();

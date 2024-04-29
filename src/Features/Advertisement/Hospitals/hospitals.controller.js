@@ -105,6 +105,7 @@ export const addImage = async (req, res, next) => {
 export const deleteImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
+
     const result = await repository.deleteImage(advertisementID, req.body.images);
     return sendResponse(res, result.message, 200);
   } catch (error) {
