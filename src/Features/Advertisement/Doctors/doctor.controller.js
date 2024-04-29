@@ -96,7 +96,7 @@ export const addImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const result = await repository.addImage(advertisementID, req.files);
-    return sendResponse(res, result.message, 200);
+    return sendResponse(res, result.message, 200, result.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -106,7 +106,7 @@ export const addImage = async (req, res, next) => {
 export const deleteImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const {message} = await repository.deleteImage(advertisementID, req.body.images);
+    const { message } = await repository.deleteImage(advertisementID, req.body.images);
     return sendResponse(res, message, 200);
   } catch (error) {
     logger.info(error)
