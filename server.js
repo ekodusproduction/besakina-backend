@@ -10,22 +10,21 @@ import { chatSocket } from './src/Features/Chats/chat.socket.js';
 import { socketAuth } from "./socketAuth.js"
 const server = http.createServer(app);
 
-// const io = new Server(server, {
-//     cors: {
-//         methods: ["GET", "POST"]
-//     }
-// })
-// console.log("req received")
-// // io.use(socketAuth);
+const io = new Server(server, {
+    cors: {
+        methods: ["GET", "POST"]
+    }
+})
 
-// io.on("connection", (socket) => {
-//     console.log("Connection established");
-//     chatSocket(socket);
-//     // notificationSocket(socket)
-//     socket.on("disconnect", () => {
-//         console.log("A user disconnected");
-//     });
-// })
+console.log("req received")
+
+io.on("connection", (socket) => {
+    console.log("Connection established");
+    chatSocket(socket);
+    socket.on("disconnect", () => {
+        console.log("A user disconnected");
+    });
+})
 
 
 const port = process.env.PORT || 3000;
