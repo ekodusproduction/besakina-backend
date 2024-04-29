@@ -69,6 +69,8 @@ export const validationMiddlewarePost = async (req, res, next) => {
 
 // Middleware for validation on PUT request
 export const validationMiddlewarePut = async (req, res, next) => {
+    console.log("req bosd in val", req.body)
+
     const rules = editEducationValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
