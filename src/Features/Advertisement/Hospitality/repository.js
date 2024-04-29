@@ -193,10 +193,12 @@ export const deleteImage = async (advertisementID, files) => {
     try {
         const sql = `SELECT * FROM vehicles WHERE id = ?`
         const [rows, fields] = await connection.query(sql, [advertisementID])
-
+        console.log("rows", rows)
         if (rows[0].length == 0) {
             throw new ApplicationError("vehicles not found.", 404);
         }
+        console.log("rows images", rows[0].images)
+
         if (rows[0].images == []) {
             return { error: false, message: "Images deleted successfully from the vehicles" };
         }
@@ -212,6 +214,7 @@ export const deleteImage = async (advertisementID, files) => {
         const photosJson = JSON.stringify(images);
 
         const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
+        console.log("photosJson images", photosJson)
 
         await connection.query(updateSql, [photosJson, advertisementID])
 
