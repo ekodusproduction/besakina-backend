@@ -4,6 +4,7 @@ import {
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./hospitals.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
+import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
@@ -23,7 +24,7 @@ hospitalsRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 hospitalsRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-hospitalsRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
+hospitalsRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 
 hospitalsRouter.post("/images/id/:id", jwtAuth, fileUpload("hospitals"), imageValidator, addImage)
 // list user own advertisement //id => user id

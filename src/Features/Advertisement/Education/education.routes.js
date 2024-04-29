@@ -3,6 +3,7 @@ import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./education.controller.js"
+import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
@@ -18,7 +19,7 @@ educationRouter.get("/filter", filterAdvertisement)
 educationRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
 educationRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
-educationRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
+educationRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 
 educationRouter.get("/id/:id", getAdvertisement)
 // images

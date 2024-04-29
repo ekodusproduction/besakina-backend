@@ -4,6 +4,7 @@ import {
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./vehicles.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
+import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
@@ -23,7 +24,7 @@ vehiclesRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 vehiclesRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
-vehiclesRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
+vehiclesRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 
 vehiclesRouter.post("/images/id/:id", jwtAuth, fileUpload("vehicles"), imageValidator, addImage)
 // list user own advertisement //id => user id

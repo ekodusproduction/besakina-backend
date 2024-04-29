@@ -4,6 +4,7 @@ import {
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./property.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
+import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
@@ -28,7 +29,7 @@ propertyRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 propertyRouter.post("/images/id/:id", jwtAuth, fileUpload("property"), imageValidator, addImage)
 
 
-propertyRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
+propertyRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 
 // list user own advertisement //id => user id
 propertyRouter.get("/list", getListAdvertisement)

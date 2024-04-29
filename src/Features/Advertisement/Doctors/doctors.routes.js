@@ -3,6 +3,7 @@ import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
 } from "./doctor.controller.js"
+import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
@@ -19,7 +20,7 @@ doctorRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 doctorRouter.get("/id/:id", getAdvertisement)
 // images 
 //id =>advertisement id
-doctorRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
+doctorRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 doctorRouter.post("/images/id/:id", jwtAuth, fileUpload("doctors"), imageValidator, addImage)
 // list user own advertisement //id => user id
 doctorRouter.get("/list/self", jwtAuth, listUserAdvertisement)
