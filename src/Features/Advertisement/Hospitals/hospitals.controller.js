@@ -27,9 +27,9 @@ export const getAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const advertisement = await repository.getAdvertisement(advertisementID);
     if (!advertisement) {
-      return sendError(res, "Doctors not found", 404);
+      return sendError(res, "hospitals not found", 404);
     }
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisement });
+    return sendResponse(res, "hospitals fetched successfully", 200, { advertisement });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -40,9 +40,9 @@ export const getListAdvertisement = async (req, res, next) => {
   try {
     const advertisements = await repository.getListAdvertisement(req.params.id);
     if (!advertisements) {
-      return sendError(res, "Doctors not found", 404);
+      return sendError(res, "hospitals not found", 404);
     }
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+    return sendResponse(res, "hospitals fetched successfully", 200, { advertisements });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -55,10 +55,10 @@ export const filterAdvertisement = async (req, res, next) => {
     const advertisements = await repository.filterAdvertisement(query);
 
     if (advertisements.length === 0) {
-      return sendError(res, "Doctors not found for given filter", 404);
+      return sendError(res, "hospitals not found for given filter", 404);
     }
 
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+    return sendResponse(res, "hospitals fetched successfully", 200, { advertisements });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -71,7 +71,7 @@ export const updateAdvertisement = async (req, res, next) => {
     const filter = req.body;
     const result = await repository.updateAdvertisement(advertisementID, filter);
     if (result.length === 0) {
-      return sendError(res, "Doctors not found for given filter", 404);
+      return sendError(res, "hospitals not found for given filter", 404);
     }
     return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
   } catch (error) {
