@@ -5,8 +5,8 @@ export const chatSocket = (socket) => {
     socket.on("sendMessage", async (messageData) => {
         let connection = await pool.getConnection()
         try {
-            const { message,  chatRoomId } = messageData;
-
+            const { message, chatRoomId } = messageData;
+            socket.broadcast("newMessage", messageData)
             // Store message in the database
             await connection.query(
                 "INSERT INTO chat (message, user_id, chat_room_id) VALUES (?, ?, ?)",
