@@ -187,7 +187,7 @@ export const addImage = async (advertisementID, files) => {
     }
 };
 
-export const deleteImage = async (advertisementID, files) => {
+export const deleteImage = async (advertisementID, deleteImages) => {
     let connection = await pool.getConnection();
 
     try {
@@ -207,8 +207,10 @@ export const deleteImage = async (advertisementID, files) => {
         console.log("parsed images", parsedImages);
         const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
         console.log("normalizedImages images", normalizedImages);
+        console.log("delete images", deleteImages);
 
-        const filteredImages = normalizedImages.filter(image => !files.includes(image));
+        const imagesToRetain = normalizedImages.filter(image => deleteImages.filter(file => file != image))
+        // const filteredImages = normalizedImages.filter(image => !files.includes(image));
         console.log("filteredImages images", filteredImages);
 
         let images = filteredImages;
