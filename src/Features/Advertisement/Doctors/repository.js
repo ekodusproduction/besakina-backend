@@ -217,6 +217,7 @@ export const deleteImage = async (advertisementID, files) => {
         return { error: false, message: "Images deleted successfully from the doctors" };
     } catch (error) {
         logger.info(error);
+        console.log("erro riu catch", error)
         throw new ApplicationError("Internal server error", 500);
     } finally {
         connection.release();
