@@ -53,6 +53,7 @@ const editEducationValidationRules = () => {
 
 // Middleware for validation on POST request
 export const validationMiddlewarePost = async (req, res, next) => {
+    console.log("req bosd in val", req.body)
     const rules = educationValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
