@@ -187,49 +187,41 @@ export const addImage = async (advertisementID, files) => {
     }
 };
 
-export const deleteImage = async (advertisementID, deleteImages) => {
+export const deleteImage = async (advertisementID, files) => {
     let connection = await pool.getConnection();
 
     try {
         const sql = `SELECT * FROM vehicles WHERE id = ?`
         const [rows, fields] = await connection.query(sql, [advertisementID])
-        console.log("rows", rows)
-        if (rows[0].length == 0) {
+
+        if (rows[0].length == "") {
             throw new ApplicationError("vehicles not found.", 404);
         }
-        console.log("rows images", rows[0].images)
-
-        if (rows[0].images === "") {
+        if (rows[0].images == []) {
             return { error: false, message: "Images deleted successfully from the vehicles" };
         }
 
         const parsedImages = JSON.parse(rows[0].images || []);
-        console.log("parsed images", parsedImages);
+
         const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
-        console.log("normalizedImages images", normalizedImages);
-        console.log("delete images", deleteImages);
 
-        const imagesToRetain = normalizedImages.filter(image => deleteImages.filter(file => file != image))
-        // const filteredImages = normalizedImages.filter(image => !files.includes(image));
-        console.log("filteredImages images", filteredImages);
+        const filteredImages = normalizedImages.filter(image => !files.includes(image));
 
-        let images = filteredImages;
+        const photosJson = JSON.stringify(filteredImages) || "";
 
-        const photosJson = JSON.stringify(images) || "";
-        console.log("photosJson images", photosJson)
         const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
 
         await connection.query(updateSql, [photosJson, advertisementID])
 
         return { error: false, message: "Images deleted successfully from the vehicles" };
     } catch (error) {
-        console.log(error)
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {
         connection.release();
     }
 };
+
 
 export const listUserAdvertisement = async (userID) => {
     let connection = await pool.getConnection();

@@ -221,7 +221,7 @@ export const deleteImage = async (advertisementID, files) => {
         return { error: false, message: "Images deleted successfully from the vehicles" };
     } catch (error) {
         logger.info(error);
-        new ApplicationError("Internal server error", 500);
+        throw new ApplicationError("Internal server error", 500);
     } finally {
         connection.release();
     }
