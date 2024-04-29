@@ -75,6 +75,7 @@ export const validationMiddlewarePost = async (req, res, next) => {
 };
 
 export const validationMiddlewarePut = async (req, res, next) => {
+    console.log("req body in valid", req.body)
     const rules = editHospitalValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
