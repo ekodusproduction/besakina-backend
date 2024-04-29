@@ -14,7 +14,7 @@ const doctorRouter = Router()
 //protected routes id=> advertisement id
 doctorRouter.post("/add", jwtAuth, fileUpload("doctors"), validationMiddlewarePost, addAdvertisement)
 doctorRouter.get("/filter", filterAdvertisement)
-doctorRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
+doctorRouter.put("/id/:id", jwtAuth, updateAdvertisement)
 doctorRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 doctorRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 doctorRouter.get("/id/:id", getAdvertisement)
