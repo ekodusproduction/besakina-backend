@@ -193,14 +193,14 @@ export const deleteImage = async (advertisementID, files) => {
     let connection = await pool.getConnection();
 
     try {
-        const sql = `SELECT * FROM vehicles WHERE id = ?`
+        const sql = `SELECT * FROM hospitals WHERE id = ?`
         const [rows, fields] = await connection.query(sql, [advertisementID])
 
         if (rows[0].length == 0) {
-            throw new ApplicationError("vehicles not found.", 404);
+            throw new ApplicationError("hospitals not found.", 404);
         }
         if (rows[0].images == []) {
-            return { error: false, message: "Images deleted successfully from the vehicles" };
+            return { error: false, message: "Images deleted successfully from the hospitals" };
         }
 
         const parsedImages = JSON.parse(rows[0].images || []);
@@ -213,11 +213,11 @@ export const deleteImage = async (advertisementID, files) => {
 
         const photosJson = JSON.stringify(images);
 
-        const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
+        const updateSql = `UPDATE hospitals SET images =? WHERE id = ?`
 
         await connection.query(updateSql, [photosJson, advertisementID])
 
-        return { error: false, message: "Images deleted successfully from the vehicles" };
+        return { error: false, message: "Images deleted successfully from the hospitals" };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);

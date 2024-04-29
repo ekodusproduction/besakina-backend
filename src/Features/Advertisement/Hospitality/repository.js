@@ -187,39 +187,35 @@ export const addImage = async (advertisementID, files) => {
     }
 };
 
-export const deleteImage = async (advertisementID, image) => {
+export const deleteImage = async (advertisementID, files) => {
     let connection = await pool.getConnection();
 
     try {
-        const sql = `SELECT * FROM vehicles WHERE id = ?`
+        const sql = `SELECT * FROM hospitality WHERE id = ?`
         const [rows, fields] = await connection.query(sql, [advertisementID])
-        console.log("parsedImages images", image)
 
         if (rows[0].length == 0) {
-            throw new ApplicationError("vehicles not found.", 404);
+            throw new ApplicationError("hospitality not found.", 404);
         }
         if (rows[0].images == []) {
-            return { error: false, message: "Images deleted successfully from the vehicles" };
+            return { error: false, message: "Images deleted successfully from the hospitality" };
         }
 
         const parsedImages = JSON.parse(rows[0].images || []);
-        console.log("parsedImages images", parsedImages)
 
         const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
-        console.log("normalized images", normalizedImages)
-        const filteredImages = normalizedImages.filter(item => item == image).slice(0, 1);
-        console.log("filteredImages images", filteredImages)
+
+        const filteredImages = normalizedImages.filter(image => !files.includes(image));
 
         let images = filteredImages;
 
         const photosJson = JSON.stringify(images);
-        console.log("photosJson images", photosJson)
 
-        const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
+        const updateSql = `UPDATE hospitality SET images =? WHERE id = ?`
 
         await connection.query(updateSql, [photosJson, advertisementID])
 
-        return { error: false, message: "Images deleted successfully from the vehicles" };
+        return { error: false, message: "Images deleted successfully from the hospitality" };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
