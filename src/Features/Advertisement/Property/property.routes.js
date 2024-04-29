@@ -18,7 +18,7 @@ propertyRouter.post("/add", jwtAuth, fileUpload("property"), addAdvertisement)
 propertyRouter.get("/filter", filterAdvertisement)
 
 propertyRouter.get("/id/:id", getAdvertisement)
-propertyRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
+propertyRouter.put("/id/:id", jwtAuth, updateAdvertisement)
 
 propertyRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 propertyRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)

@@ -16,7 +16,7 @@ educationRouter.post("/add", jwtAuth, fileUpload("education"), validationMiddlew
 
 educationRouter.get("/filter", filterAdvertisement)
 
-educationRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
+educationRouter.put("/id/:id", jwtAuth,  updateAdvertisement)
 educationRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
 educationRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)

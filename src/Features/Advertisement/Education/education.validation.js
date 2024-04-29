@@ -77,7 +77,7 @@ export const validationMiddlewarePut = async (req, res, next) => {
     const errors = validationResult(req);
     const validatedData = matchedData(req);
     console.log("req bosd in val in put validatedData", validatedData)
-
+    
     console.log("")
     if (!errors.isEmpty()) {
         console.log("req bosd in val in put error", req.body)
