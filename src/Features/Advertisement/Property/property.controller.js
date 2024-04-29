@@ -70,8 +70,12 @@ export const updateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const updateBody = req.body;
-    console.log("req body", filter)
-    const result = await repository.updateAdvertisement(advertisementID, updateBody);
+    const userId = req.user_id
+    console.log("req body", updateBody)
+    console.log("req advertisementID", advertisementID)
+    console.log("req userId", userId)
+
+    const result = await repository.updateAdvertisement(advertisementID, updateBody, userId);
     if (result.length === 0) {
       return sendError(res, "Doctors not found for given filter", 404);
     }
