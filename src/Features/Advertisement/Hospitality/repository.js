@@ -199,7 +199,7 @@ export const deleteImage = async (advertisementID, files) => {
         }
         console.log("rows images", rows[0].images)
 
-        if (rows[0].images == "") {
+        if (rows[0].images === "") {
             return { error: false, message: "Images deleted successfully from the vehicles" };
         }
 
