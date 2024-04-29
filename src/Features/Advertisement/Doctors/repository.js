@@ -137,6 +137,7 @@ export const updateAdvertisement = async (advertisementID, filter) => {
 
         return { error: false, message: "doctors updated successfully", "advertisements": rows };
     } catch (error) {
+        console.log("error in repo", error)
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
     } finally {
