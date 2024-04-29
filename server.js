@@ -13,11 +13,10 @@ const io = new Server(server, {
         methods: ["GET", "POST"]
     }
 })
-// io.on("connection", (socket) => {
-//     console.log("Connection established");
-// })
+io.on("connection", (socket) => {
+    console.log("Connection established");
+})
 
-// chatSocket(server);
 
 const port = process.env.PORT || 3000;
 
