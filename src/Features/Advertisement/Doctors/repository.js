@@ -35,6 +35,7 @@ const addAdvertisement = async (requestBody, files) => {
         }
         return { error: false, message: "doctors added successfully", id: rows.insertId };
     } catch (error) {
+
         logger.info(error)
         throw new ApplicationError("Internal server error", 500);
     } finally {
@@ -57,6 +58,7 @@ const getAdvertisement = async (advertisementID) => {
 
         return data[0];
     } catch (error) {
+        console.log("erro riu catch", error)
 
         logger.info(error);
         throw new ApplicationError("Internal server error", 500);
