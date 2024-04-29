@@ -1,4 +1,5 @@
 export const getUserAndDoctors = `
+SELECT u.*, 
 JSON_OBJECT(
      'id', p.id,
      'fullname', p.fullname,
@@ -13,6 +14,7 @@ JSON_OBJECT(
      'locality', p.locality,
      'pincode', p.pincode,
      'about', p.about
-) AS user FROM doctors AS u
+) AS user
+FROM doctors AS u
 LEFT JOIN users AS p ON u.user_id = p.id
 WHERE u.id = ?;`;
