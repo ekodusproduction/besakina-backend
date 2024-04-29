@@ -1,7 +1,7 @@
 import { body, validationResult, matchedData } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
-const educationValidationRules = () => {
+const educationValidationRules = async () => {
     return [
         body('type').isString().trim().withMessage('Course type must be a string'),
         body('domain').isString().trim().withMessage('Domain must be a string'),
@@ -26,7 +26,7 @@ const educationValidationRules = () => {
     ];
 };
 
-const editEducationValidationRules = () => {
+const editEducationValidationRules = async () => {
     return [
         body('type').optional().isString().trim().withMessage('Course type must be a string'),
         body('domain').optional().isString().trim().withMessage('Domain must be a string'),
@@ -54,7 +54,7 @@ const editEducationValidationRules = () => {
 // Middleware for validation on POST request
 export const validationMiddlewarePost = async (req, res, next) => {
     console.log("req bosd in val", req.body)
-    const rules = educationValidationRules();
+    const rules = await educationValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -71,7 +71,7 @@ export const validationMiddlewarePost = async (req, res, next) => {
 export const validationMiddlewarePut = async (req, res, next) => {
     console.log("req bosd in val in put", req.body)
 
-    const rules = editEducationValidationRules();
+    const rules = await editEducationValidationRules();
     console.log("ezzzzzz test  good here")
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
