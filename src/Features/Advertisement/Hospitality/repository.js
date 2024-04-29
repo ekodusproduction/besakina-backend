@@ -193,6 +193,7 @@ export const deleteImage = async (advertisementID, image) => {
     try {
         const sql = `SELECT * FROM vehicles WHERE id = ?`
         const [rows, fields] = await connection.query(sql, [advertisementID])
+        console.log("parsedImages images", image)
 
         if (rows[0].length == 0) {
             throw new ApplicationError("vehicles not found.", 404);
@@ -202,14 +203,17 @@ export const deleteImage = async (advertisementID, image) => {
         }
 
         const parsedImages = JSON.parse(rows[0].images || []);
+        console.log("parsedImages images", parsedImages)
 
         const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
         console.log("normalized images", normalizedImages)
-        const filteredImages = normalizedImages.filter(item => item != image);
+        const filteredImages = normalizedImages.filter(item => item == image).slice(0, 1);
+        console.log("filteredImages images", filteredImages)
 
         let images = filteredImages;
 
         const photosJson = JSON.stringify(images);
+        console.log("photosJson images", photosJson)
 
         const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
 
