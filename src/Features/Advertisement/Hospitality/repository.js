@@ -200,22 +200,22 @@ export const deleteImage = async (advertisementID, files) => {
         console.log("rows images", rows[0].images)
 
         if (rows[0].images === "") {
-            console.log("inside if")
             return { error: false, message: "Images deleted successfully from the vehicles" };
         }
 
         const parsedImages = JSON.parse(rows[0].images || []);
-
+        console.log("parsed images", parsedImages);
         const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
+        console.log("normalizedImages images", normalizedImages);
 
         const filteredImages = normalizedImages.filter(image => !files.includes(image));
+        console.log("filteredImages images", filteredImages);
 
         let images = filteredImages;
 
         const photosJson = JSON.stringify(images) || "";
-
-        const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
         console.log("photosJson images", photosJson)
+        const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
 
         await connection.query(updateSql, [photosJson, advertisementID])
 
