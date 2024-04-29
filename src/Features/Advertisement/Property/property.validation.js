@@ -1,4 +1,4 @@
-import { body, validationResult,  } from 'express-validator';
+import { body, validationResult, } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
 import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
@@ -45,26 +45,28 @@ const propertiesValidationRules = () => {
 const editPropertiesValidationRules = () => {
     return [
         body('type').optional().isString().withMessage('Type must be a string'),
-        body('bedrooms').optional().isInt().withMessage('Bedrooms must be an integer'),
-        body('bathrooms').optional().isInt().withMessage('Bathrooms must be an integer'),
+        body('bedrooms').optional().isString().withMessage('Bedrooms must be an integer'),
+        body('bathrooms').optional().isString().withMessage('Bathrooms must be an integer'),
         body('furnishing').optional().isString().withMessage('Furnishing must be a string'),
         body('construction_status').optional().isString().withMessage('Construction status must be a string'),
         body('listed_by').optional().isString().withMessage('Listed by must be a string'),
         body('super_builtup_area').optional().isDecimal().withMessage('Super builtup area must be a decimal'),
-        body('carpet_area').optional().isDecimal().withMessage('Carpet area must be a decimal'),
-        body('maintenance').optional().isDecimal().withMessage('Maintenance must be a decimal'),
-        body('total_rooms').optional().isInt().withMessage('Total floors must be an integer'),
-        body('floor_no').optional().isInt().withMessage('Floor number must be an integer'),
-        body('car_parking').optional().isInt().withMessage('Car parking must be an integer'),
-        body('price').optional().isDecimal().withMessage('Price must be a decimal'),
-        body('category').optional().isIn(allowedCategories).withMessage(`Category must be one of: ${allowedCategories.join(', ')}`),
+        body('carpet_area').optional().isString().withMessage('Carpet area must be a decimal'),
+        body('maintenance').optional().isString().withMessage('Maintenance must be a decimal'),
+        body('total_rooms').optional().isString().withMessage('Total floors must be an integer'),
+        body('floor_no').optional().isString().withMessage('Floor number must be an integer'),
+        body('total_floors').optional().isString().withMessage('Floor number must be an integer'),
+        body('car_parking').optional().isString().withMessage('Car parking must be an integer'),
+        body('price').optional().isString().withMessage('Price must be a decimal'),
+        body('category').optional().isString(allowedCategories).withMessage(`Category must be one of: ${allowedCategories.join(', ')}`),
 
-
-        body('street').optional().isString().withMessage('Street must be a string'),
-        body('address').optional().isString().withMessage('Address must be a string'),
+        body('street').optional().optional().isString().withMessage('Street must be a string'),
+        body('house_no').optional().isString().withMessage('house_no must be a string'),
+        body('landmark').optional().isString().withMessage('landmark must be a string'),
         body('city').optional().isString().withMessage('City must be a string'),
         body('state').optional().isString().withMessage('State must be a string'),
-        body('pincode').optional().isInt().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
+        body('pincode').optional().isString().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
+
     ];
 };
 
