@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, validationResult,  } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
 import { deleteFiles } from '../../../Utility/deleteFiles.js';
 
@@ -58,9 +58,7 @@ const editPropertiesValidationRules = () => {
         body('car_parking').optional().isInt().withMessage('Car parking must be an integer'),
         body('price').optional().isDecimal().withMessage('Price must be a decimal'),
         body('category').optional().isIn(allowedCategories).withMessage(`Category must be one of: ${allowedCategories.join(', ')}`),
-        body('map_location').optional().isString().withMessage('Map location must be a string'),
-        body('longitude').optional().isDecimal().withMessage('Longitude must be a decimal'),
-        body('latitude').optional().isDecimal().withMessage('Latitude must be a decimal'),
+
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('address').optional().isString().withMessage('Address must be a string'),
@@ -89,11 +87,12 @@ export const validationMiddlewarePost = async (req, res, next) => {
 };
 
 export const validationMiddlewarePut = async (req, res, next) => {
+    console.log(" inside validation in property", req.body)
     const rules = editPropertiesValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        await deleteFiles(req.files)
+        console.log("req bosd in val in put error", req.body)
         return res.status(400).json({
             message: errors.array()[0].msg,
             status: "failed",

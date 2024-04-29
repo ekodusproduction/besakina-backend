@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, validationResult, matchedData } from 'express-validator';
 import { validateImagesArray } from '../../../Utility/imageValidator.js';
 
 const educationValidationRules = () => {
@@ -28,16 +28,16 @@ const educationValidationRules = () => {
 
 const editEducationValidationRules = () => {
     return [
-        body('course_type').optional().isString().trim().withMessage('Course type must be a string'),
+        body('type').optional().isString().trim().withMessage('Course type must be a string'),
         body('domain').optional().isString().trim().withMessage('Domain must be a string'),
         body('institution_name').optional().isString().trim().withMessage('Institution name must be a string'),
         body('course_duration').optional().isString().trim().withMessage('Course duration must be a string'),
-        body('ad_title').optional().isString().trim().withMessage('Ad title must be a string'),
+        body('title').optional().isString().trim().withMessage('Ad title must be a string'),
         body('description').optional().isString().trim().withMessage('Description must be a string'),
         body('price').optional().isDecimal().withMessage('Price must be a decimal'),
 
         body('street').optional().isString().trim().withMessage('Street must be a string'),
-        body('address').optional().isString().trim().withMessage('Address must be a string'),
+        body('locality').optional().isString().trim().withMessage('Address must be a string'),
         body('city').optional().isString().trim().withMessage('City must be a string'),
         body('state').optional().isString().trim().withMessage('State must be a string'),
         body('pincode').optional().isString().toInt().withMessage('Pincode must be an integer'),
@@ -69,15 +69,19 @@ export const validationMiddlewarePost = async (req, res, next) => {
 
 // Middleware for validation on PUT request
 export const validationMiddlewarePut = async (req, res, next) => {
-    console.log("req bosd in val", req.body)
+    console.log("req bosd in val in put", req.body)
 
     const rules = editEducationValidationRules();
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
+    const validatedData = matchedData(req);
+    console.log("req bosd in val in put validatedData", validatedData)
+
+    console.log("")
     if (!errors.isEmpty()) {
-        if (req.files) {
-            await deleteFiles(req.files)
-        }
+        console.log("req bosd in val in put error", req.body)
+
+
         return res.status(400).json({
             message: errors.array()[0].msg,
             status: "failed",
