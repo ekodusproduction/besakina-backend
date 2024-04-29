@@ -104,17 +104,18 @@ export const addImage = async (req, res, next) => {
   }
 };
 
-export const deleteImageController = async (req, res, next) => {
+export const deleteImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const result = await repository.deleteImage(advertisementID, req.body.images);
     console.log("result", result)
-    return sendResponse(res, result.message, 200); // Return result message
+    return sendResponse(res, result.message, 200);
   } catch (error) {
-    console.error(error);
+    logger.info(error)
     next(error);
   }
 };
+
 export const listUserAdvertisement = async (req, res, next) => {
   try {
     const result = await repository.listUserAdvertisement(req.user_id);
