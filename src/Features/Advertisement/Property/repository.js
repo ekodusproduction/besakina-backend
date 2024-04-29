@@ -38,7 +38,7 @@ const addAdvertisement = async (requestBody, files) => {
         return { error: false, message: "property added successfully", id: rows.insertId };
     } catch (error) {
         logger.info(error)
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release(); // Release the connection back to the connection.query
 
@@ -61,7 +61,7 @@ const getAdvertisement = async (advertisementID) => {
     } catch (error) {
 
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release(); // Release the connection back to the connection.query
 
@@ -86,7 +86,7 @@ const getListAdvertisement = async () => {
         return advertisements;
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -107,14 +107,14 @@ const filterAdvertisement = async (query) => {
 
         // Call filterQuery with the correct rangeCondition
         const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
-       
+
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
         return data;
 
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -138,7 +138,7 @@ export const updateAdvertisement = async (advertisementID, filter, userId) => {
         return { error: false, message: "property updated successfully", "advertisements": rows };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -156,7 +156,7 @@ export const deactivateAdvertisement = async (advertisementID) => {
         return { error: false, message: "property deactivated successfully", advertisements: rows };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -183,7 +183,7 @@ export const addImage = async (advertisementID, files) => {
         return { error: false, message: "Images added successfully to the property", data: filePaths };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -220,7 +220,7 @@ export const deleteImage = async (advertisementID, files) => {
         return { error: false, message: "Images deleted successfully from the property" };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -234,7 +234,7 @@ export const listUserAdvertisement = async (userID) => {
         return { error: false, message: "User advertisement list", advertisements };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -256,7 +256,7 @@ export const activateAdvertisement = async (advertisementID) => {
         return { error: false, message: "property activated successfully", data: rows };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }

@@ -37,7 +37,7 @@ const addAdvertisement = async (requestBody, files) => {
     } catch (error) {
 
         logger.info(error)
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release(); // Release the connection back to the connection.query
 
@@ -61,7 +61,7 @@ const getAdvertisement = async (advertisementID) => {
         console.log("erro riu catch", error)
 
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release(); // Release the connection back to the connection.query
 
@@ -86,7 +86,7 @@ const getListAdvertisement = async () => {
         return advertisements;
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -113,7 +113,7 @@ const filterAdvertisement = async (query) => {
 
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -139,7 +139,7 @@ export const updateAdvertisement = async (advertisementID, filter) => {
     } catch (error) {
         console.log("error in repo", error)
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -157,7 +157,7 @@ export const deactivateAdvertisement = async (advertisementID) => {
         return { error: false, message: "doctors deactivated successfully", advertisements: rows };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -183,7 +183,7 @@ export const addImage = async (advertisementID, files) => {
         return { error: false, message: "Images added successfully to the doctors", data: filePaths };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -221,7 +221,7 @@ export const deleteImage = async (advertisementID, files) => {
     } catch (error) {
         logger.info(error);
         console.log("erro riu catch", error)
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -235,7 +235,7 @@ export const listUserAdvertisement = async (userID) => {
         return { error: false, message: "User advertisement list", advertisements };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -257,7 +257,7 @@ export const activateAdvertisement = async (advertisementID) => {
         return { error: false, message: "doctors activated successfully", data: rows };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }

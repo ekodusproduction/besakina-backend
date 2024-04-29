@@ -38,7 +38,7 @@ const addAdvertisement = async (requestBody, files) => {
         return { error: false, message: "vehicles added successfully", id: rows.insertId };
     } catch (error) {
         logger.info(error)
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release(); // Release the connection back to the connection.query
 
@@ -61,7 +61,7 @@ const getAdvertisement = async (advertisementID) => {
     } catch (error) {
 
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release(); // Release the connection back to the connection.query
 
@@ -86,7 +86,7 @@ const getListAdvertisement = async () => {
         return advertisements;
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -113,7 +113,7 @@ const filterAdvertisement = async (query) => {
 
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -138,7 +138,7 @@ export const updateAdvertisement = async (advertisementID, filter) => {
     } catch (error) {
         console.log("inside edit vehicles", error)
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -156,7 +156,7 @@ export const deactivateAdvertisement = async (advertisementID) => {
         return { error: false, message: "vehicles deactivated successfully", advertisements: rows };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -182,7 +182,7 @@ export const addImage = async (advertisementID, files) => {
         return { error: false, message: "Images added successfully to the vehicles", data: filePaths };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -219,7 +219,7 @@ export const deleteImage = async (advertisementID, files) => {
         return { error: false, message: "Images deleted successfully from the vehicles" };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -233,7 +233,7 @@ export const listUserAdvertisement = async (userID) => {
         return { error: false, message: "User advertisement list", advertisements };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
@@ -255,7 +255,7 @@ export const activateAdvertisement = async (advertisementID) => {
         return { error: false, message: "vehicles activated successfully", data: rows };
     } catch (error) {
         logger.info(error);
-        throw new ApplicationError("Internal server error", 500);
+        throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }

@@ -17,7 +17,7 @@ export const getAChatRoom = async function (req, res, next) {
         return sendResponse(res, "Chat room list", 200, rows);
     } catch (error) {
         logger.info(error);
-        return res.status(500).json({ success: false, error: "Internal server error" });
+        return res.status(500).json({ success: false, error: error });
     }
 };
 
@@ -34,7 +34,7 @@ export const getChatRooms = async function (req, res, next) {
         return sendResponse(res, "Chat room list", 200, rows);
     } catch (error) {
         logger.info(error);
-        return res.status(500).json({ success: false, error: "Internal server error" });
+        return res.status(500).json({ success: false, error: error });
     }
 };
 
@@ -52,7 +52,7 @@ export const getMessagesInChatRoom = async function (req, res, next) {
         return sendResponse(res, "Chat room list", 200, rows);
     } catch (error) {
         logger.info(error);
-        return res.status(500).json({ success: false, error: "Internal server error" });
+        return res.status(500).json({ success: false, error: error });
     }
 };
 
@@ -75,6 +75,6 @@ export const createChatRoom = async function (req, res, next) {
         return sendResponse(res, "Chat room created successfully", 201, insertRows[0]);
     } catch (error) {
         logger.info(error);
-        return res.status(500).json({ success: false, error: "Internal server error" });
+        return res.status(500).json({ success: false, error: error });
     }
 };
