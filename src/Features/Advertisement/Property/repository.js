@@ -123,20 +123,15 @@ const filterAdvertisement = async (query) => {
 
 export const updateAdvertisement = async (advertisementID, filter) => {
     let connection = await pool.getConnection();
-
     try {
-       
-
         if (!filter || typeof filter !== 'object') {
             throw new ApplicationError("Invalid filter object provided", 400);
         }
         const [sql, values] = await updateQuery("property", filter, { "id": advertisementID })
         const [rows, field] = await connection.query(sql, values)
-
         if (!rows) {
             throw new ApplicationError("property not updated. No matching property found for the provided ID.", 404);
         }
-
         return { error: false, message: "property updated successfully", "advertisements": rows };
     } catch (error) {
         logger.info(error);
