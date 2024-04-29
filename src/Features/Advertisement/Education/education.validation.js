@@ -72,6 +72,7 @@ export const validationMiddlewarePut = async (req, res, next) => {
     console.log("req bosd in val in put", req.body)
 
     const rules = editEducationValidationRules();
+    console.log("ezzzzzz test  good here")
     await Promise.all(rules.map(rule => rule.run(req)));
     const errors = validationResult(req);
     const validatedData = matchedData(req);
