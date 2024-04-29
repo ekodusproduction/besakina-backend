@@ -195,7 +195,7 @@ export const deleteImage = async (advertisementID, files) => {
         const [rows, fields] = await connection.query(sql, [advertisementID])
 
         if (rows[0].length == 0) {
-            return new ApplicationError("vehicles not found.", 404);
+            throw new ApplicationError("vehicles not found.", 404);
         }
         if (rows[0].images == []) {
             return { error: false, message: "Images deleted successfully from the vehicles" };
