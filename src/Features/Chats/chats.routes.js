@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getChatRooms, getMessagesInChatRoom } from "./chats.controller.js";
+import { getChatRooms, getAChatRoom, getMessagesInChatRoom } from "./chats.controller.js";
 const chatRouter = Router()
 
 chatRouter.get('/rooms', getChatRooms)
-chatRouter.get('/messages/id/:id', getMessagesInChatRoom)
+chatRouter.get('/rooms/id/:id', getAChatRoom)
+chatRouter.get('/rooms/id/:id/messages', getMessagesInChatRoom)
 
 export default chatRouter

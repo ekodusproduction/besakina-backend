@@ -15,7 +15,7 @@ hospitalsRouter.post("/add", jwtAuth, fileUpload("hospitals"), validationMiddlew
 
 hospitalsRouter.get("/filter", filterAdvertisement)
 
-hospitalsRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
+hospitalsRouter.put("/id/:id", jwtAuth, updateAdvertisement)
 
 hospitalsRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 

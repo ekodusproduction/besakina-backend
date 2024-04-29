@@ -1,6 +1,5 @@
 import { logger } from "../../Middlewares/logger.middleware.js";
-import pool from
-    "../../Mysql/mysql.database.js";
+import pool from "../../Mysql/mysql.database.js";
 import { sendResponse } from "../../Utility/response.js";
 
 export const getAChatRoom = async function (req, res, next) {
@@ -8,11 +7,7 @@ export const getAChatRoom = async function (req, res, next) {
         const userId1 = req.userId;
         const userId2 = req.body.otherUserId;
 
-        const rows = await connection.query('chat_room')
-            .where(function () {
-                this.where('user_id_1', userId1).andWhere('user_id_2', userId2)
-                    .orWhere('user_id_1', userId2).andWhere('user_id_2', userId1);
-            });
+        const [rows] = await pool.query('SELECT * FROM chat_room WHERE (user_id_1 = ? AND user_id_2 = ?) OR (user_id_1 = ? AND user_id_2 = ?)', [userId1, userId2, userId2, userId1]);
 
         return sendResponse(res, "Chat room list", 200, rows);
     } catch (error) {
@@ -25,11 +20,7 @@ export const getChatRooms = async function (req, res, next) {
     try {
         const userId = req.userId;
 
-        const rows = await connection.query('chat_room')
-            .join('users', function () {
-                this.on('chat_room.user_id_1', '=', 'users.id').orWhere('chat_room.user_id_2', '=', 'users.id');
-            })
-            .where('users.id', userId);
+        const [rows] = await pool.query('SELECT chat_room.* FROM chat_room JOIN users ON (chat_room.user_id_1 = users.id OR chat_room.user_id_2 = users.id) WHERE users.id = ?', [userId]);
 
         return sendResponse(res, "Chat room list", 200, rows);
     } catch (error) {
@@ -42,12 +33,7 @@ export const getMessagesInChatRoom = async function (req, res, next) {
     try {
         const chatRoomId = req.params.chatRoomId;
 
-        const rows = await connection.query('chat')
-            .select('chat.*', 'sender.username AS sender_username', 'receiver.username AS receiver_username')
-            .join('users AS sender', 'chat.sender_id', '=', 'sender.id')
-            .join('users AS receiver', 'chat.receiver_id', '=', 'receiver.id')
-            .where('chat.chat_room_id', chatRoomId)
-            .orderBy('chat.timestamp');
+        const [rows] = await pool.query('SELECT chat.*, sender.username AS sender_username, receiver.username AS receiver_username FROM chat JOIN users AS sender ON chat.sender_id = sender.id JOIN users AS receiver ON chat.receiver_id = receiver.id WHERE chat.chat_room_id = ? ORDER BY chat.timestamp', [chatRoomId]);
 
         return sendResponse(res, "Chat room list", 200, rows);
     } catch (error) {
@@ -58,21 +44,15 @@ export const getMessagesInChatRoom = async function (req, res, next) {
 
 export const createChatRoom = async function (req, res, next) {
     try {
-        const [existingChatRow] = await connection.query('chat_room')
-            .where(function () {
-                this.where('user_id_1', req.userId).andWhere('user_id_2', req.body.user_id_2)
-                    .orWhere('user_id_1', req.body.user_id_2).andWhere('user_id_2', req.userId);
-            })
-            .limit(1);
+        const [existingChatRow] = await pool.query('SELECT * FROM chat_room WHERE (user_id_1 = ? AND user_id_2 = ?) OR (user_id_1 = ? AND user_id_2 = ?) LIMIT 1', [req.userId, req.body.user_id_2, req.body.user_id_2, req.userId]);
 
-        if (existingChatRow) {
-            return sendResponse(res, "Chat room already exists", 200, existingChatRow.id);
+        if (existingChatRow.length > 0) {
+            return sendResponse(res, "Chat room already exists", 200, existingChatRow[0].id);
         }
 
+        const [insertRows] = await pool.query('INSERT INTO chat_room (user_id_1, user_id_2) VALUES (?, ?)', [req.userId, req.body.user_id_2]);
 
-        const [insertRows] = await connection.query('chat_room').insert({ user_id_1: req.userId, user_id_2: req.body.user_id_2 });
-
-        return sendResponse(res, "Chat room created successfully", 201, insertRows[0]);
+        return sendResponse(res, "Chat room created successfully", 201, insertRows.insertId);
     } catch (error) {
         logger.info(error);
         return res.status(500).json({ success: false, error: error });
