@@ -68,8 +68,9 @@ export const filterAdvertisement = async (req, res, next) => {
 export const updateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const filter = req.body;
-    const result = await repository.updateAdvertisement(advertisementID, filter);
+    const updateBody = req.body;
+    console.log("inside edit vehicles updateBody", updateBody)
+    const result = await repository.updateAdvertisement(advertisementID, updateBody);
     if (result.length === 0) {
       return sendError(res, "vehicles not found for given filter", 404);
     }

@@ -7,15 +7,25 @@ import { Server } from "socket.io";
 import { jwtAuth } from './src/Middlewares/auth.middleware.js';
 // import { socket } from './socket.js';
 import { chatSocket } from './src/Features/Chats/chat.socket.js';
+import { socketAuth } from "./socketAuth.js"
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        methods: ["GET", "POST"]
-    }
-})
-io.on("connection", (socket) => {
-    console.log("Connection established");
-})
+
+// const io = new Server(server, {
+//     cors: {
+//         methods: ["GET", "POST"]
+//     }
+// })
+// console.log("req received")
+// // io.use(socketAuth);
+
+// io.on("connection", (socket) => {
+//     console.log("Connection established");
+//     chatSocket(socket);
+//     // notificationSocket(socket)
+//     socket.on("disconnect", () => {
+//         console.log("A user disconnected");
+//     });
+// })
 
 
 const port = process.env.PORT || 3000;
