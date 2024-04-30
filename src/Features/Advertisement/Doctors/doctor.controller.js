@@ -115,15 +115,6 @@ export const deleteImage = async (req, res, next) => {
   }
 };
 
-export const listUserAdvertisement = async (req, res, next) => {
-  try {
-    const result = await repository.listUserAdvertisement(req.user_id);
-    return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
-  } catch (error) {
-    logger.info(error)
-    next(error);
-  }
-};
 
 export const activateAdvertisement = async (req, res, next) => {
   try {
