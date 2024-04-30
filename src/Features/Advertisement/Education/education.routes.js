@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, 
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
     deleteAdvertisement
 } from "./education.controller.js"
