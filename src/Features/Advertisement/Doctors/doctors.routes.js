@@ -23,8 +23,6 @@ doctorRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 doctorRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 doctorRouter.post("/images/id/:id", jwtAuth, fileUpload("doctors"), imageValidator, addImage)
-// list user own advertisement //id => user id
-doctorRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 doctorRouter.get("/list", getListAdvertisement)
 doctorRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
