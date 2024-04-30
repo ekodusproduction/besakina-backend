@@ -17,7 +17,7 @@ vehiclesRouter.post("/add", jwtAuth, fileUpload("vehicles"), validationMiddlewar
 
 vehiclesRouter.get("/filter", filterAdvertisement)
 
-vehiclesRouter.put("/id/:id", jwtAuth, requestBodyValidator,validationMiddlewarePut, updateAdvertisement)
+vehiclesRouter.put("/id/:id", jwtAuth, requestBodyValidator, validationMiddlewarePut, updateAdvertisement)
 vehiclesRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
 vehiclesRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
@@ -32,7 +32,7 @@ vehiclesRouter.post("/images/id/:id", jwtAuth, fileUpload("vehicles"), imageVali
 vehiclesRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 vehiclesRouter.get("/list", getListAdvertisement)
-vehiclesRouter.delete("/id/:id", deleteAdvertisement)
+vehiclesRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
 
 

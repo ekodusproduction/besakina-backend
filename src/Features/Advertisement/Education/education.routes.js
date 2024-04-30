@@ -17,7 +17,7 @@ educationRouter.post("/add", jwtAuth, fileUpload("education"), validationMiddlew
 
 educationRouter.get("/filter", filterAdvertisement)
 
-educationRouter.put("/id/:id", jwtAuth,  updateAdvertisement)
+educationRouter.put("/id/:id", jwtAuth, updateAdvertisement)
 educationRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
 educationRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
@@ -32,7 +32,7 @@ educationRouter.post("/images/id/:id", jwtAuth, fileUpload("education"), imageVa
 educationRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 educationRouter.get("/list", getListAdvertisement)
-educationRouter.delete("/id/:id", deleteAdvertisement)
+educationRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
 
 export default educationRouter

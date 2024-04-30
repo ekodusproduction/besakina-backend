@@ -27,6 +27,6 @@ doctorRouter.post("/images/id/:id", jwtAuth, fileUpload("doctors"), imageValidat
 doctorRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 doctorRouter.get("/list", getListAdvertisement)
-doctorRouter.delete("/id/:id", deleteAdvertisement)
+doctorRouter.delete("/id/:id",jwtAuth, deleteAdvertisement)
 
 export default doctorRouter

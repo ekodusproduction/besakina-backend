@@ -289,4 +289,5 @@ export default {
     activateAdvertisement,
     deleteImage,
     listUserAdvertisement,
+    deleteAdvertisement
 };

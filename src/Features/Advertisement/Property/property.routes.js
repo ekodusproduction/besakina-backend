@@ -36,7 +36,7 @@ propertyRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, del
 propertyRouter.get("/list", getListAdvertisement)
 propertyRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
-propertyRouter.delete("/id/:id", deleteAdvertisement)
+propertyRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
 
 export default propertyRouter

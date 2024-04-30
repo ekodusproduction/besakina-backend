@@ -33,6 +33,6 @@ hospitalityRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 hospitalityRouter.get("/list", getListAdvertisement)
 
-hospitalityRouter.delete("/id/:id", deleteAdvertisement)
+hospitalityRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
 export default hospitalityRouter
