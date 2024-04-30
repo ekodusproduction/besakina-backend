@@ -137,7 +137,7 @@ export const updateAdvertisement = async (advertisementID, filter, userId) => {
         }
         return { error: false, message: "property updated successfully", "advertisements": rows };
     } catch (error) {
-        console.log("err in cacth",error)
+        console.log("err in cacth", error)
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
@@ -246,7 +246,7 @@ export const activateAdvertisement = async (advertisementID) => {
 
     try {
 
-        const [query, values] = await updateQuery('property', { is_active: 1 }, { id: advertisementID })
+        const [query, values] = await selectQuery('property', { is_active: 1 }, { id: advertisementID })
         const [advertisement] = await connection.query(query, values);
 
         if (advertisement.length == 0) {
@@ -255,6 +255,22 @@ export const activateAdvertisement = async (advertisementID) => {
         const [update, updateValues] = await updateQuery('property', { is_active: 1 }, { id: advertisementID })
         const [rows] = await connection.query(update, updateValues);
         return { error: false, message: "property activated successfully", data: rows };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    } finally {
+        connection.release();
+    }
+};
+
+
+export const deleteAdvertisement = async (advertisementID) => {
+    let connection = await pool.getConnection();
+
+    try {
+        const sql = `DELETE FROM property WHERE id = ?`
+        const [advertisement] = await connection.query(sql, advertisementID);
+        return { error: false, message: "property deleted successfully" };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -274,4 +290,5 @@ export default {
     activateAdvertisement,
     deleteImage,
     listUserAdvertisement,
+    deleteAdvertisement
 };

@@ -261,6 +261,21 @@ export const activateAdvertisement = async (advertisementID) => {
     }
 };
 
+export const deleteAdvertisement = async (advertisementID) => {
+    let connection = await pool.getConnection();
+
+    try {
+        const sql = `DELETE FROM vehicles WHERE id = ?`
+        const [advertisement] = await connection.query(sql, advertisementID);
+        return { error: false, message: "property deleted successfully" };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    } finally {
+        connection.release();
+    }
+};
+
 export default {
     addAdvertisement,
     getAdvertisement,

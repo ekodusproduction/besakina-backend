@@ -1,7 +1,8 @@
 import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
-    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
+    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
+    deleteAdvertisement
 } from "./hospitals.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
@@ -32,6 +33,6 @@ hospitalsRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 hospitalsRouter.get("/list", getListAdvertisement)
 
-
+hospitalsRouter.delete("/id/:id", deleteAdvertisement)
 
 export default hospitalsRouter

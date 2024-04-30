@@ -1,7 +1,8 @@
 import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
-    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
+    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
+    deleteAdvertisement
 } from "./vehicles.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
@@ -31,6 +32,7 @@ vehiclesRouter.post("/images/id/:id", jwtAuth, fileUpload("vehicles"), imageVali
 vehiclesRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 vehiclesRouter.get("/list", getListAdvertisement)
+vehiclesRouter.delete("/id/:id", deleteAdvertisement)
 
 
 

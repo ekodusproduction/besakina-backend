@@ -137,3 +137,14 @@ export const activateAdvertisement = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteAdvertisement = async (req, res, next) => {
+  try {
+    const advertisementID = req.params.id;
+    const result = await repository.deleteAdvertisement(advertisementID);
+    return sendResponse(res, result.message, 200);
+  } catch (error) {
+    logger.info(error)
+    next(error);
+  }
+};

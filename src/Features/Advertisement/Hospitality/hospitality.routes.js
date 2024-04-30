@@ -1,7 +1,8 @@
 import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
-    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
+    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
+    deleteAdvertisement
 } from "./hospitality.controller.js"
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
@@ -32,6 +33,6 @@ hospitalityRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 hospitalityRouter.get("/list", getListAdvertisement)
 
-
+hospitalityRouter.delete("/id/:id", deleteAdvertisement)
 
 export default hospitalityRouter

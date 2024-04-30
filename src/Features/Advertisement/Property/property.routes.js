@@ -1,7 +1,8 @@
 import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
-    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
+    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
+    deleteAdvertisement
 } from "./property.controller.js"
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
@@ -35,7 +36,7 @@ propertyRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, del
 propertyRouter.get("/list", getListAdvertisement)
 propertyRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
-
+propertyRouter.delete("/id/:id", deleteAdvertisement)
 
 
 export default propertyRouter

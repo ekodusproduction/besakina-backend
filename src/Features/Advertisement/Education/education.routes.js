@@ -1,7 +1,8 @@
 import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
-    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement
+    getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
+    deleteAdvertisement
 } from "./education.controller.js"
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
@@ -31,7 +32,7 @@ educationRouter.post("/images/id/:id", jwtAuth, fileUpload("education"), imageVa
 educationRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 educationRouter.get("/list", getListAdvertisement)
-
+educationRouter.delete("/id/:id", deleteAdvertisement)
 
 
 export default educationRouter
