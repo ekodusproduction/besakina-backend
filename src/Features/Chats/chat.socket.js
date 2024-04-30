@@ -6,7 +6,7 @@ export const chatSocket = (socket) => {
         let connection = await pool.getConnection()
         try {
             const { message, chatRoomId } = messageData;
-            socket.broadcast("newMessage", messageData)
+            socket.to(chatRoomId).emit("newMessage", messageData)
             // Store message in the database
             await connection.query(
                 "INSERT INTO chat (message, user_id, chat_room_id) VALUES (?, ?, ?)",
@@ -14,7 +14,7 @@ export const chatSocket = (socket) => {
             );
 
             // Broadcast the message to all users in the chat room
-            io.to(chatRoomId).emit("newMessage", messageData);
+            socket.to(chatRoomId).emit("newMessage", messageData);
         } catch (error) {
             console.error("Error sending message:", error);
         }

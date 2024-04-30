@@ -76,11 +76,10 @@ export const updateAdvertisement = async (req, res, next) => {
     console.log("req userId", userId)
 
     const result = await repository.updateAdvertisement(advertisementID, updateBody, userId);
-    if (result.length === 0) {
-      return sendError(res, "property not found for given filter", 404);
-    }
+
     return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
   } catch (error) {
+    console.log("err in cacth controll", error)
     logger.info(error)
     next(error);
   }

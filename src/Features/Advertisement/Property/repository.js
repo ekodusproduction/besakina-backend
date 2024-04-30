@@ -137,6 +137,7 @@ export const updateAdvertisement = async (advertisementID, filter, userId) => {
         }
         return { error: false, message: "property updated successfully", "advertisements": rows };
     } catch (error) {
+        console.log("err in cacth",error)
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {

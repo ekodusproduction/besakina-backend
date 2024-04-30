@@ -16,7 +16,7 @@ vehiclesRouter.post("/add", jwtAuth, fileUpload("vehicles"), validationMiddlewar
 
 vehiclesRouter.get("/filter", filterAdvertisement)
 
-vehiclesRouter.put("/id/:id", jwtAuth, validationMiddlewarePut, updateAdvertisement)
+vehiclesRouter.put("/id/:id", jwtAuth, requestBodyValidator,validationMiddlewarePut, updateAdvertisement)
 vehiclesRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 
 vehiclesRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
