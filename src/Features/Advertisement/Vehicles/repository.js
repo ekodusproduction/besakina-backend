@@ -244,7 +244,7 @@ export const activateAdvertisement = async (advertisementID) => {
 
     try {
 
-        const [query, values] = await updateQuery('vehicles', { is_active: 1 }, { id: advertisementID })
+        const [query, values] = await selectQuery('vehicles', { is_active: 1 }, { id: advertisementID })
         const [advertisement] = await connection.query(query, values);
 
         if (advertisement.length == 0) {

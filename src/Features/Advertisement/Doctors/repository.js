@@ -227,26 +227,14 @@ export const deleteImage = async (advertisementID, files) => {
     }
 };
 
-export const listUserAdvertisement = async (userID) => {
-    let connection = await pool.getConnection();
 
-    try {
-        const advertisements = await connection.query('doctors').where('user_id', userID);
-        return { error: false, message: "User advertisement list", advertisements };
-    } catch (error) {
-        logger.info(error);
-        throw new ApplicationError(error, 500);
-    } finally {
-        connection.release();
-    }
-};
 
 export const activateAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
     try {
 
-        const [query, values] = await updateQuery('doctors', { is_active: 1 }, { id: advertisementID })
+        const [query, values] = await selectQuery('doctors', { is_active: 1 }, { id: advertisementID })
         const [advertisement] = await connection.query(query, values);
 
         if (advertisement.length == 0) {
