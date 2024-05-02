@@ -7,6 +7,7 @@ import { insertQuery, selectQuery, updateQuery, selectJoinQuery, filterQuery } f
 import { logger } from "../../../Middlewares/logger.middleware.js";
 import repository from "./repository.js";
 
+
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user_id = req.user_id
@@ -27,9 +28,9 @@ export const getAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const advertisement = await repository.getAdvertisement(advertisementID);
     if (!advertisement) {
-      return sendError(res, "hospitals not found", 404);
+      return sendError(res, "Doctors not found", 404);
     }
-    return sendResponse(res, "hospitals fetched successfully", 200, { advertisement });
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisement });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -40,9 +41,9 @@ export const getListAdvertisement = async (req, res, next) => {
   try {
     const advertisements = await repository.getListAdvertisement(req.params.id);
     if (!advertisements) {
-      return sendError(res, "hospitals not found", 404);
+      return sendError(res, "Doctors not found", 404);
     }
-    return sendResponse(res, "hospitals fetched successfully", 200, { advertisements });
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -54,11 +55,7 @@ export const filterAdvertisement = async (req, res, next) => {
     const query = req.query;
     const advertisements = await repository.filterAdvertisement(query);
 
-    if (advertisements.length === 0) {
-      return sendError(res, "hospitals not found for given filter", 404);
-    }
-
-    return sendResponse(res, "hospitals fetched successfully", 200, { advertisements });
+    return sendResponse(res, advertisements.message, 200, { "advertisements": advertisements.data });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -68,12 +65,10 @@ export const filterAdvertisement = async (req, res, next) => {
 export const updateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const filter = req.body;
-    const result = await repository.updateAdvertisement(advertisementID, filter);
-    if (result.length === 0) {
-      return sendError(res, "hospitals not found for given filter", 404);
-    }
-    return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
+    const updateBody = req.body;
+    const result = await repository.updateAdvertisement(advertisementID, updateBody, req.user_id);
+
+    return sendResponse(res, result.message, 200);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -84,7 +79,7 @@ export const deactivateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const result = await repository.deactivateAdvertisement(advertisementID);
-    return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
+    return sendResponse(res, result.message, 200);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -105,29 +100,19 @@ export const addImage = async (req, res, next) => {
 export const deleteImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-
-    const result = await repository.deleteImage(advertisementID, req.body.images);
-    return sendResponse(res, result.message, 200);
+    const { message } = await repository.deleteImage(advertisementID, req.body.images, req.user_id);
+    return sendResponse(res, message, 200);
   } catch (error) {
     logger.info(error)
     next(error);
   }
 };
 
-export const listUserAdvertisement = async (req, res, next) => {
-  try {
-    const result = await repository.listUserAdvertisement(req.user_id);
-    return sendResponse(res, result.message, 200, { advertisements: result.advertisements });
-  } catch (error) {
-    logger.info(error)
-    next(error);
-  }
-};
 
 export const activateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.activateAdvertisement(advertisementID);
+    const result = await repository.activateAdvertisement(advertisementID, req.user_id);
     return sendResponse(res, result.message, 200);
   } catch (error) {
     logger.info(error)
@@ -138,7 +123,7 @@ export const activateAdvertisement = async (req, res, next) => {
 export const deleteAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.deleteAdvertisement(advertisementID);
+    const result = await repository.deleteAdvertisement(advertisementID, req.user_id);
     return sendResponse(res, result.message, 200);
   } catch (error) {
     logger.info(error)

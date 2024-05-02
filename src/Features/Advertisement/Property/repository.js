@@ -92,26 +92,22 @@ const getListAdvertisement = async () => {
     }
 };
 
+
 const filterAdvertisement = async (query) => {
     let connection = await pool.getConnection();
 
     try {
-        // Define the rangeCondition object based on the query parameters
         const minPrice = query.minPrice ? parseInt(query.minPrice) : undefined;
         const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
         const rangeCondition = minPrice !== undefined && maxPrice !== undefined ? { price: { min: minPrice, max: maxPrice } } : {};
 
-        // Remove minPrice and maxPrice from query object
         if (query?.minPrice) delete query.minPrice;
         if (query?.maxPrice) delete query.maxPrice;
 
-        // Call filterQuery with the correct rangeCondition
         const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
-
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
-        return data;
-
+        return { error: false, message: "property filter list", "data": data };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -121,23 +117,23 @@ const filterAdvertisement = async (query) => {
 };
 
 
-export const updateAdvertisement = async (advertisementID, filter, userId) => {
+export const updateAdvertisement = async (advertisementID, updateBody, userId) => {
     let connection = await pool.getConnection();
-    console.log("req  advertisementID", advertisementID)
-    console.log("req  advertisementID", filter)
 
     try {
-        if (!filter || typeof filter !== 'object') {
-            throw new ApplicationError("Invalid filter object provided", 400);
+
+        if (!updateBody || typeof updateBody !== 'object') {
+            throw new ApplicationError("Invalid updateBody object provided", 400);
         }
-        const [sql, values] = await updateQuery("property", filter, { "id": advertisementID, user_id: userId })
+        const [sql, values] = await updateQuery("property", updateBody, { "id": advertisementID, "user_id": userId })
         const [rows, field] = await connection.query(sql, values)
+
         if (!rows) {
             throw new ApplicationError("property not updated. No matching property found for the provided ID.", 404);
         }
+
         return { error: false, message: "property updated successfully", "advertisements": rows };
     } catch (error) {
-        console.log("err in cacth", error)
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
@@ -145,16 +141,21 @@ export const updateAdvertisement = async (advertisementID, filter, userId) => {
     }
 };
 
-export const deactivateAdvertisement = async (advertisementID) => {
+export const deactivateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
-
     try {
-        const sql = `UPDATE property SET is_active = 0 WHERE id = ?`
-        const [rows, fields] = await connection.query(sql, [advertisementID]);
-        if (rows.affectedRows === 0) {
-            throw new ApplicationError("property not deactivated. No matching property found for the provided ID.", 404);
+        const select = `SELECT * FROM property WHERE is_active = 1 AND id = ? AND user_id = ?`;
+        const advertisement = await connection.query(select, [advertisementID, userId]);
+
+        // Check if advertisement exists
+        if (!advertisement.length) {
+            throw new ApplicationError("Advertisement not found", 500);
         }
-        return { error: false, message: "property deactivated successfully", advertisements: rows };
+
+        const sql = `UPDATE property SET is_active = 0 WHERE id = ?`;
+        const [rows, fields] = await connection.query(sql, [advertisementID]);
+
+        return { error: false, message: "Advertisement deactivated successfully" };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -163,13 +164,12 @@ export const deactivateAdvertisement = async (advertisementID) => {
     }
 };
 
-export const addImage = async (advertisementID, files) => {
+export const addImage = async (advertisementID, files, userId) => {
     let connection = await pool.getConnection();
 
     try {
-        const [query, values] = await selectQuery("property", {}, { id: advertisementID })
+        const [query, values] = await selectQuery("property", {}, { id: advertisementID, user_id: userId })
         const [advertisement, field] = await connection.query(query, values);
-
         if (advertisement.length == 0) {
             throw new ApplicationError("property not found.", 404);
         }
@@ -190,12 +190,12 @@ export const addImage = async (advertisementID, files) => {
     }
 };
 
-export const deleteImage = async (advertisementID, files) => {
+export const deleteImage = async (advertisementID, files, userId) => {
     let connection = await pool.getConnection();
 
     try {
-        const sql = `SELECT * FROM property WHERE id = ?`
-        const [rows, fields] = await connection.query(sql, [advertisementID])
+        const sql = `SELECT * FROM property WHERE id = ? AND user_id = ?`
+        const [rows, fields] = await connection.query(sql, [advertisementID, userId])
 
         if (rows[0].length == 0) {
             throw new ApplicationError("property not found.", 404);
@@ -227,26 +227,12 @@ export const deleteImage = async (advertisementID, files) => {
     }
 };
 
-export const listUserAdvertisement = async (userID) => {
+
+
+export const activateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
-
     try {
-        const advertisements = await connection.query('property').where('user_id', userID);
-        return { error: false, message: "User advertisement list", advertisements };
-    } catch (error) {
-        logger.info(error);
-        throw new ApplicationError(error, 500);
-    } finally {
-        connection.release();
-    }
-};
-
-export const activateAdvertisement = async (advertisementID) => {
-    let connection = await pool.getConnection();
-
-    try {
-
-        const [query, values] = await selectQuery('property', { is_active: 1 }, { id: advertisementID })
+        const [query, values] = await selectQuery('property', { is_active: 1 }, { id: advertisementID, user_id: userId })
         const [advertisement] = await connection.query(query, values);
 
         if (advertisement.length == 0) {
@@ -263,13 +249,11 @@ export const activateAdvertisement = async (advertisementID) => {
     }
 };
 
-
-export const deleteAdvertisement = async (advertisementID) => {
+export const deleteAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
-
     try {
-        const sql = `DELETE FROM property WHERE id = ?`
-        const [advertisement] = await connection.query(sql, advertisementID);
+        const sql = `DELETE FROM property WHERE id = ? AND user_id = ?`
+        const [advertisement] = await connection.query(sql, [advertisementID, userId]);
         return { error: false, message: "property deleted successfully" };
     } catch (error) {
         logger.info(error);
@@ -278,6 +262,7 @@ export const deleteAdvertisement = async (advertisementID) => {
         connection.release();
     }
 };
+
 
 export default {
     addAdvertisement,
@@ -289,6 +274,5 @@ export default {
     addImage,
     activateAdvertisement,
     deleteImage,
-    listUserAdvertisement,
     deleteAdvertisement
 };

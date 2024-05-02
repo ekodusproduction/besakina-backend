@@ -69,11 +69,11 @@ app.use("/api/home", homeRouter)
 app.use(async (err, req, res, next) => {
     logger.info(err);
     console.log("err in global middleware", err)
-
     if (err instanceof ApplicationError) {
         return await sendError(res, err.message, err.code);
+    } else {
+        return await sendError(res, "Internal server error!", 500);
     }
-    return await sendError(res, err.message, 500);
 });
 
 app.all("*", (req, res) => {
