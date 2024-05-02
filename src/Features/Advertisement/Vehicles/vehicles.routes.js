@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, 
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
     deleteAdvertisement
 } from "./vehicles.controller.js"
@@ -29,7 +29,6 @@ vehiclesRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, del
 
 vehiclesRouter.post("/images/id/:id", jwtAuth, fileUpload("vehicles"), imageValidator, addImage)
 // list user own advertisement //id => user id
-vehiclesRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 vehiclesRouter.get("/list", getListAdvertisement)
 vehiclesRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)

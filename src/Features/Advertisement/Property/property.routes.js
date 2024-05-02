@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, 
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
     deleteAdvertisement
 } from "./property.controller.js"
@@ -34,7 +34,6 @@ propertyRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, del
 
 // list user own advertisement //id => user id
 propertyRouter.get("/list", getListAdvertisement)
-propertyRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 propertyRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 

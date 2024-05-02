@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, listUserAdvertisement,
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, 
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
     deleteAdvertisement
 } from "./hospitality.controller.js"
@@ -29,7 +29,6 @@ hospitalityRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, 
 
 hospitalityRouter.post("/images/id/:id", jwtAuth, fileUpload("hospitality"), imageValidator, addImage)
 // list user own advertisement //id => user id
-hospitalityRouter.get("/list/self", jwtAuth, listUserAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 hospitalityRouter.get("/list", getListAdvertisement)
 
