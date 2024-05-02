@@ -69,6 +69,29 @@ const getAdvertisement = async (advertisementID) => {
 };
 
 
+
+const getListAdvertisement = async () => {
+    let connection = await pool.getConnection();
+
+    try {
+        const [query, values] = await selectQuery("vehicles", {}, { is_active: 1 })
+        const [advertisements, fields] = await connection.query(query, values)
+
+        if (advertisements.length === 0) {
+            return null;
+        }
+
+        const data = await parseImages(advertisements)
+
+        return advertisements;
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    } finally {
+        connection.release();
+    }
+};
+
 const filterAdvertisement = async (query) => {
     let connection = await pool.getConnection();
 
@@ -253,6 +276,5 @@ export default {
     addImage,
     activateAdvertisement,
     deleteImage,
-    listUserAdvertisement,
     deleteAdvertisement
 };
