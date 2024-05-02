@@ -37,12 +37,25 @@ export const getAdvertisement = async (req, res, next) => {
   }
 };
 
+export const getListAdvertisement = async (req, res, next) => {
+  try {
+    const advertisements = await repository.getListAdvertisement(req.params.id);
+    if (!advertisements) {
+      return sendError(res, "Doctors not found", 404);
+    }
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+  } catch (error) {
+    logger.info(error)
+    next(error);
+  }
+};
+
 export const filterAdvertisement = async (req, res, next) => {
   try {
     const query = req.query;
     const advertisements = await repository.filterAdvertisement(query);
 
-    return sendResponse(res, advertisements.message, 200, { "advertisements": advertisements.data });
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
   } catch (error) {
     logger.info(error)
     next(error);
