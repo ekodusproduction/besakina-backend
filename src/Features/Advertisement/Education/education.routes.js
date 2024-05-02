@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, 
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
     deleteAdvertisement
 } from "./education.controller.js"
@@ -19,6 +19,7 @@ educationRouter.get("/filter", filterAdvertisement)
 
 educationRouter.put("/id/:id", jwtAuth, updateAdvertisement)
 educationRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
+educationRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 
 educationRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 

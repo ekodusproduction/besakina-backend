@@ -146,7 +146,6 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
     try {
         const select = `SELECT * FROM property WHERE is_active = 1 AND id = ? AND user_id = ?`;
         const advertisement = await connection.query(select, [advertisementID, userId]);
-
         // Check if advertisement exists
         if (!advertisement.length) {
             throw new ApplicationError("Advertisement not found", 500);

@@ -115,12 +115,9 @@ const filterAdvertisement = async (query) => {
     }
 };
 
-
 export const updateAdvertisement = async (advertisementID, updateBody, userId) => {
     let connection = await pool.getConnection();
-
     try {
-
         if (!updateBody || typeof updateBody !== 'object') {
             throw new ApplicationError("Invalid updateBody object provided", 400);
         }

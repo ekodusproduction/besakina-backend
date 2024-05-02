@@ -150,11 +150,11 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
         console.log("deactive", advertisement)
         // Check if advertisement exists
         if (!advertisement.length) {
-            throw new ApplicationError("Advertisement not found", 500);
+            throw new ApplicationError("Education not found", 404);
         }
 
         const sql = `UPDATE education SET is_active = 0 WHERE id = ?`;
-        const [rows, fields] = await connection.query(sql, [advertisementID]);
+        await connection.query(sql, [advertisementID]);
 
         return { error: false, message: "Advertisement deactivated successfully" };
     } catch (error) {
