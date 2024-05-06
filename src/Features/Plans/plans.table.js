@@ -41,7 +41,6 @@ export const dropPlanTable = async function () {
     let connection = await pool.getConnection();
 
     try {
-        console.log(connection.query)
         // Define your DROP TABLE query
         const dropTableQuery = `
             DROP TABLE IF EXISTS plans
