@@ -4,7 +4,6 @@ import { deleteQuery, insertQuery, selectQuery } from "../../Utility/sqlQuery.js
 
 export const addPlan = async function (req, res, next) {
     let connection = await pool.getConnection();
-
     try {
         const requestBody = req.body;
         const membership_badge = req.files[0].path;
@@ -17,7 +16,7 @@ export const addPlan = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
+        connection.release(); 
 
     }
 }
@@ -35,8 +34,7 @@ export const getPlan = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
-
+        connection.release();
     }
 }
 
@@ -56,7 +54,7 @@ export const deletePlan = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
+        connection.release(); 
 
     }
 };

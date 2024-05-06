@@ -44,9 +44,7 @@ export const selectQuery = async (tableName, selectFields, condition) => {
   return [query, values];
 };
 
-
-
-export const updateQuery = async (tableName, updateFields, condition) => {
+export const updateQuery = async (tableName = "", updateFields = {}, condition = {}) => {
   let updateColumns = [];
   let updatePlaceholders = [];
   const updateValues = [];

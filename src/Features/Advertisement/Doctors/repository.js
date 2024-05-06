@@ -68,8 +68,6 @@ const getAdvertisement = async (advertisementID) => {
     }
 };
 
-
-
 const getListAdvertisement = async () => {
     let connection = await pool.getConnection();
 
@@ -115,7 +113,7 @@ const filterAdvertisement = async (query) => {
     }
 };
 
-export const updateAdvertisement = async (advertisementID, updateBody, userId) => {
+const updateAdvertisement = async (advertisementID, updateBody, userId) => {
     let connection = await pool.getConnection();
     try {
         if (!updateBody || typeof updateBody !== 'object') {
@@ -138,14 +136,13 @@ export const updateAdvertisement = async (advertisementID, updateBody, userId) =
     }
 };
 
-export const deactivateAdvertisement = async (advertisementID, userId) => {
+const deactivateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
     try {
         const select = `SELECT * FROM doctors WHERE is_active = 1 AND id = ? AND user_id = ?`;
-        const advertisement = await connection.query(select, [advertisementID, userId]);
+        const [advertisement, selectFields] = await connection.query(select, [advertisementID, userId]);
 
-        // Check if advertisement exists
-        if (!advertisement.length) {
+        if (advertisement.length == 0) {
             throw new ApplicationError("Advertisement not found", 500);
         }
 
@@ -161,7 +158,7 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
     }
 };
 
-export const addImage = async (advertisementID, files, userId) => {
+const addImage = async (advertisementID, files, userId) => {
     let connection = await pool.getConnection();
 
     try {
@@ -187,7 +184,7 @@ export const addImage = async (advertisementID, files, userId) => {
     }
 };
 
-export const deleteImage = async (advertisementID, files, userId) => {
+const deleteImage = async (advertisementID, files, userId) => {
     let connection = await pool.getConnection();
 
     try {
@@ -227,7 +224,7 @@ export const deleteImage = async (advertisementID, files, userId) => {
 
 
 
-export const activateAdvertisement = async (advertisementID, userId) => {
+const activateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
 
     try {
@@ -249,7 +246,7 @@ export const activateAdvertisement = async (advertisementID, userId) => {
     }
 };
 
-export const deleteAdvertisement = async (advertisementID, userId) => {
+const deleteAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
     try {
         const sql = `DELETE FROM doctors WHERE id = ? AND user_id = ?`

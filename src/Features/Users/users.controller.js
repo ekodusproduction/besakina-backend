@@ -100,7 +100,6 @@ export const addUserDetails = async function (req, res, next) {
         requestBody.doc_file = docFile || null;
         requestBody.doc_file_back = docFileBack || null;
         const [update, updateValues] = await updateQuery("users", requestBody, { id: req.user_id })
-        
 
         const [updatedUser, field] = await connection.query(update, updateValues)
 
@@ -109,7 +108,7 @@ export const addUserDetails = async function (req, res, next) {
 
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
+        connection.release();
 
     }
 }
@@ -120,7 +119,7 @@ export const getUserAdds = async function (req, res, next) {
 
     try {
         const sql = getAllPosts.replaceAll('?', user_id)
-        const [rows, fields] = await pool.query(sql);
+        const [rows, fields] = await connection.query(sql);
         if (rows.length == 0) {
             return sendResponse(res, "Advertisement fetched successfully", 200, []);
         }
@@ -153,5 +152,25 @@ export const getUserDetails = async function (req, res, next) {
     } finally {
         connection.release(); // Release the connection back to the connection.query
 
+    }
+}
+
+export const planSubscribe = async function (req, res, next) {
+    const { user_id } = req;
+    let connection = await pool.getConnection();
+
+    try {
+        const [userDetails, fields] = await pool.query(getUserAndPlan, [user_id]);
+
+        if (userDetails.length === 0) {
+            return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
+        }
+        userDetails[0].plan = JSON.parse(userDetails[0].plan);
+
+        return sendResponse(res, 'User details', 201, userDetails[0], null);
+    } catch (error) {
+        next(error);
+    } finally {
+        connection.release();
     }
 }

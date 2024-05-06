@@ -56,3 +56,73 @@ JSON_OBJECT(
 FROM users AS u
 LEFT JOIN plans AS p ON u.plan_id = p.id
 WHERE u.id = ?;`
+
+
+export const countUserPosts = `SELECT SUM(total_count) AS total_posts
+FROM (
+    SELECT COUNT(*) AS total_count
+    FROM property 
+    WHERE user_id = ?
+    UNION ALL
+    SELECT COUNT(*)
+    FROM vehicles 
+    WHERE user_id = ?
+    UNION ALL
+    SELECT COUNT(*)
+    FROM hospitality 
+    WHERE user_id = ?
+    UNION ALL
+    SELECT COUNT(*)
+    FROM education 
+    WHERE user_id = ?
+    UNION ALL
+    SELECT COUNT(*)
+    FROM doctors 
+    WHERE user_id = ?
+    UNION ALL
+    SELECT COUNT(*)
+    FROM hospitals 
+    WHERE user_id = ?
+) AS post_counts;
+`
+
+export const fetchPlansAndTotalAdds = `
+SELECT 
+    usp.*, 
+    p.no_of_ads,
+    (
+        SELECT SUM(total_count) AS total_posts
+        FROM (
+            SELECT COUNT(*) AS total_count
+            FROM property 
+            WHERE user_id = ? 
+            UNION ALL
+            SELECT COUNT(*)
+            FROM vehicles 
+            WHERE user_id = ?
+            UNION ALL
+            SELECT COUNT(*)
+            FROM hospitality 
+            WHERE user_id = ?
+            UNION ALL
+            SELECT COUNT(*)
+            FROM education 
+            WHERE user_id = ?
+            UNION ALL
+            SELECT COUNT(*)
+            FROM doctors 
+            WHERE user_id = ?
+            UNION ALL
+            SELECT COUNT(*)
+            FROM hospitals 
+            WHERE user_id = ?
+        ) AS post_counts
+    ) AS total_posts
+FROM 
+    userselectedplans AS usp
+INNER JOIN 
+    plans AS p 
+ON 
+    usp.plan_id = p.id
+WHERE 
+    usp.user_id = ?`

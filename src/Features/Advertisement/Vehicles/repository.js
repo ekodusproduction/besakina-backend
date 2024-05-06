@@ -1,9 +1,6 @@
-// repositories/advertisementRepository.js
-
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
-import pool from
-    "../../../Mysql/mysql.database.js";
+import pool from "../../../Mysql/mysql.database.js";
 import { filterQuery, insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
 import { getUserAndVehicles } from "./sqlQuery.js";
 
@@ -14,6 +11,7 @@ const parseImages = async (advertisements) => {
         return advertisement;
     });
 };
+
 const parseUser = async (advertisements) => {
     return advertisements.map(advertisement => {
         advertisement.user = JSON.parse(advertisement.user);
@@ -24,9 +22,7 @@ const parseUser = async (advertisements) => {
 
 const addAdvertisement = async (requestBody, files) => {
     let connection = await pool.getConnection();
-
     try {
-
         const filePaths = files.map(file => file.path);
         const photosJson = JSON.stringify(filePaths);
         requestBody.images = photosJson;
@@ -40,8 +36,7 @@ const addAdvertisement = async (requestBody, files) => {
         logger.info(error)
         throw new ApplicationError(error, 500);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
-
+        connection.release(); 
     }
 };
 
@@ -63,12 +58,9 @@ const getAdvertisement = async (advertisementID) => {
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
-
+        connection.release(); 
     }
 };
-
-
 
 const getListAdvertisement = async () => {
     let connection = await pool.getConnection();
@@ -145,9 +137,9 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
     try {
         const select = `SELECT * FROM doctors WHERE is_active = 1 AND id = ? AND user_id = ?`;
-        const advertisement = await connection.query(select, [advertisementID, userId]);
+        const [advertisement, selectFields] = await connection.query(select, [advertisementID, userId]);
 
-        if (!advertisement.length) {
+        if (advertisement.length == 0) {
             throw new ApplicationError("Advertisement not found", 500);
         }
 
@@ -227,13 +219,10 @@ export const deleteImage = async (advertisementID, files, userId) => {
     }
 };
 
-
-
 export const activateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
 
     try {
-
         const [query, values] = await selectQuery('doctors', { is_active: 1 }, { id: advertisementID, user_id: userId })
         const [advertisement] = await connection.query(query, values);
 

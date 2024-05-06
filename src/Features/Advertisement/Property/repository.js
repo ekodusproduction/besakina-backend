@@ -145,12 +145,11 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
     try {
         const select = `SELECT * FROM property WHERE is_active = 1 AND id = ? AND user_id = ?`;
-        const advertisement = await connection.query(select, [advertisementID, userId]);
-        // Check if advertisement exists
-        if (!advertisement.length) {
+        const [advertisement, selectFields] = await connection.query(select, [advertisementID, userId]);
+
+        if (advertisement.length == 0) {
             throw new ApplicationError("Advertisement not found", 500);
         }
-
         const sql = `UPDATE property SET is_active = 0 WHERE id = ?`;
         const [rows, fields] = await connection.query(sql, [advertisementID]);
 

@@ -9,11 +9,13 @@ import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./property.validation.js";
+import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
+
 const propertyRouter = Router()
 
 //protected routes id=> advertisement id
 // propertyRouter.post("/", jwtAuth, checkPlanValidity, fileUpload("images").array("images"), validationMiddlewarePost, addAdvertisement)
-propertyRouter.post("/add", jwtAuth, fileUpload("property"), addAdvertisement)
+propertyRouter.post("/add", jwtAuth, fileUpload("property"), checkUserProfileCompletion, checkUserPlanQuotaPermissions, addAdvertisement)
 
 propertyRouter.get("/filter", filterAdvertisement)
 

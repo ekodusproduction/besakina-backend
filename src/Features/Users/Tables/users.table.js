@@ -1,15 +1,12 @@
-
-import pool from "../../Mysql/mysql.database.js"
+import pool from "../../../Mysql/mysql.database.js"
 
 export const createUserTable = async function () {
     let connection = await pool.getConnection();
 
     try {
 
-        // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS users (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            plan_id BIGINT UNSIGNED,
             fullname VARCHAR(255),
             mobile BIGINT UNSIGNED NOT NULL UNIQUE,
             alternate_mobile BIGINT UNSIGNED UNIQUE,
@@ -30,23 +27,19 @@ export const createUserTable = async function () {
             pincode VARCHAR(255),
             about VARCHAR(255),
 
-            FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         );`;
 
-        // Execute the query
         await connection.query(createTableQuery);
 
         console.log('User Table created successfully:');
-
-        // Release the connection back to the connection.query
 
     } catch (error) {
         console.error('Error creating table:', error);
     } finally {
         if (connection) {
-            connection.release(); // Release the connection back to the connection.query
+            connection.release(); 
         }
     }
 }

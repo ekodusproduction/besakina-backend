@@ -15,7 +15,6 @@ export const createOrderTable = async function () {
 
         payment BIGINT UNSIGNED,
         payment_status BOOL,
-        payment_no BIGINT,
         
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
