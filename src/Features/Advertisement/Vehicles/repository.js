@@ -88,8 +88,8 @@ const filterAdvertisement = async (query) => {
     let connection = await pool.getConnection();
 
     try {
-        let minPrice = query.minPrice !== '' ? parseInt(query.minPrice) : undefined;
-        let maxPrice = query.maxPrice !== '' ? parseInt(query.maxPrice) : undefined;
+        let minPrice = query.minPrice && query.minPrice != '' ? parseInt(query.minPrice) : undefined;
+        let maxPrice = query.maxPrice && query.maxPrice != '' ? parseInt(query.maxPrice) : undefined;
         console.log("minPrice", minPrice)
         console.log("maxPrice", maxPrice)
         const rangeCondition = minPrice != undefined && maxPrice != undefined ? { price: { min: minPrice, max: maxPrice } } : {};
