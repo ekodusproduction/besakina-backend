@@ -92,10 +92,12 @@ const filterAdvertisement = async (query) => {
         const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
         console.log("minPrice", minPrice)
         console.log("maxPrice", maxPrice)
-        const rangeCondition = minPrice !== undefined && maxPrice !== undefined ? { price: { min: minPrice, max: maxPrice } } : {};
+        const rangeCondition = minPrice != undefined && maxPrice != undefined ? { price: { min: minPrice, max: maxPrice } } : {};
 
         if (query?.minPrice) delete query.minPrice;
         if (query?.maxPrice) delete query.maxPrice;
+        console.log("query", query)
+        console.log("rangeCondition", rangeCondition)
 
         const [sql, values] = await filterQuery("vehicles", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
