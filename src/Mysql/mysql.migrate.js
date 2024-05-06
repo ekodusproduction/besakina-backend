@@ -1,5 +1,6 @@
 import pool from "./mysql.database.js";
 import { createUserTable } from "../Features/Users/Tables/users.table.js";
+import { createUserPlansTable } from "../Features/Users/Tables/userSelectedPlansTable.js";
 import { createOrderTable } from "../Features/Orders/order.table.js";
 import { createPlanTable } from "../Features/Plans/plans.table.js";
 import { createCategoryTable } from "../Features/Categories/category.table.js";
@@ -21,6 +22,7 @@ async function createTables() {
     try {
         await createPlanTable();
         await createUserTable();
+        await createUserPlansTable();
         // await createCategoryTable();
         await createPropertyTable();
         await createEducationTable();
@@ -31,7 +33,6 @@ async function createTables() {
         // await createOrderTable();
         await createChatRoomTable();
         await createChatTable();
-
 
         await addIndexes()
         await createTriggers();

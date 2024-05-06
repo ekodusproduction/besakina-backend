@@ -1,7 +1,7 @@
 
 import pool from "../../../Mysql/mysql.database.js";
 
-export const createUserTable = async function () {
+export const createUserPlansTable = async function () {
     let connection = await pool.getConnection();
     try {
         const createTableQuery = `CREATE TABLE IF NOT EXISTS userselectedplans (
@@ -24,7 +24,7 @@ export const createUserTable = async function () {
     }
 }
 
-export const dropUserTable = async function () {
+export const dropUserPlanTable = async function () {
     let connection = await pool.getConnection();
     try {
         const dropTableQuery = `

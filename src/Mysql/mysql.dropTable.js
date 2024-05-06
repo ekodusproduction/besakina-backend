@@ -3,7 +3,7 @@ import { dropCategoryTable } from "../Features/Categories/category.table.js";
 import { dropPlanTable } from "../Features/Plans/plans.table.js";
 import { dropOrderTable } from "../Features/Orders/order.table.js";
 import { dropUserTable } from "../Features/Users/Tables/users.table.js";
-
+import { dropUserPlanTable } from "../Features/Users/Tables/userSelectedPlansTable.js"
 import { dropDoctorsTable } from "../Features/Advertisement/Doctors/doctor.table.js";
 import { dropEducationTable } from "../Features/Advertisement/Education/education.table.js";
 import { dropPropertyTable } from "../Features/Advertisement/Property/property.table.js";
@@ -31,6 +31,7 @@ async function dropTables() {
         await dropPropertyTable();
         await dropVehicleTable();
 
+        await dropUserPlanTable();
         await dropUserTable();
         await dropPlanTable();
         // await dropDatabase()
