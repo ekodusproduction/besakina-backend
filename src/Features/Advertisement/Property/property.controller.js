@@ -28,9 +28,9 @@ export const getAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const advertisement = await repository.getAdvertisement(advertisementID);
     if (!advertisement) {
-      return sendError(res, "Doctors not found", 404);
+      return sendError(res, "Property not found", 404);
     }
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisement });
+    return sendResponse(res, "Property fetched successfully", 200, { advertisement });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -41,20 +41,20 @@ export const getListAdvertisement = async (req, res, next) => {
   try {
     const advertisements = await repository.getListAdvertisement(req.params.id);
     if (!advertisements) {
-      return sendError(res, "Doctors not found", 404);
+      return sendError(res, "Property not found", 404);
     }
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+    return sendResponse(res, "Property fetched successfully", 200, { advertisements });
   } catch (error) {
     logger.info(error)
     next(error);
   }
-};
+}; 
 
 export const filterAdvertisement = async (req, res, next) => {
   try {
     const query = req.query;
     const advertisements = await repository.filterAdvertisement(query);
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements: advertisements.data });
+    return sendResponse(res, "Property fetched successfully", 200, { advertisements: advertisements.data });
   } catch (error) {
     logger.info(error)
     next(error);
