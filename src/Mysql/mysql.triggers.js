@@ -5,11 +5,11 @@ export const planUpdateTrigger = async function () {
     try {
         const addTriggerSQL = `
         CREATE TRIGGER update_plan_date_trigger 
-        AFTER UPDATE ON users
+        AFTER UPDATE ON userselectedplans
         FOR EACH ROW
         BEGIN
             IF NEW.plan_id <> OLD.plan_id THEN
-                UPDATE users 
+                UPDATE userselectedplans 
                 SET plan_date = CURRENT_TIMESTAMP 
                 WHERE id = NEW.id;
             END IF;
