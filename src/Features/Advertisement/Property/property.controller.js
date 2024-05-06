@@ -54,8 +54,7 @@ export const filterAdvertisement = async (req, res, next) => {
   try {
     const query = req.query;
     const advertisements = await repository.filterAdvertisement(query);
-
-    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements });
+    return sendResponse(res, "Doctors fetched successfully", 200, { advertisements: advertisements.data });
   } catch (error) {
     logger.info(error)
     next(error);

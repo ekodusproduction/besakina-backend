@@ -63,7 +63,7 @@ const getAdvertisement = async (advertisementID) => {
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
+        connection.release();
 
     }
 };
