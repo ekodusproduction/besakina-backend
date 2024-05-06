@@ -44,6 +44,7 @@ export const createVehicleTable = async function () {
             model VARCHAR(255),
             transmission VARCHAR(255),
             variant VARCHAR(255),
+            color VARCHAR(255),
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -36,7 +36,7 @@ const addAdvertisement = async (requestBody, files) => {
         logger.info(error)
         throw new ApplicationError(error, 500);
     } finally {
-        connection.release(); 
+        connection.release();
     }
 };
 
@@ -58,7 +58,7 @@ const getAdvertisement = async (advertisementID) => {
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
-        connection.release(); 
+        connection.release();
     }
 };
 
@@ -90,6 +90,8 @@ const filterAdvertisement = async (query) => {
     try {
         const minPrice = query.minPrice ? parseInt(query.minPrice) : undefined;
         const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
+        console.log("minPrice", minPrice)
+        console.log("maxPrice", maxPrice)
         const rangeCondition = minPrice !== undefined && maxPrice !== undefined ? { price: { min: minPrice, max: maxPrice } } : {};
 
         if (query?.minPrice) delete query.minPrice;
