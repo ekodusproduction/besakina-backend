@@ -88,16 +88,13 @@ const filterAdvertisement = async (query) => {
     let connection = await pool.getConnection();
 
     try {
-        const minPrice = query.minPrice ? parseInt(query.minPrice) : undefined;
-        const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
-        console.log("minPrice", minPrice)
-        console.log("maxPrice", maxPrice)
+        let minPrice = query.minPrice !== '' ? parseInt(query.minPrice) : undefined;
+        let maxPrice = query.maxPrice !== '' ? parseInt(query.maxPrice) : undefined;
+
         const rangeCondition = minPrice != undefined && maxPrice != undefined ? { price: { min: minPrice, max: maxPrice } } : {};
 
-        if (query?.minPrice) delete query.minPrice;
-        if (query?.maxPrice) delete query.maxPrice;
-        console.log("query", query)
-        console.log("rangeCondition", rangeCondition)
+        if (query?.minPrice || query.minPrice == '') delete query.minPrice;
+        if (query?.maxPrice || query.maxPrice == '') delete query.maxPrice;
 
         const [sql, values] = await filterQuery("vehicles", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
