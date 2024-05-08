@@ -30,7 +30,7 @@ export const getAdvertisement = async (req, res, next) => {
     if (advertisement.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, "Property fetched successfully", 200, { advertisement });
+    return sendResponse(res, advertisement.data.message, advertisement.data.statusCode, advertisement.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -43,7 +43,7 @@ export const getListAdvertisement = async (req, res, next) => {
     if (advertisements.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, "Property fetched successfully", 200, { "property": advertisements });
+    return sendResponse(res, "Property fetched successfully", 200, { "property": advertisements.data.data });
   } catch (error) {
     logger.info(error)
     next(error);
@@ -55,7 +55,7 @@ export const filterAdvertisement = async (req, res, next) => {
     const query = req.query;
     const advertisements = await repository.filterAdvertisement(query);
 
-    return sendResponse(res, advertisements.message, 200, { "property": advertisements.data });
+    return sendResponse(res, advertisements.message, 200, advertisements.data.data);
   } catch (error) {
     logger.info(error)
     next(error);

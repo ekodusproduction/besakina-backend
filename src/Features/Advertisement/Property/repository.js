@@ -49,13 +49,13 @@ const getAdvertisement = async (advertisementID) => {
     try {
         const [rows, field] = await connection.query(getUserAndVehicles, [advertisementID])
         if (rows.length === 0) {
-            return null;
+            return { error: true, data: { message: "no property to show.", statusCode: 404, data: null } };
         }
 
         let data = await parseImages(rows)
         data[0].user = await JSON.parse(data[0].user)
 
-        return data[0];
+        return { error: false, data: { message: "property", statusCode: 200, data: data[0] } };
     } catch (error) {
 
         logger.info(error);
@@ -73,12 +73,12 @@ const getListAdvertisement = async () => {
         const [advertisements, fields] = await connection.query(query, values)
 
         if (advertisements.length === 0) {
-            return null;
+            return { error: true, data: { message: "no property to show.", statusCode: 404, data: null } };
         }
 
         const data = await parseImages(advertisements)
 
-        return advertisements;
+        return { error: false, data: { message: "property list.", statusCode: 200, data: { "property": data } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -102,7 +102,7 @@ const filterAdvertisement = async (query) => {
         const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
-        return { error: false, message: "property filter list", "data": data };
+        return { error: false, message: "property filter list", "data": { "property": data } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
