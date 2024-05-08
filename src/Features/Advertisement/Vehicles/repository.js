@@ -165,8 +165,9 @@ export const addImage = async (advertisementID, files, userId) => {
     try {
         const [query, values] = await selectQuery("vehicles", {}, { id: advertisementID, user_id: userId })
         const [advertisement, field] = await connection.query(query, values);
+        console.log("adv", advertisement)
         if (advertisement.length == 0) {
-            throw new ApplicationError("vehicles not found.", 404);
+            return new ApplicationError("vehicles not found.", 404);
         }
         const images = JSON.parse(advertisement[0].images || '[]');
 
