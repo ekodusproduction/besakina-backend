@@ -26,11 +26,11 @@ export const addAdvertisement = async (req, res, next) => {
 export const getAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const advertisement = await repository.getAdvertisement(advertisementID);
-    if (advertisement.error) {
+    const result = await repository.getAdvertisement(advertisementID);
+    if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, advertisement.data.message, advertisement.data.statusCode, advertisement.data.data);
+    return sendResponse(res, result.data.message, result.data.statusCode, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -39,11 +39,11 @@ export const getAdvertisement = async (req, res, next) => {
 
 export const getListAdvertisement = async (req, res, next) => {
   try {
-    const advertisements = await repository.getListAdvertisement(req.params.id);
-    if (advertisements.error) {
+    const result = await repository.getListAdvertisement(req.params.id);
+    if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, "Property fetched successfully", 200, { "property": advertisements.data.data });
+    return sendResponse(res, "Property fetched successfully", 200, { "property": result.data.data });
   } catch (error) {
     logger.info(error)
     next(error);
