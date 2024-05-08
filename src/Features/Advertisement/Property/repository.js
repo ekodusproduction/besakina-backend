@@ -30,12 +30,14 @@ const addAdvertisement = async (requestBody, files) => {
         const photosJson = JSON.stringify(filePaths);
         requestBody.images = photosJson;
         const [query, values] = await insertQuery("property", requestBody)
+
         const [rows, field] = await connection.query(query, values);
         if (rows == null) {
             return { error: true, data: { message: "error adding property.", statusCode: 400, data: null } };
         }
         return { error: false, data: { message: "property added successfully", statusCode: 200, data: { id: rows.insertId } } };
     } catch (error) {
+        console.log(error)
         logger.info(error)
         throw new ApplicationError(error, 500);
     } finally {

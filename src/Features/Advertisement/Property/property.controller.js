@@ -11,7 +11,6 @@ import repository from "./repository.js";
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user_id = req.user_id
-
     const result = await repository.addAdvertisement(req.body, req.files);
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode);
