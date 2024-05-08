@@ -54,8 +54,9 @@ JSON_OBJECT(
      'offer_price', p.offer_price
 ) AS plan
 FROM users AS u
-LEFT JOIN plans AS p ON u.plan_id = p.id
-WHERE u.id = ?;`
+LEFT JOIN userselectedplans AS usp ON u.id = usp.user_id
+LEFT JOIN plans AS p ON usp.plan_id = p.id
+WHERE u.id = ?;`;
 
 
 export const countUserPosts = `SELECT SUM(total_count) AS total_posts

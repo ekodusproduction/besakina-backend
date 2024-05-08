@@ -71,7 +71,7 @@ export const addPlans = async (token, baseUrl) => {
             };
 
             const response = await axios.request(config);
-            console.log(JSON.stringify(response.data));
+            console.log("response", JSON.stringify(response.data));
         }
     } catch (error) {
         console.error("Error in adding plans:", error);

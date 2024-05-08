@@ -178,6 +178,7 @@ export const addImage = async (advertisementID, files, userId) => {
         const [rows] = await connection.query(update, updateValues);
         return { error: false, message: "Images added successfully to the vehicles", data: filePaths };
     } catch (error) {
+        console.log("error", error)
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
