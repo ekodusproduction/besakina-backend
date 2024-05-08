@@ -71,7 +71,7 @@ const getListAdvertisement = async () => {
     try {
         const [query, values] = await selectQuery("property", {}, { is_active: 1 })
         const [advertisements, fields] = await connection.query(query, values)
-
+        console.log("advertisements", advertisements)
         if (advertisements.length === 0) {
             return { error: true, data: { message: "no property to show.", statusCode: 404, data: null } };
         }
