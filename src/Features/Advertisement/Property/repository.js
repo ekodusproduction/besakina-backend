@@ -102,9 +102,12 @@ const filterAdvertisement = async (query) => {
         if (query?.maxPrice || query.maxPrice == '') delete query.maxPrice;
 
         const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
+        console.log("sql", sql)
+        console.log("values", values)
+
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
-        return { error: false, message: "property filter list", "data": { "property": data }, statusCode: 200 };
+        return { error: false, message: "property filter list", data: { "property": data }, statusCode: 200 };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
