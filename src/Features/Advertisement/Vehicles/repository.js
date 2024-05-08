@@ -167,7 +167,7 @@ export const addImage = async (advertisementID, files, userId) => {
         const [advertisement, field] = await connection.query(query, values);
         console.log("adv", advertisement)
         if (advertisement.length == 0) {
-            return new ApplicationError("vehicles not found.", 404);
+            return { error: true, data: { message: "vehicles not found.", statusCode: 404, data: null } };
         }
         const images = JSON.parse(advertisement[0].images || '[]');
 
@@ -177,7 +177,7 @@ export const addImage = async (advertisementID, files, userId) => {
         const [update, updateValues] = await updateQuery("vehicles", { images: photosJson }, { id: advertisementID })
 
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, message: "Images added successfully to the vehicles", data: filePaths };
+        return { error: false, data: { data: filePaths, message: "vehicles not found.", statusCode: 404 } };
     } catch (error) {
         console.log("error", error)
         logger.info(error);

@@ -90,7 +90,10 @@ export const addImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const result = await repository.addImage(advertisementID, req.files);
-    return sendResponse(res, result.message, 200, result.data);
+    if (result.error) {
+      return sendError(res, result.data.message, result.data.statusCode)
+    }
+    return sendResponse(res, result.message, 200, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
