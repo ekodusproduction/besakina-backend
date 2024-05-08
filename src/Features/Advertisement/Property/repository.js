@@ -104,7 +104,7 @@ const filterAdvertisement = async (query) => {
         const [sql, values] = await filterQuery("property", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
-        return { error: false, message: "property filter list", "data": { "property": data } };
+        return { error: false, message: "property filter list", "data": { "property": data }, statusCode: 200 };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
