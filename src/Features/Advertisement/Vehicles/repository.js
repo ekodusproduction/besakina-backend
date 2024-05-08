@@ -29,9 +29,9 @@ const addAdvertisement = async (requestBody, files) => {
         const [query, values] = await insertQuery("vehicles", requestBody)
         const [rows, field] = await connection.query(query, values);
         if (rows == null) {
-            return { error: true, message: "Error adding vehicles" };
+            return { error: true, data: { message: "error adding vehicles.", statusCode: 400, data: null } };
         }
-        return { error: false, message: "vehicles added successfully", id: rows.insertId };
+        return { error: false, data: { message: "vehicles added successfully", statusCode: 200, data: { id: rows.insertId } } };
     } catch (error) {
         logger.info(error)
         throw new ApplicationError(error, 500);
@@ -90,14 +90,11 @@ const filterAdvertisement = async (query) => {
     try {
         let minPrice = query.minPrice && query.minPrice != '' ? parseInt(query.minPrice) : undefined;
         let maxPrice = query.maxPrice && query.maxPrice != '' ? parseInt(query.maxPrice) : undefined;
-        console.log("minPrice", minPrice)
-        console.log("maxPrice", maxPrice)
+
         const rangeCondition = minPrice != undefined && maxPrice != undefined ? { price: { min: minPrice, max: maxPrice } } : {};
 
         if (query?.minPrice || query.minPrice == '') delete query.minPrice;
         if (query?.maxPrice || query.maxPrice == '') delete query.maxPrice;
-        console.log("query", query)
-        console.log("rangeCondition", rangeCondition)
 
         const [sql, values] = await filterQuery("vehicles", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
@@ -116,18 +113,16 @@ export const updateAdvertisement = async (advertisementID, updateBody, userId) =
     let connection = await pool.getConnection();
 
     try {
-
         if (!updateBody || typeof updateBody !== 'object') {
-            throw new ApplicationError("Invalid updateBody object provided", 400);
+            return { error: true, data: { message: "Invalid request body", statusCode: 400, data: null } };
         }
         const [sql, values] = await updateQuery("vehicles", updateBody, { "id": advertisementID, "user_id": userId })
         const [rows, field] = await connection.query(sql, values)
 
         if (!rows) {
-            throw new ApplicationError("vehicles not updated. No matching vehicles found for the provided ID.", 404);
+            return { error: true, data: { message: "vehicles not updated. No matching vehicles found for the provided ID.", statusCode: 404, data: null } };
         }
-
-        return { error: false, message: "vehicles updated successfully", "advertisements": rows };
+        return { error: false, data: { message: "vehicles updated successfully", statusCode: 404, data: rows } };
     } catch (error) {
         console.log("error in repo", error)
         logger.info(error);
@@ -144,13 +139,13 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
         const [advertisement, selectFields] = await connection.query(select, [advertisementID, userId]);
 
         if (advertisement.length == 0) {
-            throw new ApplicationError("Advertisement not found", 500);
+            return { error: true, data: { message: "vehicles not found.", statusCode: 404, data: null } };
         }
 
         const sql = `UPDATE vehicles SET is_active = 0 WHERE id = ?`;
         const [rows, fields] = await connection.query(sql, [advertisementID]);
 
-        return { error: false, message: "Advertisement deactivated successfully" };
+        return { error: false, data: { message: "vehicles deactivated successfully.", statusCode: 200, data: null } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -177,7 +172,7 @@ export const addImage = async (advertisementID, files, userId) => {
         const [update, updateValues] = await updateQuery("vehicles", { images: photosJson }, { id: advertisementID })
 
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, data: { data: filePaths, message: "vehicles not found.", statusCode: 404 } };
+        return { error: false, data: { data: filePaths, message: "vehicles added.", statusCode: 200 } };
     } catch (error) {
         console.log("error", error)
         logger.info(error);
@@ -195,10 +190,10 @@ export const deleteImage = async (advertisementID, files, userId) => {
         const [rows, fields] = await connection.query(sql, [advertisementID, userId])
 
         if (rows[0].length == 0) {
-            throw new ApplicationError("vehicles not found.", 404);
+            return { error: true, data: { message: "vehicles not found.", statusCode: 404, data: null } };
         }
         if (rows[0].images == []) {
-            return { error: false, message: "Images deleted successfully from the vehicles" };
+            return { error: false, data: { data: null, message: "Images deleted successfully from the vehicles", statusCode: 200 } };
         }
 
         const parsedImages = JSON.parse(rows[0].images || []);
@@ -210,15 +205,16 @@ export const deleteImage = async (advertisementID, files, userId) => {
         let images = filteredImages;
 
         const photosJson = JSON.stringify(images);
-
+        if (images.length == 0) {
+            return { error: true, data: { data: null, message: "User cannot delete all images. must have 1 image.", statusCode: 400 } };
+        }
         const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
 
         await connection.query(updateSql, [photosJson, advertisementID])
 
-        return { error: false, message: "Images deleted successfully from the vehicles" };
+        return { error: false, data: { data: null, message: "Images deleted successfully from the vehicles", statusCode: 200 } };
     } catch (error) {
         logger.info(error);
-        console.log("erro riu catch", error)
         throw new ApplicationError(error, 500);
     } finally {
         connection.release();
@@ -233,11 +229,11 @@ export const activateAdvertisement = async (advertisementID, userId) => {
         const [advertisement] = await connection.query(query, values);
 
         if (advertisement.length == 0) {
-            throw new ApplicationError("vehicles not found.", 404);
+            return { error: true, data: { message: "vehicles not found.", statusCode: 404, data: null } };
         }
         const [update, updateValues] = await updateQuery('vehicles', { is_active: 1 }, { id: advertisementID })
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, message: "vehicles activated successfully", data: rows };
+        return { error: false, data: { data: rows, message: "vehicles activated successfully", statusCode: 200 } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -251,7 +247,7 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
     try {
         const sql = `DELETE FROM vehicles WHERE id = ? AND user_id = ?`
         const [advertisement] = await connection.query(sql, [advertisementID, userId]);
-        return { error: false, message: "property deleted successfully" };
+        return { error: false, message: "vehicles deleted successfully" };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);

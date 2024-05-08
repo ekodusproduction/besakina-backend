@@ -10,16 +10,16 @@ import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./doctor.validations.js";
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
+import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
 
 const doctorRouter = Router()
 //protected routes id=> advertisement id
-doctorRouter.post("/add", jwtAuth, fileUpload("doctors"), validationMiddlewarePost, addAdvertisement)
+doctorRouter.post("/add", jwtAuth, fileUpload("doctors"), validationMiddlewarePost, checkUserProfileCompletion, addAdvertisement)
 doctorRouter.get("/filter", filterAdvertisement)
 doctorRouter.put("/id/:id", jwtAuth, updateAdvertisement)
 doctorRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 doctorRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 doctorRouter.get("/id/:id", getAdvertisement)
-// images 
 //id =>advertisement id
 doctorRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 doctorRouter.post("/images/id/:id", jwtAuth, fileUpload("doctors"), imageValidator, addImage)

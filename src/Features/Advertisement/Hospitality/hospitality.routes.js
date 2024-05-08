@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {
-    deactivateAdvertisement, updateAdvertisement, filterAdvertisement, 
+    deactivateAdvertisement, updateAdvertisement, filterAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
     deleteAdvertisement
 } from "./hospitality.controller.js"
@@ -10,10 +10,13 @@ import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitality.validation.js";
 import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
+import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
+
+
 const hospitalityRouter = Router()
 
 //protected routes id=> advertisement id
-hospitalityRouter.post("/add", jwtAuth, fileUpload("hospitality"), validationMiddlewarePost, addAdvertisement)
+hospitalityRouter.post("/add", jwtAuth, fileUpload("hospitality"), validationMiddlewarePost, checkUserProfileCompletion, addAdvertisement)
 
 hospitalityRouter.get("/filter", filterAdvertisement)
 

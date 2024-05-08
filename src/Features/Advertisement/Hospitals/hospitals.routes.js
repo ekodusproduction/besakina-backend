@@ -10,9 +10,11 @@ import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitals.validation.js";
+import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
+
 const hospitalsRouter = Router()
 //protected routes id=> advertisement id
-hospitalsRouter.post("/add", jwtAuth, fileUpload("hospitals"), validationMiddlewarePost, addAdvertisement)
+hospitalsRouter.post("/add", jwtAuth, fileUpload("hospitals"), validationMiddlewarePost, checkUserProfileCompletion, addAdvertisement)
 
 hospitalsRouter.get("/filter", filterAdvertisement)
 

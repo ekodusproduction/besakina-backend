@@ -14,6 +14,7 @@ const parseImages = async (advertisements) => {
         return advertisement;
     });
 };
+
 const parseUser = async (advertisements) => {
     return advertisements.map(advertisement => {
         advertisement.user = JSON.parse(advertisement.user);
@@ -31,16 +32,14 @@ const addAdvertisement = async (requestBody, files) => {
         const [query, values] = await insertQuery("doctors", requestBody)
         const [rows, field] = await connection.query(query, values);
         if (rows == null) {
-            return { error: true, message: "Error adding doctors" };
+            return { error: true, data: { message: "error adding doctors.", statusCode: 400, data: null } };
         }
-        return { error: false, message: "doctors added successfully", id: rows.insertId };
+        return { error: false, data: { message: "doctors added successfully", statusCode: 200, data: { id: rows.insertId } } };
     } catch (error) {
-
         logger.info(error)
         throw new ApplicationError(error, 500);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
-
+        connection.release();
     }
 };
 
@@ -58,13 +57,11 @@ const getAdvertisement = async (advertisementID) => {
 
         return data[0];
     } catch (error) {
-        console.log("erro riu catch", error)
 
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
-
+        connection.release();
     }
 };
 
@@ -94,12 +91,13 @@ const filterAdvertisement = async (query) => {
     let connection = await pool.getConnection();
 
     try {
-        const minPrice = query.minPrice ? parseInt(query.minPrice) : undefined;
-        const maxPrice = query.maxPrice ? parseInt(query.maxPrice) : undefined;
-        const rangeCondition = minPrice !== undefined && maxPrice !== undefined ? { price: { min: minPrice, max: maxPrice } } : {};
+        let minPrice = query.minPrice && query.minPrice != '' ? parseInt(query.minPrice) : undefined;
+        let maxPrice = query.maxPrice && query.maxPrice != '' ? parseInt(query.maxPrice) : undefined;
 
-        if (query?.minPrice) delete query.minPrice;
-        if (query?.maxPrice) delete query.maxPrice;
+        const rangeCondition = minPrice != undefined && maxPrice != undefined ? { price: { min: minPrice, max: maxPrice } } : {};
+
+        if (query?.minPrice || query.minPrice == '') delete query.minPrice;
+        if (query?.maxPrice || query.maxPrice == '') delete query.maxPrice;
 
         const [sql, values] = await filterQuery("doctors", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
@@ -113,20 +111,21 @@ const filterAdvertisement = async (query) => {
     }
 };
 
-const updateAdvertisement = async (advertisementID, updateBody, userId) => {
+
+export const updateAdvertisement = async (advertisementID, updateBody, userId) => {
     let connection = await pool.getConnection();
+
     try {
         if (!updateBody || typeof updateBody !== 'object') {
-            throw new ApplicationError("Invalid updateBody object provided", 400);
+            return { error: true, data: { message: "Invalid request body", statusCode: 400, data: null } };
         }
         const [sql, values] = await updateQuery("doctors", updateBody, { "id": advertisementID, "user_id": userId })
         const [rows, field] = await connection.query(sql, values)
 
         if (!rows) {
-            throw new ApplicationError("doctors not updated. No matching doctors found for the provided ID.", 404);
+            return { error: true, data: { message: "doctors not updated. No matching doctors found for the provided ID.", statusCode: 404, data: null } };
         }
-
-        return { error: false, message: "doctors updated successfully", "advertisements": rows };
+        return { error: false, data: { message: "doctors updated successfully", statusCode: 404, data: rows } };
     } catch (error) {
         console.log("error in repo", error)
         logger.info(error);
@@ -136,20 +135,20 @@ const updateAdvertisement = async (advertisementID, updateBody, userId) => {
     }
 };
 
-const deactivateAdvertisement = async (advertisementID, userId) => {
+export const deactivateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
     try {
         const select = `SELECT * FROM doctors WHERE is_active = 1 AND id = ? AND user_id = ?`;
         const [advertisement, selectFields] = await connection.query(select, [advertisementID, userId]);
 
         if (advertisement.length == 0) {
-            throw new ApplicationError("Advertisement not found", 500);
+            return { error: true, data: { message: "doctors not found.", statusCode: 404, data: null } };
         }
 
         const sql = `UPDATE doctors SET is_active = 0 WHERE id = ?`;
         const [rows, fields] = await connection.query(sql, [advertisementID]);
 
-        return { error: false, message: "Advertisement deactivated successfully" };
+        return { error: false, data: { message: "doctors deactivated successfully.", statusCode: 200, data: null } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -158,14 +157,15 @@ const deactivateAdvertisement = async (advertisementID, userId) => {
     }
 };
 
-const addImage = async (advertisementID, files, userId) => {
+export const addImage = async (advertisementID, files, userId) => {
     let connection = await pool.getConnection();
 
     try {
         const [query, values] = await selectQuery("doctors", {}, { id: advertisementID, user_id: userId })
         const [advertisement, field] = await connection.query(query, values);
+        console.log("adv", advertisement)
         if (advertisement.length == 0) {
-            throw new ApplicationError("doctors not found.", 404);
+            return { error: true, data: { message: "doctors not found.", statusCode: 404, data: null } };
         }
         const images = JSON.parse(advertisement[0].images || '[]');
 
@@ -175,8 +175,9 @@ const addImage = async (advertisementID, files, userId) => {
         const [update, updateValues] = await updateQuery("doctors", { images: photosJson }, { id: advertisementID })
 
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, message: "Images added successfully to the doctors", data: filePaths };
+        return { error: false, data: { data: filePaths, message: "doctors added.", statusCode: 200 } };
     } catch (error) {
+        console.log("error", error)
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
@@ -184,7 +185,7 @@ const addImage = async (advertisementID, files, userId) => {
     }
 };
 
-const deleteImage = async (advertisementID, files, userId) => {
+export const deleteImage = async (advertisementID, files, userId) => {
     let connection = await pool.getConnection();
 
     try {
@@ -192,10 +193,10 @@ const deleteImage = async (advertisementID, files, userId) => {
         const [rows, fields] = await connection.query(sql, [advertisementID, userId])
 
         if (rows[0].length == 0) {
-            throw new ApplicationError("doctors not found.", 404);
+            return { error: true, data: { message: "doctors not found.", statusCode: 404, data: null } };
         }
         if (rows[0].images == []) {
-            return { error: false, message: "Images deleted successfully from the doctors" };
+            return { error: false, data: { data: null, message: "Images deleted successfully from the doctors", statusCode: 200 } };
         }
 
         const parsedImages = JSON.parse(rows[0].images || []);
@@ -207,37 +208,35 @@ const deleteImage = async (advertisementID, files, userId) => {
         let images = filteredImages;
 
         const photosJson = JSON.stringify(images);
-
+        if (images.length == 0) {
+            return { error: true, data: { data: null, message: "User cannot delete all images. must have 1 image.", statusCode: 400 } };
+        }
         const updateSql = `UPDATE doctors SET images =? WHERE id = ?`
 
         await connection.query(updateSql, [photosJson, advertisementID])
 
-        return { error: false, message: "Images deleted successfully from the doctors" };
+        return { error: false, data: { data: null, message: "Images deleted successfully from the doctors", statusCode: 200 } };
     } catch (error) {
         logger.info(error);
-        console.log("erro riu catch", error)
         throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
 };
 
-
-
-const activateAdvertisement = async (advertisementID, userId) => {
+export const activateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
 
     try {
-
         const [query, values] = await selectQuery('doctors', { is_active: 1 }, { id: advertisementID, user_id: userId })
         const [advertisement] = await connection.query(query, values);
 
         if (advertisement.length == 0) {
-            throw new ApplicationError("doctors not found.", 404);
+            return { error: true, data: { message: "doctors not found.", statusCode: 404, data: null } };
         }
         const [update, updateValues] = await updateQuery('doctors', { is_active: 1 }, { id: advertisementID })
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, message: "doctors activated successfully", data: rows };
+        return { error: false, data: { data: rows, message: "doctors activated successfully", statusCode: 200 } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -246,12 +245,12 @@ const activateAdvertisement = async (advertisementID, userId) => {
     }
 };
 
-const deleteAdvertisement = async (advertisementID, userId) => {
+export const deleteAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
     try {
         const sql = `DELETE FROM doctors WHERE id = ? AND user_id = ?`
         const [advertisement] = await connection.query(sql, [advertisementID, userId]);
-        return { error: false, message: "property deleted successfully" };
+        return { error: false, message: "doctors deleted successfully" };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -259,6 +258,7 @@ const deleteAdvertisement = async (advertisementID, userId) => {
         connection.release();
     }
 };
+
 
 export default {
     addAdvertisement,
