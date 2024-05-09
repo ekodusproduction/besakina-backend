@@ -101,7 +101,7 @@ const filterAdvertisement = async (query) => {
 
         if (query?.minPrice || query.minPrice == '') delete query.minPrice;
         if (query?.maxPrice || query.maxPrice == '') delete query.maxPrice;
-
+        console.log("query", query)
         const [sql, values] = await filterQuery("education", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
