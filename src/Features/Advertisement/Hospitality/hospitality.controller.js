@@ -57,7 +57,7 @@ export const filterAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.message, 200, result.data.data);
+    return sendResponse(res, result.data.message, 200, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);

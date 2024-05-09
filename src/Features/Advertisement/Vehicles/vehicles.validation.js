@@ -33,7 +33,6 @@ export const vehiclesValidationRules = () => {
   ];
 };
 
-
 export const editVehiclesValidationRules = () => {
   return [
     body('vehicle_type').optional().isString().withMessage('Vehicle type must be a string'),
