@@ -12,19 +12,17 @@ export const vehiclesValidationRules = () => {
     body('description').isString().withMessage('Description must be a string').trim().notEmpty().withMessage('Description is required'),
     body('price').isString().withMessage('Price must be a integer').notEmpty().withMessage('Price is required'),
 
-    body('fuel').isString().withMessage('fuel must be a string'),
-    body('second_hand').isString().withMessage('second_hand must be a string'),
-    body('model').isString().withMessage('model must be a string'),
-    body('transmission').isString().withMessage('transmission must be a string'),
-    body('variant').isString().withMessage('variant must be a string'),
+    body('fuel').optional().isString().withMessage('fuel must be a string'),
+    body('second_hand').optional().isString().withMessage('second_hand must be a string'),
+    body('model').optional().isString().withMessage('model must be a string'),
+    body('transmission').optional().isString().withMessage('transmission must be a string'),
+    body('variant').optional().isString().withMessage('variant must be a string'),
 
-    body('street').optional().isString().withMessage('Street must be a string'),
+    body('street').isString().withMessage('Street must be a string'),
     body('locality').isString().withMessage('locality must be a string'),
     body('city').isString().withMessage('City must be a string'),
     body('state').isString().withMessage('State must be a string'),
     body('pincode').isString().withMessage('Pincode must be an integer').notEmpty().withMessage('Pincode is required'),
-
-    // body('verified').isString().withMessage('verified must be a boolean'),
 
     body('images').optional(),
     body('video').optional(),
