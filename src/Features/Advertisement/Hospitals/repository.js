@@ -102,7 +102,7 @@ const filterAdvertisement = async (query) => {
         const [sql, values] = await filterQuery("hospitals", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
-        return { error: false, message: "hospitals filter list", "data": { "hospitals": data } };
+        return { error: false, "data": { message: "hospitals filter list", data: { "hospitals": data } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
