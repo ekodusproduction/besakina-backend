@@ -105,11 +105,10 @@ export const addUserDetails = async function (req, res, next) {
 
         return sendResponse(res, 'User details added.', 201, field, null);
     } catch (error) {
-
+        console.log(error)
         next(error);
     } finally {
         connection.release();
-
     }
 }
 
