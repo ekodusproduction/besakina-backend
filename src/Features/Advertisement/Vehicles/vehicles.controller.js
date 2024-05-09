@@ -8,12 +8,11 @@ import repository from "./repository.js";
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user_id = req.user_id
-
     const result = await repository.addAdvertisement(req.body, req.files);
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode);
     }
-    return sendResponse(res, result.message, 201, result.data.data);
+    return sendResponse(res, result.data.message, 201, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
