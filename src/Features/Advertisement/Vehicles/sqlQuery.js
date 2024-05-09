@@ -12,7 +12,7 @@ JSON_OBJECT(
      'locality', p.locality,
      'pincode', p.pincode,
      'about', p.about,
-     'created_at', p.created_at,
+     'created_at', p.created_at
 ) AS user
 FROM vehicles AS u
 LEFT JOIN users AS p ON u.user_id = p.id
