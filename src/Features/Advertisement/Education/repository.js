@@ -30,12 +30,14 @@ const addAdvertisement = async (requestBody, files) => {
         const photosJson = JSON.stringify(filePaths);
         requestBody.images = photosJson;
         const [query, values] = await insertQuery("education", requestBody)
+
         const [rows, field] = await connection.query(query, values);
         if (rows == null) {
             return { error: true, data: { message: "error adding education.", statusCode: 400, data: null } };
         }
         return { error: false, data: { message: "education added successfully", statusCode: 200, data: { id: rows.insertId } } };
     } catch (error) {
+        console.log(error)
         logger.info(error)
         throw new ApplicationError(error, 500);
     } finally {
@@ -47,15 +49,15 @@ const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
     try {
-        const [rows, field] = await connection.query(getUserAndVehicles, [advertisementID])
+        const [rows, field] = await connection.query(getUserAndHospitality, [advertisementID])
         if (rows.length === 0) {
-            return null;
+            return { error: true, data: { message: "no education to show.", statusCode: 404, data: null } };
         }
 
         let data = await parseImages(rows)
         data[0].user = await JSON.parse(data[0].user)
 
-        return data[0];
+        return { error: false, data: { message: "education", statusCode: 200, data: data[0] } };
     } catch (error) {
 
         logger.info(error);
@@ -71,14 +73,14 @@ const getListAdvertisement = async () => {
     try {
         const [query, values] = await selectQuery("education", {}, { is_active: 1 })
         const [advertisements, fields] = await connection.query(query, values)
-
+        console.log("education", advertisements)
         if (advertisements.length === 0) {
-            return null;
+            return { error: true, data: { message: "no education to show.", statusCode: 404, data: null } };
         }
 
         const data = await parseImages(advertisements)
 
-        return advertisements;
+        return { error: false, data: { message: "education list.", statusCode: 200, data: { "education": data } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -86,6 +88,7 @@ const getListAdvertisement = async () => {
         connection.release();
     }
 };
+
 
 const filterAdvertisement = async (query) => {
     let connection = await pool.getConnection();
@@ -102,7 +105,7 @@ const filterAdvertisement = async (query) => {
         const [sql, values] = await filterQuery("education", [], { is_active: 1, ...query }, rangeCondition);
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
-        return { error: false, message: "education filter list", "data": data };
+        return { error: false, data: { message: "education filter list", "data": { "education": data } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -175,7 +178,7 @@ export const addImage = async (advertisementID, files, userId) => {
         const [update, updateValues] = await updateQuery("education", { images: photosJson }, { id: advertisementID })
 
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, data: { data: filePaths, message: "education added.", statusCode: 200 } };
+        return { error: false, data: { data: filePaths, message: "education image has been added.", statusCode: 200 } };
     } catch (error) {
         console.log("error", error)
         logger.info(error);
