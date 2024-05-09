@@ -47,7 +47,7 @@ const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
     try {
-        const [rows, field] = await connection.query(getUserAndHospitality, [advertisementID])
+        const [rows, field] = await connection.query(getUserAndHospitals, [advertisementID])
         if (rows.length === 0) {
             return { error: true, data: { message: "no hospitals to show.", statusCode: 404, data: null } };
         }

@@ -265,7 +265,7 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
 export default {
     addAdvertisement,
     getAdvertisement,
-
+    getListAdvertisement,
     filterAdvertisement,
     deactivateAdvertisement,
     updateAdvertisement,
