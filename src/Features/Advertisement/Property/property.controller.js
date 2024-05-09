@@ -42,7 +42,7 @@ export const getListAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, "Property fetched successfully", 200, result.data.data);
+    return sendResponse(res, result.data.message, 200, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);

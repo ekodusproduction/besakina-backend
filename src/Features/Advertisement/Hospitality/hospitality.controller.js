@@ -11,12 +11,11 @@ import repository from "./repository.js";
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user_id = req.user_id
-
     const result = await repository.addAdvertisement(req.body, req.files);
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode);
     }
-    return sendResponse(res, result.message, 201, result.data.data);
+    return sendResponse(res, result.data.message, 201, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -26,11 +25,11 @@ export const addAdvertisement = async (req, res, next) => {
 export const getAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const advertisement = await repository.getAdvertisement(advertisementID);
-    if (advertisement.error) {
+    const result = await repository.getAdvertisement(advertisementID);
+    if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, "hospitality fetched successfully", 200, { advertisement });
+    return sendResponse(res, result.data.message, result.data.statusCode, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -39,11 +38,11 @@ export const getAdvertisement = async (req, res, next) => {
 
 export const getListAdvertisement = async (req, res, next) => {
   try {
-    const advertisements = await repository.getListAdvertisement(req.params.id);
-    if (advertisements.error) {
+    const result = await repository.getListAdvertisement(req.params.id);
+    if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, "hospitality fetched successfully", 200, { "hospitality": advertisements });
+    return sendResponse(res, result.data.message, 200, { "hospitality": result.data.data });
   } catch (error) {
     logger.info(error)
     next(error);

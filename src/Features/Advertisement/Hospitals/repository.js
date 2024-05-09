@@ -43,21 +43,21 @@ const addAdvertisement = async (requestBody, files) => {
     }
 };
 
-const getAdvertisement = async (advertisementID) => {
+export const getListAdvertisement = async () => {
     let connection = await pool.getConnection();
 
     try {
-        const [rows, field] = await connection.query(getUserAndVehicles, [advertisementID])
-        if (rows.length === 0) {
-            return null;
+        const [query, values] = await selectQuery("hospitals", {}, { is_active: 1 })
+        const [advertisements, fields] = await connection.query(query, values)
+        console.log("hospitals", advertisements)
+        if (advertisements.length === 0) {
+            return { error: true, data: { message: "no hospitals to show.", statusCode: 404, data: null } };
         }
 
-        let data = await parseImages(rows)
-        data[0].user = await JSON.parse(data[0].user)
+        const data = await parseImages(advertisements)
 
-        return data[0];
+        return { error: false, data: { message: "hospitals list.", statusCode: 200, data: { "hospitals": data } } };
     } catch (error) {
-
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
@@ -65,20 +65,21 @@ const getAdvertisement = async (advertisementID) => {
     }
 };
 
+
 const getListAdvertisement = async () => {
     let connection = await pool.getConnection();
 
     try {
         const [query, values] = await selectQuery("hospitals", {}, { is_active: 1 })
         const [advertisements, fields] = await connection.query(query, values)
-
+        console.log("advertisements", advertisements)
         if (advertisements.length === 0) {
-            return null;
+            return { error: true, data: { message: "no hospitals to show.", statusCode: 404, data: null } };
         }
 
         const data = await parseImages(advertisements)
 
-        return advertisements;
+        return { error: false, data: { message: "hospitals list.", statusCode: 200, data: { "hospitals": data } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
