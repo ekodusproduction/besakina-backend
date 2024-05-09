@@ -53,7 +53,7 @@ const getAdvertisement = async (advertisementID) => {
         data[0].user = await JSON.parse(data[0].user)
         return { error: false, data: { message: "vehicles", statusCode: 200, data: data[0] } };
     } catch (error) {
-        console.log(error)
+        console.log("error", error)
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
