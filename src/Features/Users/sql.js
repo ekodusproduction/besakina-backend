@@ -127,3 +127,6 @@ ON
     usp.plan_id = p.id
 WHERE 
     usp.user_id = ?`
+
+
+export const getUserMobileById = `SELECT * FROM users WHERE id = ?`;

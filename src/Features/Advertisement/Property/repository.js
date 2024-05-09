@@ -254,7 +254,7 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
     try {
         const sql = `DELETE FROM property WHERE id = ? AND user_id = ?`
-        const [advertisement] = await connection.query(sql, [advertisementID, userId]);
+        await connection.query(sql, [advertisementID, userId]);
         return { error: false, message: "property deleted successfully" };
     } catch (error) {
         logger.info(error);

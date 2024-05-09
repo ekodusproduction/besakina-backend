@@ -3,7 +3,7 @@ import dotenv, { parse } from 'dotenv';
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
-import { getAllPosts, getUserAndPlan } from "./sql.js";
+import { getAllPosts, getUserAndPlan, getUserMobileById } from "./sql.js";
 import { insertQuery, selectQuery, updateQuery } from "../../Utility/sqlQuery.js";
 dotenv.config();
 
@@ -167,6 +167,24 @@ export const planSubscribe = async function (req, res, next) {
         userDetails[0].plan = JSON.parse(userDetails[0].plan);
 
         return sendResponse(res, 'User details', 201, userDetails[0], null);
+    } catch (error) {
+        next(error);
+    } finally {
+        connection.release();
+    }
+}
+
+export const getUserById = async function (req, res, next) {
+    const user_id = req.params.id;
+    let connection = await pool.getConnection();
+    try {
+        const [userDetails, fields] = await pool.query(getUserMobileById, [user_id]);
+
+        if (userDetails.length === 0) {
+            return sendResponse(res, "Advertisement fetched successfully", 200);
+        }
+
+        return sendResponse(res, 'User details', 201, userDetails[0]);
     } catch (error) {
         next(error);
     } finally {
