@@ -30,12 +30,14 @@ const addAdvertisement = async (requestBody, files) => {
         const photosJson = JSON.stringify(filePaths);
         requestBody.images = photosJson;
         const [query, values] = await insertQuery("doctors", requestBody)
+
         const [rows, field] = await connection.query(query, values);
         if (rows == null) {
             return { error: true, data: { message: "error adding doctors.", statusCode: 400, data: null } };
         }
         return { error: false, data: { message: "doctors added successfully", statusCode: 200, data: { id: rows.insertId } } };
     } catch (error) {
+        console.log(error)
         logger.info(error)
         throw new ApplicationError(error, 500);
     } finally {
@@ -49,13 +51,13 @@ const getAdvertisement = async (advertisementID) => {
     try {
         const [rows, field] = await connection.query(getUserAndDoctors, [advertisementID])
         if (rows.length === 0) {
-            return null;
+            return { error: true, data: { message: "no doctors to show.", statusCode: 404, data: null } };
         }
 
         let data = await parseImages(rows)
         data[0].user = await JSON.parse(data[0].user)
 
-        return data[0];
+        return { error: false, data: { message: "doctors", statusCode: 200, data: data[0] } };
     } catch (error) {
 
         logger.info(error);
@@ -71,14 +73,14 @@ const getListAdvertisement = async () => {
     try {
         const [query, values] = await selectQuery("doctors", {}, { is_active: 1 })
         const [advertisements, fields] = await connection.query(query, values)
-
+        console.log("advertisements", advertisements)
         if (advertisements.length === 0) {
-            return null;
+            return { error: true, data: { message: "no doctors to show.", statusCode: 404, data: null } };
         }
 
         const data = await parseImages(advertisements)
 
-        return advertisements;
+        return { error: false, data: { message: "doctors list.", statusCode: 200, data: { "doctors": data } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -100,9 +102,12 @@ const filterAdvertisement = async (query) => {
         if (query?.maxPrice || query.maxPrice == '') delete query.maxPrice;
 
         const [sql, values] = await filterQuery("doctors", [], { is_active: 1, ...query }, rangeCondition);
+        console.log("sql", sql)
+        console.log("values", values)
+
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
-        return { error: false, message: "doctors filter list", "data": data };
+        return { error: false, data: { message: "doctors filter list", "data": { "doctors": data } }, statusCode: 200 };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -175,7 +180,7 @@ export const addImage = async (advertisementID, files, userId) => {
         const [update, updateValues] = await updateQuery("doctors", { images: photosJson }, { id: advertisementID })
 
         const [rows] = await connection.query(update, updateValues);
-        return { error: false, data: { data: filePaths, message: "doctors added.", statusCode: 200 } };
+        return { error: false, data: { data: filePaths, message: "doctors image has been added.", statusCode: 200 } };
     } catch (error) {
         console.log("error", error)
         logger.info(error);
