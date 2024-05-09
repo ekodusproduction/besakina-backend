@@ -49,7 +49,7 @@ const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
     try {
-        const [rows, field] = await connection.query(getUserAndProperty, [advertisementID])
+        const [rows, field] = await connection.query(getUserAndVehicles, [advertisementID])
         if (rows.length === 0) {
             return { error: true, data: { message: "no property to show.", statusCode: 404, data: null } };
         }
