@@ -26,6 +26,8 @@ export const createUserTable = async function () {
             locality VARCHAR(255),
             pincode VARCHAR(255),
             about VARCHAR(255),
+            
+            verified BOOLEAN DEFAULT 0,
 
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

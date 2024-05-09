@@ -6,7 +6,6 @@ import { fileUpload } from "../../Middlewares/multer.middlewares.js";
 const userRouter = Router()
 
 userRouter.get("/", jwtAuth, getUsers)
-
 userRouter.post("/login", loginValidation, login)
 userRouter.post("/sendotp", mobileValidation, sendOtp)
 userRouter.post("/details", jwtAuth, fileUpload("users"), addUserDetails)
