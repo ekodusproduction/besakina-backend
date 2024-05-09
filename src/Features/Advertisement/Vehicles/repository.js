@@ -44,15 +44,15 @@ const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
     try {
-        const [rows, field] = await connection.query(getUserAndVehicles, [advertisementID])
+        const [rows, field] = await connection.query(getUserAndProperty, [advertisementID])
         if (rows.length === 0) {
-            return null;
+            return { error: true, data: { message: "no vehicles to show.", statusCode: 404, data: null } };
         }
 
         let data = await parseImages(rows)
         data[0].user = await JSON.parse(data[0].user)
 
-        return data[0];
+        return { error: false, data: { message: "vehicles", statusCode: 200, data: data[0] } };
     } catch (error) {
 
         logger.info(error);
@@ -68,14 +68,13 @@ const getListAdvertisement = async () => {
     try {
         const [query, values] = await selectQuery("vehicles", {}, { is_active: 1 })
         const [advertisements, fields] = await connection.query(query, values)
-
         if (advertisements.length === 0) {
-            return null;
+            return { error: true, data: { message: "no vehicles to show.", statusCode: 404, data: null } };
         }
 
         const data = await parseImages(advertisements)
 
-        return advertisements;
+        return { error: false, data: { message: "vehicles list.", statusCode: 200, data: { "vehicles": data } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -97,9 +96,10 @@ const filterAdvertisement = async (query) => {
         if (query?.maxPrice || query.maxPrice == '') delete query.maxPrice;
 
         const [sql, values] = await filterQuery("vehicles", [], { is_active: 1, ...query }, rangeCondition);
+
         const [rows, fields] = await connection.query(sql, values);
         const data = await parseImages(rows);
-        return { error: false, message: "vehicles filter list", "data": data };
+        return { error: false, data: { message: "vehicles filter list", "data": { "vehicles": data } }, statusCode: 200 };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
