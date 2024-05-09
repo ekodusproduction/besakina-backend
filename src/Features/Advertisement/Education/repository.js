@@ -107,6 +107,7 @@ const filterAdvertisement = async (query) => {
         const data = await parseImages(rows);
         return { error: false, data: { message: "education filter list", "data": { "education": data } } };
     } catch (error) {
+        console.log(error)
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
