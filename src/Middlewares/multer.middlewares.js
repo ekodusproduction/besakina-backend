@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { cwd } from "process";
+import { s3Client } from "../config/aws-sdk.js";
 
 
 const __filename = fileURLToPath(import.meta.url);

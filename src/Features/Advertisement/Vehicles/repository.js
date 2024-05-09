@@ -40,6 +40,7 @@ const addAdvertisement = async (requestBody, files) => {
     }
 };
 
+
 const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
@@ -48,11 +49,9 @@ const getAdvertisement = async (advertisementID) => {
         if (rows.length === 0) {
             return { error: true, data: { message: "no vehicles to show.", statusCode: 404, data: null } };
         }
-
         let data = await parseImages(rows)
         data[0].user = await JSON.parse(data[0].user)
-
-        return { error: false, data: { message: "vehicle", statusCode: 200, data: data[0] } };
+        return { error: false, data: { message: "vehicles", statusCode: 200, data: data[0] } };
     } catch (error) {
 
         logger.info(error);
