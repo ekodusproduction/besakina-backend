@@ -43,28 +43,27 @@ const addAdvertisement = async (requestBody, files) => {
     }
 };
 
-export const getListAdvertisement = async () => {
+const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
 
     try {
-        const [query, values] = await selectQuery("hospitals", {}, { is_active: 1 })
-        const [advertisements, fields] = await connection.query(query, values)
-        console.log("hospitals", advertisements)
-        if (advertisements.length === 0) {
+        const [rows, field] = await connection.query(getUserAndHospitality, [advertisementID])
+        if (rows.length === 0) {
             return { error: true, data: { message: "no hospitals to show.", statusCode: 404, data: null } };
         }
 
-        const data = await parseImages(advertisements)
+        let data = await parseImages(rows)
+        data[0].user = await JSON.parse(data[0].user)
 
-        return { error: false, data: { message: "hospitals list.", statusCode: 200, data: { "hospitals": data } } };
+        return { error: false, data: { message: "hospitals", statusCode: 200, data: data[0] } };
     } catch (error) {
+
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
         connection.release();
     }
 };
-
 
 const getListAdvertisement = async () => {
     let connection = await pool.getConnection();

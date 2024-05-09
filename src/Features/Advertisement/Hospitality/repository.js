@@ -66,7 +66,6 @@ const getAdvertisement = async (advertisementID) => {
     }
 };
 
-
 const getListAdvertisement = async () => {
     let connection = await pool.getConnection();
 
@@ -266,7 +265,7 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
 export default {
     addAdvertisement,
     getAdvertisement,
-    getListAdvertisement,
+
     filterAdvertisement,
     deactivateAdvertisement,
     updateAdvertisement,
