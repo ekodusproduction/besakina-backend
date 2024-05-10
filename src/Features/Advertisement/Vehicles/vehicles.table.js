@@ -11,7 +11,6 @@ export const createVehicleTable = async function () {
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS vehicles (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            plan_id BIGINT UNSIGNED ,        
             user_id BIGINT UNSIGNED,
 
             type VARCHAR(250),

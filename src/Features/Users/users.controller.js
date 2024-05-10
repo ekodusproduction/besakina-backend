@@ -68,7 +68,7 @@ export const login = async (req, res, next) => {
 
 const createToken = (user) => {
     return jwt.sign({ userId: user.id, plan_id: user.plan_id }, process.env.JWT_SECRET, {
-        expiresIn: 90,
+        expiresIn: '1d',
     });
 }
 
@@ -88,13 +88,13 @@ export const getUsers = async function (req, res, next) {
 
 export const addUserDetails = async function (req, res, next) {
     const { user_id } = req;
-    const { body: requestBody, files } = req;
+    const { body: requestBody, fileUrls } = req;
     let connection = await pool.getConnection();
 
     try {
-        const profilePic = files.find(item => item.fieldname === "profile_pic")?.path;
-        const docFile = files.find(item => item.fieldname === "doc_file")?.path;
-        const docFileBack = files.find(item => item.fieldname === "doc_file_back")?.path;
+        const profilePic = fileUrls.find(item => item.fieldname === "profile_pic")?.path;
+        const docFile = fileUrls.find(item => item.fieldname === "doc_file")?.path;
+        const docFileBack = fileUrls.find(item => item.fieldname === "doc_file_back")?.path;
 
         requestBody.profile_pic = profilePic || null;
         requestBody.doc_file = docFile || null;

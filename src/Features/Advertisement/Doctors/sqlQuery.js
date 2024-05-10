@@ -13,7 +13,6 @@ JSON_OBJECT(
      'pincode', p.pincode,
      'about', p.about,
      'created_at', p.created_at
-
 ) AS user
 FROM doctors AS u
 LEFT JOIN users AS p ON u.user_id = p.id

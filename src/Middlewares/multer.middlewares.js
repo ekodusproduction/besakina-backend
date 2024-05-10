@@ -4,8 +4,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { cwd } from "process";
-// import { s3Client } from "../config/aws-sdk.js";
-
+import uploadToSpaces from "../config/aws-sdk.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,22 +17,6 @@ const multerUpload = multer({
         fileSize: 10 * 1024 * 1024
     }
 });
-
-const uploadToSpaces = async (file) => {
-    const params = {
-        Bucket: 'your-bucket-name',
-        Key: `${uuidv4()}_${file.originalname}`,
-        Body: file.buffer,
-        ContentType: file.mimetype
-    };
-
-    try {
-        const data = await s3.upload(params).promise();
-        return data.Location;
-    } catch (error) {
-        throw new ApplicationError('Failed to upload file to DigitalOcean Spaces');
-    }
-};
 
 export const fileUpload = (destination) => {
     return async (req, res, next) => {
@@ -49,7 +32,9 @@ export const fileUpload = (destination) => {
             try {
                 const uploadedFileUrls = [];
                 for (const file of req.files) {
+
                     const fileUrl = await uploadToSpaces(file);
+                    console.log("file url in middleware", fileUrl)
                     uploadedFileUrls.push(fileUrl);
                 }
                 req.fileUrls = uploadedFileUrls;

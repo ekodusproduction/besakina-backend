@@ -6,17 +6,17 @@ export const addPlan = async function (req, res, next) {
     let connection = await pool.getConnection();
     try {
         const requestBody = req.body;
-        const membership_badge = req.files[0].path;
+        const membership_badge = req.fileUrls[0];
 
         const [query, values] = await insertQuery('plans', { ...requestBody, membership_badge: membership_badge })
-      
+
         const [rows, fields] = await connection.query(query, values);
 
         return sendResponse(res, "Plan added successfully", 201, { id: rows.insertId }, null);
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); 
+        connection.release();
 
     }
 }
@@ -54,7 +54,7 @@ export const deletePlan = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); 
+        connection.release();
 
     }
 };

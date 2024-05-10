@@ -9,7 +9,6 @@ export const createDoctorsTable = async function () {
         // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS doctors (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            plan_id BIGINT UNSIGNED,        
             user_id BIGINT UNSIGNED,
             
             expertise VARCHAR(50),
