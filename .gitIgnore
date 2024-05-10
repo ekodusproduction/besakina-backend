@@ -1,4 +1,6 @@
-/node_modules
+/# node.js
+#
+node_modules/
 /public
 .env
 logs.txt
