@@ -7,7 +7,6 @@ import path from 'path';
 import helmet from "helmet"; // Security middleware
 import rateLimit from "express-rate-limit"; // Rate limiting middleware
 
-
 import { logger, loggerMiddleware } from './src/Middlewares/logger.middleware.js';
 import { ApplicationError } from './src/ErrorHandler/applicationError.js';
 import { sendError } from './src/Utility/response.js';
@@ -45,8 +44,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(helmet({
     crossOriginResourcePolicy: false,
 }));
-
-
 
 app.use('/api/public', express.static('public'));
 

@@ -33,9 +33,11 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "droptable": "node src/Mysql/mysql.dropTable.js",
-    "migrate": "node src/Mysql/mysql.migrate.js",
-    "seed": "node seeders/index.js"
+    "db:droptable": "node src/Mysql/mysql.dropTable.js",
+    "db:migrate": "node src/Mysql/mysql.migrate.js",
+    "db:seed": "node seeders/index.js",
+    "db:create": "node src/Mysql/mysql.createDb.js",
+    "db:drop": "node src/Mysql/mysql.dropDb.js"
   },
   "keywords": [],
   "author": "",
