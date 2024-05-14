@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, validationResult, check } from 'express-validator';
 
 
 export const loginValidation = async (req, res, next) => {
@@ -42,3 +42,5 @@ export const mobileValidation = async (req, res, next) => {
     }
     next()
 };
+
+

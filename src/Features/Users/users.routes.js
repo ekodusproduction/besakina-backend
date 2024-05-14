@@ -13,4 +13,6 @@ userRouter.get("/details", jwtAuth, getUserDetails)
 userRouter.get("/myads", jwtAuth, getUserAdds)
 userRouter.get("/id/:id", jwtAuth, getUserById)
 
+
+
 export default userRouter  

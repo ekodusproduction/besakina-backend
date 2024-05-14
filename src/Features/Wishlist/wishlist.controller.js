@@ -1,0 +1,74 @@
+import pool  from "../../Mysql/mysql.database";
+export const addWishListItem = async function (req, res, next) {
+    const user_id = req.user_id;
+    const { adv_id, adv_type } = req.body; // assuming adv_id and adv_type are sent in the request body
+    let connection = await pool.getConnection();
+    try {
+        const insertQuery = `
+            INSERT INTO userswishlist (user_id, adv_id, adv_type)
+            VALUES (?, ?, ?)
+        `;
+        await connection.query(insertQuery, [user_id, adv_id, adv_type]);
+
+        return sendResponse(res, 'Advertisement added to wishlist successfully', 201);
+    } catch (error) {
+        next(error);
+    } finally {
+        connection.release();
+    }
+}
+
+export const removeWishListItem = async function (req, res, next) {
+    const adv_id = req.params.id;
+    let connection = await pool.getConnection();
+    try {
+        const deleteQuery = `
+            DELETE FROM userswishlist
+            WHERE user_id = ? AND adv_id = ?
+        `;
+        const [result] = await connection.query(deleteQuery, [req.user_id, adv_id]);
+
+        if (result.affectedRows === 0) {
+            return sendResponse(res, "Advertisement not found in wishlist", 404);
+        }
+        return sendResponse(res, 'Wishlist item deleted.', 201);
+    } catch (error) {
+        next(error);
+    } finally {
+        connection.release();
+    }
+}
+
+export const getWishList = async function (req, res, next) {
+    const user_id = req.params.id;
+    let connection = await pool.getConnection();
+    try {
+        const selectQuery = `
+            SELECT adv_id, adv_type
+            FROM userswishlist
+            WHERE user_id = ?
+        `;
+        const [wishlistItems] = await connection.query(selectQuery, [user_id]);
+
+        if (wishlistItems.length === 0) {
+            return sendResponse(res, "Wishlist is empty", 200);
+        }
+
+        const subqueries = wishlistItems.map(item => {
+            const tableName = item.adv_type;
+            return `
+                (SELECT * FROM ${tableName} WHERE id = ${item.adv_id})
+            `;
+        });
+
+        const unionQuery = subqueries.join(' UNION ALL ');
+
+        const [data] = await connection.query(unionQuery);
+
+        return sendResponse(res, 'Wishlist details fetched successfully', 200, data);
+    } catch (error) {
+        next(error);
+    } finally {
+        connection.release();
+    }
+}

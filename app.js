@@ -62,6 +62,7 @@ app.use("/api/doctors", doctorRouter);
 app.use("/api/plans", plansRouter);
 app.use('/api/chat', chatRouter)
 app.use("/api/home", homeRouter)
+app.use("/api/favourites", homeRouter)
 
 app.use(async (err, req, res, next) => {
     logger.info(err);
