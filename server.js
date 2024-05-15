@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 import app from './app.js';
 import https from 'https';
+import http from 'http';
+
 import { Server } from "socket.io";
 import { redisClient } from './redis.js';
 // import { initializeSocketIO } from './socket.js';
