@@ -12,17 +12,26 @@ import { socketAuth } from "./socketAuth.js"
 import { s3Client } from './src/config/aws-sdk.js';
 import fs from "fs";
 
-const privateKey = fs.readFileSync('./private.key', 'utf8');
-const certificate = fs.readFileSync('./certificate.pem', 'utf8');
-
-const credentials = { key: privateKey, cert: certificate };
-
-// Create HTTPS server
-
-const httpsServer = https.createServer(credentials, app);
-
 const port = process.env.PORT || 3000;
 
-httpsServer.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+// Check if it's a production environment
+if (process.env.NODE_ENV === 'production') {
+    const privateKey = fs.readFileSync('./private.key', 'utf8');
+    const certificate = fs.readFileSync('./certificate.pem', 'utf8');
+
+    const credentials = { key: privateKey, cert: certificate };
+
+    // Create HTTPS server with credentials
+    const httpsServer = https.createServer(credentials, app);
+
+    httpsServer.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+    });
+} else {
+    // Create HTTP server without credentials
+    const httpServer = http.createServer(app);
+
+    httpServer.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+    });
+}
