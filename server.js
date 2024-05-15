@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import app from './app.js';
-import https from 'https';
+import http from 'http';
+import https from "https";
 import { Server } from "socket.io";
 import { redisClient } from './redis.js';
 // import { initializeSocketIO } from './socket.js';
@@ -12,17 +13,23 @@ import { socketAuth } from "./socketAuth.js"
 import { s3Client } from './src/config/aws-sdk.js';
 import fs from "fs";
 
-const privateKey = fs.readFileSync('./private.key', 'utf8');
-const certificate = fs.readFileSync('./certificate.pem', 'utf8');
-
-const credentials = { key: privateKey, cert: certificate };
-
-// Create HTTPS server
-
-const httpsServer = https.createServer(credentials, app);
-
 const port = process.env.PORT || 3000;
 
-httpsServer.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+if (process.env.NODE_ENV === 'production') {
+    const privateKey = fs.readFileSync('./private.key', 'utf8');
+    const certificate = fs.readFileSync('./certificate.pem', 'utf8');
+
+    const credentials = { key: privateKey, cert: certificate };
+
+    const httpsServer = https.createServer(credentials, app);
+
+    httpsServer.listen(port, () => {
+        console.log(`Production server running on port ${port}`);
+    });
+} else {
+    const httpServer = http.createServer(app);
+
+    httpServer.listen(port, () => {
+        console.log(`Dev server running on port ${port}`);
+    });
+}
