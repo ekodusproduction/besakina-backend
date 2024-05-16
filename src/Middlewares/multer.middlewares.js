@@ -26,7 +26,8 @@ export const fileUpload = (destination) => {
             }
 
             if (!req.files || req.files.length === 0) {
-                return next(new ApplicationError('No files uploaded', 400));
+                next()
+                // return next(new ApplicationError('No files uploaded', 400));
             }
 
             try {
