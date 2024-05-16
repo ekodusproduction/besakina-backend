@@ -12,7 +12,7 @@ export const addPlan = async function (req, res, next) {
 
         const [rows, fields] = await connection.query(query, values);
 
-        return sendResponse(res, "Plan added successfully", 201, { id: rows.insertId }, null);
+        return await sendResponse(res, "Plan added successfully", 201, { id: rows.insertId }, null);
     } catch (error) {
         next(error);
     } finally {
@@ -30,7 +30,7 @@ export const getPlan = async function (req, res, next) {
             return sendError(res, "No plan found", 404);
         }
 
-        return sendResponse(res, "Plan List", 200, rows);
+        return await sendResponse(res, "Plan List", 200, rows);
     } catch (error) {
         next(error);
     } finally {
@@ -50,7 +50,7 @@ export const deletePlan = async function (req, res, next) {
             return sendError(res, "No plan found", 404);
         }
 
-        return sendResponse(res, "Plan deleted successfully", 200, { id });
+        return await sendResponse(res, "Plan deleted successfully", 200, { id });
     } catch (error) {
         next(error);
     } finally {

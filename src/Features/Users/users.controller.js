@@ -29,7 +29,7 @@ export const sendOtp = async (req, res, next) => {
             const [update, updateValues] = await updateQuery("users", { otp }, { id: user[0].id })
             await connection.query(update, updateValues)
         }
-        return sendResponse(res, 'Otp sent successfully', 201, { otp }, null);
+        return await sendResponse(res, 'Otp sent successfully', 201, { otp }, null);
     } catch (error) {
         next(error);
     } finally {
@@ -54,7 +54,7 @@ export const login = async (req, res, next) => {
 
         if (Date.now() < updatedAtDate.getTime() + fiveMin) {
             const token = createToken(user[0]);
-            return sendResponse(res, 'Login successful', 201, null, token);
+            return await sendResponse(res, 'Login successful', 201, null, token);
         } else {
             return sendError(res, 'OTP expired', 400);
         }
@@ -77,7 +77,7 @@ export const getUsers = async function (req, res, next) {
     try {
         const [query, values] = await selectQuery("users", [], {})
         const [users, fields] = await connection.query(query, values);
-        return sendResponse(res, 'Login successful', 201, users, null);
+        return await sendResponse(res, 'Login successful', 201, users, null);
     } catch (error) {
         next(error);
     } finally {
@@ -103,7 +103,7 @@ export const addUserDetails = async function (req, res, next) {
 
         const [updatedUser, field] = await connection.query(update, updateValues)
 
-        return sendResponse(res, 'User details added.', 201, field, null);
+        await sendResponse(res, 'User details added.', 201, field, null);
     } catch (error) {
         console.log(error)
         next(error);
@@ -120,11 +120,11 @@ export const getUserAdds = async function (req, res, next) {
         const sql = getAllPosts.replaceAll('?', user_id)
         const [rows, fields] = await connection.query(sql);
         if (rows.length == 0) {
-            return sendResponse(res, "Advertisement fetched successfully", 200, []);
+            return await sendResponse(res, "Advertisement fetched successfully", 200, []);
         }
 
         const data = await parseImages(rows)
-        return sendResponse(res, 'User adds', 200, data, null);
+        return await sendResponse(res, 'User adds', 200, data, null);
     } catch (error) {
         next(error);
     } finally {
@@ -141,11 +141,11 @@ export const getUserDetails = async function (req, res, next) {
         const [userDetails, fields] = await pool.query(getUserAndPlan, [user_id]);
 
         if (userDetails.length === 0) {
-            return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
+            return await sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
         }
         userDetails[0].plan = JSON.parse(userDetails[0].plan);
 
-        return sendResponse(res, 'User details', 201, userDetails[0], null);
+        return await sendResponse(res, 'User details', 201, userDetails[0], null);
     } catch (error) {
         next(error);
     } finally {
@@ -162,11 +162,11 @@ export const planSubscribe = async function (req, res, next) {
         const [userDetails, fields] = await pool.query(getUserAndPlan, [user_id]);
 
         if (userDetails.length === 0) {
-            return sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
+            return await sendResponse(res, "Advertisement fetched successfully", 200, { advertisement: [] });
         }
         userDetails[0].plan = JSON.parse(userDetails[0].plan);
 
-        return sendResponse(res, 'User details', 201, userDetails[0], null);
+        return await sendResponse(res, 'User details', 201, userDetails[0], null);
     } catch (error) {
         next(error);
     } finally {
@@ -181,10 +181,10 @@ export const getUserById = async function (req, res, next) {
         const [userDetails, fields] = await pool.query(getUserMobileById, [user_id]);
 
         if (userDetails.length === 0) {
-            return sendResponse(res, "Advertisement fetched successfully", 200);
+            return await sendResponse(res, "Advertisement fetched successfully", 200);
         }
 
-        return sendResponse(res, 'User details', 201, userDetails[0]);
+        return await sendResponse(res, 'User details', 201, userDetails[0]);
     } catch (error) {
         next(error);
     } finally {

@@ -22,7 +22,7 @@ export const latestAdds = async function (req, res, next) {
         const rows = await connection.query(selectLatestAds, [limit, offset]);
         const advertisements = await parseImages(rows[0]);
 
-        return sendResponse(res, "Latest Adds", 200, { advertisements });
+        return await sendResponse(res, "Latest Adds", 200, { advertisements });
     } catch (error) {
         next(error);
     } finally {
@@ -45,7 +45,7 @@ export const searchAdds = async function (req, res, next) {
         const rows = await connection.query(searchAdd, [search, search, search, search, search, search]);
         const advertisements = await parseImages(rows[0]);
 
-        return sendResponse(res, "Search Results", 200, { advertisements });
+        return await sendResponse(res, "Search Results", 200, { advertisements });
     } catch (error) {
         next(error);
     } finally {

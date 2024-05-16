@@ -1,4 +1,4 @@
-import pool  from "../../Mysql/mysql.database";
+import pool from "../../Mysql/mysql.database";
 
 export const addWishListItem = async function (req, res, next) {
     const user_id = req.user_id;
@@ -11,7 +11,7 @@ export const addWishListItem = async function (req, res, next) {
         `;
         await connection.query(insertQuery, [user_id, adv_id, adv_type]);
 
-        return sendResponse(res, 'Advertisement added to wishlist successfully', 201);
+        return await sendResponse(res, 'Advertisement added to wishlist successfully', 201);
     } catch (error) {
         next(error);
     } finally {
@@ -30,9 +30,9 @@ export const removeWishListItem = async function (req, res, next) {
         const [result] = await connection.query(deleteQuery, [req.user_id, adv_id]);
 
         if (result.affectedRows === 0) {
-            return sendResponse(res, "Advertisement not found in wishlist", 404);
+            return await sendResponse(res, "Advertisement not found in wishlist", 404);
         }
-        return sendResponse(res, 'Wishlist item deleted.', 201);
+        return await sendResponse(res, 'Wishlist item deleted.', 201);
     } catch (error) {
         next(error);
     } finally {
@@ -52,7 +52,7 @@ export const getWishList = async function (req, res, next) {
         const [wishlistItems] = await connection.query(selectQuery, [user_id]);
 
         if (wishlistItems.length === 0) {
-            return sendResponse(res, "Wishlist is empty", 200);
+            return await sendResponse(res, "Wishlist is empty", 200);
         }
 
         const subqueries = wishlistItems.map(item => {
@@ -66,7 +66,7 @@ export const getWishList = async function (req, res, next) {
 
         const [data] = await connection.query(unionQuery);
 
-        return sendResponse(res, 'Wishlist details fetched successfully', 200, data);
+        return await sendResponse(res, 'Wishlist details fetched successfully', 200, data);
     } catch (error) {
         next(error);
     } finally {

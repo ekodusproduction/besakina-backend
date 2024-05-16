@@ -15,7 +15,7 @@ export const addAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode);
     }
-    return sendResponse(res, result.data.message, 201, result.data.data);
+    return await sendResponse(res, result.data.message, 201, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -29,7 +29,7 @@ export const getAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.data.message, result.data.statusCode, result.data.data);
+    return await sendResponse(res, result.data.message, result.data.statusCode, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -42,7 +42,7 @@ export const getListAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.data.message, 200, result.data.data);
+    return await sendResponse(res, result.data.message, 200, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -57,7 +57,7 @@ export const filterAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.data.message, 200, result.data.data);
+    return await sendResponse(res, result.data.message, 200, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -73,7 +73,7 @@ export const updateAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.data.message, 200);
+    return await sendResponse(res, result.data.message, 200);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -87,7 +87,7 @@ export const deactivateAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.data.message, result.data.statusCode);
+    return await sendResponse(res, result.data.message, result.data.statusCode);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -101,7 +101,7 @@ export const addImage = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.data.message, 200, result.data.data);
+    return await sendResponse(res, result.data.message, 200, result.data.data);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -115,7 +115,7 @@ export const deleteImage = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.data.message, 200);
+    return await sendResponse(res, result.data.message, 200);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -129,7 +129,7 @@ export const activateAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.data.message, 200);
+    return await sendResponse(res, result.data.message, 200);
   } catch (error) {
     logger.info(error)
     next(error);
@@ -143,7 +143,7 @@ export const deleteAdvertisement = async (req, res, next) => {
     if (result.error) {
       return sendError(res, result.data.message, result.data.statusCode)
     }
-    return sendResponse(res, result.message, 200);
+    return await sendResponse(res, result.message, 200);
   } catch (error) {
     logger.info(error)
     next(error);
