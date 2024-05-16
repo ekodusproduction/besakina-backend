@@ -1,4 +1,5 @@
 import pool  from "../../Mysql/mysql.database";
+
 export const addWishListItem = async function (req, res, next) {
     const user_id = req.user_id;
     const { adv_id, adv_type } = req.body; // assuming adv_id and adv_type are sent in the request body

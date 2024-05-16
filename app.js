@@ -36,7 +36,7 @@ app.use((req, res, next) => {
     next();
 })
 app.set('trust proxy', true);
-app.use(cors({ credentials: true }));
+app.use(cors({ credentials: false }));
 
 
 app.use(express.json());
