@@ -92,9 +92,9 @@ export const addUserDetails = async function (req, res, next) {
     let connection = await pool.getConnection();
 
     try {
-        const profilePic = fileUrls.find(item => item.fieldname === "profile_pic")?.path;
-        const docFile = fileUrls.find(item => item.fieldname === "doc_file")?.path;
-        const docFileBack = fileUrls.find(item => item.fieldname === "doc_file_back")?.path;
+        const profilePic = fileUrls?.find(item => item.fieldname === "profile_pic")?.path;
+        const docFile = fileUrls?.find(item => item.fieldname === "doc_file")?.path;
+        const docFileBack = fileUrls?.find(item => item.fieldname === "doc_file_back")?.path;
 
         requestBody.profile_pic = profilePic || null;
         requestBody.doc_file = docFile || null;
