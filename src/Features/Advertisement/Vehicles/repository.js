@@ -187,7 +187,7 @@ export const deleteImage = async (advertisementID, files, userId) => {
     try {
         const sql = `SELECT * FROM vehicles WHERE id = ? AND user_id = ?`;
         const [rows, fields] = await connection.query(sql, [advertisementID, userId]);
-
+        console.log("rows", rows)
         if (rows.length == 0) {
             return { error: true, data: { message: "vehicles not found.", statusCode: 404, data: null } };
         }
