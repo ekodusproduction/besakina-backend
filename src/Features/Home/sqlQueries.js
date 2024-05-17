@@ -39,7 +39,7 @@ UNION ALL
 )
 UNION ALL
 (
-    SELECT id, title, price_registration, created_at, images,city, state, 'hospitals' AS category
+    SELECT id, title, name, created_at, images,city, state, 'hospitals' AS category
     FROM hospitals
     WHERE is_active = 1
     ORDER BY created_at DESC
