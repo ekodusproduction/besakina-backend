@@ -16,7 +16,6 @@ export const createHospitalityTable = async function () {
             name VARCHAR(255) NOT NULL,
             title VARCHAR(255) NOT NULL,
             description TEXT NOT NULL,
-            price VARCHAR(255),
             category VARCHAR(255),
 
             street VARCHAR(50),
