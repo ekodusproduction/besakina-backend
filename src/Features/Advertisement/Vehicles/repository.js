@@ -185,35 +185,35 @@ export const deleteImage = async (advertisementID, files, userId) => {
     let connection = await pool.getConnection();
 
     try {
-        const sql = `SELECT * FROM vehicles WHERE id = ? AND user_id = ?`
-        const [rows, fields] = await connection.query(sql, [advertisementID, userId])
+        const sql = `SELECT * FROM vehicles WHERE id = ? AND user_id = ?`;
+        const [rows, fields] = await connection.query(sql, [advertisementID, userId]);
 
-        if (rows[0].length == 0) {
+        if (rows.length == 0) {
             return { error: true, data: { message: "vehicles not found.", statusCode: 404, data: null } };
         }
-        if (rows[0].images == []) {
+
+        if (!rows[0].images || rows[0].images.length == 0) {
             return { error: false, data: { data: null, message: "Images deleted successfully from the vehicles", statusCode: 200 } };
         }
 
-        const parsedImages = JSON.parse(rows[0].images || []);
-        console.log("parsedImages", parsedImages)
-        const normalizedImages = parsedImages?.map(image => image?.replace(/\\/g, '/'));
-        console.log("normalizedImages", normalizedImages)
+        const parsedImages = JSON.parse(rows[0].images || '[]');
+        console.log("parsedImages", parsedImages);
 
-        const filteredImages = normalizedImages?.filter(image => !files?.includes(image));
-        console.log("filteredImages", filteredImages)
+        const normalizedImages = parsedImages.map(image => image?.replace(/\\/g, '/'));
+        console.log("normalizedImages", normalizedImages);
 
-        let images = filteredImages;
+        const filteredImages = normalizedImages.filter(image => image && !files.includes(image));
+        console.log("filteredImages", filteredImages);
 
-        const photosJson = JSON.stringify(images);
-        console.log("photosJson", photosJson)
-
-        if (images.length == 0) {
+        if (filteredImages.length == 0) {
             return { error: true, data: { data: null, message: "User cannot delete all images. must have 1 image.", statusCode: 400 } };
         }
-        const updateSql = `UPDATE vehicles SET images =? WHERE id = ?`
 
-        await connection.query(updateSql, [photosJson, advertisementID])
+        const photosJson = JSON.stringify(filteredImages);
+        console.log("photosJson", photosJson);
+
+        const updateSql = `UPDATE vehicles SET images = ? WHERE id = ?`;
+        await connection.query(updateSql, [photosJson, advertisementID]);
 
         return { error: false, data: { data: null, message: "Images deleted successfully from the vehicles", statusCode: 200 } };
     } catch (error) {
@@ -223,6 +223,7 @@ export const deleteImage = async (advertisementID, files, userId) => {
         connection.release();
     }
 };
+
 
 export const activateAdvertisement = async (advertisementID, userId) => {
     let connection = await pool.getConnection();
