@@ -13,7 +13,7 @@ export const addAdvertisement = async (req, res, next) => {
     req.body.user_id = req.user_id
     const result = await repository.addAdvertisement(req.body, req.fileUrls);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode);
+      return await sendError(res, result.data.message, result.data.statusCode);
     }
     return await sendResponse(res, result.data.message, 201, result.data.data);
   } catch (error) {
@@ -27,7 +27,7 @@ export const getAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const result = await repository.getAdvertisement(advertisementID);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.data.message, result.data.statusCode, result.data.data);
   } catch (error) {
@@ -40,7 +40,7 @@ export const getListAdvertisement = async (req, res, next) => {
   try {
     const result = await repository.getListAdvertisement(req.params.id);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.data.message, 200, result.data.data);
   } catch (error) {
@@ -54,7 +54,7 @@ export const filterAdvertisement = async (req, res, next) => {
     const query = req.query;
     const result = await repository.filterAdvertisement(query);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.data.message, 200, result.data.data);
   } catch (error) {
@@ -69,7 +69,7 @@ export const updateAdvertisement = async (req, res, next) => {
     const updateBody = req.body;
     const result = await repository.updateAdvertisement(advertisementID, updateBody, req.user_id);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.data.message, 200);
   } catch (error) {
@@ -83,7 +83,7 @@ export const deactivateAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const result = await repository.deactivateAdvertisement(advertisementID, req.user_id);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.data.message, result.data.statusCode);
   } catch (error) {
@@ -97,7 +97,7 @@ export const addImage = async (req, res, next) => {
     const advertisementID = req.params.id;
     const result = await repository.addImage(advertisementID, req.fileUrls, req.user_id);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.data.message, 200, result.data.data);
   } catch (error) {
@@ -111,7 +111,7 @@ export const deleteImage = async (req, res, next) => {
     const advertisementID = req.params.id;
     const result = await repository.deleteImage(advertisementID, req.body.images, req.user_id);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.data.message, 200);
   } catch (error) {
@@ -125,7 +125,7 @@ export const activateAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const result = await repository.activateAdvertisement(advertisementID, req.user_id);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.data.message, 200);
   } catch (error) {
@@ -139,7 +139,7 @@ export const deleteAdvertisement = async (req, res, next) => {
     const advertisementID = req.params.id;
     const result = await repository.deleteAdvertisement(advertisementID, req.user_id);
     if (result.error) {
-      return sendError(res, result.data.message, result.data.statusCode)
+      return await sendError(res, result.data.message, result.data.statusCode)
     }
     return await sendResponse(res, result.message, 200);
   } catch (error) {

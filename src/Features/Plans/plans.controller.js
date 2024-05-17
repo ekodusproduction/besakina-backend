@@ -27,7 +27,7 @@ export const getPlan = async function (req, res, next) {
         const [query, values] = await selectQuery("plans", {}, {})
         const [rows, fields] = await connection.query(query);
         if (rows.length === 0) {
-            return sendError(res, "No plan found", 404);
+            return await sendError(res, "No plan found", 404);
         }
 
         return await sendResponse(res, "Plan List", 200, rows);
@@ -47,7 +47,7 @@ export const deletePlan = async function (req, res, next) {
         const deletedCount = await connection.query(sql, id);
 
         if (deletedCount === 0) {
-            return sendError(res, "No plan found", 404);
+            return await sendError(res, "No plan found", 404);
         }
 
         return await sendResponse(res, "Plan deleted successfully", 200, { id });

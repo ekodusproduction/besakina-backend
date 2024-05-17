@@ -21,7 +21,7 @@ export const jwtAuth = (req, res, next) => {
     // Extract the token from the request headers
     const token = req.headers.authorization;
     if (!token) {
-        return sendError(res, 'No token provided. Please login', 401);
+        return await sendError(res, 'No token provided. Please login', 401);
     }
 
     const { isValid, decoded, error } = verifyToken(token.split(" ")[1]);
@@ -32,6 +32,6 @@ export const jwtAuth = (req, res, next) => {
         next();
     } else {
         // If token is invalid or expired, send an error response
-        return sendError(res, `Invalid token. ${error}`, 401);
+        return await sendError(res, `Invalid token. ${error}`, 401);
     }
 };

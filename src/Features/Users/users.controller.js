@@ -56,7 +56,7 @@ export const login = async (req, res, next) => {
             const token = createToken(user[0]);
             return await sendResponse(res, 'Login successful', 201, null, token);
         } else {
-            return sendError(res, 'OTP expired', 400);
+            return await sendError(res, 'OTP expired', 400);
         }
     } catch (error) {
         next(error);
