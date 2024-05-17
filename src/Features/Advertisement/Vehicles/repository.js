@@ -196,14 +196,18 @@ export const deleteImage = async (advertisementID, files, userId) => {
         }
 
         const parsedImages = JSON.parse(rows[0].images || []);
+        console.log("parsedImages", parsedImages)
+        const normalizedImages = parsedImages?.map(image => image?.replace(/\\/g, '/'));
+        console.log("normalizedImages", normalizedImages)
 
-        const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
-
-        const filteredImages = normalizedImages.filter(image => !files.includes(image));
+        const filteredImages = normalizedImages?.filter(image => !files?.includes(image));
+        console.log("filteredImages", filteredImages)
 
         let images = filteredImages;
 
         const photosJson = JSON.stringify(images);
+        console.log("photosJson", photosJson)
+
         if (images.length == 0) {
             return { error: true, data: { data: null, message: "User cannot delete all images. must have 1 image.", statusCode: 400 } };
         }
