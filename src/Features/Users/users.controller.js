@@ -9,8 +9,8 @@ dotenv.config();
 
 const parseImages = async (advertisements) => {
     return advertisements.map(advertisement => {
-        advertisement.images = JSON.parse(advertisement.images);
-        advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+        advertisement.images = JSON.parse(advertisement?.images);
+        advertisement.images = advertisement?.images?.map(photo => photo?.replace(/\\/g, '/'));
         return advertisement;
     });
 };
