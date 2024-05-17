@@ -6,16 +6,16 @@ import { getUserAndVehicles } from "./sqlQuery.js";
 
 const parseImages = async (advertisements) => {
     return advertisements.map(advertisement => {
-        advertisement.images = JSON.parse(advertisement.images);
-        advertisement.images = advertisement.images.map(photo => photo.replace(/\\/g, '/'));
+        advertisement.images = JSON.parse(advertisement?.images);
+        advertisement.images = advertisement?.images?.map(photo => photo?.replace(/\\/g, '/'));
         return advertisement;
     });
 };
 
 const parseUser = async (advertisements) => {
     return advertisements.map(advertisement => {
-        advertisement.user = JSON.parse(advertisement.user);
-        advertisement.user = advertisement.user.map(photo => photo.replace(/\\/g, '/'));
+        advertisement.user = JSON.parse(advertisement?.user);
+        advertisement.user = advertisement?.user?.map(photo => photo.replace(/\\/g, '/'));
         return advertisement;
     });
 };
