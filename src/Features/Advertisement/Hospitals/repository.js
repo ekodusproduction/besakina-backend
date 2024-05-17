@@ -190,33 +190,37 @@ export const deleteImage = async (advertisementID, files, userId) => {
     let connection = await pool.getConnection();
 
     try {
-        const sql = `SELECT * FROM hospitals WHERE id = ? AND user_id = ?`
-        const [rows, fields] = await connection.query(sql, [advertisementID, userId])
-
-        if (rows[0].length == 0) {
-            return { error: true, data: { message: "hospitals not found.", statusCode: 404, data: null } };
-        }
-        if (rows[0].images == []) {
-            return { error: false, data: { data: null, message: "Images deleted successfully from the hospitals", statusCode: 200 } };
+        const sql = `SELECT * FROM vehicles WHERE id = ? AND user_id = ?`;
+        const [rows, fields] = await connection.query(sql, [advertisementID, userId]);
+        console.log("rows", rows)
+        if (rows.length == 0) {
+            return { error: true, data: { message: "vehicles not found.", statusCode: 404, data: null } };
         }
 
-        const parsedImages = JSON.parse(rows[0].images || []);
+        if (!rows[0].images || rows[0].images.length == 0) {
+            return { error: false, data: { data: null, message: "Images deleted successfully from the vehicles", statusCode: 200 } };
+        }
 
-        const normalizedImages = parsedImages.map(image => image.replace(/\\/g, '/'));
+        const parsedImages = JSON.parse(rows[0].images || '[]');
+        console.log("parsedImages", parsedImages);
 
-        const filteredImages = normalizedImages.filter(image => !files.includes(image));
+        const normalizedImages = parsedImages.map(image => image?.replace(/\\/g, '/'));
+        console.log("normalizedImages", normalizedImages);
 
-        let images = filteredImages;
+        const filteredImages = normalizedImages.filter(image => image && !files.includes(image));
+        console.log("filteredImages", filteredImages);
 
-        const photosJson = JSON.stringify(images);
-        if (images.length == 0) {
+        if (filteredImages.length == 0) {
             return { error: true, data: { data: null, message: "User cannot delete all images. must have 1 image.", statusCode: 400 } };
         }
-        const updateSql = `UPDATE hospitals SET images =? WHERE id = ?`
 
-        await connection.query(updateSql, [photosJson, advertisementID])
+        const photosJson = JSON.stringify(filteredImages);
+        console.log("photosJson", photosJson);
 
-        return { error: false, data: { data: null, message: "Images deleted successfully from the hospitals", statusCode: 200 } };
+        const updateSql = `UPDATE vehicles SET images = ? WHERE id = ?`;
+        await connection.query(updateSql, [photosJson, advertisementID]);
+
+        return { error: false, data: { data: null, message: "Images deleted successfully from the vehicles", statusCode: 200 } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
