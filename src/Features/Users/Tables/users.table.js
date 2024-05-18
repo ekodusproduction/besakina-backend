@@ -18,7 +18,7 @@ export const createUserTable = async function () {
             doc_file VARCHAR(255),
             doc_file_back VARCHAR(255),
 
-            profile_pic VARCHAR(255),
+            profile_pic text,
             plan_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             contacts_quota INT , 
             state VARCHAR(255),
@@ -41,7 +41,7 @@ export const createUserTable = async function () {
         console.error('Error creating table:', error);
     } finally {
         if (connection) {
-            connection.release(); 
+            connection.release();
         }
     }
 }
