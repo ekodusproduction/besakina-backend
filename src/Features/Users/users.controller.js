@@ -101,10 +101,11 @@ export const addUserDetails = async function (req, res, next) {
         docFileBack ? requestBody.doc_file_back = docFileBack : null;
 
         const [update, updateValues] = await updateQuery("users", requestBody, { id: req.user_id })
-
+        console.log("update", updateValues)
         const [updatedUser, field] = await connection.query(update, updateValues)
+        console.log("updatedUser", field)
 
-        return await sendResponse(res, 'User details added.', 201, field, null);
+        return await sendResponse(res, 'User details added.', 201, updatedUser.i, null);
     } catch (error) {
         console.log("werrr", error)
         next(error);
