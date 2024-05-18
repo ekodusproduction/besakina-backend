@@ -90,30 +90,49 @@ export const addUserDetails = async function (req, res, next) {
     const { user_id } = req;
     const { body: requestBody } = req;
     let connection = await pool.getConnection();
-    console.log("files", fileUrls)
     try {
-        // const profilePic = fileUrls?.find(item => item.fieldname === "profile_pic")?.path;
-        // const docFile = fileUrls?.find(item => item.fieldname === "doc_file")?.path;
-        // const docFileBack = fileUrls?.find(item => item.fieldname === "doc_file_back")?.path;
-
-        // profilePic ? requestBody.profile_pic = profilePic : null;
-        // docFile ? requestBody.doc_file = docFile : null;
-        // docFileBack ? requestBody.doc_file_back = docFileBack : null;
-
         const [update, updateValues] = await updateQuery("users", requestBody, { id: req.user_id })
-        console.log("update", update)
 
-        console.log("updateValues", updateValues)
         const [updatedUser, field] = await connection.query(update, updateValues)
-        console.log("updatedUser", updatedUser)
 
         return await sendResponse(res, 'User details added.', 201, updatedUser, null);
     } catch (error) {
-        console.log("werrr", error)
+        next(error)
     } finally {
         connection.release();
     }
 }
+
+export const addUserDocs = async function (req, res, next) {
+    const { user_id } = req;
+    const { fileUrls } = req;
+
+    // Extract file paths for each type of document or set them to null if not found
+    const docFile = fileUrls.find(item => item.fieldname === "doc_file")?.path || null;
+    const docFileBack = fileUrls.find(item => item.fieldname === "doc_file_back")?.path || null;
+    const profilePic = fileUrls.find(item => item.fieldname === "profile_pic")?.path || null;
+    
+    let connection;
+    try {
+        connection = await pool.getConnection();
+
+        const updateQuery = `UPDATE users SET doc_file = ?, profile_pic = ?, doc_file_back = ? WHERE id = ?`;
+        const updateValues = [docFile, docFileBack, profilePic, user_id];
+
+        await connection.query(updateQuery, updateValues);
+
+        return sendResponse(res, 'User documents uploaded successfully.', 201, null, null);
+    } catch (error) {
+        console.log("Error:", error);
+        return sendResponse(res, 'Internal server error.', 500, null, null);
+    } finally {
+        if (connection) {
+            connection.release();
+        }
+    }
+}
+
+
 
 export const getUserAdds = async function (req, res, next) {
     const { user_id } = req;
