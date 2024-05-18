@@ -34,10 +34,10 @@ export const createHospitalsTable = async function () {
             verified BOOLEAN DEFAULT 1,
             is_active BOOLEAN DEFAULT 1,
 
-            street VARCHAR(50),
+            street VARCHAR(255),
             locality VARCHAR(255),
-            city VARCHAR(20),
-            state VARCHAR(25),
+            city VARCHAR(50),
+            state VARCHAR(50),
             pincode VARCHAR(255),
 
             seen_by INT DEFAULT 0,

@@ -18,11 +18,12 @@ export const createDoctorsTable = async function () {
             description TEXT,
 
             price_per_visit VARCHAR(255),
-            street VARCHAR(50),
+            
+            street VARCHAR(255),
             locality VARCHAR(255),
-            city VARCHAR(20),
-            state VARCHAR(25),
-            pincode VARCHAR(255) ,
+            city VARCHAR(50),
+            state VARCHAR(50),
+            pincode VARCHAR(255),
 
             images LONGTEXT,
             video TEXT,
