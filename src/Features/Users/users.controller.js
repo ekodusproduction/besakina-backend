@@ -107,11 +107,9 @@ export const addUserDetails = async function (req, res, next) {
         const [updatedUser, field] = await connection.query(update, updateValues)
         console.log("updatedUser", updatedUser)
 
-        await sendResponse(res, 'User details added.', 201, updatedUser, null);
-        return
+        return await sendResponse(res, 'User details added.', 201, updatedUser, null);
     } catch (error) {
         console.log("werrr", error)
-        next(error);
     } finally {
         connection.release();
     }
