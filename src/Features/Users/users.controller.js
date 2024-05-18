@@ -96,9 +96,10 @@ export const addUserDetails = async function (req, res, next) {
         const docFile = fileUrls?.find(item => item.fieldname === "doc_file")?.path;
         const docFileBack = fileUrls?.find(item => item.fieldname === "doc_file_back")?.path;
 
-        requestBody.profile_pic = profilePic || null;
-        requestBody.doc_file = docFile || null;
-        requestBody.doc_file_back = docFileBack || null;
+        profilePic ? requestBody.profile_pic = profilePic : null;
+        docFile ? requestBody.doc_file = docFile : null;
+        docFileBack ? requestBody.doc_file_back = docFileBack : null;
+
         const [update, updateValues] = await updateQuery("users", requestBody, { id: req.user_id })
 
         const [updatedUser, field] = await connection.query(update, updateValues)
