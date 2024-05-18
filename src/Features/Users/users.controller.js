@@ -111,13 +111,13 @@ export const addUserDocs = async function (req, res, next) {
     const docFile = fileUrls.find(item => item.fieldname === "doc_file")?.path || null;
     const docFileBack = fileUrls.find(item => item.fieldname === "doc_file_back")?.path || null;
     const profilePic = fileUrls.find(item => item.fieldname === "profile_pic")?.path || null;
-    
+
     let connection;
     try {
         connection = await pool.getConnection();
 
         const updateQuery = `UPDATE users SET doc_file = ?, profile_pic = ?, doc_file_back = ? WHERE id = ?`;
-        const updateValues = [docFile, docFileBack, profilePic, user_id];
+        const updateValues = [docFile, profilePic, docFileBack, user_id];
 
         await connection.query(updateQuery, updateValues);
 
