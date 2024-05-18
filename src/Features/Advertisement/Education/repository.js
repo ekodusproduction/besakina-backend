@@ -31,11 +31,12 @@ const addAdvertisement = async (requestBody, files) => {
         const photosJson = JSON.stringify(filePaths);
         requestBody.images = photosJson;
         const [query, values] = await insertQuery("education", requestBody)
-
+        console.log("query", query)
         const [rows, field] = await connection.query(query, values);
         if (rows == null) {
             return { error: true, data: { message: "error adding education.", statusCode: 400, data: null } };
         }
+        console.log("query", rows)
         return { error: false, data: { message: "education added successfully", statusCode: 200, data: { id: rows.insertId } } };
     } catch (error) {
         console.log(error)
