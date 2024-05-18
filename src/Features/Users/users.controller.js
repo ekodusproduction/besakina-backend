@@ -106,7 +106,7 @@ export const addUserDetails = async function (req, res, next) {
 
         return await sendResponse(res, 'User details added.', 201, field, null);
     } catch (error) {
-        console.log(error)
+        console.log("werrr",error)
         next(error);
     } finally {
         connection.release();
