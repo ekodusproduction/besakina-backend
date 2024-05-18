@@ -90,7 +90,7 @@ export const addUserDetails = async function (req, res, next) {
     const { user_id } = req;
     const { body: requestBody, fileUrls } = req;
     let connection = await pool.getConnection();
-
+    console.log("files", fileUrls)
     try {
         const profilePic = fileUrls?.find(item => item.fieldname === "profile_pic")?.path;
         const docFile = fileUrls?.find(item => item.fieldname === "doc_file")?.path;
