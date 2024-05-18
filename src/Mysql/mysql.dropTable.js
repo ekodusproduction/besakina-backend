@@ -4,7 +4,7 @@ import { dropPlanTable } from "../Features/Plans/plans.table.js";
 import { dropOrderTable } from "../Features/Orders/order.table.js";
 import { dropUserTable } from "../Features/Users/Tables/users.table.js";
 import { dropUserPlanTable } from "../Features/Users/Tables/userSelectedPlansTable.js"
-import { dropUserWishListTable } from "../Features/Users/Tables/userWishList.js";
+import { dropUserWishListTable } from "../Features/Wishlist/Table/userWishList.js";
 import { dropDoctorsTable } from "../Features/Advertisement/Doctors/doctor.table.js";
 import { dropEducationTable } from "../Features/Advertisement/Education/education.table.js";
 import { dropPropertyTable } from "../Features/Advertisement/Property/property.table.js";

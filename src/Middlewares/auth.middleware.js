@@ -17,7 +17,7 @@ export const verifyToken = (token) => {
     }
 };
 
-export const jwtAuth = (req, res, next) => {
+export const jwtAuth = async (req, res, next) => {
     // Extract the token from the request headers
     const token = req.headers.authorization;
     if (!token) {
