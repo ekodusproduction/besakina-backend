@@ -21,15 +21,14 @@ const multerUpload = multer({
 export const fileUpload = (destination) => {
     return async (req, res, next) => {
         multerUpload.any()(req, res, async (err) => {
-            if (err) {
-                return next(err);
-            }
-
             if (!req.files || req.files.length === 0) {
+                console.log("file upload skipped")
                 next()
                 // return next(new ApplicationError('No files uploaded', 400));
             }
-
+            if (err) {
+                return next(err);
+            }
             try {
                 const uploadedFileUrls = [];
                 for (const file of req.files) {
