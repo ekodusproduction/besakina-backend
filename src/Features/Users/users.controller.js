@@ -88,10 +88,10 @@ export const getUsers = async function (req, res, next) {
 
 export const addUserDetails = async function (req, res, next) {
     const { user_id } = req;
-    const { body: requestBody } = req;
+    const { body } = req;
     let connection = await pool.getConnection();
     try {
-        const [update, updateValues] = await updateQuery("users", requestBody, { id: req.user_id })
+        const [update, updateValues] = await updateQuery("users", body, { id: req.user_id })
         console.log("update", update)
         console.log("updateValues", updateValues)
         const [updatedUser, field] = await connection.query(update, updateValues)
