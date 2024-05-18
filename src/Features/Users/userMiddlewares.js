@@ -9,6 +9,9 @@ export const checkUserProfileCompletion = async function (req, res, next) {
         const selectUser = `SELECT fullname, email, mobile, city, state FROM users WHERE id = ?`
         const [rows, fields] = await connection.query(selectUser, [req.user_id])
         const userProfile = rows[0];
+        if (!userProfile) {
+            return await sendError(res, "Mobile number not registered please login", 400);
+        }
         if (!userProfile.fullname || !userProfile.email || !userProfile.mobile || !userProfile.city || !userProfile.state) {
             return await sendError(res, "User Profile Incomplete", 400);
         }
