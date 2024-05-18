@@ -4,6 +4,7 @@ import { countUserPosts, fetchPlansAndTotalAdds } from "./sql.js"
 
 export const checkUserProfileCompletion = async function (req, res, next) {
     const connection = await pool.getConnection()
+    console.log("checking user profile")
     try {
         const selectUser = `SELECT fullname, email, mobile, city, state FROM users WHERE id = ?`
         const [rows, fields] = await connection.query(selectUser, [req.user_id])
@@ -13,6 +14,7 @@ export const checkUserProfileCompletion = async function (req, res, next) {
         }
         next()
     } catch (error) {
+        console.log("checking user profile error", error)
         return await sendError(res, "Internal Server Error", 500);
     } finally {
         connection.release()
