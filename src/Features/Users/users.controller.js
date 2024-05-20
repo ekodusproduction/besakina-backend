@@ -109,24 +109,34 @@ export const addUserDocs = async function (req, res, next) {
     const { user_id } = req;
     const { fileUrls } = req;
 
-    // Extract file paths for each type of document or set them to null if not found
-    const docFile = fileUrls.find(item => item.fieldname === "doc_file")?.path || null;
-    const docFileBack = fileUrls.find(item => item.fieldname === "doc_file_back")?.path || null;
-    const profilePic = fileUrls.find(item => item.fieldname === "profile_pic")?.path || null;
-    console.log("docFile", docFile)
-    console.log("docFileBack", docFileBack)
-    console.log("profilePic", profilePic)
+    const updateFields = {};
+
+    const docFile = fileUrls.find(item => item.fieldname === "doc_file")?.path;
+    if (docFile) updateFields.doc_file = docFile;
+
+    const docFileBack = fileUrls.find(item => item.fieldname === "doc_file_back")?.path;
+    if (docFileBack) updateFields.doc_file_back = docFileBack;
+
+    const profilePic = fileUrls.find(item => item.fieldname === "profile_pic")?.path;
+    if (profilePic) updateFields.profile_pic = profilePic;
+
+    console.log("Update fields:", updateFields);
 
     let connection;
     try {
         connection = await pool.getConnection();
 
-        const updateQuery = `UPDATE users SET doc_file = ?, profile_pic = ?, doc_file_back = ? WHERE id = ?`;
-        const updateValues = [docFile, profilePic, docFileBack, user_id];
+        const setClause = Object.keys(updateFields).map(field => `${field} = ?`).join(', ');
+        const updateValues = [...Object.values(updateFields), user_id];
+
+        const updateQuery = `UPDATE users SET ${setClause} WHERE id = ?`;
+
+        console.log("Update query:", updateQuery);
+        console.log("Update values:", updateValues);
 
         await connection.query(updateQuery, updateValues);
 
-        return sendResponse(res, 'User documents uploaded successfully.', 201, null, null);
+        return await sendResponse(res, 'User documents uploaded successfully.', 201, null, null);
     } catch (error) {
         console.log("Error:", error);
         return sendResponse(res, 'Internal server error.', 500, null, null);
@@ -135,7 +145,7 @@ export const addUserDocs = async function (req, res, next) {
             connection.release();
         }
     }
-}
+};
 
 
 
