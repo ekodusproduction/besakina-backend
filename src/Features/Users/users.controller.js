@@ -81,7 +81,7 @@ export const getUsers = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
+        connection.release(); 
 
     }
 }
@@ -89,12 +89,9 @@ export const getUsers = async function (req, res, next) {
 export const addUserDetails = async function (req, res, next) {
     const { user_id } = req;
     const body = req.body;
-    console.log("body", body)
     let connection = await pool.getConnection();
     try {
         const [update, updateValues] = await updateQuery("users", body, { id: req.user_id })
-        console.log("update", update)
-        console.log("updateValues", updateValues)
         const [updatedUser, field] = await connection.query(update, updateValues)
 
         return await sendResponse(res, 'User details added.', 201, updatedUser, null);
@@ -226,5 +223,13 @@ export const getUserById = async function (req, res, next) {
         next(error);
     } finally {
         connection.release();
+    }
+}
+
+export const profileStatus = async function (req, res, next) {
+    try {
+        return await sendResponse(res, 'User profile complete', 200);
+    } catch (error) {
+        next(error);
     }
 }
