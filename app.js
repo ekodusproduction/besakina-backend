@@ -28,13 +28,11 @@ import homeRouter from './src/Features/Home/home.routes.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
 // Middleware setup
-app.use(express.raw())
 app.use((req, res, next) => {
     console.log("ip", req.ip)
     console.log("url", req.url)
     console.log('method', req.method)
     console.log('origin', req.headers.origin)
-
     console.log("rawBody ", req.body)
     next();
 })
