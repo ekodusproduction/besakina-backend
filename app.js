@@ -33,8 +33,11 @@ app.use((req, res, next) => {
     console.log("url", req.url)
     console.log('method', req.method)
     console.log('origin', req.headers.origin)
+    console.log("body", req.body)
     next();
 })
+
+
 app.set('trust proxy', true);
 app.use(cors({ credentials: false }));
 
