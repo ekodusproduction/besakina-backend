@@ -113,6 +113,9 @@ export const addUserDocs = async function (req, res, next) {
     const docFile = fileUrls.find(item => item.fieldname === "doc_file")?.path || null;
     const docFileBack = fileUrls.find(item => item.fieldname === "doc_file_back")?.path || null;
     const profilePic = fileUrls.find(item => item.fieldname === "profile_pic")?.path || null;
+    console.log("docFile", docFile)
+    console.log("docFileBack", docFileBack)
+    console.log("profilePic", profilePic)
 
     let connection;
     try {

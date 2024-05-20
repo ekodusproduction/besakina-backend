@@ -5,11 +5,12 @@ import { jwtAuth } from "../../Middlewares/auth.middleware.js";
 import { fileUpload } from "../../Middlewares/multer.middlewares.js";
 const userRouter = Router()
 
+
+userRouter.post("/details", jwtAuth, addUserDetails)
+userRouter.post("/doc", jwtAuth, fileUpload("users"), addUserDocs)
 userRouter.get("/", jwtAuth, getUsers)
 userRouter.post("/login", loginValidation, login)
 userRouter.post("/sendotp", mobileValidation, sendOtp)
-userRouter.post("/details", jwtAuth, addUserDetails)
-userRouter.post("/doc", jwtAuth, fileUpload("users"), addUserDocs)
 userRouter.get("/details", jwtAuth, getUserDetails)
 userRouter.get("/myads", jwtAuth, getUserAdds)
 userRouter.get("/id/:id", jwtAuth, getUserById)
