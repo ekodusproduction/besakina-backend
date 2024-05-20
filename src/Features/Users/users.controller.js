@@ -81,7 +81,7 @@ export const getUsers = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); 
+        connection.release();
 
     }
 }
@@ -133,7 +133,7 @@ export const addUserDocs = async function (req, res, next) {
 
         await connection.query(updateQuery, updateValues);
 
-        return await sendResponse(res, 'User documents uploaded successfully.', 201, null, null);
+        return await sendResponse(res, 'User documents uploaded successfully.', 201, updateFields, null);
     } catch (error) {
         console.log("Error:", error);
         return sendResponse(res, 'Internal server error.', 500, null, null);
@@ -149,14 +149,12 @@ export const addUserDocs = async function (req, res, next) {
 export const getUserAdds = async function (req, res, next) {
     const { user_id } = req;
     let connection = await pool.getConnection();
-
     try {
         const sql = getAllPosts.replaceAll('?', user_id)
         const [rows, fields] = await connection.query(sql);
         if (rows.length == 0) {
             return await sendResponse(res, "Advertisement fetched successfully", 200, []);
         }
-
         const data = await parseImages(rows)
         return await sendResponse(res, 'User adds', 200, data, null);
     } catch (error) {
