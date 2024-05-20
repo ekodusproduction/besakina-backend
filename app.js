@@ -33,7 +33,7 @@ app.use((req, res, next) => {
     console.log("url", req.url)
     console.log('method', req.method)
     console.log('origin', req.headers.origin)
-    console.log("body", req.body)
+    console.log("rawBody ", req.rawBody)
     next();
 })
 
@@ -42,7 +42,7 @@ app.set('trust proxy', true);
 app.use(cors({ credentials: false }));
 
 
-app.use(express.json());
+app.use(express.json({ strict: false }));
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet({
     crossOriginResourcePolicy: false,
