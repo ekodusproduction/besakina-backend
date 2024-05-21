@@ -8,8 +8,8 @@ export const hospitalValidationRules = () => {
         body('name').trim().isString().withMessage('Name must be a string'),
         body('title').trim().isString().withMessage('Title must be a string'),
         body('description').trim().isString().withMessage('Description must be a string'),
-        body('price_registration').isString().withMessage('Price registration must be a integer').toInt(),
-        body('price_per_visit').isString().withMessage('Price per visit must be a integer').toInt(),
+        body('price_registration').optional().isString().withMessage('Price registration must be a integer'),
+        body('price_per_visit').optional().isString().withMessage('Price per visit must be a integer'),
 
         body('street').optional().trim().isString().withMessage('Street must be a string'),
         body('locality').trim().isString().withMessage('Address must be a string'),

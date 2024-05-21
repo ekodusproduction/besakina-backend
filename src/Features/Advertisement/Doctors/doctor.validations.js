@@ -10,7 +10,7 @@ export const doctorValidationRules = () => {
         body('title').isString().notEmpty().withMessage('Title must be a non-empty string'),
         body('description').isString().notEmpty().withMessage('Description must be a non-empty string'),
 
-        body('price_per_visit').isString().notEmpty().withMessage('Price per visit must be a non-empty integer'),
+        body('price_per_visit').optional().isString().notEmpty().withMessage('Price per visit must be a non-empty integer'),
 
         body('street').optional().isString().withMessage('Street must be a string'),
         body('locality').isString().withMessage('Locality must be a string'),

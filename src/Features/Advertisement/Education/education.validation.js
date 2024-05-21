@@ -9,7 +9,7 @@ const educationValidationRules = async () => {
         body('course_duration').isString().trim().withMessage('Course duration must be a string'),
         body('title').isString().trim().withMessage('Adv title must be a string'),
         body('description').isString().trim().withMessage('Description must be a string'),
-        body('price').isString().toFloat().withMessage('Price must be a decimal'),
+        body('price').optional().isString().withMessage('Price is required'),
 
         body('street').isString().trim().withMessage('Street must be a string'),
         body('locality').isString().trim().withMessage('locality must be a string'),

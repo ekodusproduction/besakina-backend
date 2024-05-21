@@ -10,7 +10,7 @@ export const vehiclesValidationRules = () => {
     body('kilometer_driven').optional().isString().withMessage('Kilometer driven must be an string'),
     body('title').isString().withMessage('Ad title must be a string').trim().notEmpty().withMessage('Ad title is required'),
     body('description').isString().withMessage('Description must be a string').trim().notEmpty().withMessage('Description is required'),
-    body('price').isString().withMessage('Price must be a integer').notEmpty().withMessage('Price is required'),
+    body('price').optional().isString().withMessage('Price must be string'),
 
     body('fuel').optional().isString().withMessage('fuel must be a string'),
     body('second_hand').optional().isString().withMessage('second_hand must be a string'),
