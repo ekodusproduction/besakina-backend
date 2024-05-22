@@ -6,7 +6,7 @@ import pool from
     "../../../Mysql/mysql.database.js";
 import { filterQuery, insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
 import { getUserAndDoctors } from "./sqlQuery.js";
-
+import Doctor from "./Models/DoctorModel.js";
 const parseImages = async (advertisements) => {
     return advertisements.map(advertisement => {
         advertisement.images = JSON.parse(advertisement?.images);
@@ -25,42 +25,36 @@ const parseUser = async (advertisements) => {
 
 
 const addAdvertisement = async (requestBody, files) => {
-    let connection = await pool.getConnection();
     try {
-        const filePaths = files.map(file => file.path);
-        const photosJson = JSON.stringify(filePaths);
-        requestBody.images = photosJson;
-        const [query, values] = await insertQuery("doctors", requestBody)
+        requestBody.images = files.map(file => file.path);
 
-        const [rows, field] = await connection.query(query, values);
-        if (rows == null) {
-            return { error: true, data: { message: "error adding doctors.", statusCode: 400, data: null } };
+        const doctor = new Doctor(requestBody);
+
+        const savedDoctor = await doctor.save();
+
+        if (!savedDoctor) {
+            return { error: true, data: { message: "Error adding doctors.", statusCode: 400, data: null } };
         }
-        return { error: false, data: { message: "doctors added successfully", statusCode: 200, data: { id: rows.insertId } } };
+
+        return { error: false, data: { message: "Doctors added successfully", statusCode: 200, data: { id: savedDoctor._id } } };
     } catch (error) {
-        console.log(error)
+        console.error(error);
         logger.info(error)
         throw new ApplicationError(error, 500);
-    } finally {
-        connection.release();
     }
 };
 
 const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
-
     try {
         const [rows, field] = await connection.query(getUserAndDoctors, [advertisementID])
         if (rows.length === 0) {
             return { error: true, data: { message: "no doctors to show.", statusCode: 404, data: null } };
         }
-
         let data = await parseImages(rows)
         data[0].user = await JSON.parse(data[0].user)
-
         return { error: false, data: { message: "doctors", statusCode: 200, data: data[0] } };
     } catch (error) {
-
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {

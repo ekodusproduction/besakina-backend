@@ -1,63 +1,51 @@
+import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
 import { deleteQuery, insertQuery, selectQuery } from "../../Utility/sqlQuery.js";
+import Plan from "./Models/PlanModel.js";
 
 export const addPlan = async function (req, res, next) {
-    let connection = await pool.getConnection();
     try {
         const requestBody = req.body;
-        const membership_badge = req.fileUrls[0];
+        const membership_badge = req.fileUrls[0].path;
+        console.log("mem", { ...requestBody, membership_badge })
+        const plan = new Plan({ ...requestBody, membership_badge });
+        const savedPlan = await plan.save();
 
-        const [query, values] = await insertQuery('plans', { ...requestBody, membership_badge: membership_badge })
-
-        const [rows, fields] = await connection.query(query, values);
-
-        return await sendResponse(res, "Plan added successfully", 201, { id: rows.insertId }, null);
+        return sendResponse(res, "Plan added successfully", 201, { id: savedPlan._id }, null);
     } catch (error) {
-        next(error);
-    } finally {
-        connection.release();
-
-    }
-}
-
-export const getPlan = async function (req, res, next) {
-    let connection = await pool.getConnection();
-    try {
-        const [query, values] = await selectQuery("plans", {}, {})
-        const [rows, fields] = await connection.query(query);
-        if (rows.length === 0) {
-            return await sendError(res, "No plan found", 404);
-        }
-
-        return await sendResponse(res, "Plan List", 200, rows);
-    } catch (error) {
-        next(error);
-    } finally {
-        connection.release();
-    }
-}
-
-export const deletePlan = async function (req, res, next) {
-    let connection = await pool.getConnection();
-
-    try {
-        const id = req.params.id;
-        const sql = `DELETE FROM plans WHERE id = ?`
-        const deletedCount = await connection.query(sql, id);
-
-        if (deletedCount === 0) {
-            return await sendError(res, "No plan found", 404);
-        }
-
-        return await sendResponse(res, "Plan deleted successfully", 200, { id });
-    } catch (error) {
-        next(error);
-    } finally {
-        connection.release();
-
+        throw ApplicationError(error, 400);
     }
 };
+
+export const getPlan = async function (req, res, next) {
+    try {
+        const plans = await Plan.find({});
+        if (plans.length === 0) {
+            return sendError(res, "No plan found", 404);
+        }
+
+        return sendResponse(res, "Plan List", 200, plans);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const deletePlan = async function (req, res, next) {
+    try {
+        const id = req.params.id;
+        const deletedPlan = await Plan.findByIdAndDelete(id);
+
+        if (!deletedPlan) {
+            return sendError(res, "No plan found", 404);
+        }
+
+        return sendResponse(res, "Plan deleted successfully", 200, { id });
+    } catch (error) {
+        next(error);
+    }
+};
+
 
 const plans = {
     addPlan,

@@ -37,6 +37,8 @@ export const fileUpload = (destination) => {
                     console.log("file url in middleware", fileUrl)
                     uploadedFileUrls.push(fileUrl);
                 }
+                const filePaths = uploadedFileUrls.map(file => file.path);
+                req.images = filePaths;
                 req.fileUrls = uploadedFileUrls;
                 next();
             } catch (error) {
