@@ -13,7 +13,7 @@ const hospitalitySchema = new mongoose.Schema({
     city: { type: String },
     state: { type: String },
     pincode: { type: String },
-    images: { type: String },
+    images: [{ type: String }],
     video: { type: String },
     map_location: { type: String },
     latitude: { type: Number },
@@ -21,11 +21,11 @@ const hospitalitySchema = new mongoose.Schema({
     verified: { type: Boolean, default: true },
     is_active: { type: Boolean, default: true },
     seen_by: { type: Number, default: 0 },
-    created_at: { type: Date, default: Date.now },
-    updated_at: { type: Date, default: Date.now }
+
 }, {
     collection: 'advertisement',
-    discriminatorKey: 'type'
+    discriminatorKey: 'type',
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 
 hospitalitySchema.index({ title: 'text', name: 'text', type: 'text', description: 'text', city: 'text', state: 'text', locality: 'text', category: 'text', pincode: 'text' });
