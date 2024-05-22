@@ -6,7 +6,6 @@ import pool from
     "../../../Mysql/mysql.database.js";
 import { filterQuery, insertQuery, selectJoinQuery, selectQuery, updateQuery } from "../../../Utility/sqlQuery.js";
 import { getUserAndDoctors } from "./sqlQuery.js";
-import Doctor from "./Models/DoctorModel.js"
 
 const parseImages = async (advertisements) => {
     return advertisements.map(advertisement => {
@@ -26,25 +25,26 @@ const parseUser = async (advertisements) => {
 
 
 const addAdvertisement = async (requestBody, files) => {
+    let connection = await pool.getConnection();
     try {
         const filePaths = files.map(file => file.path);
-        requestBody.images = filePaths;
+        const photosJson = JSON.stringify(filePaths);
+        requestBody.images = photosJson;
+        const [query, values] = await insertQuery("doctors", requestBody)
 
-        const doctor = new Doctor(requestBody);
-        const savedDoctor = await doctor.save();
-
-        if (!savedDoctor) {
-            return { error: true, data: { message: "Error adding doctors.", statusCode: 400, data: null } };
+        const [rows, field] = await connection.query(query, values);
+        if (rows == null) {
+            return { error: true, data: { message: "error adding doctors.", statusCode: 400, data: null } };
         }
-
-        return { error: false, data: { message: "Doctors added successfully", statusCode: 200, data: { id: savedDoctor._id } } };
+        return { error: false, data: { message: "doctors added successfully", statusCode: 200, data: { id: rows.insertId } } };
     } catch (error) {
-        console.error(error);
+        console.log(error)
         logger.info(error)
         throw new ApplicationError(error, 500);
+    } finally {
+        connection.release();
     }
 };
-
 
 const getAdvertisement = async (advertisementID) => {
     let connection = await pool.getConnection();
