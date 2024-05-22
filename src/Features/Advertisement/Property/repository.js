@@ -226,6 +226,7 @@ export const deleteImage = async (advertisementID, files, userId) => {
 
         return { error: false, data: { data: null, message: "Images deleted successfully from the property", statusCode: 200 } };
     } catch (error) {
+        console.log("error", error)
         logger.info(error);
         throw new ApplicationError(error, 500);
     } finally {
