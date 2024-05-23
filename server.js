@@ -6,7 +6,7 @@ import http from 'http';
 import { Server } from "socket.io";
 import { redisClient } from './redis.js';
 import { jwtAuth } from './src/Middlewares/auth.middleware.js';
-import { chatSocket } from './src/Features/Chats/chat.socket.js';
+// import { chatSocket } from './src/Features/Chats/chat.socket.js';
 import { socketAuth } from "./socketAuth.js"
 import { s3Client } from './src/config/aws-sdk.js';
 import fs from "fs";

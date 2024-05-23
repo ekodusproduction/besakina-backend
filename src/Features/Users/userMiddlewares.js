@@ -1,6 +1,4 @@
 import { sendError } from "../../Utility/response.js"
-import pool from "../../Mysql/mysql.database.js"
-import { countUserPosts, fetchPlansAndTotalAdds } from "./sql.js"
 import User from "./Models/UserModel.js"
 import Plan from "../Plans/Models/PlanModel.js"
 

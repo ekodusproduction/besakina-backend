@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Base from '../../BaseModel/BaseModel.js';
 
 const doctorSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -13,31 +14,18 @@ const doctorSchema = new mongoose.Schema({
     city: { type: String, required: true },
     state: { type: String, required: true },
     pincode: { type: String, required: true },
-    images: [{ type: String }],
-    video: { type: String },
-    map_location: { type: String },
-    latitude: { type: Number },
-    longitude: { type: Number },
-    verified: { type: Boolean, default: false },
-    is_active: { type: Boolean, default: true },
-    seen_by: { type: Number, default: 0 },
-}, {
-    collection: 'advertisement',
-    discriminatorKey: 'discriminatorKey',
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 
 doctorSchema.index({ title: 'text', expertise: 'text', description: 'text', street: 'text', city: 'text', locality: 'text', pincode: 'text' });
 doctorSchema.index({ is_active: 1, created_at: -1 });
 
-doctorSchema.pre('save', function (next) {
-    // Set the discriminator key to the model name
-    this.__t = this.constructor.modelName;
-    console.log("constructor", this.constructor)
-    console.log("this", this.__t)
-    next();
-});
+// doctorSchema.pre('save', function (next) {
+//     // Set the discriminator key to the model name
+//     this.__t = this.constructor.modelName;
+//     console.log("constructor", this.constructor)
+//     console.log("this", this.__t)
+//     next();
+// });
 
-const Doctor = mongoose.model('Doctor', doctorSchema);
-
+const Doctor = Base.discriminator('Doctor', doctorSchema);
 export default Doctor;

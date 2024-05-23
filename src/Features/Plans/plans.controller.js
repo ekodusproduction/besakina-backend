@@ -1,7 +1,5 @@
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
-import pool from "../../Mysql/mysql.database.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
-import { deleteQuery, insertQuery, selectQuery } from "../../Utility/sqlQuery.js";
 import Plan from "./Models/PlanModel.js";
 
 export const addPlan = async function (req, res, next) {

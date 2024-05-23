@@ -22,7 +22,7 @@ import hospitalityRouter from './src/Features/Advertisement/Hospitality/hospital
 import educationRouter from './src/Features/Advertisement/Education/education.routes.js';
 import doctorRouter from './src/Features/Advertisement/Doctors/doctors.routes.js';
 
-import chatRouter from './src/Features/Chats/chats.routes.js';
+// import chatRouter from './src/Features/Chats/chats.routes.js';
 import homeRouter from './src/Features/Home/home.routes.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
@@ -62,7 +62,7 @@ app.use("/api/hospitality", hospitalityRouter);
 app.use("/api/education", educationRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/plans", plansRouter);
-app.use('/api/chat', chatRouter)
+// app.use('/api/chat', chatRouter)
 app.use("/api/home", homeRouter)
 app.use("/api/favourites", homeRouter)
 

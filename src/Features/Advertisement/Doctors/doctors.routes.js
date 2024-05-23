@@ -9,7 +9,6 @@ import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./doctor.validations.js";
-import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
 
 const doctorRouter = Router()

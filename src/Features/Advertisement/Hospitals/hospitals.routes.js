@@ -4,7 +4,6 @@ import {
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
     deleteAdvertisement
 } from "./hospitals.controller.js"
-import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";

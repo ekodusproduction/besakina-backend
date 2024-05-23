@@ -8,9 +8,9 @@ export const addAdvertisement = async (requestBody, files) => {
         const result = new Property(requestBody);
         const savedDoctor = await result.save();
         if (!savedDoctor) {
-            return { error: true, data: { message: "Error adding doctors.", statusCode: 400, data: null } };
+            return { error: true, data: { message: "Error adding Property.", statusCode: 400, data: null } };
         }
-        return { error: false, data: { message: "Doctors added successfully", statusCode: 200, data: { id: savedDoctor._id } } };
+        return { error: false, data: { message: "Property added successfully", statusCode: 200, data: { id: savedDoctor._id } } };
     } catch (error) {
         console.error(error);
         logger.info(error);
@@ -24,10 +24,10 @@ export const getAdvertisement = async (advertisementID) => {
         const result = await Property.findById(advertisementID).populate('user');
 
         if (!result) {
-            return { error: true, data: { message: "No doctors to show.", statusCode: 404, data: null } };
+            return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
         }
 
-        return { error: false, data: { message: "Doctors", statusCode: 200, data: result } };
+        return { error: false, data: { message: "property", statusCode: 200, data: result } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -75,7 +75,7 @@ export const updateAdvertisement = async (advertisementID, updateBody, userId) =
             { new: true }
         );
         if (!result) {
-            return { error: true, data: { message: "Property not updated. No matching doctors found for the provided ID.", statusCode: 404, data: null } };
+            return { error: true, data: { message: "Property not updated. No matching property found for the provided ID.", statusCode: 404, data: null } };
         }
         return { error: false, data: { message: "Property updated successfully", statusCode: 200, data: result } };
     } catch (error) {

@@ -8,7 +8,6 @@ import {
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
 import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitality.validation.js";
-import { checkPlanValidity } from "../../../Middlewares/checkValidPlan.middleware.js";
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
 
