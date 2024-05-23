@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
     fullname: { type: String },
     mobile: { type: String, required: true, unique: true },
-    alternate_mobile: { type: Number, unique: true },
+    alternate_mobile: { type: Number },
     otp: { type: String },
     email: { type: String },
     doc_number: { type: String },
