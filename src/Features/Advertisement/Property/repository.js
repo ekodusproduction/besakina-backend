@@ -1,5 +1,3 @@
-// repositories/advertisementRepository.js
-
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
 import Property from "./Models/PropertyModel.js";

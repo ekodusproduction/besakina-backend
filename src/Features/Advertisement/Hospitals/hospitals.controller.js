@@ -1,9 +1,4 @@
-import { ApplicationError } from "../../../ErrorHandler/applicationError.js"
 import { sendResponse, sendError } from "../../../Utility/response.js";
-import pool from
-  "../../../Mysql/mysql.database.js";
-// import path from 'path';  // Import path module
-import { insertQuery, selectQuery, updateQuery, selectJoinQuery, filterQuery } from "../../../Utility/sqlQuery.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
 import repository from "./repository.js";
 
@@ -11,7 +6,7 @@ import repository from "./repository.js";
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user = req.user
-    const result = await repository.addAdvertisement(req.body, req.fileUrls);
+    const result = await repository.addAdvertisement(req.body, req.images);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode);
     }
