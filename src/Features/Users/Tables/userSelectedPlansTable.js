@@ -7,8 +7,8 @@ export const createUserPlansTable = async function () {
         const createTableQuery = `CREATE TABLE IF NOT EXISTS userselectedplans (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             plan_id BIGINT UNSIGNED,
-            user_id BIGINT UNSIGNED,
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            user BIGINT UNSIGNED,
+            FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE,
             FOREIGN KEY (plan_id) REFERENCES plans(id) ON DELETE CASCADE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -12,7 +12,7 @@ export const socketAuth = async function (socket, next) {
         const { isValid, decoded, error } = verifyToken(token.split(" ")[1]);
 
         if (isValid) {
-            socket.user_id = decoded.userId;
+            socket.user = decoded.userId;
             socket.plan_id = decoded.plan_id;
             next();
         } else {

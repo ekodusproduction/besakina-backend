@@ -5,6 +5,7 @@ import { sendError, sendResponse } from '../../Utility/response.js';
 import { ApplicationError } from '../../ErrorHandler/applicationError.js';
 import jwt from 'jsonwebtoken';
 import { MongoClient, ObjectId } from 'mongodb';
+import { getDB } from '../../mongodb/mongodb.js';
 // Send OTP
 export const sendOtp = async (req, res, next) => {
     const { mobile } = req.body;
@@ -12,10 +13,12 @@ export const sendOtp = async (req, res, next) => {
 
     try {
         let user = await User.findOne({ mobile });
+        console.log(user)
         if (!user) {
             user = new User({ mobile, otp });
             await user.save();
         } else {
+            console.log("usr found")
             user.otp = otp;
             await user.save();
         }
@@ -31,27 +34,26 @@ export const login = async (req, res, next) => {
 
     try {
         const user = await User.findOne({ mobile, otp });
-
+        console.log("user", user);
         if (!user) {
-            throw new ApplicationError('Invalid Otp', 404);
+            throw new ApplicationError('Invalid OTP', 404);
         }
 
-        const fiveMin = 5 * 60 * 1000;
-        const updatedAtDate = new Date(user.updated_at);
-
-        if (Date.now() < updatedAtDate.getTime() + fiveMin) {
-            const token = createToken(user);
-            return await sendResponse(res, 'Login successful', 201, null, token);
-        } else {
+        const otpExpirationTime = new Date(user.otp_expires_at);
+        if (otpExpirationTime < Date.now()) {
             return await sendError(res, 'OTP expired', 400);
         }
+
+        const token = createToken(user);
+        return await sendResponse(res, 'Login successful', 201, null, token);
     } catch (error) {
         next(error);
     }
 };
 
+
 const createToken = (user) => {
-    return jwt.sign({ userId: user._id, plan_id: user.plan }, process.env.JWT_SECRET, {
+    return jwt.sign({ user: user._id, plan_id: user.plan }, process.env.JWT_SECRET, {
         expiresIn: '1d',
     });
 };
@@ -68,10 +70,10 @@ export const getUsers = async function (req, res, next) {
 
 // Add User Details
 export const addUserDetails = async function (req, res, next) {
-    const { user_id } = req;
+    const { user } = req;
     const body = req.body;
     try {
-        const updatedUser = await User.findByIdAndUpdate(user_id, body, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(user, body, { new: true });
         return await sendResponse(res, 'User details added.', 201, updatedUser, null);
     } catch (error) {
         next(error);
@@ -79,7 +81,7 @@ export const addUserDetails = async function (req, res, next) {
 };
 
 export const addUserDocs = async function (req, res, next) {
-    const { user_id } = req;
+    const { user } = req;
     const { fileUrls } = req;
 
     const updateFields = {};
@@ -96,7 +98,7 @@ export const addUserDocs = async function (req, res, next) {
     console.log("Update fields:", updateFields);
 
     try {
-        const updatedUser = await User.findByIdAndUpdate(user_id, updateFields, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(user, updateFields, { new: true });
         return await sendResponse(res, 'User documents uploaded successfully.', 201, updatedUser, null);
     } catch (error) {
         console.log("Error:", error);
@@ -105,13 +107,14 @@ export const addUserDocs = async function (req, res, next) {
 };
 
 export const getUserAdds = async function (req, res, next) {
-    const { user_id } = req;
-
+    const { user } = req;
+    if (!ObjectId.isValid(user)) {
+        return await sendError(res, "Invalid User id", 400)
+    }
     try {
-        const db = await connectToDatabase();
-        const adsCollection = db.collection('advertisement');
+        const adsCollection = getDB().collection('advertisement');
 
-        const ads = await adsCollection.find({ user: ObjectId(user_id) }).toArray();
+        const ads = await adsCollection.find({ user: user }).toArray();
 
         if (!ads.length) {
             return await sendResponse(res, "Advertisement fetched successfully", 200, []);
@@ -119,14 +122,15 @@ export const getUserAdds = async function (req, res, next) {
 
         return await sendResponse(res, 'User ads', 200, ads, null);
     } catch (error) {
+        console.log(error)
         next(error);
     }
 };
 
 export const getUserDetails = async function (req, res, next) {
-    const { user_id } = req;
+    const { user } = req;
     try {
-        const userDetails = await User.findById(user_id).populate('plan');
+        const userDetails = await User.findById(user).populate('plan');
         if (!userDetails) {
             return await sendResponse(res, "User details fetched successfully", 200, { advertisement: [] });
         }
@@ -138,7 +142,7 @@ export const getUserDetails = async function (req, res, next) {
 
 // Plan Subscribe
 export const planSubscribe = async function (req, res, next) {
-    const { user_id } = req;
+    const { user } = req;
     const { plan_id } = req.body;
 
     try {
@@ -147,7 +151,7 @@ export const planSubscribe = async function (req, res, next) {
             return await sendError(res, 'Plan not found', 404);
         }
 
-        const user = await User.findByIdAndUpdate(user_id, { plan: plan_id, plan_date: new Date() }, { new: true });
+        const user = await User.findByIdAndUpdate(user, { plan: plan_id, plan_date: new Date() }, { new: true });
         return await sendResponse(res, 'Plan subscribed successfully', 201, user, null);
     } catch (error) {
         next(error);
@@ -156,9 +160,9 @@ export const planSubscribe = async function (req, res, next) {
 
 // Get User By ID
 export const getUserById = async function (req, res, next) {
-    const user_id = req.params.id;
+    const user = req.params.id;
     try {
-        const userDetails = await User.findById(user_id);
+        const userDetails = await User.findById(user);
         if (!userDetails) {
             return await sendResponse(res, "User details fetched successfully", 200);
         }

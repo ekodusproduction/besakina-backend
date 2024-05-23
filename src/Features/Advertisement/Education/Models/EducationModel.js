@@ -25,7 +25,7 @@ const educationSchema = new mongoose.Schema({
 
 }, {
     collection: 'advertisement',
-    discriminatorKey: 'type',
+    discriminatorKey: 'discriminatorKey',
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 

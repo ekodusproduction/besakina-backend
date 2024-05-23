@@ -7,10 +7,10 @@ export const createUserWishListTable = async function () {
 
         const createTableQuery = `CREATE TABLE IF NOT EXISTS userswishlist (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id BIGINT UNSIGNED,
+            user BIGINT UNSIGNED,
             adv_id BIGINT UNSIGNED,
             adv_type VARCHAR(255),
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+            FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );`;
 

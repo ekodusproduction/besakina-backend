@@ -12,8 +12,8 @@ export const createChatTable = async function () {
         CREATE TABLE IF NOT EXISTS chat (
         id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
         message VARCHAR(255),
-        user_id BIGINT UNSIGNED NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        user BIGINT UNSIGNED NOT NULL,
+        FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE,
         chat_room_id BIGINT UNSIGNED NOT NULL,
         FOREIGN KEY (chat_room_id) REFERENCES chat_room(id) ON DELETE CASCADE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

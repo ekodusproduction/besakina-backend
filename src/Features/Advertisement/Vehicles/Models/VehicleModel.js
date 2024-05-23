@@ -33,7 +33,7 @@ const vehicleSchema = new mongoose.Schema({
     updated_at: { type: Date, default: Date.now }
 }, {
     collection: 'advertisement',
-    discriminatorKey: 'type',
+    discriminatorKey: 'discriminatorKey',
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 

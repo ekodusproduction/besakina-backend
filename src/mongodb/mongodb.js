@@ -9,10 +9,7 @@ let client;
 // 3. Function to connect to the database
 export const connectToMongoDB = async () => {
     try {
-        client = await MongoClient.connect(url, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        client = await MongoClient.connect(url);
         console.log("Connected to MongoDB using native driver!");
     } catch (err) {
         console.error("Failed to connect to MongoDB", err);

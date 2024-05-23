@@ -1,39 +1,37 @@
 import { sendError } from "../../Utility/response.js"
 import pool from "../../Mysql/mysql.database.js"
 import { countUserPosts, fetchPlansAndTotalAdds } from "./sql.js"
+import User from "./Models/UserModel.js"
+import Plan from "../Plans/Models/PlanModel.js"
 
-export const checkUserProfileCompletion = async function (req, res, next) {
-    const connection = await pool.getConnection()
-    console.log("checking user profile")
+export const checkUserProfileCompletion = async (req, res, next) => {
+    console.log("checking user profile");
     try {
-        const selectUser = `SELECT fullname, email, mobile, city, state FROM users WHERE id = ?`
-        const [rows, fields] = await connection.query(selectUser, [req.user_id])
-        const userProfile = rows[0];
+        const userProfile = await User.findById(req.user, 'fullname email mobile city state').exec();
+
         if (!userProfile) {
-            return await sendError(res, "Mobile number not registered please login", 400);
+            return sendError(res, "Mobile number not registered. Please login.", 400);
         }
         if (!userProfile.fullname || !userProfile.email || !userProfile.mobile || !userProfile.city || !userProfile.state) {
-            return await sendError(res, "User Profile Incomplete", 400);
+            return sendError(res, "User profile incomplete.", 400);
         }
-        next()
+        next();
     } catch (error) {
-        console.log("checking user profile error", error)
-        return await sendError(res, "Internal Server Error", 500);
-    } finally {
-        connection.release()
+        console.error("Checking user profile error", error);
+        return sendError(res, "Internal Server Error", 500);
     }
-}
+};
 
 // export const checkUserPlanQuotaPermissions = async function (req, res, next) {
 //     const connection = await pool.getConnection()
 //     try {
-//         const selectUser = `SELECT * FROM userselectedplans WHERE user_id = ?`
-//         const [rows, fields] = await connection.query(selectUser, [req.user_id])
+//         const selectUser = `SELECT * FROM userselectedplans WHERE user = ?`
+//         const [rows, fields] = await connection.query(selectUser, [req.user])
 //         const userProfile = rows[0];
 //         const planSql = `SELECT * FROM plans WHERE id = ?`
 //         const [plans, planFields] = await connection.query(planSql, [rows[0].plan_id])
 
-//         const sql = countUserPosts.replaceAll('?', user_id)
+//         const sql = countUserPosts.replaceAll('?', user)
 //         const [posts, postFields] = await connection.query(sql);
 //         if(posts[0].total_posts >= plans[0].no_of_ads){
 //             return await sendError(res, "Advertisement quota is full. Please upgrade the plan.")
@@ -46,25 +44,23 @@ export const checkUserProfileCompletion = async function (req, res, next) {
 //     }
 // }
 
-export const checkUserPlanQuotaPermissions = async function (req, res, next) {
-    const connection = await pool.getConnection()
+export const checkUserPlanQuotaPermissions = async (req, res, next) => {
     try {
-        const sql = fetchPlansAndTotalAdds.replaceAll('?', req.user_id)
-        const [userData] = await connection.query(sql);
+        const user = await User.findById(req.user).populate('plan').exec();
 
-        if (userData.length === 0) {
-            return await sendError(res, "No plans subscribed. Please subscribe to a plan.", 400);
+        if (!user || !user.plan) {
+            return sendError(res, "No plans subscribed. Please subscribe to a plan.", 400);
         }
 
-        if (userData.total_posts >= userData.no_of_ads) {
-            return await sendError(res, "Advertisement quota is full. Please upgrade the plan.", 403);
+        const userPostsCount = await Post.countDocuments({ user: req.user });
+
+        if (userPostsCount >= user.plan.no_of_ads) {
+            return sendError(res, "Advertisement quota is full. Please upgrade the plan.", 403);
         }
 
         next();
     } catch (error) {
         console.error("Error checking user plan quota permissions:", error);
-        return await sendError(res, "Internal Server Error", 500);
-    } finally {
-        connection.release();
+        return sendError(res, "Internal Server Error", 500);
     }
 };

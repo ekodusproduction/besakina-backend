@@ -22,10 +22,10 @@ const hospitalSchema = new mongoose.Schema({
     state: { type: String },
     pincode: { type: String },
     seen_by: { type: Number, default: 0 },
-    
+
 }, {
     collection: 'advertisement',
-    discriminatorKey: 'type',
+    discriminatorKey: 'discriminatorKey',
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 

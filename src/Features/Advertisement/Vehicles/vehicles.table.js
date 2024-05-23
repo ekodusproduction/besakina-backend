@@ -11,7 +11,7 @@ export const createVehicleTable = async function () {
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS vehicles (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id BIGINT UNSIGNED,
+            user BIGINT UNSIGNED,
 
             type VARCHAR(250),
             brand text,
@@ -48,7 +48,7 @@ export const createVehicleTable = async function () {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
             
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
         );`;
 
         // Execute the query

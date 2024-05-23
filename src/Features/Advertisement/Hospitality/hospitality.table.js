@@ -10,7 +10,7 @@ export const createHospitalityTable = async function () {
         // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS hospitality (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id BIGINT UNSIGNED NOT NULL,
+            user BIGINT UNSIGNED NOT NULL,
 
             type VARCHAR(50) NOT NULL,
             name VARCHAR(255) NOT NULL,
@@ -38,7 +38,7 @@ export const createHospitalityTable = async function () {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
             );`;
 
         // Execute the query

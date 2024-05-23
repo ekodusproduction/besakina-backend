@@ -7,26 +7,25 @@ const countAdds = `
     SELECT 
         SUM(advertisement_count) AS total_advertisements
     FROM (
-        SELECT COUNT(*) AS advertisement_count FROM property WHERE user_id = ? 
+        SELECT COUNT(*) AS advertisement_count FROM property WHERE user = ? 
         UNION ALL
-        SELECT COUNT(*) AS advertisement_count FROM vehicles WHERE user_id = ? 
+        SELECT COUNT(*) AS advertisement_count FROM vehicles WHERE user = ? 
         UNION ALL
-        SELECT COUNT(*) AS advertisement_count FROM education WHERE user_id = ? 
+        SELECT COUNT(*) AS advertisement_count FROM education WHERE user = ? 
         UNION ALL
-        SELECT COUNT(*) AS advertisement_count FROM hospitals WHERE user_id = ? 
+        SELECT COUNT(*) AS advertisement_count FROM hospitals WHERE user = ? 
         UNION ALL
-        SELECT COUNT(*) AS advertisement_count FROM doctors WHERE user_id = ? 
+        SELECT COUNT(*) AS advertisement_count FROM doctors WHERE user = ? 
         UNION ALL
-        SELECT COUNT(*) AS advertisement_count FROM hospitality WHERE user_id = ? 
+        SELECT COUNT(*) AS advertisement_count FROM hospitality WHERE user = ? 
     ) AS advertisement_counts;
 `;
 
 export const checkPlanValidity = async function (req, res, next) {
     try {
-        const user_id = req.user_id;
 
         // Fetch user information
-        const [users, userFields] = await connection.query.raw('SELECT * FROM users WHERE id = ?', [user_id]);
+        const [users, userFields] = await connection.query.raw('SELECT * FROM users WHERE id = ?', [req.user]);
         const user = users[0]; // Assuming user is unique by ID
 
         if (!user) {
@@ -38,9 +37,8 @@ export const checkPlanValidity = async function (req, res, next) {
             return await sendError(res, 'Invalid plan', 400);
         }
 
-        // Fetch plan information
         const [plans, planFields] = await connection.query.raw('SELECT * FROM plans WHERE id = ?', [plan_id]);
-        const plan = plans[0]; // Assuming plan is unique by ID
+        const plan = plans[0];
 
         if (!plan) {
             return await sendError(res, 'Plan not found', 404);
@@ -54,8 +52,7 @@ export const checkPlanValidity = async function (req, res, next) {
             return await sendError(res, 'Invalid plan. Plan Expired', 400);
         }
 
-        // Replace placeholders with user_id in the SQL query
-        const dynamicQuery = countAdds.replaceAll('?', user_id);
+        const dynamicQuery = countAdds.replaceAll('?', user);
 
         const [count, postFields] = await connection.query.raw(dynamicQuery);
 

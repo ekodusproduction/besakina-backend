@@ -9,7 +9,7 @@ export const createDoctorsTable = async function () {
         // Define your CREATE TABLE query
         const createTableQuery = `CREATE TABLE IF NOT EXISTS doctors (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id BIGINT UNSIGNED,
+            user BIGINT UNSIGNED,
             
             expertise VARCHAR(50),
             name VARCHAR(255) ,
@@ -39,7 +39,7 @@ export const createDoctorsTable = async function () {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
         );`;
 
         // Execute the query

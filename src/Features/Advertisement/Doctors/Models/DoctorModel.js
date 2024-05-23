@@ -23,12 +23,20 @@ const doctorSchema = new mongoose.Schema({
     seen_by: { type: Number, default: 0 },
 }, {
     collection: 'advertisement',
-    discriminatorKey: 'type',
+    discriminatorKey: 'discriminatorKey',
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 });
 
 doctorSchema.index({ title: 'text', expertise: 'text', description: 'text', street: 'text', city: 'text', locality: 'text', pincode: 'text' });
 doctorSchema.index({ is_active: 1, created_at: -1 });
+
+doctorSchema.pre('save', function (next) {
+    // Set the discriminator key to the model name
+    this.__t = this.constructor.modelName;
+    console.log("constructor", this.constructor)
+    console.log("this", this.__t)
+    next();
+});
 
 const Doctor = mongoose.model('Doctor', doctorSchema);
 

@@ -9,7 +9,7 @@ import repository from "./repository.js";
 
 export const addAdvertisement = async (req, res, next) => {
   try {
-    req.body.user_id = req.user_id
+    req.body.user = req.user
     const result = await repository.addAdvertisement(req.body, req.fileUrls);
     console.log("result", result)
     if (result.error) {
@@ -68,7 +68,7 @@ export const updateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
     const updateBody = req.body;
-    const result = await repository.updateAdvertisement(advertisementID, updateBody, req.user_id);
+    const result = await repository.updateAdvertisement(advertisementID, updateBody, req.user);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
@@ -82,7 +82,7 @@ export const updateAdvertisement = async (req, res, next) => {
 export const deactivateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.deactivateAdvertisement(advertisementID, req.user_id);
+    const result = await repository.deactivateAdvertisement(advertisementID, req.user);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
@@ -96,7 +96,7 @@ export const deactivateAdvertisement = async (req, res, next) => {
 export const addImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.addImage(advertisementID, req.fileUrls, req.user_id);
+    const result = await repository.addImage(advertisementID, req.fileUrls, req.user);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
@@ -110,7 +110,7 @@ export const addImage = async (req, res, next) => {
 export const deleteImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.deleteImage(advertisementID, req.body.images, req.user_id);
+    const result = await repository.deleteImage(advertisementID, req.body.images, req.user);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
@@ -124,7 +124,7 @@ export const deleteImage = async (req, res, next) => {
 export const activateAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.activateAdvertisement(advertisementID, req.user_id);
+    const result = await repository.activateAdvertisement(advertisementID, req.user);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
@@ -138,11 +138,11 @@ export const activateAdvertisement = async (req, res, next) => {
 export const deleteAdvertisement = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.deleteAdvertisement(advertisementID, req.user_id);
+    const result = await repository.deleteAdvertisement(advertisementID, req.user);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
-    return await sendResponse(res, result.message, 200);
+    return await sendResponse(res, result.data.message, 200);
   } catch (error) {
     logger.info(error)
     next(error);

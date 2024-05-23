@@ -27,7 +27,7 @@ export const jwtAuth = async (req, res, next) => {
     const { isValid, decoded, error } = verifyToken(token.split(" ")[1]);
     if (isValid) {
         // If token is valid, attach user information to the request object
-        req.user_id = decoded.userId;
+        req.user = decoded.user;
         req.plan_id = decoded.plan_id;
         next();
     } else {

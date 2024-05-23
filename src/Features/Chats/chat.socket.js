@@ -9,7 +9,7 @@ export const chatSocket = (socket) => {
             socket.to(chatRoomId).emit("newMessage", messageData)
             // Store message in the database
             await connection.query(
-                "INSERT INTO chat (message, user_id, chat_room_id) VALUES (?, ?, ?)",
+                "INSERT INTO chat (message, user, chat_room_id) VALUES (?, ?, ?)",
                 [message, userId, chatRoomId]
             );
 

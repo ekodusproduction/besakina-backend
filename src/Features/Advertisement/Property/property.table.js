@@ -10,7 +10,7 @@ export const createPropertyTable = async function () {
         const createTableQuery = `
         CREATE TABLE IF NOT EXISTS property (
             id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            user_id BIGINT UNSIGNED,
+            user BIGINT UNSIGNED,
 
             title VARCHAR(255),
             type VARCHAR(250),
@@ -54,7 +54,7 @@ export const createPropertyTable = async function () {
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
             
-            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE
         );`
         // Execute the query
         await connection.query(createTableQuery);
