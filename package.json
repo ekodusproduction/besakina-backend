@@ -38,7 +38,8 @@
     "db:migrate": "node src/Mysql/mysql.migrate.js",
     "db:seed": "node seeders/index.js",
     "db:create": "node src/Mysql/mysql.createDb.js",
-    "db:drop": "node src/Mysql/mysql.dropDb.js"
+    "db:drop": "node src/Mysql/mysql.dropDb.js",
+    "db:reindex": "node src/mongodb/reindex.js"
   },
   "keywords": [],
   "author": "",

@@ -10,6 +10,10 @@ let client;
 export const connectToMongoDB = async () => {
     try {
         client = await MongoClient.connect(url);
+        client.db().getCollectionNames().forEach(function (collectionName) {
+            print("Reindexing " + collectionName);
+            db.getCollection(collectionName).reIndex();
+        });
         console.log("Connected to MongoDB using native driver!");
     } catch (err) {
         console.error("Failed to connect to MongoDB", err);
