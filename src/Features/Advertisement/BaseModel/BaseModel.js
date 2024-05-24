@@ -17,6 +17,7 @@ const baseSchema = new mongoose.Schema({
     seen_by: { type: Number, default: 0 },
 }, baseOptions);
 
+baseSchema.index({ "advType": 1 })
 const Base = mongoose.model('Base', baseSchema);
 
 export default Base;

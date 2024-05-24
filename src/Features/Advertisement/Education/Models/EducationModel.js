@@ -14,7 +14,7 @@ const educationSchema = new mongoose.Schema({
     locality: { type: String },
     city: { type: String },
     state: { type: String },
-    pincode: { type: String },
+    pincode: { type: String }
 });
 
 educationSchema.index({ title: 'text', domain: 'text', institution_name: 'text', type: 'text', description: 'text', city: 'text', locality: 'text', pincode: 'text' });

@@ -13,7 +13,7 @@ const doctorSchema = new mongoose.Schema({
     locality: { type: String, required: true },
     city: { type: String, required: true },
     state: { type: String, required: true },
-    pincode: { type: String, required: true },
+    pincode: { type: String, required: true }
 });
 
 doctorSchema.index({ title: 'text', expertise: 'text', description: 'text', street: 'text', city: 'text', locality: 'text', pincode: 'text' });

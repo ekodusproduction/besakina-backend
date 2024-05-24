@@ -25,8 +25,7 @@ const propertySchema = new mongoose.Schema({
     landmark: { type: String },
     city: { type: String },
     state: { type: String },
-    pincode: { type: String },
-
+    pincode: { type: String }
 });
 
 propertySchema.index({ title: 'text', type: 'text', city: 'text', state: 'text', landmark: 'text', category: 'text', price: 'text', pincode: 'text' });

@@ -13,7 +13,7 @@ const hospitalSchema = new mongoose.Schema({
     street: { type: String },
     locality: { type: String },
     city: { type: String },
-    state: { type: String },
+    state: { type: String }
 });
 
 // Indexes

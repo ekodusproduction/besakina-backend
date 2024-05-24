@@ -22,7 +22,7 @@ const vehicleSchema = new mongoose.Schema({
     model: { type: String },
     transmission: { type: String },
     variant: { type: String },
-    color: { type: String },
+    color: { type: String }
 });
 
 vehicleSchema.index({ title: 'text', brand: 'text', type: 'text', city: 'text', kilometer_driven: 'text', registration_year: 'text', fuel: 'text', category: 'text', price: 'text', second_hand: 'text', model: 'text', variant: 'text', transmission: 'text' });

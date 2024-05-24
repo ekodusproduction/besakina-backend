@@ -21,7 +21,7 @@ const hospitalitySchema = new mongoose.Schema({
     longitude: { type: Number },
     verified: { type: Boolean, default: true },
     is_active: { type: Boolean, default: true },
-    seen_by: { type: Number, default: 0 },
+    seen_by: { type: Number, default: 0 }
 
 }, {
     collection: 'advertisement',
