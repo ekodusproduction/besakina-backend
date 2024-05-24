@@ -35,18 +35,18 @@ export const getAdvertisement = async (advertisementID) => {
 };
 
 export const getListAdvertisement = async () => {
-    const db = getDB();
     try {
-        const result = await db.collection('advertisement').find({ is_active: true, advType: "Vehicle" }).toArray();
+        const result = await Vehicle.find({ is_active: true });
         if (result.length === 0) {
             return { error: true, data: { message: "No Vehicle to show.", statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: "Vehicle list.", statusCode: 200, data: { "Vehicle": result } } };
+        return { error: false, data: { message: "Vehicle list.", statusCode: 200, data: { "vehicles": result } } };
     } catch (error) {
-        console.error(error);
+        logger.info(error);
         throw new ApplicationError(error, 500);
     }
 };
+
 
 export const filterAdvertisement = async (query) => {
     const db = getDB();

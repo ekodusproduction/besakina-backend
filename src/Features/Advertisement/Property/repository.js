@@ -20,16 +20,22 @@ export const addAdvertisement = async (requestBody, files) => {
 
 // Get Advertisement
 export const getAdvertisement = async (advertisementID) => {
+    const db = getDB();
     try {
-        const result = await Property.findById(advertisementID).populate('user');
+        const advertisement = await db.collection('advertisement').findOne({ _id: new ObjectId(advertisementID), advType: "Property" });
 
-        if (!result) {
-            return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
+        if (!advertisement) {
+            return { error: true, data: { message: "No Advertisement to show.", statusCode: 404, data: null } };
         }
 
-        return { error: false, data: { message: "property", statusCode: 200, data: result } };
+        // Populating the user field manually
+        const user = await db.collection('users').findOne({ _id: new ObjectId(advertisement.user) });
+
+        advertisement.user = user; // Assigning the populated user object to the advertisement
+
+        return { error: false, data: { message: "Advertisement", statusCode: 200, data: advertisement } };
     } catch (error) {
-        logger.info(error);
+        console.error(error);
         throw new ApplicationError(error, 500);
     }
 };
