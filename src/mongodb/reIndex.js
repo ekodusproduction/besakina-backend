@@ -1,4 +1,4 @@
-import { getDB } from "./mongodb";
+import { getDB } from "./mongodb.js";
 const reindexCollections = async () => {
     try {
         const db = getDB();
