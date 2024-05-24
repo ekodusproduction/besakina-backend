@@ -20,19 +20,16 @@ export const addAdvertisement = async (requestBody, files) => {
 
 // Get Advertisement
 export const getAdvertisement = async (advertisementID) => {
-    const db = getDB();
     try {
-        const result = await db.collection('advertisement').findOne({ _id: advertisementID, advType: "Vehicle" });
+        const result = await Vehicle.findById(advertisementID).populate('user');
 
         if (!result) {
             return { error: true, data: { message: "No Vehicle to show.", statusCode: 404, data: null } };
         }
 
-        const user = await db.collection('users').findOne({ _id: result.user });
-
-        return { error: false, data: { message: "Vehicle", statusCode: 200, data: { ...result, user } } };
+        return { error: false, data: { message: "Vehicle", statusCode: 200, data: result } };
     } catch (error) {
-        console.error(error);
+        logger.info(error);
         throw new ApplicationError(error, 500);
     }
 };

@@ -10,7 +10,7 @@ export const latestAdds = async function (req, res, next) {
         const db = getDB();
         const advertisements = await db.collection("advertisement")
             .find({ is_active: true })
-            .sort({ created_at: -1 }) 
+            .sort({ created_at: -1 })
             .skip(offset)
             .limit(limit)
             .toArray();

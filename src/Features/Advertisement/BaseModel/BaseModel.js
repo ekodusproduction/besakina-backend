@@ -18,6 +18,8 @@ const baseSchema = new mongoose.Schema({
 }, baseOptions);
 
 baseSchema.index({ "advType": 1 })
+baseSchema.index({ "user": 1 })
+
 const Base = mongoose.model('Base', baseSchema);
 
 export default Base;
