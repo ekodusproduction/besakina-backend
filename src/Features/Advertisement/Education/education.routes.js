@@ -8,7 +8,6 @@ import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
-import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./education.validation.js";
 
 import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
 
@@ -31,7 +30,7 @@ educationRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 educationRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
 
-educationRouter.post("/images/id/:id", jwtAuth, fileUpload("education"), imageValidator, addImage)
+educationRouter.post("/images/id/:id", jwtAuth, fileUpload("education"),  addImage)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 educationRouter.get("/list", getListAdvertisement)
 educationRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)

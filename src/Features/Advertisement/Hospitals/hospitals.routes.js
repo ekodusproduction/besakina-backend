@@ -8,12 +8,11 @@ import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
-import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./hospitals.validation.js";
 import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
 
 const hospitalsRouter = Router()
 //protected routes id=> advertisement id
-hospitalsRouter.post("/add", jwtAuth, fileUpload("hospitals"), validationMiddlewarePost, checkUserProfileCompletion, addAdvertisement)
+hospitalsRouter.post("/add", jwtAuth, fileUpload("hospitals"),  checkUserProfileCompletion, addAdvertisement)
 
 hospitalsRouter.get("/filter", filterAdvertisement)
 
@@ -28,7 +27,7 @@ hospitalsRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 hospitalsRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 
-hospitalsRouter.post("/images/id/:id", jwtAuth, fileUpload("hospitals"), imageValidator, addImage)
+hospitalsRouter.post("/images/id/:id", jwtAuth, fileUpload("hospitals"),  addImage)
 // list user own advertisement //id => user id
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 hospitalsRouter.get("/list", getListAdvertisement)

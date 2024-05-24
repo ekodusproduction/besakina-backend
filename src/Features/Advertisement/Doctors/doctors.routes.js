@@ -8,7 +8,6 @@ import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
-import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./doctor.validations.js";
 import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
 
 const doctorRouter = Router()
@@ -21,7 +20,7 @@ doctorRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 doctorRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 doctorRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
-doctorRouter.post("/images/id/:id", jwtAuth, fileUpload("doctors"), imageValidator, addImage)
+doctorRouter.post("/images/id/:id", jwtAuth, fileUpload("doctors"), addImage)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 doctorRouter.get("/list", getListAdvertisement)
 doctorRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)

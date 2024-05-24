@@ -7,7 +7,6 @@ import {
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../../Middlewares/auth.middleware.js";
-import { validationMiddlewarePost, validationMiddlewarePut, imageValidator } from "./property.validation.js";
 import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../../Users/userMiddlewares.js";
 
 const propertyRouter = Router()
@@ -25,7 +24,7 @@ propertyRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 propertyRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 
 //id =>advertisement id
-propertyRouter.post("/images/id/:id", jwtAuth, fileUpload("property"), imageValidator, addImage)
+propertyRouter.post("/images/id/:id", jwtAuth, fileUpload("property"),  addImage)
 
 propertyRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 
