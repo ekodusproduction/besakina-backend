@@ -7,7 +7,7 @@ export const latestAdds = async function (req, res, next) {
         const page = parseInt(req.query.page) || 1;
         const offset = (page - 1) * limit;
 
-        const advertisements = await getDB().collection("advertisement").find([
+        const advertisements = await getDB().collection("advertisement").aggregate([
             { $match: { is_active: true } },
             { $sort: { created_at: -1 } },
             { $skip: offset },
