@@ -7,12 +7,13 @@ export const latestAdds = async function (req, res, next) {
         const page = parseInt(req.query.page) || 1;
         const offset = (page - 1) * limit;
 
-        const advertisements = await getDB().collection("advertisement").aggregate([
-            { $match: { is_active: true } },
-            { $sort: { created_at: -1 } },
-            { $skip: offset },
-            { $limit: limit }
-        ]).toArray();
+        const db = getDB();
+        const advertisements = await db.collection("advertisement")
+            .find({ is_active: true })
+            .sort({ created_at: -1 }) 
+            .skip(offset)
+            .limit(limit)
+            .toArray();
 
         return await sendResponse(res, "Latest Ads", 200, { advertisements });
     } catch (error) {

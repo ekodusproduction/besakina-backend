@@ -20,46 +20,48 @@ export const addAdvertisement = async (requestBody, files) => {
 
 // Get Advertisement
 export const getAdvertisement = async (advertisementID) => {
+    const db = getDB();
     try {
-        const result = await Vehicle.findById(advertisementID).populate('user');
+        const result = await db.collection('advertisement').findOne({ _id: advertisementID, advType: "Vehicle" });
 
         if (!result) {
             return { error: true, data: { message: "No Vehicle to show.", statusCode: 404, data: null } };
         }
 
-        return { error: false, data: { message: "Vehicle", statusCode: 200, data: result } };
+        const user = await db.collection('users').findOne({ _id: result.user });
+
+        return { error: false, data: { message: "Vehicle", statusCode: 200, data: { ...result, user } } };
     } catch (error) {
-        logger.info(error);
+        console.error(error);
         throw new ApplicationError(error, 500);
     }
 };
 
-// Get List of Advertisements
 export const getListAdvertisement = async () => {
+    const db = getDB();
     try {
-        const result = await Vehicle.find({ is_active: true });
+        const result = await db.collection('advertisement').find({ is_active: true, advType: "Vehicle" }).toArray();
         if (result.length === 0) {
             return { error: true, data: { message: "No Vehicle to show.", statusCode: 404, data: null } };
         }
         return { error: false, data: { message: "Vehicle list.", statusCode: 200, data: { "Vehicle": result } } };
     } catch (error) {
-        logger.info(error);
+        console.error(error);
         throw new ApplicationError(error, 500);
     }
 };
 
-const filterAdvertisement = async (query) => {
+export const filterAdvertisement = async (query) => {
     const db = getDB();
     try {
-        const filter = { is_active: true, discriminatorKey: 'Vehicle', ...query };
-        console.log("filter", filter)
+        const filter = { is_active: true, advType: 'Vehicle', ...query };
         const result = await db.collection('advertisement').find(filter).sort({ created_at: -1 }).toArray();
         if (result.length === 0) {
             return { error: true, data: { message: "No Vehicle to show.", statusCode: 404, data: null } };
         }
         return { error: false, data: { message: "Vehicle filter list", statusCode: 200, data: { "Vehicle": result } } };
     } catch (error) {
-        logger.info(error);
+        console.error(error);
         throw new ApplicationError(error, 500);
     }
 };
