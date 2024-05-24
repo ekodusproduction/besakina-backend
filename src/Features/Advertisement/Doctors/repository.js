@@ -11,7 +11,6 @@ export const addAdvertisement = async (requestBody, files) => {
         if (!savedDoctor) {
             return { error: true, data: { message: "Error adding doctors.", statusCode: 400, data: null } };
         }
-
         return { error: false, data: { message: "Doctors added successfully", statusCode: 200, data: { id: savedDoctor._id } } };
     } catch (error) {
         console.error(error);
@@ -20,7 +19,6 @@ export const addAdvertisement = async (requestBody, files) => {
     }
 };
 
-// Get Advertisement
 export const getAdvertisement = async (advertisementID) => {
     try {
         const doctor = await Doctor.findById(advertisementID).populate('user');
@@ -34,9 +32,8 @@ export const getAdvertisement = async (advertisementID) => {
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
-};
+};   
 
-// Get List of Advertisements
 export const getListAdvertisement = async () => {
     try {
         const doctors = await Doctor.find({ is_active: true });
