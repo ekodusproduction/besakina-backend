@@ -33,7 +33,7 @@ export const sendOtp = async (req, res, next) => {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
+        connection.release();
     }
 }
 
@@ -61,8 +61,7 @@ export const login = async (req, res, next) => {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
-
+        connection.release();
     }
 }
 
@@ -160,7 +159,7 @@ export const getUserAdds = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
+        connection.release();
 
     }
 }
@@ -181,7 +180,7 @@ export const getUserDetails = async function (req, res, next) {
     } catch (error) {
         next(error);
     } finally {
-        connection.release(); // Release the connection back to the connection.query
+        connection.release();
 
     }
 }
