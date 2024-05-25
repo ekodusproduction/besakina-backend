@@ -55,12 +55,12 @@ app.get("/api", (req, res) => {
 
 app.use("/api/users", userRouter);
 app.use("/api/category", categoryRouter);
-app.use("/api/property", propertyRouter);
-app.use("/api/vehicles", vehiclesRouter);
-app.use("/api/hospitals", hospitalsRouter);
-app.use("/api/hospitality", hospitalityRouter);
-app.use("/api/education", educationRouter);
-app.use("/api/doctors", doctorRouter);
+app.use("/api/Property", propertyRouter);
+app.use("/api/Vehicles", vehiclesRouter);
+app.use("/api/Hospitals", hospitalsRouter);
+app.use("/api/Hospitality", hospitalityRouter);
+app.use("/api/Education", educationRouter);
+app.use("/api/Doctors", doctorRouter);
 app.use("/api/plans", plansRouter);
 // app.use('/api/chat', chatRouter)
 app.use("/api/home", homeRouter)
