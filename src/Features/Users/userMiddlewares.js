@@ -10,6 +10,7 @@ export const checkUserProfileCompletion = async (req, res, next) => {
         if (!userProfile) {
             return sendError(res, "Mobile number not registered. Please login.", 400);
         }
+        console.log("user profile >>>>", userProfile)
         if (!userProfile.fullname || !userProfile.mobile || !userProfile.city || !userProfile.profile_pic || !userProfile.state) {
             return sendError(res, "User Profile Incomplete", 400);
         }
