@@ -109,7 +109,7 @@ export const addImage = async (advertisementID, files, userId) => {
         if (!doctor) {
             return { error: true, data: { message: "Doctors not found.", statusCode: 404, data: null } };
         }
-        doctor.images = [...doctor.images, ...files];
+        result.images.push(files);
         await doctor.save();
         return { error: false, data: { data: doctor, message: "Doctors image has been added.", statusCode: 200 } };
     } catch (error) {

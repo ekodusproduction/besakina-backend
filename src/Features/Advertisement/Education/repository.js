@@ -107,7 +107,7 @@ export const addImage = async (advertisementID, files, userId) => {
         if (!result) {
             return { error: true, data: { message: "Education not found.", statusCode: 404, data: null } };
         }
-        result.images = [...Education.images, ...files];
+        result.images.push(files);
         await result.save();
         return { error: false, data: { data: result, message: "Education image has been added.", statusCode: 200 } };
     } catch (error) {
