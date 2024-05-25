@@ -121,7 +121,7 @@ export const deleteImage = async (advertisementID, file, userId) => {
     try {
         const result = await Vehicle.findOneAndUpdate(
             { _id: advertisementID, user: userId },
-            { $pull: { images: { $in: file } } },
+            { $pull: { images:  file } },
             { new: true }
         );
         if (!result) {
