@@ -121,7 +121,7 @@ export const deleteImage = async (advertisementID, files, userId) => {
     try {
         const result = await Education.findOneAndUpdate(
             { _id: advertisementID, user: userId },
-            { $pull: { images:  files }  },
+            { $pull: { images: files } },
             { new: true }
         );
         if (!result) {
@@ -157,7 +157,7 @@ export const activateAdvertisement = async (advertisementID, userId) => {
 export const deleteAdvertisement = async (advertisementID, userId) => {
     try {
         const result = await Education.deleteOne({ _id: advertisementID, user: userId });
-
+        console.log("defew", result)
         if (result.deletedCount === 0) {
             return { error: true, data: { message: "Education not found.", statusCode: 404, data: null } };
         }
