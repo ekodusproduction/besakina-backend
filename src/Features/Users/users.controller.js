@@ -112,8 +112,9 @@ export const getUserAdds = async function (req, res, next) {
         return await sendError(res, "Invalid User id", 400)
     }
     try {
-
+        console.log("user", user)
         const ads = await getDB().collection('advertisement').find({ user: user }).toArray();
+        console.log("user", ads)
 
         if (!ads.length) {
             return await sendResponse(res, "Advertisement fetched successfully", 200, []);
