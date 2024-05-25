@@ -32,7 +32,7 @@ export const getAdvertisement = async (advertisementID) => {
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
-};   
+};
 
 export const getListAdvertisement = async () => {
     try {
@@ -109,7 +109,7 @@ export const addImage = async (advertisementID, files, userId) => {
         if (!doctor) {
             return { error: true, data: { message: "Doctors not found.", statusCode: 404, data: null } };
         }
-        result.images.push(files);
+        result.images.push(files[0]);
         await doctor.save();
         return { error: false, data: { data: doctor, message: "Doctors image has been added.", statusCode: 200 } };
     } catch (error) {

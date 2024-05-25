@@ -110,7 +110,7 @@ export const addImage = async (advertisementID, files, userId) => {
         if (!result) {
             return { error: true, data: { message: "Hospital not found.", statusCode: 404, data: null } };
         }
-        result.images.push(files);
+        result.images.push(files[0]);
         await result.save();
         return { error: false, data: { data: result, message: "Hospital image has been added.", statusCode: 200 } };
     } catch (error) {

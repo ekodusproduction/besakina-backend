@@ -107,7 +107,7 @@ export const addImage = async (advertisementID, files, userId) => {
         if (!result) {
             return { error: true, data: { message: "Vehicle not found.", statusCode: 404, data: null } };
         }
-        result.images.push(files);
+        result.images.push(files[0]);
         await result.save();
         return { error: false, data: { data: result, message: "Vehicle image has been added.", statusCode: 200 } };
     } catch (error) {
@@ -117,11 +117,11 @@ export const addImage = async (advertisementID, files, userId) => {
     }
 };
 
-export const deleteImage = async (advertisementID, files, userId) => {
+export const deleteImage = async (advertisementID, file, userId) => {
     try {
         const result = await Vehicle.findOneAndUpdate(
             { _id: advertisementID, user: userId },
-            { $pull: { images: { $in: files } } },
+            { $pull: { images: { $in: file } } },
             { new: true }
         );
         if (!result) {
