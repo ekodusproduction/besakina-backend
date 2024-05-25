@@ -43,7 +43,7 @@ export const getListAdvertisement = async () => {
         if (result.length === 0) {
             return { error: true, data: { message: "No Hospital to show.", statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: "Hospital list.", statusCode: 200, data: { "Hospital": result } } };
+        return { error: false, data: { message: "Hospital list.", statusCode: 200, data: { "hospital": result } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);

@@ -40,7 +40,7 @@ export const getListAdvertisement = async () => {
         if (result.length === 0) {
             return { error: true, data: { message: "No Hospitality to show.", statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: "Hospitality list.", statusCode: 200, data: { "Hospitality": result } } };
+        return { error: false, data: { message: "Hospitality list.", statusCode: 200, data: { "hospitality": result } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);

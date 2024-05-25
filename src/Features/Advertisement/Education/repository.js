@@ -40,7 +40,7 @@ export const getListAdvertisement = async () => {
         if (result.length === 0) {
             return { error: true, data: { message: "No Education to show.", statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: "Education list.", statusCode: 200, data: { "Education": result } } };
+        return { error: false, data: { message: "Education list.", statusCode: 200, data: { "education": result } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
