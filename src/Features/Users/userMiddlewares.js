@@ -5,7 +5,7 @@ import Plan from "../Plans/Models/PlanModel.js"
 export const checkUserProfileCompletion = async (req, res, next) => {
     console.log("checking user profile");
     try {
-        const userProfile = await User.findById(req.user, 'fullname email mobile city state').exec();
+        const userProfile = await User.findById(req.user, 'fullname profile_pic mobile city state').exec();
 
         if (!userProfile) {
             return sendError(res, "Mobile number not registered. Please login.", 400);
