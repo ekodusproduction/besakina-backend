@@ -120,7 +120,7 @@ export const deleteImage = async (advertisementID, files, userId) => {
     try {
         const result = await Property.findOneAndUpdate(
             { _id: advertisementID, user: userId },
-            { $pull: { images: { $in: files } } },
+            { $pull: { images: files }  },
             { new: true }
         );
         if (!result) {
