@@ -23,7 +23,7 @@ const baseSchema = new mongoose.Schema({
     is_active: { type: Boolean, default: true },
     seen_by: { type: Number, default: 0 },
     street: { type: String, required: true },
-    locality: { type: String, required: true },
+    locality: { type: String, required: false, default: null },
     city: { type: String, required: true },
     state: { type: String, required: true },
     pincode: { type: String, required: true },
