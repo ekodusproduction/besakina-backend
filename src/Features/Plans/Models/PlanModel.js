@@ -22,7 +22,7 @@ planSchema.pre('save', function (next) {
     next();
 });
 
-userSchema.pre('save', function (next) {
+planSchema.pre('save', function (next) {
     for (let key in this.toObject()) {
         if (this[key] === "null" || this[key] === "") {
             this[key] = null;
