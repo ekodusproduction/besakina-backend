@@ -35,7 +35,7 @@ export const getAdvertisement = async (advertisementID) => {
 
 export const getListAdvertisement = async () => {
     try {
-        const result = await Property.find({ is_active: true });
+        const result = await Property.find({ is_active: true }).sort({ created_at: -1 });
         if (result.length === 0) {
             return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
         }

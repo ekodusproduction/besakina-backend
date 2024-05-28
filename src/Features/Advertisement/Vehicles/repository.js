@@ -36,7 +36,7 @@ export const getAdvertisement = async (advertisementID) => {
 
 export const getListAdvertisement = async () => {
     try {
-        const result = await Vehicle.find({ is_active: true });
+        const result = await Vehicle.find({ is_active: true }).sort({ created_at: -1 });
         if (result.length === 0) {
             return { error: true, data: { message: "No Vehicle to show.", statusCode: 404, data: null } };
         }
@@ -121,7 +121,7 @@ export const deleteImage = async (advertisementID, file, userId) => {
     try {
         const result = await Vehicle.findOneAndUpdate(
             { _id: advertisementID, user: userId },
-            { $pull: { images:  file } },
+            { $pull: { images: file } },
             { new: true }
         );
         if (!result) {

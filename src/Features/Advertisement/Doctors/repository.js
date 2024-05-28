@@ -36,7 +36,7 @@ export const getAdvertisement = async (advertisementID) => {
 
 export const getListAdvertisement = async () => {
     try {
-        const doctors = await Doctor.find({ is_active: true });
+        const doctors = await Doctor.find({ is_active: true }).sort({ created_at: -1 });
 
         if (doctors.length === 0) {
             return { error: true, data: { message: "No doctors to show.", statusCode: 404, data: null } };

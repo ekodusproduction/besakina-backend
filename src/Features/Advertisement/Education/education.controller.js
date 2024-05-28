@@ -6,6 +6,8 @@ import repository from "./repository.js";
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user = req.user
+    console.log("body", req.body)
+
     const result = await repository.addAdvertisement(req.body, req.images);
     console.log("result", result)
     if (result.error) {

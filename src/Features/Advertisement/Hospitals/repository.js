@@ -39,7 +39,7 @@ export const getAdvertisement = async (advertisementID) => {
 // Get List of Advertisements
 export const getListAdvertisement = async () => {
     try {
-        const result = await Hospital.find({ is_active: true });
+        const result = await Hospital.find({ is_active: true }).sort({ created_at: -1 });
         if (result.length === 0) {
             return { error: true, data: { message: "No Hospital to show.", statusCode: 404, data: null } };
         }
@@ -124,7 +124,7 @@ export const deleteImage = async (advertisementID, files, userId) => {
     try {
         const result = await Hospital.findOneAndUpdate(
             { _id: advertisementID, user: userId },
-            { $pull: { images:  files } },
+            { $pull: { images: files } },
             { new: true }
         );
         if (!result) {

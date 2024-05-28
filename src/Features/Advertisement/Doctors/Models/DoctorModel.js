@@ -2,18 +2,10 @@ import mongoose from 'mongoose';
 import Base from '../../BaseModel/BaseModel.js';
 
 const doctorSchema = new mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     expertise: { type: String, required: true },
     name: { type: String, required: true },
     total_experience: { type: String, required: true },
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    price_per_visit: { type: String },
-    street: { type: String, required: true },
-    locality: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    pincode: { type: String, required: true }
+    price_per_visit: { type: String, default: null },
 });
 
 doctorSchema.index({ title: 'text', expertise: 'text', description: 'text', street: 'text', city: 'text', locality: 'text', pincode: 'text' });
