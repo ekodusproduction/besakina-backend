@@ -5,11 +5,14 @@ const baseOptions = {
     collection: 'advertisement',
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 };
+
 const priceValidator = {
     validator: function (v) {
-        return v === null || /^\d+(\.\d{1,2})?$/.test(v);
+        if (v === null) return true;
+        const num = parseFloat(v);
+        return !isNaN(num);
     },
-    message: props => `${props.value} is not a valid price! Price should be a number with up to two decimal places.`
+    message: props => `${props.value} is not a valid price!`
 };
 
 const baseSchema = new mongoose.Schema({
@@ -29,7 +32,7 @@ const baseSchema = new mongoose.Schema({
     pincode: { type: String, required: true },
     title: { type: String, required: true },
     description: { type: String, required: true },
-    price: { type: String, default: null, validate: priceValidator },
+    price: { type: Number, default: null, validate: priceValidator },
 }, baseOptions);
 
 baseSchema.index({ "advType": 1 })
@@ -43,6 +46,7 @@ baseSchema.pre('save', function (next) {
     }
     next();
 });
+
 const Base = mongoose.model('Base', baseSchema);
 
 export default Base;
