@@ -12,13 +12,22 @@ const planSchema = new mongoose.Schema({
     no_images: { type: String, required: true },
     business_profile: { type: Boolean, required: true },
     images_business_profile: { type: String, required: true },
-    offer_price: { type: String, required: true },  
+    offer_price: { type: String, required: true },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }
 });
 
 planSchema.pre('save', function (next) {
     this.updated_at = Date.now();
+    next();
+});
+
+userSchema.pre('save', function (next) {
+    for (let key in this.toObject()) {
+        if (this[key] === "null" || this[key] === "") {
+            this[key] = null;
+        }
+    }
     next();
 });
 
