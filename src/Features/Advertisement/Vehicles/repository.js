@@ -103,13 +103,15 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
 
 export const addImage = async (advertisementID, files, userId) => {
     try {
+        console.log("file to add", files)
         const result = await Vehicle.findOne({ _id: advertisementID, user: userId });
+        console.log("result after file added", result)
         if (!result) {
             return { error: true, data: { message: "Vehicle not found.", statusCode: 404, data: null } };
         }
         result.images.push(files[0]);
         await result.save();
-        return { error: false, data: { data: files[0], message: "Vehicle image has been added.", statusCode: 200 } };
+        return { error: false, data: { data: [files[0]], message: "Vehicle image has been added.", statusCode: 200 } };
     } catch (error) {
         console.log("error", error);
         logger.info(error);
@@ -119,11 +121,13 @@ export const addImage = async (advertisementID, files, userId) => {
 
 export const deleteImage = async (advertisementID, file, userId) => {
     try {
+        console.log("file to remove", file)
         const result = await Vehicle.findOneAndUpdate(
             { _id: advertisementID, user: userId },
             { $pull: { images: file } },
             { new: true }
         );
+        console.log("result after file removed", result)
         if (!result) {
             return { error: true, data: { message: "Vehicle not found.", statusCode: 404, data: null } };
         }
