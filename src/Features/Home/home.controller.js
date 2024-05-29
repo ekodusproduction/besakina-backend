@@ -25,23 +25,22 @@ export const searchAdds = async function (req, res, next) {
     try {
         const limit = parseInt(req.query.limit) || 100;
         const page = parseInt(req.query.page) || 1;
-        const search = req.query.search || '';
+        let search = req.query.search || '';
         const offset = (page - 1) * limit;
+        search = new RegExp(search, 'i');
 
-        // Step 1: Perform text search to get the matching IDs
-        const textSearchResults = await getDB().collection("advertisement").find(
-            { $text: { $search: search } },
-            { projection: { _id: 1, score: { $meta: "textScore" } } }
-        ).sort({ score: { $meta: "textScore" } }).toArray();
-
-        const matchingIds = textSearchResults.map(doc => doc._id);
-
-        // Step 2: Use the matching IDs to filter documents with `is_active: true` and paginate
         const advertisements = await getDB().collection("advertisement").find({
-            _id: { $in: matchingIds },
-            is_active: true
-        })
-            .sort({ created_at: -1 }) // Sort by creation date as textScore is already used in initial search
+            $or: [
+                { title: { $regex: search } },
+                { description: { $regex: search } },
+                { city: { $regex: search } },
+                { state: { $regex: search } },
+                { category: { $regex: search } },
+                { price: { $regex: search } },
+                { type: { $regex: search } }
+            ]
+        },)
+            .sort({ created_at: -1 })
             .skip(offset)
             .limit(limit)
             .toArray();
