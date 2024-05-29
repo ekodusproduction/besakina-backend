@@ -25,27 +25,18 @@ export const searchAdds = async function (req, res, next) {
     try {
         const limit = parseInt(req.query.limit) || 100;
         const page = parseInt(req.query.page) || 1;
-        let search = req.query.search || '';
+        const search = req.query.search || '';
         const offset = (page - 1) * limit;
-        search = new RegExp(search, 'i');
 
         const advertisements = await getDB().collection("advertisement").find({
             $and: [
-                {
-                    $or: [
-                        { title: { $regex: search } },
-                        { description: { $regex: search } },
-                        { city: { $regex: search } },
-                        { state: { $regex: search } },
-                        { category: { $regex: search } },
-                        { price: { $regex: search } },
-                        { type: { $regex: search } }
-                    ]
-                },
+                { $text: { $search: search } },
                 { is_active: true }
             ]
+        }, {
+            score: { $meta: "textScore" }
         })
-            .sort({ created_at: -1 })
+            .sort({ score: { $meta: "textScore" }, created_at: -1 })
             .skip(offset)
             .limit(limit)
             .toArray();
