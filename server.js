@@ -13,28 +13,18 @@ import fs from "fs";
 import { connectToMongoDB } from './src/mongodb/mongodb.js';
 import { mongooseConnection } from "./src/Mongoose/mongoose.js"
 
-
-
 const port = process.env.PORT || 3000;
-
 if (process.env.NODE_ENV === 'production') {
-    const privateKey = fs.readFileSync('./private.key', 'utf8');
-    const certificate = fs.readFileSync('./certificate.pem', 'utf8');
-
-    const credentials = { key: privateKey, cert: certificate };
-
-    const httpsServer = https.createServer(credentials, app);
-
+    const httpsServer = https.createServer(app);
     httpsServer.listen(port, async () => {
-        console.log(`Server running on port ${port}`);
+        console.log(`HTTPS server running on port ${port}`);
         await connectToMongoDB()
         await mongooseConnection()
     });
 } else {
     const httpServer = http.createServer(app);
-
     httpServer.listen(port, async () => {
-        console.log(`Server running on port ${port}`);
+        console.log(`HTTP server running on port ${port}`);
         await connectToMongoDB()
         await mongooseConnection()
     });
