@@ -30,14 +30,19 @@ export const searchAdds = async function (req, res, next) {
         search = new RegExp(search, 'i');
 
         const advertisements = await getDB().collection("advertisement").find({
-            $or: [
-                { title: { $regex: search } },
-                { description: { $regex: search } },
-                { city: { $regex: search } },
-                { state: { $regex: search } },
-                { category: { $regex: search } },
-                { price: { $regex: search } },
-                { type: { $regex: search } }
+            $and: [
+                {
+                    $or: [
+                        { title: { $regex: search } },
+                        { description: { $regex: search } },
+                        { city: { $regex: search } },
+                        { state: { $regex: search } },
+                        { category: { $regex: search } },
+                        { price: { $regex: search } },
+                        { type: { $regex: search } }
+                    ]
+                },
+                { is_active: true }
             ]
         })
             .sort({ created_at: -1 })
