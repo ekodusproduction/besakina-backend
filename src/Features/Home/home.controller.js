@@ -28,26 +28,23 @@ export const searchAdds = async function (req, res, next) {
         const search = req.query.search || '';
         const offset = (page - 1) * limit;
 
-        const advertisements = await getDB().collection("advertisement").aggregate([
-            {
-                $match: { is_active: true } // First filter by is_active
-            },
-            {
-                $match: { $text: { $search: search } } // Then perform the text search
-            },
-            {
-                $addFields: { score: { $meta: "textScore" } } // Add the relevance score
-            },
-            {
-                $sort: { score: { $meta: "textScore" }, created_at: -1 } // Sort by relevance and creation date
-            },
-            {
-                $skip: offset // Skip the documents for pagination
-            },
-            {
-                $limit: limit // Limit the number of documents
-            }
-        ]).toArray();
+        // Step 1: Perform text search to get the matching IDs
+        const textSearchResults = await getDB().collection("advertisement").find(
+            { $text: { $search: search } },
+            { projection: { _id: 1, score: { $meta: "textScore" } } }
+        ).sort({ score: { $meta: "textScore" } }).toArray();
+
+        const matchingIds = textSearchResults.map(doc => doc._id);
+
+        // Step 2: Use the matching IDs to filter documents with `is_active: true` and paginate
+        const advertisements = await getDB().collection("advertisement").find({
+            _id: { $in: matchingIds },
+            is_active: true
+        })
+            .sort({ created_at: -1 }) // Sort by creation date as textScore is already used in initial search
+            .skip(offset)
+            .limit(limit)
+            .toArray();
 
         return await sendResponse(res, "Search Results", 200, { advertisements });
     } catch (error) {
