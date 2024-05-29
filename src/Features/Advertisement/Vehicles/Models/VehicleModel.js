@@ -5,12 +5,12 @@ const vehicleSchema = new mongoose.Schema({
     type: { type: String, required: true },
     brand: { type: String, required: true },
     registration_year: { type: String, required: true },
-    kilometer_driven: { type: String, required: true },
+    kilometer_driven: { type: String, default: null },
     category: { type: String, required: true },
     fuel: { type: String, required: true },
     second_hand: { type: Boolean, required: true },
     model: { type: String, required: true },
-    transmission: { type: String, required: true },
+    transmission: { type: String, default: null },
     variant: { type: String, required: true },
     // color: { type: String, required: true }
 });
