@@ -12,14 +12,6 @@ const educationSchema = new mongoose.Schema({
 educationSchema.index({ title: 'text', domain: 'text', institution_name: 'text', type: 'text', description: 'text', city: 'text', locality: 'text', pincode: 'text' });
 educationSchema.index({ is_active: 1, created_at: -1 });
 
-// educationSchema.pre('save', function (next) {
-//     // Set the discriminator key to the model name
-//     this.__t = this.constructor.modelName;
-//     console.log("constructor", this.constructor)
-//     console.log("this", this.__t)
-//     next();
-// });
-
 const Education = Base.discriminator('Education', educationSchema);
 
 export default Education;

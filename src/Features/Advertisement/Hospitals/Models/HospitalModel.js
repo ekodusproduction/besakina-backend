@@ -12,14 +12,6 @@ const hospitalSchema = new mongoose.Schema({
 hospitalSchema.index({ title: 'text', name: 'text', type: 'text', description: 'text', city: 'text', state: 'text', locality: 'text', category: 'text', pincode: 'text' });
 hospitalSchema.index({ is_active: 1, created_at: -1 });
 
-// hospitalSchema.pre('save', function (next) {
-//     // Set the discriminator key to the model name
-//     this.__t = this.constructor.modelName;
-//     console.log("constructor", this.constructor)
-//     console.log("this", this.__t)
-//     next();
-// });
-
 const Hospital = Base.discriminator('Hospital', hospitalSchema);
 
 export default Hospital;
