@@ -108,7 +108,7 @@ export const addImage = async (advertisementID, files, userId) => {
         }
         result.images.push(files[0]);
         await result.save();
-        return { error: false, data: { data: files[0], message: "Hospitality image has been added.", statusCode: 200 } };
+        return { error: false, data: { data: [files[0]], message: "Property image has been added.", statusCode: 200 } };
     } catch (error) {
         console.log("error", error);
         logger.info(error);
@@ -120,7 +120,7 @@ export const deleteImage = async (advertisementID, files, userId) => {
     try {
         const result = await Property.findOneAndUpdate(
             { _id: advertisementID, user: userId },
-            { $pull: { images: files }  },
+            { $pull: { images: files } },
             { new: true }
         );
         if (!result) {
