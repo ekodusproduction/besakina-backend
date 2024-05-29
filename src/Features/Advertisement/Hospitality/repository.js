@@ -109,7 +109,7 @@ export const addImage = async (advertisementID, files, userId) => {
         }
         result.images.push(files[0]);
         await result.save();
-        return { error: false, data: { data: files[0], message: "Hospitality image has been added.", statusCode: 200 } };
+        return { error: false, data: { data: [files[0]], message: "Vehicle image has been added.", statusCode: 200 } };
     } catch (error) {
         console.log("error", error);
         logger.info(error);

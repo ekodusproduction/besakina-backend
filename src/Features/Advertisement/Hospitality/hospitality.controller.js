@@ -93,7 +93,7 @@ export const deactivateAdvertisement = async (req, res, next) => {
 export const addImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.deleteImage(advertisementID, req.body.images[0], req.user);
+    const result = await repository.deleteImage(advertisementID, req.body.images, req.user);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
