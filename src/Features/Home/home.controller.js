@@ -28,18 +28,26 @@ export const searchAdds = async function (req, res, next) {
         const search = req.query.search || '';
         const offset = (page - 1) * limit;
 
-        const advertisements = await getDB().collection("advertisement").find({
-            $and: [
-                { $text: { $search: search } },
-                { is_active: true }
-            ]
-        }, {
-            score: { $meta: "textScore" }
-        })
-            .sort({ score: { $meta: "textScore" }, created_at: -1 })
-            .skip(offset)
-            .limit(limit)
-            .toArray();
+        const advertisements = await getDB().collection("advertisement").aggregate([
+            {
+                $match: { is_active: true } // First filter by is_active
+            },
+            {
+                $match: { $text: { $search: search } } // Then perform the text search
+            },
+            {
+                $addFields: { score: { $meta: "textScore" } } // Add the relevance score
+            },
+            {
+                $sort: { score: { $meta: "textScore" }, created_at: -1 } // Sort by relevance and creation date
+            },
+            {
+                $skip: offset // Skip the documents for pagination
+            },
+            {
+                $limit: limit // Limit the number of documents
+            }
+        ]).toArray();
 
         return await sendResponse(res, "Search Results", 200, { advertisements });
     } catch (error) {
