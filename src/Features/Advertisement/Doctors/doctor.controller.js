@@ -143,3 +143,57 @@ export const deleteAdvertisement = async (req, res, next) => {
     next(error);
   }
 };
+
+export const listExpertise = async (req, res, next) => {
+  try {
+    const result = await repository.listExpertise();
+    if (result.error) {
+      return await sendError(res, result.data.message, result.data.statusCode)
+    }
+    return await sendResponse(res, result.data.message, 200, result.data.data);
+  } catch (error) {
+    logger.info(error)
+    next(error);
+  }
+};
+
+export const addExpertise = async (req, res, next) => {
+  try {
+    const result = await repository.addExpertise(req.body);
+    if (result.error) {
+      return await sendError(res, result.data.message, result.data.statusCode)
+    }
+    return await sendResponse(res, result.data.message, 200, result.data.data);
+  } catch (error) {
+    logger.info(error)
+    next(error);
+  }
+};
+
+export const editExpertise = async (req, res, next) => {
+  try {
+    const id = req.params.id
+    const data = req.body
+    const result = await repository.editExpertise(id, data);
+    if (result.error) {
+      return await sendError(res, result.data.message, result.data.statusCode)
+    }
+    return await sendResponse(res, result.data.message, 200);
+  } catch (error) {
+    logger.info(error)
+    next(error);
+  }
+};
+
+export const deleteExpertise = async (req, res, next) => {
+  try {
+    const result = await repository.deleteExpertise(req.params.id);
+    if (result.error) {
+      return await sendError(res, result.data.message, result.data.statusCode)
+    }
+    return await sendResponse(res, result.data.message, 200);
+  } catch (error) {
+    logger.info(error)
+    next(error);
+  }
+};

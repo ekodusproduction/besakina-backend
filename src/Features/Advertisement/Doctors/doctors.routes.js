@@ -2,7 +2,11 @@ import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
-    deleteAdvertisement
+    deleteAdvertisement,
+    deleteExpertise,
+    editExpertise,
+    listExpertise,
+    addExpertise
 } from "./doctor.controller.js"
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
@@ -24,5 +28,14 @@ doctorRouter.post("/images/id/:id", jwtAuth, fileUpload("doctors"), addImage)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 doctorRouter.get("/list", getListAdvertisement)
 doctorRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
+
+
+// data 
+
+doctorRouter.get("/expertise", jwtAuth, listExpertise)
+doctorRouter.post("/expertise", jwtAuth, addExpertise)
+doctorRouter.put("/expertise/id/:id", jwtAuth, editExpertise)
+doctorRouter.delete("/expertise/id/:id", jwtAuth, deleteExpertise)
+
 
 export default doctorRouter

@@ -2,6 +2,7 @@ import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
 import { getDB } from "../../../mongodb/mongodb.js";
 import Doctor from "./Models/DoctorModel.js";
+import DoctorExpertise from "./Models/ExpertiseModel.js";
 
 export const addAdvertisement = async (requestBody, files) => {
     try {
@@ -105,12 +106,12 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
 
 export const addImage = async (advertisementID, files, userId) => {
     try {
-        const doctor = await Doctor.findOne({ _id: advertisementID, user: userId });
-        if (!doctor) {
+        const result = await Doctor.findOne({ _id: advertisementID, user: userId });
+        if (!result) {
             return { error: true, data: { message: "Doctors not found.", statusCode: 404, data: null } };
         }
         result.images.push(files[0]);
-        await doctor.save();
+        await result.save();
         return { error: false, data: { data: [files[0]], message: "Doctor image has been added.", statusCode: 200 } };
     } catch (error) {
         console.log("error", error);
@@ -171,6 +172,66 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
     }
 };
 
+export const listExpertise = async () => {
+    try {
+        const result = await DoctorExpertise.find({});
+
+        if (result.deletedCount === 0) {
+            return { error: true, data: { message: "Expertise not found.", statusCode: 404, data: null } };
+        }
+
+        return { error: false, data: { message: "Expertise List.", statusCode: 200, data: { expertise: result } } };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    }
+};
+
+export const addExpertise = async (data) => {
+    try {
+        const result = await DoctorExpertise.create(data);
+
+        if (!result) {
+            return { error: true, data: { message: "Expertise not found.", statusCode: 404, data: null } };
+        }
+
+        return { error: false, data: { message: "Expertise add.", statusCode: 200, data: { _id: result._id } } };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    }
+};
+
+export const editExpertise = async (expertiseId, data) => {
+    try {
+        const result = await DoctorExpertise.updateOne({ _id: expertiseId }, data);
+
+        if (result.nModified === 0) {
+            return { error: true, data: { message: "Expertise not found or not modified.", statusCode: 404, data: null } };
+        }
+
+        return { error: false, data: { message: "Expertise updated successfully.", statusCode: 200, data: result } };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error.message, 500);
+    }
+};
+
+export const deleteExpertise = async (expertiseId) => {
+    try {
+        const result = await DoctorExpertise.deleteOne({ _id: expertiseId });
+
+        if (result.deletedCount === 0) {
+            return { error: true, data: { message: "Expertise not found.", statusCode: 404, data: null } };
+        }
+
+        return { error: false, data: { message: "Expertise deleted.", statusCode: 200 } };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    }
+};
+
 export default {
     addAdvertisement,
     getAdvertisement,
@@ -181,5 +242,10 @@ export default {
     addImage,
     activateAdvertisement,
     deleteImage,
-    deleteAdvertisement
+    deleteAdvertisement,
+    listExpertise,
+    deleteExpertise,
+    addExpertise,
+    editExpertise
 };
+
