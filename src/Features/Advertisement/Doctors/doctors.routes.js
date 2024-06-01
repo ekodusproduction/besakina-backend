@@ -32,7 +32,7 @@ doctorRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
 // data 
 
-doctorRouter.get("/expertise", jwtAuth, listExpertise)
+doctorRouter.get("/expertise", listExpertise)
 doctorRouter.post("/expertise", jwtAuth, addExpertise)
 doctorRouter.put("/expertise/id/:id", jwtAuth, editExpertise)
 doctorRouter.delete("/expertise/id/:id", jwtAuth, deleteExpertise)
