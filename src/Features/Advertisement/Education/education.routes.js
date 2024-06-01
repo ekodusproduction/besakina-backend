@@ -2,7 +2,11 @@ import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
-    deleteAdvertisement
+    deleteAdvertisement,
+    addEducationFormData,
+    listEducationFormData,
+    editEducationFormData,
+    deleteEducationFormData
 } from "./education.controller.js"
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 
@@ -15,7 +19,7 @@ import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../..
 const educationRouter = Router()
 
 //protected routes id=> advertisement id
-educationRouter.post("/add", jwtAuth, fileUpload("education"),  checkUserProfileCompletion, addAdvertisement)
+educationRouter.post("/add", jwtAuth, fileUpload("education"), checkUserProfileCompletion, addAdvertisement)
 
 educationRouter.get("/filter", filterAdvertisement)
 
@@ -30,10 +34,15 @@ educationRouter.get("/id/:id", getAdvertisement)
 //id =>advertisement id
 educationRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
 
-educationRouter.post("/images/id/:id", jwtAuth, fileUpload("education"),  addImage)
+educationRouter.post("/images/id/:id", jwtAuth, fileUpload("education"), addImage)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 educationRouter.get("/list", getListAdvertisement)
 educationRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
+
+educationRouter.get("/formdata", listEducationFormData)
+educationRouter.post("/formdata", jwtAuth, addEducationFormData)
+educationRouter.put("/formdata/id/:id", jwtAuth, editEducationFormData)
+educationRouter.delete("/formdata/id/:id", jwtAuth, deleteEducationFormData)
 
 export default educationRouter
