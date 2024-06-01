@@ -184,7 +184,7 @@ export const listEducationFormData = async (fieldname) => {
     }
 };
 
-export const addEducationFormData = async (data) => {
+export const addEducationFormData = async (data, fieldname) => {
     try {
         const result = await DoctorExpertise.create(data);
 
@@ -199,7 +199,7 @@ export const addEducationFormData = async (data) => {
     }
 };
 
-export const editEducationFormData = async (expertiseId, data) => {
+export const editEducationFormData = async (expertiseId, data, fieldname) => {
     try {
         const result = await DoctorExpertise.updateOne({ _id: expertiseId }, data);
 
@@ -214,9 +214,9 @@ export const editEducationFormData = async (expertiseId, data) => {
     }
 };
 
-export const deleteEducationFormData = async (expertiseId) => {
+export const deleteEducationFormData = async (id, fieldname) => {
     try {
-        const result = await DoctorExpertise.deleteOne({ _id: expertiseId });
+        const result = await DoctorExpertise.deleteOne({ _id: id });
 
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };

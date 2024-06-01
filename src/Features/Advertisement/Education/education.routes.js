@@ -40,9 +40,9 @@ educationRouter.get("/list", getListAdvertisement)
 educationRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
 
-educationRouter.get("/formdata", listEducationFormData)
+educationRouter.get("/formdata/fieldname/:fieldname", listEducationFormData)
 educationRouter.post("/formdata", jwtAuth, addEducationFormData)
 educationRouter.put("/formdata/id/:id", jwtAuth, editEducationFormData)
-educationRouter.delete("/formdata/id/:id", jwtAuth, deleteEducationFormData)
+educationRouter.delete("/formdata/:fieldname/id/:id", jwtAuth, deleteEducationFormData)
 
 export default educationRouter
