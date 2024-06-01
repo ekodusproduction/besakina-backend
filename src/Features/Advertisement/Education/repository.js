@@ -172,7 +172,7 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
 
 export const listEducationFormData = async (fieldname) => {
     try {
-        const result = await EducationData.find(fieldname);
+        const result = await EducationData.find({ fieldname: fieldname });
 
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
