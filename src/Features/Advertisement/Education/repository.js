@@ -1,5 +1,6 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
+import EducationData from "./Models/EducationDataModel.js";
 import Education from "./Models/EducationModel.js";
 
 export const addAdvertisement = async (requestBody, files) => {
