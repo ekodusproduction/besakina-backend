@@ -8,7 +8,7 @@ const doctorSchema = new mongoose.Schema({
     price_per_visit: { type: String, default: null },
 });
 
-doctorSchema.index({ title: 'text', expertise: 'text', description: 'text', street: 'text', city: 'text', locality: 'text', pincode: 'text' });
+doctorSchema.index({ expertise: 'text', name: "text", is_active: 1 });
 doctorSchema.index({ is_active: 1, created_at: -1 });
 
 // doctorSchema.pre('save', function (next) {

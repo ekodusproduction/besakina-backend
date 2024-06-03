@@ -53,9 +53,9 @@ export const getListAdvertisement = async () => {
 const filterAdvertisement = async (query) => {
     const db = getDB();
     try {
-        const filter = { is_active: true, discriminatorKey: 'Doctor', ...query };
+        const filter = { is_active: true, ...query };
         console.log("filter", filter)
-        const doctors = await db.collection('advertisement').find(filter).sort({ created_at: -1 }).toArray();
+        const doctors = await Doctor.find(filter).sort({ created_at: -1 }).toArray();
         if (doctors.length === 0) {
             return { error: true, data: { message: "No doctors to show.", statusCode: 404, data: null } };
         }

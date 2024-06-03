@@ -6,7 +6,8 @@ const hospitalSchema = new mongoose.Schema({
     name: { type: String, required: false, default: null },
     price_registration: { type: Number, default: null },
     price_per_visit: { type: Number, default: null },
-    category: { type: String, default: null },
+    price_range: { type: String, default: null },
+    subcategory: { type: String, default: null },
 });
 
 hospitalSchema.index({ title: 'text', name: 'text', type: 'text', description: 'text', city: 'text', state: 'text', locality: 'text', category: 'text', pincode: 'text' });
