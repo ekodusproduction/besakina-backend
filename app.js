@@ -62,7 +62,6 @@ app.use("/api/Hospital", hospitalsRouter);
 app.use("/api/Hospitality", hospitalityRouter);
 app.use("/api/Education", educationRouter);
 app.use("/api/Doctor", doctorRouter);
-
 app.use("/api/plans", plansRouter);
 // app.use('/api/chat', chatRouter)
 app.use("/api/home", homeRouter)

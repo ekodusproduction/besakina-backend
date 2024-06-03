@@ -148,7 +148,7 @@ export const listFormData = async (req, res, next) => {
   try {
     const fieldname = req.params.fieldname;
 
-    const result = await repository.listEducationFormData(fieldname);
+    const result = await repository.listFormData(fieldname);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
@@ -161,7 +161,7 @@ export const listFormData = async (req, res, next) => {
 
 export const addFormData = async (req, res, next) => {
   try {
-    const result = await repository.addEducationFormData(req.body, req.body.fieldname);
+    const result = await repository.addFormData(req.body, req.body.fieldname);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
@@ -176,7 +176,7 @@ export const editFormData = async (req, res, next) => {
   try {
     const id = req.params.id
     const data = req.body
-    const result = await repository.editEducationFormData(id, data, req.body.fieldname);
+    const result = await repository.editFormData(id, data, req.body.fieldname);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
@@ -189,7 +189,7 @@ export const editFormData = async (req, res, next) => {
 
 export const deleteFormData = async (req, res, next) => {
   try {
-    const result = await repository.deleteEducationFormData(req.params.id, req.params.fieldname);
+    const result = await repository.deleteFormData(req.params.id, req.params.fieldname);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
