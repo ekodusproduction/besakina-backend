@@ -195,7 +195,7 @@ export const addExpertise = async (data) => {
             return { error: true, data: { message: "Expertise not found.", statusCode: 404, data: null } };
         }
 
-        return { error: false, data: { message: "Expertise add.", statusCode: 200, data: { _id: result._id } } };
+        return { error: false, data: { message: "New Expertise add.", statusCode: 200, data: { _id: result._id } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);

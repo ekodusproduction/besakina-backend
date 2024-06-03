@@ -189,7 +189,7 @@ export const addFormData = async (data, fieldname) => {
         if (!result) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: `${fieldname} added.`, statusCode: 200, data: { _id: result._id } } };
+        return { error: false, data: { message: `New ${fieldname} added.`, statusCode: 200, data: { _id: result._id } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
