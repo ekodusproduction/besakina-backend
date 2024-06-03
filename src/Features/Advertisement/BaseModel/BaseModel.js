@@ -30,7 +30,7 @@ const baseSchema = new mongoose.Schema({
     city: { type: String, required: true },
     state: { type: String, required: true },
     pincode: { type: String, required: true },
-    title: { type: String, required: true },
+    title: { type: String, required: false, default: null },
     description: { type: String, required: true },
     price: { type: Number, default: null, validate: priceValidator },
 }, baseOptions);
