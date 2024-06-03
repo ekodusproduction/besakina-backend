@@ -1,6 +1,6 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
-import EducationData from "./Models/EducationDataModel.js";
+import EducationFormData from "./Models/EducationDataModel.js";
 import Education from "./Models/EducationModel.js";
 
 export const addAdvertisement = async (requestBody, files) => {
@@ -172,7 +172,7 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
 
 export const listEducationFormData = async (fieldname) => {
     try {
-        const result = await EducationData.find({ fieldname: fieldname });
+        const result = await EducationFormData.find({ fieldname: fieldname });
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
@@ -185,7 +185,7 @@ export const listEducationFormData = async (fieldname) => {
 
 export const addEducationFormData = async (data, fieldname) => {
     try {
-        const result = await EducationData.create(data);
+        const result = await EducationFormData.create(data);
         if (!result) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
@@ -198,7 +198,7 @@ export const addEducationFormData = async (data, fieldname) => {
 
 export const editEducationFormData = async (expertiseId, data, fieldname) => {
     try {
-        const result = await EducationData.updateOne({ _id: expertiseId }, data);
+        const result = await EducationFormData.updateOne({ _id: expertiseId }, data);
 
         if (result.nModified === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
@@ -213,7 +213,7 @@ export const editEducationFormData = async (expertiseId, data, fieldname) => {
 
 export const deleteEducationFormData = async (id, fieldname) => {
     try {
-        const result = await EducationData.deleteOne({ _id: id });
+        const result = await EducationFormData.deleteOne({ _id: id });
 
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };

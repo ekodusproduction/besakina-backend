@@ -10,6 +10,6 @@ const educationDataSchema = new mongoose.Schema({
     label: { type: String }
 });
 
-const EducationData = mongoose.model('EducationFormData', educationDataSchema);
+const EducationFormData = mongoose.model('EducationFormData', educationDataSchema);
 
-export default EducationData;
+export default EducationFormData;

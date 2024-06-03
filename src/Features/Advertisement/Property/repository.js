@@ -1,5 +1,6 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
+import PropertyFormData from "./Models/PropertyFormModel.js";
 import Property from "./Models/PropertyModel.js";
 
 export const addAdvertisement = async (requestBody, files) => {
