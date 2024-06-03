@@ -3,7 +3,7 @@ import Base from '../../BaseModel/BaseModel.js';
 
 const hospitalitySchema = new mongoose.Schema({
     type: { type: String, required: true },
-    name: { type: String, required: true },
+    name: { type: String, required: false, default: null },
     category: { type: String, default: null },
 });
 

@@ -3,7 +3,7 @@ import Base from '../../BaseModel/BaseModel.js';
 
 const hospitalSchema = new mongoose.Schema({
     type: { type: String, required: true },
-    name: { type: String, required: true },
+    name: { type: String, required: false, default: null },
     price_registration: { type: Number, default: null },
     price_per_visit: { type: Number, default: null },
     category: { type: String, default: null },
