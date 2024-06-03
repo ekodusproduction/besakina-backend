@@ -173,11 +173,9 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
 export const listEducationFormData = async (fieldname) => {
     try {
         const result = await EducationData.find({ fieldname: fieldname });
-
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
-
         return { error: false, data: { message: `${fieldname} List.`, statusCode: 200, data: { [fieldname]: result } } };
     } catch (error) {
         logger.info(error);
@@ -188,11 +186,9 @@ export const listEducationFormData = async (fieldname) => {
 export const addEducationFormData = async (data, fieldname) => {
     try {
         const result = await EducationData.create(data);
-
         if (!result) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
-
         return { error: false, data: { message: `${fieldname} added.`, statusCode: 200, data: { _id: result._id } } };
     } catch (error) {
         logger.info(error);

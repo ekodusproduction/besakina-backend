@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const hospitalityDataSchema = new mongoose.Schema({
+const hospitalsDataSchema = new mongoose.Schema({
     fieldname: {
         type: String,
         enum: ['type'],
@@ -10,6 +10,6 @@ const hospitalityDataSchema = new mongoose.Schema({
     label: { type: String }
 });
 
-const HospitalityFormData = mongoose.model('HospitalityFormData', hospitalityDataSchema);
+const HospitalsFormData = mongoose.model('HospitalsFormData', hospitalsDataSchema);
 
-export default HospitalityFormData;
+export default HospitalsFormData;

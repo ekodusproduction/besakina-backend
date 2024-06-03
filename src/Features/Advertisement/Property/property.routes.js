@@ -2,7 +2,10 @@ import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
-    deleteAdvertisement
+    deleteAdvertisement, addFormData,
+    listFormData,
+    editFormData,
+    deleteFormData
 } from "./property.controller.js"
 import { requestBodyValidator } from "../../../Middlewares/validationMiddleware.js";
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
@@ -24,7 +27,7 @@ propertyRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 propertyRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
 
 //id =>advertisement id
-propertyRouter.post("/images/id/:id", jwtAuth, fileUpload("property"),  addImage)
+propertyRouter.post("/images/id/:id", jwtAuth, fileUpload("property"), addImage)
 
 propertyRouter.delete("/image/delete/id/:id", jwtAuth, requestBodyValidator, deleteImage)
 
@@ -33,5 +36,9 @@ propertyRouter.get("/list", getListAdvertisement)
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 propertyRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
 
+propertyRouter.get("/formdata/fieldname/:fieldname", listFormData)
+propertyRouter.post("/formdata", jwtAuth, addFormData)
+propertyRouter.put("/formdata/id/:id", jwtAuth, editFormData)
+propertyRouter.delete("/formdata/:fieldname/id/:id", jwtAuth, deleteFormData)
 
 export default propertyRouter

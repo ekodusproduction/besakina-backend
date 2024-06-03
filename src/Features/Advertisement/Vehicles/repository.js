@@ -174,6 +174,63 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
 };
 
 
+export const listFormData = async (fieldname) => {
+    try {
+        const result = await EducationData.find({ fieldname: fieldname });
+        if (result.deletedCount === 0) {
+            return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
+        }
+        return { error: false, data: { message: `${fieldname} List.`, statusCode: 200, data: { [fieldname]: result } } };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    }
+};
+
+export const addFormData = async (data, fieldname) => {
+    try {
+        const result = await EducationData.create(data);
+        if (!result) {
+            return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
+        }
+        return { error: false, data: { message: `${fieldname} added.`, statusCode: 200, data: { _id: result._id } } };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    }
+};
+
+export const editFormData = async (expertiseId, data, fieldname) => {
+    try {
+        const result = await EducationData.updateOne({ _id: expertiseId }, data);
+
+        if (result.nModified === 0) {
+            return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
+        }
+
+        return { error: false, data: { message: `${fieldname} updated.`, statusCode: 200, data: result } };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error.message, 500);
+    }
+};
+
+export const deleteFormData = async (id, fieldname) => {
+    try {
+        const result = await EducationData.deleteOne({ _id: id });
+
+        if (result.deletedCount === 0) {
+            return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
+        }
+
+        return { error: false, data: { message: `${fieldname} deleted.`, statusCode: 200 } };
+    } catch (error) {
+        logger.info(error);
+        throw new ApplicationError(error, 500);
+    }
+};
+
+
 export default {
     addAdvertisement,
     getAdvertisement,
@@ -184,5 +241,9 @@ export default {
     addImage,
     activateAdvertisement,
     deleteImage,
-    deleteAdvertisement
+    deleteAdvertisement,
+    deleteFormData,
+    addFormData,
+    editFormData,
+    listFormData,
 };

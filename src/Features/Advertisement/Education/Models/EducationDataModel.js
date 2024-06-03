@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
-import Base from '../../BaseModel/BaseModel.js';
 
 const educationDataSchema = new mongoose.Schema({
-    fieldname: { type: String },
+    fieldname: {
+        type: String,
+        enum: ['type', "domain"],
+        required: true
+    },
     value: { type: String },
     label: { type: String }
 });

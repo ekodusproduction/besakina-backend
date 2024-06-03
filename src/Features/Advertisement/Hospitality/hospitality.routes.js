@@ -2,7 +2,11 @@ import { Router } from "express";
 import {
     deactivateAdvertisement, updateAdvertisement, filterAdvertisement,
     getListAdvertisement, addAdvertisement, addImage, deleteImage, getAdvertisement, activateAdvertisement,
-    deleteAdvertisement
+    deleteAdvertisement,
+    addFormData,
+    listFormData,
+    editFormData,
+    deleteFormData
 } from "./hospitality.controller.js"
 
 import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
@@ -34,5 +38,10 @@ hospitalityRouter.post("/images/id/:id", jwtAuth, fileUpload("hospitality"), add
 hospitalityRouter.get("/list", getListAdvertisement)
 
 hospitalityRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
+
+hospitalityRouter.get("/formdata/fieldname/:fieldname", listFormData)
+hospitalityRouter.post("/formdata", jwtAuth, addFormData)
+hospitalityRouter.put("/formdata/id/:id", jwtAuth, editFormData)
+hospitalityRouter.delete("/formdata/:fieldname/id/:id", jwtAuth, deleteFormData)
 
 export default hospitalityRouter
