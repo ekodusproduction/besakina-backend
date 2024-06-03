@@ -3,6 +3,7 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
 import Hospital from "./Models/HospitalModel.js";
+import HospitalsFormData from "./Models/HospitalsDataModel.js";
 
 export const addAdvertisement = async (requestBody, files) => {
     try {
@@ -173,7 +174,7 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
 };
 export const listFormData = async (fieldname) => {
     try {
-        const result = await Hospital.find({ fieldname: fieldname });
+        const result = await HospitalsFormData.find({ fieldname: fieldname });
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
@@ -186,7 +187,7 @@ export const listFormData = async (fieldname) => {
 
 export const addFormData = async (data, fieldname) => {
     try {
-        const result = await Hospital.create(data);
+        const result = await HospitalsFormData.create(data);
         if (!result) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
@@ -199,7 +200,7 @@ export const addFormData = async (data, fieldname) => {
 
 export const editFormData = async (expertiseId, data, fieldname) => {
     try {
-        const result = await Hospital.updateOne({ _id: expertiseId }, data);
+        const result = await HospitalsFormData.updateOne({ _id: expertiseId }, data);
 
         if (result.nModified === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
@@ -214,7 +215,7 @@ export const editFormData = async (expertiseId, data, fieldname) => {
 
 export const deleteFormData = async (id, fieldname) => {
     try {
-        const result = await Hospital.deleteOne({ _id: id });
+        const result = await HospitalsFormData.deleteOne({ _id: id });
 
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };

@@ -1,5 +1,6 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
+import HospitalityFormData from "./Models/HospitalityFormModel.js";
 import Hospitality from "./Models/HospitalityModel.js";
 
 export const addAdvertisement = async (requestBody, files) => {
@@ -171,7 +172,7 @@ export const deleteAdvertisement = async (advertisementID, userId) => {
 
 export const listFormData = async (fieldname) => {
     try {
-        const result = await Hospitality.find({ fieldname: fieldname });
+        const result = await HospitalityFormData.find({ fieldname: fieldname });
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
@@ -184,7 +185,7 @@ export const listFormData = async (fieldname) => {
 
 export const addFormData = async (data, fieldname) => {
     try {
-        const result = await Hospitality.create(data);
+        const result = await HospitalityFormData.create(data);
         if (!result) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
         }
@@ -197,7 +198,7 @@ export const addFormData = async (data, fieldname) => {
 
 export const editFormData = async (expertiseId, data, fieldname) => {
     try {
-        const result = await Hospitality.updateOne({ _id: expertiseId }, data);
+        const result = await HospitalityFormData.updateOne({ _id: expertiseId }, data);
 
         if (result.nModified === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
@@ -212,7 +213,7 @@ export const editFormData = async (expertiseId, data, fieldname) => {
 
 export const deleteFormData = async (id, fieldname) => {
     try {
-        const result = await Hospitality.deleteOne({ _id: id });
+        const result = await HospitalityFormData.deleteOne({ _id: id });
 
         if (result.deletedCount === 0) {
             return { error: true, data: { message: `${fieldname} not found.`, statusCode: 404, data: null } };
