@@ -16,7 +16,9 @@ const propertySchema = new mongoose.Schema({
     total_floors: { type: Number, default: null },
     car_parking: { type: Number, default: 0 },
     category: { type: String, default: null },
-    house_no: { type: String, default: null }
+    house_no: { type: String, default: null },
+    landmark: { type: String, default: null }
+
 });
 
 propertySchema.index({ title: 'text', type: 'text', city: 'text', state: 'text', landmark: 'text', category: 'text', price: 'text', pincode: 'text' });
