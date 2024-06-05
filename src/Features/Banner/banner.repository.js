@@ -1,5 +1,5 @@
 import Banner from "./BannerModel.js";
-import ApplicationError from "../../utils/ApplicationError.js"; // Ensure you have a custom error handling utility
+import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 
 const getBanner = async () => {
     try {
