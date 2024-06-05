@@ -91,7 +91,7 @@ export const deactivateAdvertisement = async (req, res, next) => {
 export const addImage = async (req, res, next) => {
   try {
     const advertisementID = req.params.id;
-    const result = await repository.addImage(advertisementID, req.body.images, req.user);
+    const result = await repository.addImage(advertisementID, req.images, req.user);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }

@@ -50,7 +50,7 @@ export const getListAdvertisement = async () => {
 const filterAdvertisement = async (query) => {
     const db = getDB();
     try {
-        const filter = { is_active: true, discriminatorKey: 'Property', ...query };
+        const filter = { is_active: true, };
         console.log("filter", filter)
         const result = await db.collection('advertisement').find(filter).sort({ created_at: -1 }).toArray();
         if (result.length === 0) {

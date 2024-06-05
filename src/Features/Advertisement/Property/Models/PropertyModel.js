@@ -21,6 +21,7 @@ const propertySchema = new mongoose.Schema({
 
 propertySchema.index({ title: 'text', type: 'text', city: 'text', state: 'text', landmark: 'text', category: 'text', price: 'text', pincode: 'text' });
 propertySchema.index({ is_active: 1, created_at: -1 });
+propertySchema.index({ type: 1, price: 1, category: 1 });
 
 const Property = Base.discriminator('Property', propertySchema);
 

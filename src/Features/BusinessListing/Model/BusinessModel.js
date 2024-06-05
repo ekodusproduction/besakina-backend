@@ -35,7 +35,7 @@ const baseSchema = new mongoose.Schema({
     price: { type: Number, default: null, validate: priceValidator },
 }, baseOptions);
 
-baseSchema.index({ "advType": 1 })
+baseSchema.index({ "category": 1 })
 baseSchema.index({ "user": 1 })
 
 baseSchema.pre('save', function (next) {

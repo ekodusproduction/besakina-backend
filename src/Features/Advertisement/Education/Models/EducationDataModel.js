@@ -6,8 +6,8 @@ const educationDataSchema = new mongoose.Schema({
         enum: ['type', "domain"],
         required: true
     },
-    value: { type: String },
-    label: { type: String }
+    value: { type: String, trim: true },
+    label: { type: String, trim: true }
 });
 
 const EducationFormData = mongoose.model('EducationFormData', educationDataSchema);
