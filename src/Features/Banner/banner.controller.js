@@ -1,5 +1,5 @@
 import repository from "./banner.repository.js";
-
+import { logger } from "../../Middlewares/logger.middleware.js";
 export const addBanner = async (req, res, next) => {
     try {
         const result = await repository.addBanner(req.body, req.files);
