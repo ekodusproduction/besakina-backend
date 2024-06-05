@@ -1,58 +1,49 @@
-import Banner from "./BannerModel.js"
+import Banner from "./BannerModel.js";
+import ApplicationError from "../../utils/ApplicationError.js"; // Ensure you have a custom error handling utility
 
 const getBanner = async () => {
     try {
         const data = await Banner.find({});
-        return { error: false, data: { message: "Banner list .", statusCode: 200, data: data } };
+        return { error: false, data: { message: "Banner list.", statusCode: 200, data } };
     } catch (error) {
-        console.error(error);
-        logger.info(error);
+        logger.error(error);
         throw new ApplicationError(error, 500);
     }
-}
+};
 
 const addBanner = async (requestBody, files) => {
     try {
         requestBody.images = files;
         const banner = new Banner(requestBody);
-        const [savedBanner, error] = await banner.save();
-        if (error) {
-            return { error: true, data: { message: "Error adding banner.", statusCode: 400, data: null } };
-        }
-        return { error: false, data: { message: "Banner added successfully", statusCode: 200, data: { id: savedBanner._id } } };
+        const savedBanner = await banner.save();
+        return { error: false, data: { message: "Banner added successfully", statusCode: 201, data: { id: savedBanner._id } } };
     } catch (error) {
-        console.error(error);
-        logger.info(error);
+        logger.error(error);
         throw new ApplicationError(error, 500);
     }
-}
+};
 
-const editBanner = async (id, body, images) => {
+const editBanner = async (id, body, files) => {
     try {
         body.images = files;
-        const banner = Banner.findOneAndUpdate({ _id: id }, body, { new: true });
-        if (error) {
-            return { error: true, data: { message: "Error editing banner .", statusCode: 400, data: null } };
-        }
-        return { error: false, data: { message: "Banner edited successfully .", statusCode: 200 } };
+        const banner = await Banner.findOneAndUpdate({ _id: id }, body, { new: true });
+        return { error: false, data: { message: "Banner edited successfully.", statusCode: 200 } };
     } catch (error) {
-        console.error(error);
-        logger.info(error);
+        logger.error(error);
         throw new ApplicationError(error, 500);
     }
-}
+};
 
 const deleteBanner = async (id) => {
     try {
         await Banner.deleteOne({ _id: id });
         return { error: false, data: { message: "Banner deleted successfully", statusCode: 200 } };
     } catch (error) {
-        console.error(error);
-        logger.info(error);
+        logger.error(error);
         throw new ApplicationError(error, 500);
     }
-}
+};
 
-export default repository = {
+export default {
     getBanner, addBanner, editBanner, deleteBanner
-}
+};

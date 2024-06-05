@@ -1,49 +1,55 @@
-import Banner from "./BannerModel.js";
-import { ApplicationError } from "../../ErrorHandler/applicationError.js";
+import repository from "./banner.repository.js";
 
-const getBanner = async () => {
+export const addBanner = async (req, res, next) => {
     try {
-        const data = await Banner.find({});
-        return { error: false, data: { message: "Banner list.", statusCode: 200, data } };
+        const result = await repository.addBanner(req.body, req.files);
+        if (result.error) {
+            return sendError(res, result.data.message, result.data.statusCode);
+        }
+        return sendResponse(res, result.data.message, 201, result.data.data);
     } catch (error) {
         logger.error(error);
-        throw new ApplicationError(error, 500);
+        next(error);
     }
 };
 
-const addBanner = async (requestBody, files) => {
+export const getBanner = async (req, res, next) => {
     try {
-        requestBody.images = files;
-        const banner = new Banner(requestBody);
-        const savedBanner = await banner.save();
-        return { error: false, data: { message: "Banner added successfully", statusCode: 201, data: { id: savedBanner._id } } };
+        const result = await repository.getBanner();
+        if (result.error) {
+            return sendError(res, result.data.message, result.data.statusCode);
+        }
+        return sendResponse(res, result.data.message, 200, result.data.data);
     } catch (error) {
         logger.error(error);
-        throw new ApplicationError(error, 500);
+        next(error);
     }
 };
 
-const editBanner = async (id, body, files) => {
+export const editBanner = async (req, res, next) => {
     try {
-        body.images = files;
-        const banner = await Banner.findOneAndUpdate({ _id: id }, body, { new: true });
-        return { error: false, data: { message: "Banner edited successfully.", statusCode: 200 } };
+        const id = req.params.id;
+        const result = await repository.editBanner(id, req.body, req.files);
+        if (result.error) {
+            return sendError(res, result.data.message, result.data.statusCode);
+        }
+        return sendResponse(res, result.data.message, 200);
     } catch (error) {
         logger.error(error);
-        throw new ApplicationError(error, 500);
+        next(error);
     }
 };
 
-const deleteBanner = async (id) => {
+export const deleteBanner = async (req, res, next) => {
     try {
-        await Banner.deleteOne({ _id: id });
-        return { error: false, data: { message: "Banner deleted successfully", statusCode: 200 } };
+        const id = req.params.id;
+        const result = await repository.deleteBanner(id);
+        if (result.error) {
+            return sendError(res, result.data.message, result.data.statusCode);
+        }
+        return sendResponse(res, result.data.message, 200);
     } catch (error) {
         logger.error(error);
-        throw new ApplicationError(error, 500);
+        next(error);
     }
-};
-
-export default {
-    getBanner, addBanner, editBanner, deleteBanner
 };
