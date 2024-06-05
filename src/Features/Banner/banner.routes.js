@@ -6,7 +6,7 @@ const bannerRouter = Router()
 
 bannerRouter.get("/", getBanner)
 bannerRouter.post("/", jwtAuth, addBanner)
-bannerRouter.put("/", jwtAuth, editBanner)
-bannerRouter.delete("/", jwtAuth, deleteBanner)
+bannerRouter.put("/id/:id", jwtAuth, editBanner)
+bannerRouter.delete("/id/:id", jwtAuth, deleteBanner)
 
 export default bannerRouter
