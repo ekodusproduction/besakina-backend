@@ -74,9 +74,9 @@ const filterAdvertisement = async (query) => {
         console.log("filter", filter);
         const result = await Hospital.find(filter).sort({ created_at: -1 });
         if (result.length === 0) {
-            return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
+            return { error: true, data: { message: "No hospitals to show.", statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: "Property filter list", statusCode: 200, data: { property: result } } };
+        return { error: false, data: { message: "Hospitals filter list", statusCode: 200, data: { property: result } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
