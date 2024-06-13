@@ -73,7 +73,7 @@ const filterAdvertisement = async (query) => {
         if (result.length === 0) {
             return { error: true, data: { message: "No hospitality to show.", statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: "Hospitality filter list", statusCode: 200, data: { property: result } } };
+        return { error: false, data: { message: "Hospitality filter list", statusCode: 200, data: { hospitality: result } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
