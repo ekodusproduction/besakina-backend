@@ -112,7 +112,7 @@ export const getUserAdds = async function (req, res, next) {
     }
     try {
         console.log("user", user)
-        const ads = await getDB().collection('advertisement').find({ user: new ObjectId(user) }).toArray();
+        const ads = await getDB().collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
         console.log("user", ads)
 
         if (!ads.length) {
