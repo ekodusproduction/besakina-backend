@@ -50,10 +50,9 @@ export const getListAdvertisement = async () => {
 
 
 const filterAdvertisement = async (query) => {
-        // Build the filter object
+    try {
         const filter = { is_active: true };
 
-        // Add dynamic filters based on the query parameters
         for (const key in query) {
             if (query.hasOwnProperty(key)) {
                 if (key === 'minPrice' && query[key] !== undefined) {
