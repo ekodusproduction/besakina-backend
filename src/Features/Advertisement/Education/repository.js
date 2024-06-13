@@ -70,7 +70,7 @@ const filterAdvertisement = async (query) => {
         }
 
         console.log("filter", filter);
-        const result = await Vehicle.find(filter).sort({ created_at: -1 }).exec();
+        const result = await Education.find(filter).sort({ created_at: -1 }).exec();
         if (result.length === 0) {
             return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
         }
