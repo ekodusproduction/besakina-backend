@@ -50,8 +50,6 @@ export const getListAdvertisement = async () => {
 
 
 const filterAdvertisement = async (query) => {
-    const db = getDB();
-    try {
         // Build the filter object
         const filter = { is_active: true };
 

@@ -48,12 +48,9 @@ export const getListAdvertisement = async () => {
 };
 
 const filterAdvertisement = async (query) => {
-    const db = getDB();
     try {
-        // Build the filter object
         const filter = { is_active: true };
 
-        // Add dynamic filters based on the query parameters
         for (const key in query) {
             if (query.hasOwnProperty(key)) {
                 if (key === 'minPrice' && query[key] !== undefined) {
