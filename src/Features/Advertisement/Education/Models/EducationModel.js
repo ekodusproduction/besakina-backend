@@ -12,8 +12,7 @@ const educationSchema = new mongoose.Schema({
         }
     }],
     institution_name: { type: String, required: true },
-    course_duration: { type: String, required: true },
-    price: { type: String, default: null },
+    course_duration: { type: String, required: true }
 });
 
 educationSchema.index({ title: 'text', domain: 'text', institution_name: 'text', type: 'text', description: 'text', city: 'text', locality: 'text', pincode: 'text' });

@@ -51,13 +51,30 @@ export const getListAdvertisement = async () => {
 const filterAdvertisement = async (query) => {
     const db = getDB();
     try {
-        const filter = { is_active: true, discriminatorKey: 'Hospitality', ...query };
-        console.log("filter", filter)
-        const result = await db.collection('advertisement').find(filter).sort({ created_at: -1 }).toArray();
-        if (result.length === 0) {
-            return { error: true, data: { message: "No Hospitality to show.", statusCode: 404, data: null } };
+        // Build the filter object
+        const filter = { is_active: true };
+
+        // Add dynamic filters based on the query parameters
+        for (const key in query) {
+            if (query.hasOwnProperty(key)) {
+                if (key === 'minPrice' && query[key] !== undefined) {
+                    if (!filter.price) filter.price = {};
+                    filter.price.$gte = parseFloat(query[key]);
+                } else if (key === 'maxPrice' && query[key] !== undefined) {
+                    if (!filter.price) filter.price = {};
+                    filter.price.$lte = parseFloat(query[key]);
+                } else {
+                    filter[key] = query[key];
+                }
+            }
         }
-        return { error: false, data: { message: "Hospitality filter list", statusCode: 200, data: { "Hospitality": result } } };
+
+        console.log("filter", filter);
+        const result = await Vehicle.find(filter).sort({ created_at: -1 }).exec();
+        if (result.length === 0) {
+            return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
+        }
+        return { error: false, data: { message: "Property filter list", statusCode: 200, data: { property: result } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
