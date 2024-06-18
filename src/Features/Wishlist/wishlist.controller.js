@@ -19,7 +19,7 @@ export const addWishListItem = async function (req, res, next) {
             throw new ApplicationError('User not found', 404);
         }
 
-        const uniqueUser = await ensureUniqueArray(updatedUser._id, User, wishlist);
+        const uniqueUser = await ensureUniqueArray(updatedUser._id, User, "wishlist");
 
         console.log("wishlist ", uniqueUser.wishlist);
 
