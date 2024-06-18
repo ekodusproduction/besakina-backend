@@ -25,6 +25,7 @@ import doctorRouter from './src/Features/Advertisement/Doctors/doctors.routes.js
 // import chatRouter from './src/Features/Chats/chats.routes.js';
 import homeRouter from './src/Features/Home/home.routes.js';
 import bannerRouter from './src/Features/Banner/banner.routes.js';
+import wishlistRoutes from './src/Features/Wishlist/wishlist.routes.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
@@ -68,6 +69,7 @@ app.use("/api/plans", plansRouter);
 app.use("/api/home", homeRouter)
 app.use("/api/favourites", homeRouter)
 app.use("/api/banner", bannerRouter)
+app.use('/api/wishlist', wishlistRoutes)
 
 app.use(async (err, req, res, next) => {
     logger.info(err);
