@@ -30,20 +30,19 @@ import wishlistRoutes from './src/Features/Wishlist/wishlist.routes.js';
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
 // Middleware setup
+
+app.set('trust proxy', true);
+app.use(cors({ credentials: false }));
+
+app.use(express.json());
 app.use((req, res, next) => {
     console.log("ip", req.ip)
     console.log("url", req.url)
     console.log('method', req.method)
     console.log('origin', req.headers.origin)
     console.log("rawBody ", req.body)
-    console.log("body", req.body)
     next();
 })
-
-app.set('trust proxy', true);
-app.use(cors({ credentials: false }));
-
-app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet({
