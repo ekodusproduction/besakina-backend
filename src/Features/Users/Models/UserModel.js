@@ -35,15 +35,10 @@ userSchema.pre('save', function (next) {
             this[key] = null;
         }
     }
-
-    // Ensure unique items in wishlist
-    if (this.wishlist && Array.isArray(this.wishlist)) {
-        const uniqueWishlist = [...new Set(this.wishlist.map(item => item.toString()))];
-        this.wishlist = uniqueWishlist;
-    }
-
+ 
     next();
 });
+
 
 const User = mongoose.model('User', userSchema);
 
