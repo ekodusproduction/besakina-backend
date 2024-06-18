@@ -4,7 +4,7 @@ import { wishlistValidation } from "./wishlist.middleware.js";
 import { addWishListItem, getWishList, removeWishListItem } from "./wishlist.controller";
 const wishlistRoutes = Router()
 
-wishlistRoutes.post("/add", jwtAuth, wishlistValidation, addWishListItem)
+wishlistRoutes.post("/add", jwtAuth,  addWishListItem)
 wishlistRoutes.get("/get", jwtAuth, removeWishListItem)
 wishlistRoutes.delete("/delete/id/:id", jwtAuth, getWishList)
 
