@@ -4,7 +4,7 @@ import { addWishListItem, getWishList, removeWishListItem } from "./wishlist.con
 const wishlistRoutes = Router()
 
 wishlistRoutes.post("/add", jwtAuth, addWishListItem)
-wishlistRoutes.get("/get", jwtAuth, removeWishListItem)
-wishlistRoutes.delete("/delete/id/:id", jwtAuth, getWishList)
+wishlistRoutes.get("/get", jwtAuth, getWishList)
+wishlistRoutes.delete("/delete/id/:id", jwtAuth, removeWishListItem)
 
 export default wishlistRoutes  
