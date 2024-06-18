@@ -15,6 +15,7 @@ export const addWishListItem = async function (req, res, next) {
         if (!wishlist) {
             throw new ApplicationError('User not found', 404);
         }
+        console.log("wishlist ", wishlist)
 
         return await sendResponse(res, 'Advertisement added to wishlist successfully', 201, wishlist._id);
     } catch (error) {

@@ -36,6 +36,7 @@ app.use((req, res, next) => {
     console.log('method', req.method)
     console.log('origin', req.headers.origin)
     console.log("rawBody ", req.body)
+    console.log("body", req.body)
     next();
 })
 

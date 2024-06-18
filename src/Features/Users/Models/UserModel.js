@@ -28,11 +28,6 @@ const userSchema = new mongoose.Schema({
     updated_at: { type: Date, default: Date.now }
 });
 
-// Custom validator for unique elements in the wishlist array
-userSchema.path('wishlist').validate(function (value) {
-    const uniqueValues = new Set(value.map(v => v.toString()));
-    return uniqueValues.size === value.length;
-}, 'Wishlist must contain unique items.');
 
 userSchema.pre('save', function (next) {
     for (let key in this.toObject()) {
@@ -42,8 +37,10 @@ userSchema.pre('save', function (next) {
     }
 
     // Ensure unique items in wishlist
-    const uniqueWishlist = [...new Set(this.wishlist.map(item => item.toString()))];
-    this.wishlist = uniqueWishlist;
+    if (this.wishlist && Array.isArray(this.wishlist)) {
+        const uniqueWishlist = [...new Set(this.wishlist.map(item => item.toString()))];
+        this.wishlist = uniqueWishlist;
+    }
 
     next();
 });
