@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { jwtAuth } from "../../Middlewares/auth.middleware.js";
-import { addWishListItem, getWishList, removeWishListItem } from "./wishlist.controller";
+import { addWishListItem, getWishList, removeWishListItem } from "./wishlist.controller.js";
 const wishlistRoutes = Router()
 
 wishlistRoutes.post("/add", jwtAuth, addWishListItem)
