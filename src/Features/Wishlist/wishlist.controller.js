@@ -1,4 +1,4 @@
-import { ApplicationError } from "../../ErrorHandler/applicationError";
+import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 import User from "../Users/Models/UserModel.js";
 
 export const addWishListItem = async function (req, res, next) {
