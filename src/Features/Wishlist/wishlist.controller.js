@@ -1,6 +1,8 @@
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 import User from "../Users/Models/UserModel.js";
 import { sendResponse, sendError } from "../../Utility/response.js";
+import { ensureUniqueArray } from "../../Utility/ensureUniqueArray.js"
+
 export const addWishListItem = async function (req, res, next) {
     const user = req.user;
     const data = req.body.adv_id;
@@ -17,7 +19,7 @@ export const addWishListItem = async function (req, res, next) {
             throw new ApplicationError('User not found', 404);
         }
 
-        const uniqueUser = await ensureUniqueWishlist(updatedUser._id);
+        const uniqueUser = await ensureUniqueArray(updatedUser._id);
 
         console.log("wishlist ", uniqueUser.wishlist);
 
