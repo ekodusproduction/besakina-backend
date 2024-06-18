@@ -35,7 +35,7 @@ userSchema.pre('save', function (next) {
             this[key] = null;
         }
     }
- 
+
     next();
 });
 
