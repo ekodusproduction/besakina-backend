@@ -62,7 +62,7 @@ export const addPlans = async (token, baseUrl) => {
             const config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: `http://${baseUrl}/api/plans`,
+                url: `https://${baseUrl}/api/plans`,
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     ...formData.getHeaders()

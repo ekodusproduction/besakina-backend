@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     pincode: { type: String, default: null },
     about: { type: String, default: null },
     verified: { type: Boolean, default: false },
+    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Base' }],
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }
 });

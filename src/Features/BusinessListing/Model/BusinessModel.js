@@ -6,16 +6,7 @@ const baseOptions = {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 };
 
-const priceValidator = {
-    validator: function (v) {
-        if (v === null) return true;
-        const num = parseFloat(v);
-        return !isNaN(num);
-    },
-    message: props => `${props.value} is not a valid price!`
-};
-
-const baseSchema = new mongoose.Schema({
+const businessSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     images: [{ type: String, required: true }],
     video: { type: String },
@@ -32,13 +23,12 @@ const baseSchema = new mongoose.Schema({
     pincode: { type: String, required: true },
     title: { type: String, required: false, default: null },
     description: { type: String, required: true },
-    price: { type: Number, default: null, validate: priceValidator },
 }, baseOptions);
 
 baseSchema.index({ "category": 1 })
 baseSchema.index({ "user": 1 })
 
-baseSchema.pre('save', function (next) {
+businessSchema.pre('save', function (next) {
     for (let key in this.toObject()) {
         if (this[key] === "null" || this[key] === "") {
             this[key] = null;
@@ -47,6 +37,6 @@ baseSchema.pre('save', function (next) {
     next();
 });
 
-const Base = mongoose.model('Base', baseSchema);
+const Business = mongoose.model('Business', businessSchema);
 
 export default Base;

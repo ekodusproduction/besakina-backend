@@ -1,75 +1,62 @@
-import pool from "../../Mysql/mysql.database";
+import { ApplicationError } from "../../ErrorHandler/applicationError";
+import User from "../Users/Models/UserModel.js";
 
 export const addWishListItem = async function (req, res, next) {
     const user = req.user;
-    const { adv_id, adv_type } = req.body; // assuming adv_id and adv_type are sent in the request body
-    let connection = await pool.getConnection();
+    const data = req.body.adv_id;
     try {
-        const insertQuery = `
-            INSERT INTO userswishlist (user, adv_id, adv_type)
-            VALUES (?, ?, ?)
-        `;
-        await connection.query(insertQuery, [user, adv_id, adv_type]);
+        const wishlist = await User.findByIdAndUpdate(
+            user,
+            { $push: { wishlist: data } },
+            { new: true, useFindAndModify: false }
+        );
 
-        return await sendResponse(res, 'Advertisement added to wishlist successfully', 201);
+        if (!wishlist) {
+            throw new ApplicationError('User not found', 404);
+        }
+
+        return await sendResponse(res, 'Advertisement added to wishlist successfully', 201, wishlist._id);
     } catch (error) {
-        next(error);
-    } finally {
-        connection.release();
+        next(new ApplicationError(error.message || 'Internal server error', 500));
     }
-}
+};
 
 export const removeWishListItem = async function (req, res, next) {
-    const adv_id = req.params.id;
-    let connection = await pool.getConnection();
-    try {
-        const deleteQuery = `
-            DELETE FROM userswishlist
-            WHERE user = ? AND adv_id = ?
-        `;
-        const [result] = await connection.query(deleteQuery, [req.user, adv_id]);
+    const user = req.user;
+    const advId = req.params.id;
 
-        if (result.affectedRows === 0) {
-            return await sendResponse(res, "Advertisement not found in wishlist", 404);
+    try {
+        const result = await User.findByIdAndUpdate(
+            user,
+            { $pull: { wishlist: advId } },
+            { new: true, useFindAndModify: false }
+        );
+
+        if (!result) {
+            throw new ApplicationError('User not found', 404);
         }
-        return await sendResponse(res, 'Wishlist item deleted.', 201);
+
+        return await sendResponse(res, 'Wishlist item deleted successfully.', 200);
     } catch (error) {
-        next(error);
-    } finally {
-        connection.release();
+        next(new ApplicationError(error.message || 'Internal server error', 500));
     }
-}
+};
+
 
 export const getWishList = async function (req, res, next) {
-    const user = req.params.id;
-    let connection = await pool.getConnection();
+    const userId = req.params.id;
     try {
-        const selectQuery = `
-            SELECT adv_id, adv_type
-            FROM userswishlist
-            WHERE user = ?
-        `;
-        const [wishlistItems] = await connection.query(selectQuery, [user]);
+        const user = await User.findById(userId).populate('wishlist');
+        if (!user) {
+            throw new ApplicationError('User not found', 404);
+        }
 
-        if (wishlistItems.length === 0) {
+        if (user.wishlist.length === 0) {
             return await sendResponse(res, "Wishlist is empty", 200);
         }
 
-        const subqueries = wishlistItems.map(item => {
-            const tableName = item.adv_type;
-            return `
-                (SELECT * FROM ${tableName} WHERE id = ${item.adv_id})
-            `;
-        });
-
-        const unionQuery = subqueries.join(' UNION ALL ');
-
-        const [data] = await connection.query(unionQuery);
-
-        return await sendResponse(res, 'Wishlist details fetched successfully', 200, data);
+        return await sendResponse(res, 'Wishlist details fetched successfully', 200, user.wishlist);
     } catch (error) {
-        next(error);
-    } finally {
-        connection.release();
+        next(new ApplicationError(error.message || 'Internal server error', 500));
     }
-}
+};

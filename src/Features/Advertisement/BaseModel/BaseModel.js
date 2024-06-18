@@ -36,7 +36,7 @@ const baseSchema = new mongoose.Schema({
 }, baseOptions);
 
 baseSchema.index({ "advType": 1 })
-baseSchema.index({ "user": 1 })
+baseSchema.index({ "_id": 1, "user": 1 })
 
 baseSchema.pre('save', function (next) {
     for (let key in this.toObject()) {

@@ -22,7 +22,6 @@ export const getPlan = async function (req, res, next) {
         if (plans.length === 0) {
             return sendError(res, "No plan found", 404);
         }
-
         return sendResponse(res, "Plan List", 200, plans);
     } catch (error) {
         next(error);
