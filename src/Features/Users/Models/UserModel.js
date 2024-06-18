@@ -20,10 +20,19 @@ const userSchema = new mongoose.Schema({
     pincode: { type: String, default: null },
     about: { type: String, default: null },
     verified: { type: Boolean, default: false },
-    wishlist: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Base', unique: true }],
+    wishlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Base'
+    }],
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }
 });
+
+// Custom validator for unique elements in the wishlist array
+userSchema.path('wishlist').validate(function (value) {
+    const uniqueValues = new Set(value.map(v => v.toString()));
+    return uniqueValues.size === value.length;
+}, 'Wishlist must contain unique items.');
 
 userSchema.pre('save', function (next) {
     for (let key in this.toObject()) {
@@ -31,10 +40,14 @@ userSchema.pre('save', function (next) {
             this[key] = null;
         }
     }
+
+    // Ensure unique items in wishlist
+    const uniqueWishlist = [...new Set(this.wishlist.map(item => item.toString()))];
+    this.wishlist = uniqueWishlist;
+
     next();
 });
 
 const User = mongoose.model('User', userSchema);
 
 export default User;
-

@@ -9,7 +9,7 @@ export const addWishListItem = async function (req, res, next) {
         const wishlist = await User.findByIdAndUpdate(
             user,
             { $push: { wishlist: data } },
-            { new: true, useFindAndModify: false }
+            { new: true }
         );
 
         if (!wishlist) {
