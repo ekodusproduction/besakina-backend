@@ -1,4 +1,4 @@
-const ensureUniqueArray = async (id, Model, fieldname) => {
+export const ensureUniqueArray = async (id, Model, fieldname) => {
     const user = await Model.findById(id);
     const modelName = Model.modelName;
 
