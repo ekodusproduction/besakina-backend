@@ -16,7 +16,7 @@ const businessSchema = new mongoose.Schema({
     city: { type: String, required: true },
     state: { type: String, required: true },
     pincode: { type: String, required: true },
-    title: { type: String, required: false, default: null },
+    name: { type: String, required: true, },
     description: { type: String, required: true },
     category: { type: String, required: true }
 }, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
