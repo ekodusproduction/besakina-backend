@@ -39,4 +39,4 @@ businessSchema.pre('save', function (next) {
 
 const Business = mongoose.model('Business', businessSchema);
 
-export default Base;
+export default Business;
