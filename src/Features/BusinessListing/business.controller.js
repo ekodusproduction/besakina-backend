@@ -2,6 +2,7 @@ import { logger } from "../../Middlewares/logger.middleware.js";
 import repository from "./repository.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 import { sendError, sendResponse } from "../../Utility/response.js";
+import repository from "./business.repository.js"
 export const addAdvertisement = async (req, res, next) => {
   try {
     req.body.user = req.user
