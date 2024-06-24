@@ -8,10 +8,9 @@ import {
     deleteFormData
 } from "./business.controller.js"
 
-import { fileUpload } from "../../../Middlewares/multer.middlewares.js";
 import { jwtAuth } from "../../Middlewares/auth.middleware.js";
 import { checkUserProfileCompletion } from "../Users/userMiddlewares.js";
-
+import { fileUpload } from "../../Middlewares/multer.middlewares.js";
 let businessRouter = Router()
 //protected routes id=> advertisement id
 businessRouter.post("/add", jwtAuth, fileUpload("vehicles"), checkUserProfileCompletion, addAdvertisement)
