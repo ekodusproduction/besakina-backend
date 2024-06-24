@@ -1,10 +1,5 @@
 import mongoose from 'mongoose';
 
-const baseOptions = {
-    discriminatorKey: 'advType',
-    collection: '',
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
-};
 
 const businessSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -23,10 +18,11 @@ const businessSchema = new mongoose.Schema({
     pincode: { type: String, required: true },
     title: { type: String, required: false, default: null },
     description: { type: String, required: true },
-}, baseOptions);
+    category: { type: String, required: true }
+}, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
-baseSchema.index({ "category": 1 })
-baseSchema.index({ "user": 1 })
+businessSchema.index({ "category": 1 })
+businessSchema.index({ "user": 1 })
 
 businessSchema.pre('save', function (next) {
     for (let key in this.toObject()) {

@@ -1,5 +1,5 @@
-import { logger } from "../../../Middlewares/logger.middleware.js";
-import BusinessFormData from "./Models/BusinessFormData.js";
+import { logger } from "../../Middlewares/logger.middleware.js";
+import BusinessFormData from "./Model/BusinessFormModel.js";
 import Business from "./Model/BusinessModel.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 
