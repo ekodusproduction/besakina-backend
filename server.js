@@ -10,7 +10,7 @@ import { jwtAuth } from './src/Middlewares/auth.middleware.js';
 import { socketAuth } from "./socketAuth.js"
 import { s3Client } from './src/config/aws-sdk.js';
 import fs from "fs";
-import { connectToMongoDB } from './src/mongodb/mongodb.js';
+// import { connectToMongoDB } from './src/mongodb/mongodb.js';
 import { mongooseConnection } from "./src/Mongoose/mongoose.js"
 
 const port = process.env.PORT || 3000;
@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === 'production') {
     const httpServer = http.createServer(app);
     httpServer.listen(port, async () => {
         console.log(`HTTP server running on port ${port}`);
-        await connectToMongoDB()
+        // await connectToMongoDB()
         await mongooseConnection()
     });
 }
