@@ -116,8 +116,8 @@ export const getUserAdds = async function (req, res, next) {
         console.log("Valid user ID:", user);
 
         const db = getDB(); // Ensure getDB() is correctly implemented
-        const ads = await db.collection('advertisement').find({ user: ObjectId(user) }).sort({ created_at: -1 }).toArray();
-        const business = await db.collection('Business').find({ user: ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const ads = await db.collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const business = await db.collection('Business').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
 
         console.log("Advertisements:", ads);
         console.log("Businesses:", business);
