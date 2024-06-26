@@ -112,9 +112,9 @@ export const getUserAdds = async function (req, res, next) {
     }
     try {
         console.log("user", user)
-        const ads = await getDB().collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const ads = await getDB().collection('advertisement').find({ user: user }).sort({ created_at: -1 }).toArray();
         console.log("user", ads)
-        const business = await getDB().collection('business').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const business = await getDB().collection('Business').find({ user: user }).sort({ created_at: -1 }).toArray();
         console.log("business + ads", [...business, ...ads])
         if (!ads.length) {
             return await sendResponse(res, "Advertisement fetched successfully", 200, []);
