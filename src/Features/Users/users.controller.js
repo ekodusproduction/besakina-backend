@@ -107,22 +107,29 @@ export const addUserDocs = async function (req, res, next) {
 
 export const getUserAdds = async function (req, res, next) {
     const { user } = req;
+
     if (!ObjectId.isValid(user)) {
-        return await sendError(res, "Invalid User id", 400)
+        return sendError(res, "Invalid User id", 400);
     }
+
     try {
-        console.log("user", user)
-        const ads = await getDB().collection('advertisement').find({ user: user }).sort({ created_at: -1 }).toArray();
-        console.log("user", ads)
-        const business = await getDB().collection('Business').find({ user: user }).sort({ created_at: -1 }).toArray();
-        console.log("business + ads", [...business, ...ads])
-        if (!ads.length) {
-            return await sendResponse(res, "Advertisement fetched successfully", 200, []);
+        console.log("Valid user ID:", user);
+
+        const db = getDB(); // Ensure getDB() is correctly implemented
+        const ads = await db.collection('advertisement').find({ user: ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const business = await db.collection('Business').find({ user: ObjectId(user) }).sort({ created_at: -1 }).toArray();
+
+        console.log("Advertisements:", ads);
+        console.log("Businesses:", business);
+
+        const combined = [...business, ...ads];
+        if (!combined.length) {
+            return sendResponse(res, "No advertisements or businesses found", 200, []);
         }
 
-        return await sendResponse(res, 'User ads', 200, [...business, ...ads,], null);
+        return sendResponse(res, 'User ads and businesses', 200, combined);
     } catch (error) {
-        console.log(error)
+        console.error("Error fetching user ads and businesses:", error);
         next(error);
     }
 };
