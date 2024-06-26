@@ -14,7 +14,7 @@ export const connectToMongoDB = async () => {
         const collections = await client.db().listCollections().toArray();
         for (let collection of collections) {
             console.log("Reindexing " + collection.name);
-            await db.collection(collection.name).reIndex();
+            await client.db().collection(collection.name).reIndex();
         }
 
         console.log("Connected to MongoDB using native driver!");
