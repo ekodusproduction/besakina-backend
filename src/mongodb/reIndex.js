@@ -1,5 +1,5 @@
 import { getDB } from "./mongodb.js";
-const reindexCollections = async () => {
+export const reindexCollections = async () => {
     try {
         const db = getDB();
         const collections = await db.listCollections().toArray();
