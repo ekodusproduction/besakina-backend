@@ -41,7 +41,7 @@ export const getListAdvertisement = async () => {
         if (result.length === 0) {
             return { error: true, data: { message: "No Business to show.", statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: "Business list.", statusCode: 200, data: { "vehicles": result } } };
+        return { error: false, data: { message: "Business list.", statusCode: 200, data: { "business": result } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
@@ -70,9 +70,9 @@ const filterAdvertisement = async (query) => {
         console.log("filter", filter);
         const result = await Business.find(filter).sort({ created_at: -1 });
         if (result.length === 0) {
-            return { error: true, data: { message: "No vehicle to show.", statusCode: 404, data: null } };
+            return { error: true, data: { message: "No business to show.", statusCode: 404, data: null } };
         }
-        return { error: false, data: { message: "Business filter list", statusCode: 200, data: { vehicles: result } } };
+        return { error: false, data: { message: "Business filter list", statusCode: 200, data: { business: result } } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
