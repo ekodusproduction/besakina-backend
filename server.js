@@ -27,6 +27,5 @@ if (process.env.NODE_ENV === 'production') {
         console.log(`HTTP server running on port ${port}`);
         await connectToMongoDB()
         await mongooseConnection()
-        await reindexCollections()
     });
 }
