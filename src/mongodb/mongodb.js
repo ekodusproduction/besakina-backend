@@ -9,10 +9,9 @@ let client;
 export const connectToMongoDB = async () => {
     try {
         client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
-        const db = client.db();
 
         // Reindexing all collections
-        const collections = await db.listCollections().toArray();
+        const collections = await client.db().listCollections().toArray();
         for (let collection of collections) {
             console.log("Reindexing " + collection.name);
             await db.collection(collection.name).reIndex();
