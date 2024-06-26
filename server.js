@@ -12,7 +12,6 @@ import { s3Client } from './src/config/aws-sdk.js';
 import fs from "fs";
 import { connectToMongoDB } from './src/mongodb/mongodb.js';
 import { mongooseConnection } from "./src/Mongoose/mongoose.js"
-import { reindexCollections } from './src/mongodb/reIndex.js';
 
 const port = process.env.PORT || 3000;
 if (process.env.NODE_ENV === 'production') {

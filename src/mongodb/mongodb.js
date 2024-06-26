@@ -6,7 +6,6 @@ const url = process.env.MONGODB_URI;
 
 let client;
 
-// 3. Function to connect to the database
 export const connectToMongoDB = async () => {
     try {
         client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -26,7 +25,6 @@ export const connectToMongoDB = async () => {
     }
 };
 
-// 4. Function to access the database
 export const getDB = () => {
     if (!client) {
         throw new Error("You must connect to MongoDB first!");
