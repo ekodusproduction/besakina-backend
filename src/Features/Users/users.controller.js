@@ -113,14 +113,13 @@ export const getUserAdds = async function (req, res, next) {
     }
 
     try {
-        console.log("Valid user ID:", user);
+        // console.log("Valid user ID:", user);
 
-        const db = getDB(); // Ensure getDB() is correctly implemented
-        const ads = await db.collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
-        const business = await db.collection('Business').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const ads = await getDB().collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const business = await getDB().collection('Business').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
 
-        console.log("Advertisements:", ads);
-        console.log("Businesses:", business);
+        // console.log("Advertisements:", ads);
+        // console.log("Businesses:", business);
 
         const combined = [...business, ...ads];
         if (!combined.length) {
