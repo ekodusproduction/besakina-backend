@@ -9,8 +9,8 @@ let client;
 export const connectToMongoDB = async () => {
     try {
         client = await MongoClient.connect(url);
-        const db = client.db("backend_prod");
-        const collections = await db.listCollections().toArray();
+        // const db = client.db();
+        const collections = await client.listCollections().toArray();
 
         console.log("Collections:");
         collections.forEach(collection => {
