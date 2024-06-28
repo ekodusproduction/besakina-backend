@@ -9,9 +9,6 @@ let client;
 export const connectToMongoDB = async () => {
     try {
         client = await MongoClient.connect(url);
-
-        const db = client.db();
-        // Reindexing all collections
         console.log("Connected to MongoDB using native driver!");
     } catch (err) {
         console.error("Failed to connect to MongoDB", err);
