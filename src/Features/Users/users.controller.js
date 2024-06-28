@@ -114,8 +114,8 @@ export const getUserAdds = async function (req, res, next) {
 
     try {
 
-        const ads = await getDB().collection('advertisements').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
-        const business = await getDB().collection('Businesses').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const ads = await getDB().collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        const business = await getDB().collection('businesses').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
         const combined = [...business, ...ads];
         if (!combined.length) {
             return sendResponse(res, "No advertisements or businesses found", 200, []);
