@@ -10,12 +10,6 @@ export const connectToMongoDB = async () => {
     try {
         client = await MongoClient.connect(url);
         // const db = client.db();
-        const collections = await client.listCollections().toArray();
-
-        console.log("Collections:");
-        collections.forEach(collection => {
-            console.log(collection.name);
-        });
         console.log("Connected to MongoDB using native driver!");
     } catch (err) {
         console.error("Failed to connect to MongoDB", err);
