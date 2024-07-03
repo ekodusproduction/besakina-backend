@@ -3,7 +3,7 @@ import { verifyToken } from "./src/Middlewares/auth.middleware.js"; // Assuming 
 export const socketAuth = async function (socket, next) {
     try {
         const token = socket.handshake.headers.token || socket.handshake.headers.authorization;
-        console.log("socket", socket)
+        console.log("token", token)
         console.log("socket", socket.handshake.headers)
 
         if (!token) {
