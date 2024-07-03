@@ -14,18 +14,29 @@ import { connectToMongoDB } from './src/mongodb/mongodb.js';
 import { mongooseConnection } from "./src/Mongoose/mongoose.js"
 
 const port = process.env.PORT || 3000;
-if (process.env.NODE_ENV === 'production') {
-    const httpsServer = https.createServer(app);
-    httpsServer.listen(port, async () => {
-        console.log(`HTTPS server running on port ${port}`);
-        await connectToMongoDB()
-        await mongooseConnection()
+
+const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST"]
+    }
+})
+
+io.use(socketAuth)
+
+io.on('connection', (socket) => {
+    console.log('New client connected');
+    chatSocket(socket);
+
+    socket.on('disconnect', () => {
+        console.log('Client disconnected');
     });
-} else {
-    const httpServer = http.createServer(app);
-    httpServer.listen(port, async () => {
-        console.log(`HTTP server running on port ${port}`);
-        await connectToMongoDB()
-        await mongooseConnection()
-    });
-}
+});
+
+httpServer.listen(port, async () => {
+    console.log(`HTTP server running on port ${port}`);
+    await connectToMongoDB()
+    await mongooseConnection()
+});

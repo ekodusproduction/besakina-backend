@@ -2,7 +2,6 @@ import { verifyToken } from "./src/Middlewares/auth.middleware.js"; // Assuming 
 
 export const socketAuth = async function (socket, next) {
     try {
-        // Extract the token from the socket handshake query or headers
         const token = socket.handshake.query.token || socket.handshake.headers.authorization;
 
         if (!token) {

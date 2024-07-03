@@ -22,7 +22,7 @@ import hospitalityRouter from './src/Features/Advertisement/Hospitality/hospital
 import educationRouter from './src/Features/Advertisement/Education/education.routes.js';
 import doctorRouter from './src/Features/Advertisement/Doctors/doctors.routes.js';
 
-// import chatRouter from './src/Features/Chats/chats.routes.js';
+import chatRouter from './src/Features/Chats/chats.routes.js';
 import homeRouter from './src/Features/Home/home.routes.js';
 import bannerRouter from './src/Features/Banner/banner.routes.js';
 import wishlistRoutes from './src/Features/Wishlist/wishlist.routes.js';
@@ -66,7 +66,7 @@ app.use("/api/Hospitality", hospitalityRouter);
 app.use("/api/Education", educationRouter);
 app.use("/api/Doctor", doctorRouter);
 app.use("/api/plans", plansRouter);
-// app.use('/api/chat', chatRouter)
+app.use('/api/chat', chatRouter)
 app.use("/api/home", homeRouter)
 app.use("/api/favourites", homeRouter)
 app.use("/api/banner", bannerRouter)
