@@ -1,4 +1,4 @@
-import Chat from "./chatModel";
+import Chat from "./chatModel.js";
 
 export const chatSocket = (socket) => {
 
