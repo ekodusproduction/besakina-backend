@@ -2,8 +2,9 @@ import { verifyToken } from "./src/Middlewares/auth.middleware.js"; // Assuming 
 
 export const socketAuth = async function (socket, next) {
     try {
-        const token = socket.token || socket.authorization;
-        console.log("token", token)
+        const token = socket.handshake.headers.token || socket.handshake.headers.authorization;
+        console.log("socket", socket)
+        console.log("socket", socket.handshake.headers)
 
         if (!token) {
             throw new Error("No token provided. Please provide a valid token.");
