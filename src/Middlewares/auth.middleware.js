@@ -4,7 +4,7 @@ import jwt, { decode } from 'jsonwebtoken';
 import { sendError } from "../Utility/response.js";
 export const verifyToken = (token) => {
     try {
-        console.log("token", token)
+        console.log("token in verification", token)
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         return {
             isValid: true,

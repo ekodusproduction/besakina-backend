@@ -9,7 +9,7 @@ export const socketAuth = async function (socket, next) {
             throw new Error("No token provided. Please provide a valid token.");
         }
 
-        const { isValid, decoded, error } = verifyToken(token.split(" ")[1]);
+        const { isValid, decoded, error } = verifyToken(token);
         if (isValid) {
             req.user = decoded.user;
             console.log(req.user)
