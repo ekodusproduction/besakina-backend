@@ -10,6 +10,7 @@ export const verifyToken = (token) => {
             decoded: decoded
         };
     } catch (error) {
+        console.log("error in verifyng token")
         return {
             isValid: false,
             error: error.message
