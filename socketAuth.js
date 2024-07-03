@@ -11,9 +11,6 @@ export const socketAuth = async function (socket, next) {
 
         const { isValid, decoded, error } = verifyToken(token);
         if (isValid) {
-            req.user = decoded.user;
-            console.log(req.user)
-            req.plan_id = decoded.plan_id;
             next();
         } else {
             throw new Error(`Invalid token. ${error}`);
