@@ -11,7 +11,7 @@ export const socketAuth = async function (socket, next) {
 
         const { isValid, decoded, error } = verifyToken(token);
         if (isValid) {
-            socket.sender = decoded.user;
+            socket.user = decoded.user;
             next();
         } else {
             throw new Error(`Invalid token. ${error}`);
