@@ -2,19 +2,19 @@ import Chat from "./chatModel.js";
 
 export const chatSocket = (socket) => {
 
-    socket.on('join', async ({ receiver }) => {
-        try {
-            const sender = socket.user;
-            console.log("sender", sender)
+    // socket.on('join', async ({ receiver }) => {
+    //     try {
+    //         const sender = socket.user;
+    //         console.log("sender", sender)
 
-            const roomId = [sender, receiver].sort().join('_');
-            socket.join(roomId);
-            socket.emit('joinedRoom', { roomId, message: `You have joined room ${roomId}` });
-            console.log(`User joined room: ${roomId}`);
-        } catch (error) {
-            console.error("Error joining room:", error);
-        }
-    });
+    //         const roomId = [sender, receiver].sort().join('_');
+    //         socket.join(roomId);
+    //         socket.emit('joinedRoom', { roomId, message: `You have joined room ${roomId}` });
+    //         console.log(`User joined room: ${roomId}`);
+    //     } catch (error) {
+    //         console.error("Error joining room:", error);
+    //     }
+    // });
 
     socket.on("sendMessage", async (messageData) => {
         try {
