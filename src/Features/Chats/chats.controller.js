@@ -1,7 +1,7 @@
 import { logger } from "../../Middlewares/logger.middleware.js";
 import { sendResponse } from "../../Utility/response.js";
 import Chat from "./chatModel.js";
-
+import mongoose from "mongoose"
 export const getChatRooms = async (req, res, next) => {
     try {
         const userId = req.userId;
