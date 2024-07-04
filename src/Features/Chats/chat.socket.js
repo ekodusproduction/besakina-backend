@@ -22,11 +22,11 @@ export const chatSocket = (socket) => {
             const sender = socket.user;
             console.log("sender", sender)
             const roomId = [sender, receiver].sort().join('_');
+            socket.join(roomId);
             messageData.roomId = roomId;
             messageData.sender = sender;
             const message = await Chat.create(messageData);
 
-            // Check if the socket is in the room before sending the message
             if (socket.rooms.has(roomId)) {
                 console.log("has room ")
                 socket.to(roomId).emit("receivedMessage", message);
