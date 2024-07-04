@@ -6,6 +6,7 @@ export const chatSocket = (socket) => {
         try {
             const roomId = [user1, user2].sort().join('_');
             socket.join(roomId);
+            console.log(`User joined room: ${roomId}`);
         } catch (error) {
             console.error("Error joining room:", error);
         }
@@ -16,8 +17,16 @@ export const chatSocket = (socket) => {
             const { sender, receiver } = messageData;
             const roomId = [sender, receiver].sort().join('_');
             messageData.roomId = roomId;
-            const message = await Chat.create(messageData);
-            socket.to(roomId).emit("newMessage", message);
+
+            // Check if the socket is in the room before sending the message
+            if (socket.rooms.has(roomId)) {
+                console.log("has room ")
+                const message = await Chat.create(messageData);
+                socket.to(roomId).emit("newMessage", message);
+                console.log(`Message sent to room: ${roomId}`, message);
+            } else {
+                console.error(`Socket is not in the room: ${roomId}`);
+            }
         } catch (error) {
             console.error("Error sending message:", error);
         }
@@ -28,10 +37,19 @@ export const chatSocket = (socket) => {
             const { sender, receiver } = messageData;
             const roomId = [sender, receiver].sort().join('_');
             messageData.roomId = roomId;
-            const message = await Chat.create(messageData);
-            socket.to(roomId).emit("isActive", { isActive: true });
+
+            // Check if the socket is in the room before sending the isActive event
+            if (socket.rooms.has(roomId)) {
+                console.log("has room ")
+                await Chat.create(messageData);
+                socket.to(roomId).emit("isActive", { isActive: true });
+                console.log(`isActive event emitted to room: ${roomId}`);
+            } else {
+                console.error(`Socket is not in the room: ${roomId}`);
+            }
         } catch (error) {
-            console.error("Error sending message:", error);
+            console.error("Error sending isActive event:", error);
         }
     });
+
 };
