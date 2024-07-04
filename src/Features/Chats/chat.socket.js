@@ -23,6 +23,7 @@ export const chatSocket = (socket) => {
             console.log("sender", sender)
             const roomId = [sender, receiver].sort().join('_');
             messageData.roomId = roomId;
+            messageData.sender = sender;
             const message = await Chat.create(messageData);
 
             // Check if the socket is in the room before sending the message
