@@ -29,7 +29,7 @@ export const chatSocket = (socket) => {
 
             if (socket.rooms.has(roomId)) {
                 console.log("has room ")
-                socket.to(roomId).emit("receivedMessage", message);
+                socket.to(roomId).emit("receivedMessage", messageData.message);
                 // socket.emit('receivedMessage', { roomId, message: message });
                 console.log(`Message sent to room: ${roomId}`, message);
             } else {
