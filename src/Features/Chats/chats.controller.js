@@ -8,7 +8,7 @@ export const getChatRooms = async (req, res, next) => {
         const rooms = await Chat.aggregate([
             {
                 $match: {
-                    $or: [{ sender: mongoose.Types.ObjectId(userId) }, { receiver: mongoose.Types.ObjectId(userId) }]
+                    $or: [{ sender: userId }, { receiver: userId }]
                 }
             },
             {
