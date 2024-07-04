@@ -28,8 +28,8 @@ export const chatSocket = (socket) => {
             // Check if the socket is in the room before sending the message
             if (socket.rooms.has(roomId)) {
                 console.log("has room ")
-                socket.to(roomId).emit("newMessage", message);
-                socket.emit('receivedMessage', { roomId, message: message });
+                socket.to(roomId).emit("receivedMessage", message);
+                // socket.emit('receivedMessage', { roomId, message: message });
                 console.log(`Message sent to room: ${roomId}`, message);
             } else {
                 console.error(`Socket is not in the room: ${roomId}`);
