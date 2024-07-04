@@ -26,10 +26,10 @@ export const chatSocket = (socket) => {
             messageData.roomId = roomId;
             messageData.sender = sender;
             const message = await Chat.create(messageData);
-
+            console.log("message", message)
             if (socket.rooms.has(roomId)) {
                 console.log("has room ")
-                socket.to(roomId).emit("receivedMessage", messageData.message);
+                socket.to(roomId).emit("receivedMessage", message);
                 // socket.emit('receivedMessage', { roomId, message: message });
                 console.log(`Message sent to room: ${roomId}`, message);
             } else {
