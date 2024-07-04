@@ -4,7 +4,7 @@ import Chat from "./chatModel.js";
 import mongoose from "mongoose"
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = mongoose.Types.ObjectId(req.user);
+        const userId = req.user;
         console.log("userId:", userId);
 
         const rooms = await Chat.aggregate([
