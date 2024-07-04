@@ -20,11 +20,11 @@ export const chatSocket = (socket) => {
 
             const roomId = [sender, receiver].sort().join('_');
             messageData.roomId = roomId;
+            const message = await Chat.create(messageData);
 
             // Check if the socket is in the room before sending the message
             if (socket.rooms.has(roomId)) {
                 console.log("has room ")
-                const message = await Chat.create(messageData);
                 socket.to(roomId).emit("newMessage", message);
                 console.log(`Message sent to room: ${roomId}`, message);
             } else {
@@ -45,7 +45,6 @@ export const chatSocket = (socket) => {
             // Check if the socket is in the room before sending the isActive event
             if (socket.rooms.has(roomId)) {
                 console.log("has room ")
-                await Chat.create(messageData);
                 socket.to(roomId).emit("isActive", { isActive: true });
                 console.log(`isActive event emitted to room: ${roomId}`);
             } else {
