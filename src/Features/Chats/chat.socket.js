@@ -9,6 +9,7 @@ export const chatSocket = (socket) => {
 
             const roomId = [sender, receiver].sort().join('_');
             socket.join(roomId);
+            socket.emit('joinedRoom', { roomId, message: `You have joined room ${roomId}` });
             console.log(`User joined room: ${roomId}`);
         } catch (error) {
             console.error("Error joining room:", error);
@@ -28,6 +29,7 @@ export const chatSocket = (socket) => {
             if (socket.rooms.has(roomId)) {
                 console.log("has room ")
                 socket.to(roomId).emit("newMessage", message);
+                socket.emit('receivedMessage', { roomId, message: message });
                 console.log(`Message sent to room: ${roomId}`, message);
             } else {
                 console.error(`Socket is not in the room: ${roomId}`);
