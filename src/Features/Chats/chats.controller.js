@@ -3,10 +3,9 @@ import { sendResponse } from "../../Utility/response.js";
 import Chat from "./chatModel.js";
 
 
-
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = mongoose.Types.ObjectId(req.user);
+        const userId = req.user;
         console.log("userId:", userId);
 
         // Step 1: Match messages where user is sender or receiver
