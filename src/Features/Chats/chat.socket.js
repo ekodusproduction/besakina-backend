@@ -5,6 +5,8 @@ export const chatSocket = (socket) => {
     socket.on('join', async ({ receiver }) => {
         try {
             const sender = socket.user;
+            console.log("sender", sender)
+
             const roomId = [sender, receiver].sort().join('_');
             socket.join(roomId);
             console.log(`User joined room: ${roomId}`);
