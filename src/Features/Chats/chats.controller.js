@@ -2,11 +2,11 @@ import { logger } from "../../Middlewares/logger.middleware.js";
 import { sendResponse } from "../../Utility/response.js";
 import Chat from "./chatModel.js";
 import mongoose from "mongoose"
-
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = req.user;
-        console.log("userId,", userId)
+        const userId = mongoose.Types.ObjectId(req.user);
+        console.log("userId:", userId);
+
         const rooms = await Chat.aggregate([
             {
                 $match: {
@@ -14,13 +14,25 @@ export const getChatRooms = async (req, res, next) => {
                 }
             },
             {
+                $project: {
+                    senderReceiver: {
+                        $cond: [
+                            { $gt: ["$sender", "$receiver"] },
+                            { sender: "$receiver", receiver: "$sender" },
+                            { sender: "$sender", receiver: "$receiver" }
+                        ]
+                    }
+                }
+            },
+            {
                 $group: {
-                    _id: {
-                        senderReceiver: {
-                            $cond: [
-                                { $gt: ["$sender", "$receiver"] },
-                                { sender: "$receiver", receiver: "$sender" },
-                                { sender: "$sender", receiver: "$receiver" }
+                    _id: "$senderReceiver",
+                    roomId: {
+                        $first: {
+                            $concat: [
+                                { $toString: "$senderReceiver.sender" },
+                                "_",
+                                { $toString: "$senderReceiver.receiver" }
                             ]
                         }
                     }
@@ -29,11 +41,12 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $project: {
                     _id: 0,
-                    roomId: { $concat: [{ $toString: "$_id.senderReceiver.sender" }, "_", { $toString: "$_id.senderReceiver.receiver" }] }
+                    roomId: 1
                 }
             }
         ]);
 
+        console.log("Rooms:", rooms);  // Debugging log to check rooms
         return sendResponse(res, "Chat rooms list", 200, rooms);
     } catch (error) {
         logger.error(error);
