@@ -2,7 +2,6 @@ import { logger } from "../../Middlewares/logger.middleware.js";
 import { sendResponse } from "../../Utility/response.js";
 import Chat from "./chatModel.js";
 import { getDB } from "../../mongodb/mongodb.js";
-
 export const getChatRooms = async (req, res, next) => {
     try {
         const userId = req.user;
@@ -11,20 +10,8 @@ export const getChatRooms = async (req, res, next) => {
         const db = getDB();
         const chatsCollection = db.collection("chats");
 
-        // Step 1: Match messages where user is sender or receiver
-        const matchedMessagesCursor = await chatsCollection.aggregate([
-            {
-                $match: {
-                    $or: [{ sender: userId }, { receiver: userId }]
-                }
-            }
-        ]);
-
-        const matchedMessages = await matchedMessagesCursor.toArray();
-        console.log("Matched Messages:", matchedMessages);
-
-        // Step 2: Project senderReceiver field based on comparison
-        const projectedMessagesCursor = await chatsCollection.aggregate([
+        // Aggregation pipeline
+        const pipeline = [
             {
                 $match: {
                     $or: [{ sender: userId }, { receiver: userId }]
@@ -55,9 +42,11 @@ export const getChatRooms = async (req, res, next) => {
                     }
                 }
             }
-        ]);
+        ];
 
-        const groupedRooms = await projectedMessagesCursor.toArray();
+        const roomsCursor = await chatsCollection.aggregate(pipeline);
+        const groupedRooms = await roomsCursor.toArray();
+
         console.log("Grouped Rooms:", groupedRooms);
 
         const rooms = groupedRooms.map(room => ({ roomId: room.roomId }));
