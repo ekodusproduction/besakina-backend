@@ -90,8 +90,8 @@ export const getChatRooms = async (req, res, next) => {
         const uniqueChatRooms = [];
 
         chatRooms.forEach(chatRoom => {
-            const senderId = chatRoom.sender._id.toString();
-            const receiverId = chatRoom.receiver._id.toString();
+            const senderId = chatRoom?.sender._id.toString();
+            const receiverId = chatRoom?.receiver._id.toString();
 
             // Create a unique key regardless of order
             const pairKey = [senderId, receiverId].sort().join('-');
