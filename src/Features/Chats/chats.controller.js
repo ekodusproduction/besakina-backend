@@ -60,6 +60,7 @@ import { getDB } from "../../mongodb/mongodb.js";
 //         return res.status(500).json({ success: false, error: error.message });
 //     }
 // };
+
 const removeUser = (array, id) => {
     return array.map(chatRoom => {
         if (chatRoom.sender && chatRoom.sender._id.toString() === id) {
@@ -74,7 +75,7 @@ const removeUser = (array, id) => {
 
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = req.user._id.toString(); // Convert userId to string for comparison
+        const userId = req.user; // Convert userId to string for comparison
         console.log("userId:", userId);
 
         // Find all chats where the user is either the sender or the receiver
@@ -114,10 +115,10 @@ export const getChatRooms = async (req, res, next) => {
 const transformMessages = (array, id) => {
     return array.map(message => {
         const transformedMessage = message.toObject(); // Convert Mongoose document to plain object
-        if (transformedMessage.sender._id.toString() === id) {
+        if (transformedMessage.sender._id == id) {
             transformedMessage.user = transformedMessage.sender;
         }
-        if (transformedMessage.receiver._id.toString() === id) {
+        if (transformedMessage.receiver._id == id) {
             transformedMessage.user = transformedMessage.receiver;
         }
         return transformedMessage;
@@ -127,7 +128,7 @@ const transformMessages = (array, id) => {
 export const getMessagesInChatRoom = async (req, res, next) => {
     try {
         const { id: roomId } = req.params;
-        const userId = req.user._id.toString(); // Convert userId to string for comparison
+        const userId = req.user; // Convert userId to string for comparison
 
         const messages = await Chat.find({
             $or: [{ sender: userId, receiver: roomId }, { sender: roomId, receiver: userId }]
