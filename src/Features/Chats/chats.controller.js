@@ -133,10 +133,10 @@ const transformMessages = async (array, id) => {
 
 export const getMessagesInChatRoom = async (req, res, next) => {
     try {
-        const { roomId } = req.params;
+        const { id } = req.params;
         const userId = req.user;
         const messages = await Chat.find({
-            $or: [{ sender: userId, receiver: roomId }, { sender: roomId, receiver: userId }]
+            $or: [{ sender: userId, receiver: id }, { sender: id, receiver: userId }]
         }).sort({ createdAt: -1 }).populate(['sender', 'receiver']);
 
         const result = await transformMessages(messages, userId);
