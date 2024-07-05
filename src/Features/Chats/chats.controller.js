@@ -85,8 +85,25 @@ export const getChatRooms = async (req, res, next) => {
 
         console.log("Chat Rooms:", chatRooms);
 
+        // Use a Set to store unique combinations of sender and receiver
+        const uniquePairs = new Set();
+        const uniqueChatRooms = [];
+
+        chatRooms.forEach(chatRoom => {
+            const senderId = chatRoom.sender._id.toString();
+            const receiverId = chatRoom.receiver._id.toString();
+
+            // Create a unique key regardless of order
+            const pairKey = [senderId, receiverId].sort().join('-');
+
+            if (!uniquePairs.has(pairKey)) {
+                uniquePairs.add(pairKey);
+                uniqueChatRooms.push(chatRoom);
+            }
+        });
+
         // Remove user from the sender and receiver fields
-        const result = await removeUser(chatRooms, userId);
+        const result = await removeUser(uniqueChatRooms, userId);
 
         return sendResponse(res, "Chat rooms list", 200, result);
     } catch (error) {
