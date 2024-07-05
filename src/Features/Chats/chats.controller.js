@@ -60,19 +60,18 @@ import { getDB } from "../../mongodb/mongodb.js";
 //         return res.status(500).json({ success: false, error: error.message });
 //     }
 // };
+
 const removeUser = async (array, id) => {
-    let result = array.reduce((acc, curr) => {
-        if (curr.sender._id == id) {
-            curr.sender = null;
-            delete curr.sender
-        } else {
-            curr.receiver = null;
-            delete curr.receiver
+    return array.map(chatRoom => {
+        if (chatRoom.sender._id == id) {
+            chatRoom.sender = null;
         }
-        return curr;
-    }, [])
-    return result
-}
+        if (chatRoom.receiver._id == id) {
+            chatRoom.receiver = null;
+        }
+        return chatRoom;
+    });
+};
 
 export const getChatRooms = async (req, res, next) => {
     try {
@@ -87,7 +86,7 @@ export const getChatRooms = async (req, res, next) => {
         console.log("Chat Rooms:", chatRooms);
 
         // Remove user from the sender and receiver fields
-        const result = await removeUser(chatRooms, userId)
+        const result = await removeUser(chatRooms, userId);
 
         return sendResponse(res, "Chat rooms list", 200, result);
     } catch (error) {
@@ -97,12 +96,34 @@ export const getChatRooms = async (req, res, next) => {
 };
 
 
+const transformMessages = async (array, id) => {
+    return array.map(chatRoom => {
+        const transformedChatRoom = chatRoom.toObject(); // Convert Mongoose document to plain object
+        if (transformedChatRoom.sender._id == id) {
+            transformedChatRoom.user = transformedChatRoom.sender;
+            transformedChatRoom.sender = null;
+            delete transformedChatRoom.sender;
+        }
+        if (transformedChatRoom.receiver._id == id) {
+            transformedChatRoom.user = transformedChatRoom.receiver;
+            transformedChatRoom.receiver = null;
+
+            delete transformedChatRoom.receiver;
+        }
+        return transformedChatRoom;
+    });
+};
+
 export const getMessagesInChatRoom = async (req, res, next) => {
     try {
         const { roomId } = req.params;
-        const messages = await Chat.find({ roomId }).sort({ createdAt: -1 });
+        const userId = req.user;
+        const messages = await Chat.find({
+            $or: [{ sender: userId, receiver: roomId }, { sender: roomId, receiver: userId }]
+        }).sort({ createdAt: -1 }).populate(['sender', 'receiver']);
 
-        return sendResponse(res, "Chat message list", 200, messages);
+        const result = await transformMessages(messages, userId);
+        return sendResponse(res, "Chat message list", 200, result);
     } catch (error) {
         logger.error(error);
         return res.status(500).json({ success: false, error: error.message });
