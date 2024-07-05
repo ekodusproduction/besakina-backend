@@ -70,24 +70,14 @@ export const getChatRooms = async (req, res, next) => {
         // Find all chats where the user is either the sender or the receiver
         const chatRooms = await Chat.find({
             $or: [{ sender: userId }, { receiver: userId }]
-        })
+        }).populate(['sender', 'receiver']).select(['message', 'seen', "sender.name", 'receiver.name'])
 
         console.log("Chat Rooms:", chatRooms);
 
-        // Extract room IDs from chat rooms
-        const rooms = chatRooms.map(chat => {
-            const senderReceiver = [chat.sender, chat.receiver].sort();
-            const roomId = senderReceiver.join('_');
-            return { roomId };
-        });
 
-        // Remove duplicate room IDs
-        const uniqueRooms = Array.from(new Set(rooms.map(room => room.roomId)))
-            .map(roomId => ({ roomId }));
 
-        console.log("Unique Rooms:", uniqueRooms);
 
-        return sendResponse(res, "Chat rooms list", 200, uniqueRooms);
+        return sendResponse(res, "Chat rooms list", 200, chatRooms);
     } catch (error) {
         logger.error(error);
         return res.status(500).json({ success: false, error: error.message });
