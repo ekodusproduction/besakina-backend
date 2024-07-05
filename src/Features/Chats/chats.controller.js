@@ -127,7 +127,8 @@ const transformMessages = (array, id) => {
 
 export const getMessagesInChatRoom = async (req, res, next) => {
     try {
-        const { id: roomId } = req.params;
+        const roomId = req.params.id;
+        console.log("rooms", roomId)
         const userId = req.user; // Convert userId to string for comparison
 
         const messages = await Chat.find({
