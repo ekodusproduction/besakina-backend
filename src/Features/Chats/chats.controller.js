@@ -70,11 +70,9 @@ export const getChatRooms = async (req, res, next) => {
         // Find all chats where the user is either the sender or the receiver
         const chatRooms = await Chat.find({
             $or: [{ sender: userId }, { receiver: userId }]
-        }).populate(['sender', 'receiver']).select(['message', 'seen', "sender.name", 'receiver.name'])
+        }).populate(['sender', 'receiver']).select(['message', 'seen', "sender.fullname", 'receiver.fullname'])
 
         console.log("Chat Rooms:", chatRooms);
-
-
 
 
         return sendResponse(res, "Chat rooms list", 200, chatRooms);
