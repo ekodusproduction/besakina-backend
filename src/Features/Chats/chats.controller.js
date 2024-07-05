@@ -71,6 +71,7 @@ const removeUser = async (array, id) => {
         }
         return curr;
     }, [])
+    return result
 }
 
 export const getChatRooms = async (req, res, next) => {
