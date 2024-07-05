@@ -60,6 +60,18 @@ import { getDB } from "../../mongodb/mongodb.js";
 //         return res.status(500).json({ success: false, error: error.message });
 //     }
 // };
+const removeUser = async (array, id) => {
+    let result = array.reduce((acc, curr) => {
+        if (curr.sender._id == id) {
+            curr.sender = null;
+            delete curr.sender
+        } else {
+            curr.receiver = null;
+            delete curr.receiver
+        }
+        return curr;
+    }, [])
+}
 
 export const getChatRooms = async (req, res, next) => {
     try {
@@ -74,20 +86,9 @@ export const getChatRooms = async (req, res, next) => {
         console.log("Chat Rooms:", chatRooms);
 
         // Remove user from the sender and receiver fields
-        const sanitizedChatRooms = chatRooms.map(sanitizedChatRoom => {
+        const result = await removeUser(chatRooms, userId)
 
-            if (sanitizedChatRoom.sender._id.equals(userId)) {
-                delete sanitizedChatRoom.sender;
-            }
-
-            if (sanitizedChatRoom.receiver._id.equals(userId)) {
-                delete sanitizedChatRoom.receiver;
-            }
-
-            return sanitizedChatRoom;
-        });
-
-        return sendResponse(res, "Chat rooms list", 200, sanitizedChatRooms);
+        return sendResponse(res, "Chat rooms list", 200, result);
     } catch (error) {
         logger.error(error);
         return res.status(500).json({ success: false, error: error.message });
