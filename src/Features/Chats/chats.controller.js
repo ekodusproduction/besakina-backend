@@ -118,14 +118,9 @@ const transformMessages = async (array, id) => {
         const transformedChatRoom = chatRoom.toObject(); // Convert Mongoose document to plain object
         if (transformedChatRoom.sender == id) {
             transformedChatRoom.user = transformedChatRoom.sender;
-            transformedChatRoom.sender = null;
-            delete transformedChatRoom.sender;
         }
         if (transformedChatRoom.receiver == id) {
             transformedChatRoom.user = transformedChatRoom.receiver;
-            transformedChatRoom.receiver = null;
-
-            delete transformedChatRoom.receiver;
         }
         return transformedChatRoom;
     });

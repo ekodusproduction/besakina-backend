@@ -8,7 +8,6 @@ const chatSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 chatSchema.index({ receiver: 1, sender: 1 });
-chatSchema.index({ roomId: 1 });
 
 const Chat = mongoose.model('Chat', chatSchema);
 export default Chat;
