@@ -60,14 +60,13 @@ import { getDB } from "../../mongodb/mongodb.js";
 //         return res.status(500).json({ success: false, error: error.message });
 //     }
 // };
-
-const removeUser = async (array, id) => {
+const removeUser = (array, id) => {
     return array.map(chatRoom => {
-        if (chatRoom?.sender?._id == id) {
-            chatRoom?.sender = null;
+        if (chatRoom.sender && chatRoom.sender._id.toString() === id) {
+            chatRoom.sender = null;
         }
-        if (chatRoom?.receiver?._id == id) {
-            chatRoom?.receiver = null;
+        if (chatRoom.receiver && chatRoom.receiver._id.toString() === id) {
+            chatRoom.receiver = null;
         }
         return chatRoom;
     });
@@ -75,7 +74,7 @@ const removeUser = async (array, id) => {
 
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = req.user;
+        const userId = req.user._id.toString(); // Convert userId to string for comparison
         console.log("userId:", userId);
 
         // Find all chats where the user is either the sender or the receiver
@@ -90,8 +89,8 @@ export const getChatRooms = async (req, res, next) => {
         const uniqueChatRooms = [];
 
         chatRooms.forEach(chatRoom => {
-            const senderId = chatRoom?.sender?._id.toString();
-            const receiverId = chatRoom?.receiver?._id.toString();
+            const senderId = chatRoom.sender?._id.toString();
+            const receiverId = chatRoom.receiver?._id.toString();
 
             // Create a unique key regardless of order
             const pairKey = [senderId, receiverId].sort().join('-');
@@ -103,41 +102,43 @@ export const getChatRooms = async (req, res, next) => {
         });
 
         // Remove user from the sender and receiver fields
-        const result = await removeUser(uniqueChatRooms, userId);
+        const result = removeUser(uniqueChatRooms, userId);
 
         return sendResponse(res, "Chat rooms list", 200, result);
     } catch (error) {
         logger.error(error);
-        return sendError(res, error.message, 500);
+        return res.status(500).json({ success: false, error: error.message });
     }
 };
 
-
-const transformMessages = async (array, id) => {
-    return array.map(chatRoom => {
-        const transformedChatRoom = chatRoom.toObject(); // Convert Mongoose document to plain object
-        if (transformedChatRoom.sender == id) {
-            transformedChatRoom.user = transformedChatRoom.sender;
+const transformMessages = (array, id) => {
+    return array.map(message => {
+        const transformedMessage = message.toObject(); // Convert Mongoose document to plain object
+        if (transformedMessage.sender._id.toString() === id) {
+            transformedMessage.user = transformedMessage.sender;
         }
-        if (transformedChatRoom.receiver == id) {
-            transformedChatRoom.user = transformedChatRoom.receiver;
+        if (transformedMessage.receiver._id.toString() === id) {
+            transformedMessage.user = transformedMessage.receiver;
         }
-        return transformedChatRoom;
+        return transformedMessage;
     });
 };
 
 export const getMessagesInChatRoom = async (req, res, next) => {
     try {
-        const { id } = req.params;
-        const userId = req.user;
-        const messages = await Chat.find({
-            $or: [{ sender: userId, receiver: id }, { sender: id, receiver: userId }]
-        }).sort({ createdAt: -1 })
+        const { id: roomId } = req.params;
+        const userId = req.user._id.toString(); // Convert userId to string for comparison
 
-        const result = await transformMessages(messages, userId);
+        const messages = await Chat.find({
+            $or: [{ sender: userId, receiver: roomId }, { sender: roomId, receiver: userId }]
+        }).sort({ createdAt: -1 }).populate(['sender', 'receiver']);
+
+        console.log("Fetched Messages:", messages);
+
+        const result = transformMessages(messages, userId);
         return sendResponse(res, "Chat message list", 200, result);
     } catch (error) {
         logger.error(error);
-        return sendError(res, error.message, 500);
+        return res.status(500).json({ success: false, error: error.message });
     }
 };
