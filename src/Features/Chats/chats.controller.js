@@ -66,16 +66,29 @@ export const getChatRooms = async (req, res, next) => {
         const userId = req.user;
         console.log("userId:", userId);
 
-
         // Find all chats where the user is either the sender or the receiver
         const chatRooms = await Chat.find({
             $or: [{ sender: userId }, { receiver: userId }]
-        }).populate(['sender', 'receiver'])
+        }).populate(['sender', 'receiver']);
 
         console.log("Chat Rooms:", chatRooms);
 
+        // Remove user from the sender and receiver fields
+        const sanitizedChatRooms = chatRooms.map(chatRoom => {
+            const sanitizedChatRoom = chatRoom.toObject(); // Convert to plain object
 
-        return sendResponse(res, "Chat rooms list", 200, chatRooms);
+            if (sanitizedChatRoom.sender._id.equals(userId)) {
+                delete sanitizedChatRoom.sender;
+            }
+
+            if (sanitizedChatRoom.receiver._id.equals(userId)) {
+                delete sanitizedChatRoom.receiver;
+            }
+
+            return sanitizedChatRoom;
+        });
+
+        return sendResponse(res, "Chat rooms list", 200, sanitizedChatRooms);
     } catch (error) {
         logger.error(error);
         return res.status(500).json({ success: false, error: error.message });
