@@ -107,7 +107,7 @@ export const getChatRooms = async (req, res, next) => {
         return sendResponse(res, "Chat rooms list", 200, result);
     } catch (error) {
         logger.error(error);
-        return res.status(500).json({ success: false, error: error.message });
+        return sendError(res, error.message, 500);
     }
 };
 
@@ -139,6 +139,6 @@ export const getMessagesInChatRoom = async (req, res, next) => {
         return sendResponse(res, "Chat message list", 200, result);
     } catch (error) {
         logger.error(error);
-        return res.status(500).json({ success: false, error: error.message });
+        return sendError(res, error.message, 500);
     }
 };
