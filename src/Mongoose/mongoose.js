@@ -5,7 +5,7 @@ import mongoose from "mongoose"
 export const mongooseConnection = async function () {
     const uri = process.env.MONGODB_URI;
     try {
-        await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        await mongoose.connect(uri);
         const db = mongoose.connection.db;
         const collections = await db.listCollections().toArray();
 
