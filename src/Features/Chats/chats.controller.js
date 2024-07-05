@@ -66,11 +66,9 @@ export const getChatRooms = async (req, res, next) => {
         const userId = req.user;
         console.log("userId:", userId);
 
-        const db = getDB();
-        const chatsCollection = db.collection("chat");
 
         // Find all chats where the user is either the sender or the receiver
-        const chatRooms = await chatsCollection.find({
+        const chatRooms = await Chat.find({
             $or: [{ sender: userId }, { receiver: userId }]
         }).toArray();
 
