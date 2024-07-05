@@ -74,8 +74,7 @@ export const getChatRooms = async (req, res, next) => {
         console.log("Chat Rooms:", chatRooms);
 
         // Remove user from the sender and receiver fields
-        const sanitizedChatRooms = chatRooms.map(chatRoom => {
-            const sanitizedChatRoom = chatRoom.toObject(); // Convert to plain object
+        const sanitizedChatRooms = chatRooms.map(sanitizedChatRoom => {
 
             if (sanitizedChatRoom.sender._id.equals(userId)) {
                 delete sanitizedChatRoom.sender;
