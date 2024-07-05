@@ -61,7 +61,7 @@ import { getDB } from "../../mongodb/mongodb.js";
 //     }
 // };
 
-const removeUser = (array, id) => {
+const removeUser = async (array, id) => {
     return array.map(chatRoom => {
         if (chatRoom.sender && chatRoom.sender._id.toString() === id) {
             chatRoom.sender = null;
@@ -103,7 +103,7 @@ export const getChatRooms = async (req, res, next) => {
         });
 
         // Remove user from the sender and receiver fields
-        const result = removeUser(uniqueChatRooms, userId);
+        const result = await removeUser(uniqueChatRooms, userId);
 
         return sendResponse(res, "Chat rooms list", 200, result);
     } catch (error) {
@@ -112,7 +112,7 @@ export const getChatRooms = async (req, res, next) => {
     }
 };
 
-const transformMessages = (array, id) => {
+const transformMessages = async (array, id) => {
     return array.map(message => {
         const transformedMessage = message.toObject(); // Convert Mongoose document to plain object
         if (transformedMessage.sender._id == id) {
@@ -129,15 +129,15 @@ export const getMessagesInChatRoom = async (req, res, next) => {
     try {
         const roomId = req.params.id;
         console.log("rooms", roomId)
-        const userId = req.user; // Convert userId to string for comparison
+        const userId = req.user;
 
         const messages = await Chat.find({
             $or: [{ sender: userId, receiver: roomId }, { sender: roomId, receiver: userId }]
-        }).sort({ createdAt: -1 }).populate(['sender', 'receiver']);
+        }).sort({ createdAt: -1 })
 
         console.log("Fetched Messages:", messages);
 
-        const result = transformMessages(messages, userId);
+        const result = await transformMessages(messages, userId);
         return sendResponse(res, "Chat message list", 200, result);
     } catch (error) {
         logger.error(error);
