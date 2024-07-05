@@ -116,12 +116,12 @@ export const getChatRooms = async (req, res, next) => {
 const transformMessages = async (array, id) => {
     return array.map(chatRoom => {
         const transformedChatRoom = chatRoom.toObject(); // Convert Mongoose document to plain object
-        if (transformedChatRoom.sender._id == id) {
+        if (transformedChatRoom.sender == id) {
             transformedChatRoom.user = transformedChatRoom.sender;
             transformedChatRoom.sender = null;
             delete transformedChatRoom.sender;
         }
-        if (transformedChatRoom.receiver._id == id) {
+        if (transformedChatRoom.receiver == id) {
             transformedChatRoom.user = transformedChatRoom.receiver;
             transformedChatRoom.receiver = null;
 
@@ -137,7 +137,7 @@ export const getMessagesInChatRoom = async (req, res, next) => {
         const userId = req.user;
         const messages = await Chat.find({
             $or: [{ sender: userId, receiver: id }, { sender: id, receiver: userId }]
-        }).sort({ createdAt: -1 }).populate(['sender', 'receiver']);
+        }).sort({ createdAt: -1 })
 
         const result = await transformMessages(messages, userId);
         return sendResponse(res, "Chat message list", 200, result);
