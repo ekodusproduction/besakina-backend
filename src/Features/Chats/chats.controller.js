@@ -3,11 +3,13 @@ import { sendResponse, sendError } from "../../Utility/response.js";
 import Chat from "./chatModel.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
+import { getDB } from "../../mongodb/mongodb.js";
 
 export const getChatRooms = async (req, res, next) => {
     try {
         const userId = req.user.toString();
         console.log("userId:", userId);
+        const db = getDB()
 
         const pipeline = [
             {
@@ -100,7 +102,7 @@ export const getChatRooms = async (req, res, next) => {
             }
         ];
 
-        const rooms = await Chat.aggregate(pipeline);
+        const rooms = await db.getCollection("chats").aggregate(pipeline);
 
         console.log("Rooms:", rooms);
 
