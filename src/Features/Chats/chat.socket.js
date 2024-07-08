@@ -4,7 +4,7 @@ export const chatSocket = (socket) => {
 
     socket.on('join', async ({ recieverId }) => {
         try {
-            console.log("data--------->", data)
+            // console.log("data--------->", data)
             console.log("join event fired");
             const sender = socket.user;
             console.log("sender", sender);
