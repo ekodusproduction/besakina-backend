@@ -1,4 +1,4 @@
-import { asyncGet, asyncSet, asyncSadd, asyncSrem, asyncSmembers, asyncSismember } from "../../../redis";
+import { asyncGet, asyncSet, asyncSadd, asyncSrem, asyncSmembers, asyncSismember } from "../../../redis.js";
 const ONLINE_USERS_KEY = 'online_users';
 
 // Function to add user to online users set
