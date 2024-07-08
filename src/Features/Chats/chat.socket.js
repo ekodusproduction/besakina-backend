@@ -4,6 +4,7 @@ export const chatSocket = (socket) => {
 
     socket.on('join', async () => {
         try {
+            console.log("join event fired")
             const sender = socket.user;
             console.log("sender", sender)
             const roomId = sender
@@ -17,6 +18,8 @@ export const chatSocket = (socket) => {
 
     socket.on("sendMessage", async (messageData) => {
         try {
+            console.log("sendMessage event fired")
+
             const { receiver } = messageData;
             const sender = socket.user;
             console.log("sender", sender)
@@ -42,6 +45,8 @@ export const chatSocket = (socket) => {
 
     socket.on("isActive", async (messageData) => {
         try {
+            console.log("isActive event fired")
+
             const sender = socket.user;
             const roomId = sender
             messageData.roomId = roomId;

@@ -65,7 +65,6 @@ const filterAdvertisement = async (query) => {
             }
         }
 
-        console.log("filter", filter);
         const result = await Property.find(filter).sort({ created_at: -1 });
         if (result.length === 0) {
             return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
@@ -93,7 +92,6 @@ export const updateAdvertisement = async (advertisementID, updateBody, userId) =
         }
         return { error: false, data: { message: "Property updated successfully", statusCode: 200, data: result } };
     } catch (error) {
-        console.log("error in repo", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -126,7 +124,6 @@ export const addImage = async (advertisementID, files, userId) => {
         await result.save();
         return { error: false, data: { data: [files[0]], message: "Property image has been added.", statusCode: 200 } };
     } catch (error) {
-        console.log("error", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -144,7 +141,6 @@ export const deleteImage = async (advertisementID, files, userId) => {
         }
         return { error: false, data: { data: null, message: "Images deleted successfully from the property.", statusCode: 200 } };
     } catch (error) {
-        console.log("error", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }

@@ -27,11 +27,9 @@ const uploadToSpaces = async (file) => {
     try {
         const command = new PutObjectCommand(params);
         const data = await s3Client.send(command);
-        console.log("file data", data)
         const fileUrl = `${spaceBaseUrl}/${params.Key}`;
         return { fieldname: file.fieldname, path: fileUrl };
     } catch (error) {
-        console.log(error)
         throw new ApplicationError('Failed to upload file to DigitalOcean Spaces', 400);
     }
 };

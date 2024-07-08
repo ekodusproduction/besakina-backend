@@ -52,7 +52,6 @@ const filterAdvertisement = async (query, Model) => {
     const db = getDB();
     try {
         const filter = { is_active: true, discriminatorKey: `${Model}`, ...query };
-        console.log("filter", filter)
         const doctors = await db.collection('advertisement').find(filter).sort({ created_at: -1 }).toArray();
         if (doctors.length === 0) {
             return { error: true, data: { message: "No doctors to show.", statusCode: 404, data: null } };
@@ -79,7 +78,6 @@ export const updateAdvertisement = async (advertisementID, updateBody, userId, M
         }
         return { error: false, data: { message: `${Model} updated successfully`, statusCode: 200, data: result } };
     } catch (error) {
-        console.log("error in repo", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -112,7 +110,6 @@ export const addImage = async (advertisementID, files, userId, Model) => {
         await doctor.save();
         return { error: false, data: { data: [files[0]], message: `${Model} image has been added.`, statusCode: 200 } };
     } catch (error) {
-        console.log("error", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -130,7 +127,6 @@ export const deleteImage = async (advertisementID, files, userId) => {
         }
         return { error: false, data: { data: null, message: "Images deleted successfully from the doctors", statusCode: 200 } };
     } catch (error) {
-        console.log("error", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }

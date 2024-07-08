@@ -67,7 +67,6 @@ const filterAdvertisement = async (query) => {
             }
         }
 
-        console.log("filter", filter);
         const result = await Business.find(filter).sort({ created_at: -1 });
         if (result.length === 0) {
             return { error: true, data: { message: "No business to show.", statusCode: 404, data: null } };
@@ -95,7 +94,6 @@ export const updateAdvertisement = async (advertisementID, updateBody, userId) =
         }
         return { error: false, data: { message: "Business updated successfully", statusCode: 200, data: result } };
     } catch (error) {
-        console.log("error in repo", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -120,9 +118,7 @@ export const deactivateAdvertisement = async (advertisementID, userId) => {
 
 export const addImage = async (advertisementID, files, userId) => {
     try {
-        console.log("file to add", files)
         const result = await Business.findOne({ _id: advertisementID, user: userId });
-        console.log("result after file added", result)
         if (!result) {
             return { error: true, data: { message: "Business not found.", statusCode: 404, data: null } };
         }
@@ -130,7 +126,6 @@ export const addImage = async (advertisementID, files, userId) => {
         await result.save();
         return { error: false, data: { data: [files[0]], message: "Business image has been added.", statusCode: 200 } };
     } catch (error) {
-        console.log("error", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -138,19 +133,16 @@ export const addImage = async (advertisementID, files, userId) => {
 
 export const deleteImage = async (advertisementID, file, userId) => {
     try {
-        console.log("file to remove", file)
         const result = await Business.findOneAndUpdate(
             { _id: advertisementID, user: userId },
             { $pull: { images: file } },
             { new: true }
         );
-        console.log("result after file removed", result)
         if (!result) {
             return { error: true, data: { message: "Business not found.", statusCode: 404, data: null } };
         }
         return { error: false, data: { data: null, message: "Images deleted successfully from the Business.", statusCode: 200 } };
     } catch (error) {
-        console.log("error", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }

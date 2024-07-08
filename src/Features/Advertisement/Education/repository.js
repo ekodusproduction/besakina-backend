@@ -69,7 +69,6 @@ const filterAdvertisement = async (query) => {
             }
         }
 
-        console.log("filter", filter);
         const result = await Education.find(filter).sort({ created_at: -1 });
         if (result.length === 0) {
             return { error: true, data: { message: "No education to show.", statusCode: 404, data: null } };
@@ -96,7 +95,6 @@ export const updateAdvertisement = async (advertisementID, updateBody, userId) =
         }
         return { error: false, data: { message: "Education updated successfully", statusCode: 200, data: result } };
     } catch (error) {
-        console.log("error in repo", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -129,7 +127,6 @@ export const addImage = async (advertisementID, files, userId) => {
         await result.save();
         return { error: false, data: { data: [files[0]], message: "Education image has been added.", statusCode: 200 } };
     } catch (error) {
-        console.log("error", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -147,7 +144,6 @@ export const deleteImage = async (advertisementID, files, userId) => {
         }
         return { error: false, data: { data: null, message: "Images deleted successfully from the Education.", statusCode: 200 } };
     } catch (error) {
-        console.log("error", error);
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
@@ -175,7 +171,6 @@ export const activateAdvertisement = async (advertisementID, userId) => {
 export const deleteAdvertisement = async (advertisementID, userId) => {
     try {
         const result = await Education.deleteOne({ _id: advertisementID, user: userId });
-        console.log("defew", result)
         if (result.deletedCount === 0) {
             return { error: true, data: { message: "Education not found.", statusCode: 404, data: null } };
         }
