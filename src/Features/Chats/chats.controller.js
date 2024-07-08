@@ -2,9 +2,11 @@ import { logger } from "../../Middlewares/logger.middleware.js";
 import { sendResponse, sendError } from "../../Utility/response.js";
 import Chat from "./chatModel.js";
 import mongoose from "mongoose";
+
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = req.user;
+        const userId = req.user.toString();
+        console.log("userId:", userId);
 
         const pipeline = [
             {
@@ -15,8 +17,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 "$match": {
                     "$or": [
-                        { "sender": userId },
-                        { "receiver": userId }
+                        { "sender": mongoose.Types.ObjectId(userId) },
+                        { "receiver": mongoose.Types.ObjectId(userId) }
                     ]
                 }
             },
@@ -70,14 +72,14 @@ export const getChatRooms = async (req, res, next) => {
                     "lastTimestamp": 1,
                     "sender": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.receiver", userId] },
+                            "if": { "$eq": ["$_id.receiver", mongoose.Types.ObjectId(userId)] },
                             "then": { "$arrayElemAt": ["$senderDetails", 0] },
                             "else": { "fullname": "", "profile_pic": "" }
                         }
                     },
                     "receiver": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.sender", userId] },
+                            "if": { "$eq": ["$_id.sender", mongoose.Types.ObjectId(userId)] },
                             "then": { "$arrayElemAt": ["$receiverDetails", 0] },
                             "else": { "fullname": "", "profile_pic": "" }
                         }
