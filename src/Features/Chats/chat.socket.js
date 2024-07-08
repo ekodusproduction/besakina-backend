@@ -2,12 +2,12 @@ import Chat from "./chatModel.js";
 
 export const chatSocket = (socket) => {
 
-    socket.on('join', async (data) => {
+    socket.on('join', async ({ receiverId }) => {
         try {
             console.log("join event fired");
             const sender = socket.user;
             console.log("sender", sender);
-            const roomId = [receiver, sender].sort().join("_");
+            const roomId = [receiverId, sender].sort().join("_");
             socket.join(roomId);
             socket.emit('joinedRoom', { roomId, message: `You have joined room ${roomId}` });
             console.log(`User joined room: ${roomId}`);
