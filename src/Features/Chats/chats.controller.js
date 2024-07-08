@@ -15,8 +15,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 "$match": {
                     "$or": [
-                        { "sender": mongoose.Types.ObjectId(userId) },
-                        { "receiver": mongoose.Types.ObjectId(userId) }
+                        { "sender": userId.$toString },
+                        { "receiver": userId.$toString }
                     ]
                 }
             },
