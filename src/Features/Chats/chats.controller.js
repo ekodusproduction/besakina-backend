@@ -18,8 +18,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 "$match": {
                     "$or": [
-                        { "sender": userId },
-                        { "receiver": userId }
+                        { "sender": { $toObjectId: userId } },
+                        { "receiver": { $toObjectId: userId } }
                     ]
                 }
             },
@@ -73,14 +73,14 @@ export const getChatRooms = async (req, res, next) => {
                     "lastTimestamp": 1,
                     "sender": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.receiver", userId] },
+                            "if": { "$eq": ["$_id.receiver", { $toObjectId: userId }] },
                             "then": { "$arrayElemAt": ["$senderDetails", 0] },
                             "else": { "fullname": "", "profile_pic": "" }
                         }
                     },
                     "receiver": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.sender", userId] },
+                            "if": { "$eq": ["$_id.sender", { $toObjectId: userId }] },
                             "then": { "$arrayElemAt": ["$receiverDetails", 0] },
                             "else": { "fullname": "", "profile_pic": "" }
                         }
@@ -110,6 +110,8 @@ export const getChatRooms = async (req, res, next) => {
         return res.status(500).json({ success: false, error: error.message });
     }
 };
+
+
 // const removeUser = async (array, id) => {
 //     return array.map(chatRoom => {
 //         if (chatRoom.sender && chatRoom.sender._id.toString() === id) {
