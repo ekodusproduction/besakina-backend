@@ -4,7 +4,6 @@ import app from './app.js';
 import https from 'https';
 import http from 'http';
 import { Server } from "socket.io";
-import { asyncAdd, redisClient } from './redis.js';
 import { jwtAuth } from './src/Middlewares/auth.middleware.js';
 // import { chatSocket } from './src/Features/Chats/chat.socket.js';
 import { socketAuth } from "./socketAuth.js"
@@ -13,7 +12,7 @@ import fs from "fs";
 import { connectToMongoDB } from './src/mongodb/mongodb.js';
 import { mongooseConnection } from "./src/Mongoose/mongoose.js"
 import { chatSocket } from './src/Features/Chats/chat.socket.js';
-
+import { addUserToOnline, removeUserFromOnline } from './src/Features/Users/userActivity.js';
 const port = process.env.PORT || 3000;
 
 const httpServer = http.createServer(app);
@@ -29,18 +28,14 @@ const io = new Server(httpServer, {
 
 io.use(socketAuth)
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('New client connected');
+    const user = socket.user;
+    await addUserToOnline()
     chatSocket(socket);
 
     socket.on('disconnect', async () => {
-        try {
-            const user = socket.user;
-            await redisClient.srem('onlineUsers', user.id);
-            console.log(`User ${user.username} disconnected and removed from onlineUsers`);
-        } catch (error) {
-            console.error("Error handling disconnect:", error);
-        }
+        await removeUserFromOnline()
     });
 });
 

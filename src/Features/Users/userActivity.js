@@ -5,6 +5,7 @@ const ONLINE_USERS_KEY = 'online_users';
 const addUserToOnline = async (userId) => {
     try {
         await asyncSadd(ONLINE_USERS_KEY, userId);
+        await getOnlineUsers()
         console.log(`User ${userId} added to online users.`);
     } catch (error) {
         console.error('Error adding user to online users:', error);
