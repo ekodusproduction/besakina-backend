@@ -2,8 +2,9 @@ import Chat from "./chatModel.js";
 
 export const chatSocket = (socket) => {
 
-    socket.on('join', async ({ receiverId }) => {
+    socket.on('join', async (data) => {
         try {
+            console.log("data--------->", data)
             console.log("join event fired");
             const sender = socket.user;
             console.log("sender", sender);
