@@ -21,10 +21,11 @@ export const chatSocket = (socket) => {
             const sender = socket.user;
             console.log("sender", sender)
             const roomId = receiver;
-            socket.join(roomId);
             messageData.roomId = roomId;
             messageData.sender = sender;
             const message = await Chat.create(messageData);
+            messageData.user = sender;
+
             console.log("message", message)
             if (socket.rooms.has(roomId)) {
                 console.log("has room ")
@@ -48,7 +49,7 @@ export const chatSocket = (socket) => {
             // Check if the socket is in the room before sending the isActive event
             if (socket.rooms.has(roomId)) {
                 console.log("has room ");
-                io.emit("isActive", { isActive: true,  }); // Broadcast to everyone
+                io.emit("isActive", { isActive: true, }); // Broadcast to everyone
                 console.log(`isActive event broadcast to all clients for room: ${roomId}`);
             } else {
                 console.error(`Socket is not in the room: ${roomId}`);
