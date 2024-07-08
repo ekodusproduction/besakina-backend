@@ -133,7 +133,7 @@ export const getMessagesInChatRoom = async (req, res, next) => {
 
         const messages = await Chat.find({
             $or: [{ sender: userId, receiver: roomId }, { sender: roomId, receiver: userId }]
-        }).sort({ createdAt: -1 })
+        }).sort({ createdAt: 1 })
 
         console.log("Fetched Messages:", messages);
 
