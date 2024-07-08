@@ -26,4 +26,8 @@ redisClient.on('error', (err) => {
     console.error('Redis error:', err);
 });
 
+redisClient.on('ready', () => {
+    console.log('Redis client connected');
+});
+
 export { asyncGet, asyncSadd, asyncSet, asyncSismember, asyncSmembers, asyncSrem };
