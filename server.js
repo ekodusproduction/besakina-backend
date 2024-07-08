@@ -4,7 +4,7 @@ import app from './app.js';
 import https from 'https';
 import http from 'http';
 import { Server } from "socket.io";
-import { redisClient } from './redis.js';
+import { asyncAdd, redisClient } from './redis.js';
 import { jwtAuth } from './src/Middlewares/auth.middleware.js';
 // import { chatSocket } from './src/Features/Chats/chat.socket.js';
 import { socketAuth } from "./socketAuth.js"
@@ -33,8 +33,14 @@ io.on('connection', (socket) => {
     console.log('New client connected');
     chatSocket(socket);
 
-    socket.on('disconnect', () => {
-        console.log('Client disconnected');
+    socket.on('disconnect', async () => {
+        try {
+            const user = socket.user;
+            await redisClient.srem('onlineUsers', user.id);
+            console.log(`User ${user.username} disconnected and removed from onlineUsers`);
+        } catch (error) {
+            console.error("Error handling disconnect:", error);
+        }
     });
 });
 

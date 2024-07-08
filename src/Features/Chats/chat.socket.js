@@ -45,17 +45,16 @@ export const chatSocket = (socket) => {
 
     socket.on("isActive", async (messageData) => {
         try {
-            console.log("isActive event fired");
-
+            const receiverId = messageData.receiver;
             const sender = socket.user;
-            const roomId = sender; // Assuming sender is the unique identifier for the room in this context
-            messageData.roomId = roomId;
+            const roomId = [receiverId, sender.id].sort().join("_");
 
-            // Check if the socket is in the room before sending the isActive event
+            // Check if the recipient is active
+            const isRecipientActive = await redisClient.sismember('onlineUsers', receiverId);
+
             if (socket.rooms.has(roomId)) {
-                console.log("has room ");
-                io.emit("isActive", { isActive: true }); // Broadcast to everyone
-                console.log(`isActive event broadcast to all clients for room: ${roomId}`);
+                socket.emit("userIsActive", { userId: receiverId, isActive: isRecipientActive });
+                console.log(`isActive event sent to user: ${sender.username} for room: ${roomId}`);
             } else {
                 console.error(`Socket is not in the room: ${roomId}`);
             }
@@ -63,5 +62,7 @@ export const chatSocket = (socket) => {
             console.error("Error sending isActive event:", error);
         }
     });
+
+
 
 };
