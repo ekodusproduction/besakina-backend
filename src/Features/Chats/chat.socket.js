@@ -21,7 +21,7 @@ export const chatSocket = (socket) => {
         try {
             console.log("sendMessage event fired", messageData);
 
-            const { recieverId } = messageData;
+            const recieverId = messageData.receiver;
             const sender = socket.user;
             console.log("sender", sender);
             const roomId = [recieverId, sender].sort().join("_");
