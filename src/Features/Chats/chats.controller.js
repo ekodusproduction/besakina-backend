@@ -102,7 +102,7 @@ export const getChatRooms = async (req, res, next) => {
             }
         ];
 
-        const rooms = await db.getCollection("chats").aggregate(pipeline);
+        const rooms = await db.collection("chats").aggregate(pipeline);
 
         console.log("Rooms:", rooms);
 
