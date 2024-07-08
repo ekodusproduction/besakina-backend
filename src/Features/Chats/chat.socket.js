@@ -19,7 +19,7 @@ export const chatSocket = (socket) => {
 
     socket.on("sendMessage", async (messageData) => {
         try {
-            console.log("sendMessage event fired");
+            console.log("sendMessage event fired", messageData);
 
             const { recieverId } = messageData;
             const sender = socket.user;
