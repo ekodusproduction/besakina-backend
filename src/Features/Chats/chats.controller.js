@@ -77,14 +77,14 @@ export const getChatRooms = async (req, res, next) => {
                         "$cond": {
                             "if": { "$eq": ["$_id.sender", new ObjectId(userId)] },
                             "then": { "$arrayElemAt": ["$recieverDetails", 0] },
-                            "else": {}
+                            "else": null
                         }
                     },
                     "reciever": {
                         "$cond": {
                             "if": { "$eq": ["$_id.reciever", new ObjectId(userId)] },
                             "then": { "$arrayElemAt": ["$senderDetails", 0] },
-                            "else": {}
+                            "else": null
                         }
                     }
                 }
