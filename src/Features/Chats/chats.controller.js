@@ -17,64 +17,64 @@ export const getChatRooms = async (req, res, next) => {
             },
             [
                 {
-                    $match: {
-                        $or: [{ sender: userId }, { receiver: userId }]
+                    "$match": {
+                        "$or": [{ "sender": userId }, { "receiver": userId }]
                     }
                 },
                 {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'sender',
-                        foreignField: '_id',
-                        as: 'sender'
+                    "$lookup": {
+                        "from": 'users',
+                        "localField": 'sender',
+                        "foreignField": '_id',
+                        "as": 'sender'
                     }
                 },
                 {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'receiver',
-                        foreignField: '_id',
-                        as: 'receiver'
+                    "$lookup": {
+                        "from": 'users',
+                        "localField": 'receiver',
+                        "foreignField": '_id',
+                        "as": 'receiver'
                     }
                 },
                 {
-                    $unwind: { path: '$sender', preserveNullAndEmptyArrays: true }
+                    "$unwind": { "path": '$sender', "preserveNullAndEmptyArrays": true }
                 },
                 {
-                    $unwind: { path: '$receiver', preserveNullAndEmptyArrays: true }
+                    "$unwind": { "path": '$receiver', "preserveNullAndEmptyArrays": true }
                 },
                 {
-                    $addFields: {
-                        senderId: { $ifNull: ['$sender._id', null] },
-                        receiverId: { $ifNull: ['$receiver._id', null] }
+                    "$addFields": {
+                        "senderId": { "$ifNull": ['$sender._id', null] },
+                        "receiverId": { "$ifNull": ['$receiver._id', null] }
                     }
                 },
                 {
-                    $group: {
-                        _id: {
-                            senderId: '$senderId',
-                            receiverId: '$receiverId'
+                    "$group": {
+                        "_id": {
+                            "senderId": '$senderId',
+                            "receiverId": '$receiverId'
                         },
-                        chatRoom: { $first: '$$ROOT' }
+                        "chatRoom": { "$first": '$$ROOT' }
                     }
                 },
                 {
-                    $project: {
-                        _id: 0,
-                        chatRoom: {
-                            _id: 1,
-                            message: 1,
-                            timestamp: 1,
-                            sender: {
-                                $cond: [
+                    "$project": {
+                        "_id": 0,
+                        "chatRoom": {
+                            "_id": 1,
+                            "message": 1,
+                            "timestamp": 1,
+                            "sender": {
+                                "$cond": [
                                     { $eq: ['$chatRoom.sender._id', userId] },
                                     null,
                                     '$chatRoom.sender'
                                 ]
                             },
-                            receiver: {
-                                $cond: [
-                                    { $eq: ['$chatRoom.receiver._id', userId] },
+                            "receiver": {
+                                "$cond": [
+                                    { "$eq": ['$chatRoom.receiver._id', userId] },
                                     null,
                                     '$chatRoom.receiver'
                                 ]
