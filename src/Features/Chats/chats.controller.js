@@ -15,10 +15,9 @@ export const getChatRooms = async (req, res, next) => {
                     "createdAt": -1
                 }
             },
-
             {
                 $match: {
-                    $or: [{ sender: new ObjectId(userId) }, { receiver: new ObjectId(userId) }]
+                    $or: [{ sender: ObjectId(userId) }, { receiver: ObjectId(userId) }]
                 }
             },
             {
@@ -46,7 +45,13 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $addFields: {
                     senderId: { $ifNull: ['$sender._id', null] },
-                    receiverId: { $ifNull: ['$receiver._id', null] }
+                    receiverId: { $ifNull: ['$receiver._id', null] },
+                    'sender.fullname': { $ifNull: ['$sender.fullname', ''] },
+                    'sender.profile_pic': { $ifNull: ['$sender.profile_pic', ''] },
+                    'sender.mobile': { $ifNull: ['$sender.mobile', ''] },
+                    'receiver.fullname': { $ifNull: ['$receiver.fullname', ''] },
+                    'receiver.profile_pic': { $ifNull: ['$receiver.profile_pic', ''] },
+                    'receiver.mobile': { $ifNull: ['$receiver.mobile', ''] }
                 }
             },
             {
@@ -66,7 +71,7 @@ export const getChatRooms = async (req, res, next) => {
                     'chatRoom.timestamp': 1,
                     'chatRoom.sender': {
                         $cond: [
-                            { $eq: ['$chatRoom.sender._id', new ObjectId(userId)] },
+                            { $eq: ['$chatRoom.sender._id', ObjectId(userId)] },
                             null,
                             {
                                 _id: '$chatRoom.sender._id',
@@ -78,7 +83,7 @@ export const getChatRooms = async (req, res, next) => {
                     },
                     'chatRoom.receiver': {
                         $cond: [
-                            { $eq: ['$chatRoom.receiver._id', new ObjectId(userId)] },
+                            { $eq: ['$chatRoom.receiver._id', ObjectId(userId)] },
                             null,
                             {
                                 _id: '$chatRoom.receiver._id',
