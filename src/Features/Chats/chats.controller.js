@@ -12,7 +12,7 @@ export const getChatRooms = async (req, res, next) => {
         const pipeline = [
             {
                 $match: {
-                    $or: [{ sender: userId }, { receiver: userId }]
+                    $or: [{ sender: userId }, { reciever: userId }]
                 }
             },
             {
@@ -21,8 +21,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $group: {
                     _id: {
-                        senderId: { $cond: [{ $eq: ['$sender', userId] }, '$sender', '$receiver'] },
-                        receiverId: { $cond: [{ $eq: ['$sender', userId] }, '$receiver', '$sender'] }
+                        senderId: { $cond: [{ $eq: ['$sender', userId] }, '$reciever', '$reciever'] },
+                        receiverId: { $cond: [{ $eq: ['$reciever', userId] }, '$sender', '$sender'] }
                     },
                     lastMessage: { $first: '$$ROOT' }
                 }
@@ -40,26 +40,20 @@ export const getChatRooms = async (req, res, next) => {
                     from: 'users',
                     localField: '_id.receiverId',
                     foreignField: '_id',
-                    as: 'receiver'
+                    as: 'reciever'
                 }
             },
             {
                 $unwind: { path: '$sender', preserveNullAndEmptyArrays: true }
             },
             {
-                $unwind: { path: '$receiver', preserveNullAndEmptyArrays: true }
-            },
-            {
-                $addFields: {
-                    senderId: { $ifNull: ['$sender._id', null] },
-                    receiverId: { $ifNull: ['$receiver._id', null] }
-                }
+                $unwind: { path: '$reciever', preserveNullAndEmptyArrays: true }
             },
             {
                 $match: {
                     $or: [
-                        { senderId: { $ne: userId } }, // Exclude current user as sender
-                        { receiverId: { $ne: userId } } // Exclude current user as receiver
+                        { 'sender._id': { $ne: userId } }, // Exclude current user as sender
+                        { 'reciever._id': { $ne: userId } } // Exclude current user as reciever
                     ]
                 }
             },
@@ -80,15 +74,15 @@ export const getChatRooms = async (req, res, next) => {
                             }
                         ]
                     },
-                    receiver: {
+                    reciever: {
                         $cond: [
-                            { $eq: ['$lastMessage.receiver', userId] },
+                            { $eq: ['$lastMessage.reciever', userId] },
                             null,
                             {
-                                _id: '$receiver._id',
-                                fullname: { $ifNull: ['$receiver.fullname', 'No Name'] },
-                                profile_pic: { $ifNull: ['$receiver.profile_pic', 'No Pic'] },
-                                mobile: { $ifNull: ['$receiver.mobile', 'No Mobile'] }
+                                _id: '$reciever._id',
+                                fullname: { $ifNull: ['$reciever.fullname', 'No Name'] },
+                                profile_pic: { $ifNull: ['$reciever.profile_pic', 'No Pic'] },
+                                mobile: { $ifNull: ['$reciever.mobile', 'No Mobile'] }
                             }
                         ]
                     }
@@ -107,7 +101,7 @@ export const getChatRooms = async (req, res, next) => {
                 message: doc.message,
                 timestamp: doc.timestamp,
                 sender: doc.sender,
-                receiver: doc.receiver
+                reciever: doc.reciever
             })),
             token: null
         });
@@ -121,6 +115,7 @@ export const getChatRooms = async (req, res, next) => {
         });
     }
 };
+
 // const removeUser = async (array, id) => {
 //     return array.map(chatRoom => {
 //         if (chatRoom.sender && chatRoom.sender._id.toString() === id) {
