@@ -13,7 +13,7 @@ export const getChatRooms = async (req, res, next) => {
         const pipeline = [
             {
                 $match: {
-                    $or: [{ sender: new ObjectId(userId) }, { receiver: new ObjectId(userId) }]
+                    $or: [{ sender: new ObjectId(userId) }, { reciever: new ObjectId(userId) }]
                 }
             },
             {
@@ -23,7 +23,7 @@ export const getChatRooms = async (req, res, next) => {
                 $group: {
                     _id: {
                         senderId: '$sender',
-                        receiverId: '$receiver'
+                        receiverId: '$reciever'
                     },
                     lastMessage: { $first: '$$ROOT' }
                 }
@@ -39,21 +39,21 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $lookup: {
                     from: 'users',
-                    localField: 'lastMessage.receiver',
+                    localField: 'lastMessage.reciever',
                     foreignField: '_id',
-                    as: 'receiver'
+                    as: 'reciever'
                 }
             },
             {
                 $unwind: { path: '$sender', preserveNullAndEmptyArrays: true }
             },
             {
-                $unwind: { path: '$receiver', preserveNullAndEmptyArrays: true }
+                $unwind: { path: '$reciever', preserveNullAndEmptyArrays: true }
             },
             {
                 $addFields: {
                     senderId: { $ifNull: ['$sender._id', null] },
-                    receiverId: { $ifNull: ['$receiver._id', null] }
+                    receiverId: { $ifNull: ['$reciever._id', null] }
                 }
             },
             {
@@ -74,15 +74,15 @@ export const getChatRooms = async (req, res, next) => {
                             }
                         ]
                     },
-                    'chatRoom.receiver': {
+                    'chatRoom.reciever': {
                         $cond: [
-                            { $eq: ['$lastMessage.receiver', new ObjectId(userId)] },
+                            { $eq: ['$lastMessage.reciever', new ObjectId(userId)] },
                             null,
                             {
-                                _id: '$receiver._id',
-                                fullname: { $ifNull: ['$receiver.fullname', 'No Name'] },
-                                profile_pic: { $ifNull: ['$receiver.profile_pic', 'No Pic'] },
-                                mobile: { $ifNull: ['$receiver.mobile', 'No Mobile'] }
+                                _id: '$reciever._id',
+                                fullname: { $ifNull: ['$reciever.fullname', 'No Name'] },
+                                profile_pic: { $ifNull: ['$reciever.profile_pic', 'No Pic'] },
+                                mobile: { $ifNull: ['$reciever.mobile', 'No Mobile'] }
                             }
                         ]
                     }
@@ -115,8 +115,8 @@ export const getChatRooms = async (req, res, next) => {
 //         if (chatRoom.sender && chatRoom.sender._id.toString() === id) {
 //             chatRoom.sender = null;
 //         }
-//         if (chatRoom.receiver && chatRoom.receiver._id.toString() === id) {
-//             chatRoom.receiver = null;
+//         if (chatRoom.reciever && chatRoom.reciever._id.toString() === id) {
+//             chatRoom.reciever = null;
 //         }
 //         return chatRoom;
 //     });
@@ -127,20 +127,20 @@ export const getChatRooms = async (req, res, next) => {
 //         const userId = req.user; // Convert userId to string for comparison
 //         console.log("userId:", userId);
 
-//         // Find all chats where the user is either the sender or the receiver
+//         // Find all chats where the user is either the sender or the reciever
 //         const chatRooms = await Chat.find({
-//             $or: [{ sender: userId }, { receiver: userId }]
-//         }).populate(['sender', 'receiver']);
+//             $or: [{ sender: userId }, { reciever: userId }]
+//         }).populate(['sender', 'reciever']);
 
 //         console.log("Chat Rooms:", chatRooms);
 
-//         // Use a Set to store unique combinations of sender and receiver
+//         // Use a Set to store unique combinations of sender and reciever
 //         const uniquePairs = new Set();
 //         const uniqueChatRooms = [];
 
 //         chatRooms.forEach(chatRoom => {
 //             const senderId = chatRoom.sender?._id.toString();
-//             const receiverId = chatRoom.receiver?._id.toString();
+//             const receiverId = chatRoom.reciever?._id.toString();
 
 //             const pairKey = [senderId, receiverId].sort().join('-');
 
