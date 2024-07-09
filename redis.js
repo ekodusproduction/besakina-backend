@@ -30,7 +30,9 @@ const redisClient = redis.createClient({
         // Reconnect after
         return Math.min(options.attempt * 100, 3000);
     }
-});
+}).then(redis => {
+    console.log(redis)
+}).catch(error => console.log("redis error caught", error));
 
 // Promisify Redis commands
 const asyncSet = promisify(redisClient.set).bind(redisClient);
