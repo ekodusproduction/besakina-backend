@@ -19,8 +19,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 "$match": {
                     "$or": [
-                        { "sender": ObjectId(userId) },
-                        { "receiver": ObjectId(userId) }
+                        { "sender": userId },
+                        { "receiver": userId }
                     ]
                 }
             },
@@ -28,7 +28,7 @@ export const getChatRooms = async (req, res, next) => {
                 "$addFields": {
                     "participant": {
                         "$cond": {
-                            "if": { "$eq": ["$sender", ObjectId(userId)] },
+                            "if": { "$eq": ["$sender", userId] },
                             "then": "$receiver",
                             "else": "$sender"
                         }
