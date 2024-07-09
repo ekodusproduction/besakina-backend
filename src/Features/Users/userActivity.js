@@ -4,6 +4,7 @@ const ONLINE_USERS_KEY = 'online_users';
 // Function to add user to online users set
 const addUserToOnline = async (userId) => {
     try {
+        console.log(`attempting to add ${userId} to online users.`);
         await asyncSadd(ONLINE_USERS_KEY, userId);
         await getOnlineUsers()
         console.log(`User ${userId} added to online users.`);
@@ -15,6 +16,7 @@ const addUserToOnline = async (userId) => {
 // Function to remove user from online users set
 const removeUserFromOnline = async (userId) => {
     try {
+        console.log(`attempting to remove ${userId} to online users.`);
         await asyncSrem(ONLINE_USERS_KEY, userId);
         console.log(`User ${userId} removed from online users.`);
     } catch (error) {
@@ -25,6 +27,7 @@ const removeUserFromOnline = async (userId) => {
 // Function to get all online users
 const getOnlineUsers = async () => {
     try {
+        console.log(`attempting to fetch online users.`);
         const onlineUsers = await asyncSmembers(ONLINE_USERS_KEY);
         console.log('Online users:', onlineUsers);
         return onlineUsers;
@@ -37,6 +40,7 @@ const getOnlineUsers = async () => {
 // Function to check if a user is online
 const isUserOnline = async (userId) => {
     try {
+        console.log(`attempting to check  online users presence of ${userId}`);
         const isOnline = await asyncSismember(ONLINE_USERS_KEY, userId);
         console.log(`User ${userId} is online:`, isOnline);
         return isOnline === 1; // Return true or false based on membership
