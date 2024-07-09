@@ -15,69 +15,74 @@ export const getChatRooms = async (req, res, next) => {
                     "createdAt": -1
                 }
             },
-            {
-                $match: {
-                    $or: [{ sender: new ObjectId(userId) }, { receiver: new ObjectId(userId) }]
+            [
+                {
+                    $match: {
+                        $or: [{ sender: ObjectId(userId) }, { receiver: ObjectId(userId) }]
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'sender',
+                        foreignField: '_id',
+                        as: 'sender'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'receiver',
+                        foreignField: '_id',
+                        as: 'receiver'
+                    }
+                },
+                {
+                    $unwind: { path: '$sender', preserveNullAndEmptyArrays: true }
+                },
+                {
+                    $unwind: { path: '$receiver', preserveNullAndEmptyArrays: true }
+                },
+                {
+                    $addFields: {
+                        senderId: { $ifNull: ['$sender._id', null] },
+                        receiverId: { $ifNull: ['$receiver._id', null] }
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            senderId: '$senderId',
+                            receiverId: '$receiverId'
+                        },
+                        chatRoom: { $first: '$$ROOT' }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        chatRoom: {
+                            _id: 1,
+                            message: 1,
+                            timestamp: 1,
+                            sender: {
+                                $cond: [
+                                    { $eq: ['$chatRoom.sender._id', ObjectId(userId)] },
+                                    null,
+                                    '$chatRoom.sender'
+                                ]
+                            },
+                            receiver: {
+                                $cond: [
+                                    { $eq: ['$chatRoom.receiver._id', ObjectId(userId)] },
+                                    null,
+                                    '$chatRoom.receiver'
+                                ]
+                            }
+                        }
+                    }
                 }
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'sender',
-                    foreignField: '_id',
-                    as: 'sender'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'receiver',
-                    foreignField: '_id',
-                    as: 'receiver'
-                }
-            },
-            {
-                $unwind: { path: '$sender', preserveNullAndEmptyArrays: true }
-            },
-            {
-                $unwind: { path: '$receiver', preserveNullAndEmptyArrays: true }
-            },
-            {
-                $addFields: {
-                    senderId: { $ifNull: ['$sender._id', null] },
-                    receiverId: { $ifNull: ['$receiver._id', null] }
-                }
-            },
-            {
-                $group: {
-                    _id: {
-                        senderId: '$senderId',
-                        receiverId: '$receiverId'
-                    },
-                    chatRoom: { $first: '$$ROOT' }
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    'chatRoom.sender': {
-                        $cond: [
-                            { $eq: ['$chatRoom.sender._id', new ObjectId(userId)] },
-                            null,
-                            '$chatRoom.sender'
-                        ]
-                    },
-                    'chatRoom.receiver': {
-                        $cond: [
-                            { $eq: ['$chatRoom.receiver._id', new ObjectId(userId)] },
-                            null,
-                            '$chatRoom.receiver'
-                        ]
-                    },
-                    'chatRoom.senderId': 0,
-                    'chatRoom.receiverId': 0
-                }
-            }
+            ]
         ];
 
         const rooms = await Chat.aggregate(pipeline);
