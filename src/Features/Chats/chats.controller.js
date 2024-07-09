@@ -12,7 +12,7 @@ export const getChatRooms = async (req, res, next) => {
         const pipeline = [
             {
                 "$sort": {
-                    "createdAt": NumberInt(-1)
+                    "createdAt": -1
                 }
             },
             {
