@@ -11,59 +11,71 @@ export const getChatRooms = async (req, res, next) => {
 
         const pipeline = [
             {
-                $match: {
-                    $or: [
-                        { sender: userId },
-                        { receiver: userId }
-                    ]
+                "$sort": {
+                    "createdAt": NumberInt(-1)
                 }
             },
             {
-                $sort: { createdAt: -1 }
-            },
-            {
-                $group: {
-                    _id: {
-                        $cond: {
-                            if: { $eq: ['$sender', userId] },
-                            then: '$receiver',
-                            else: '$sender'
-                        }
-                    },
-                    lastMessage: { $first: '$message' },
-                    lastTimestamp: { $first: '$createdAt' }
+                $match: {
+                    $or: [{ sender: new ObjectId(userId) }, { receiver: new ObjectId(userId) }]
                 }
             },
             {
                 $lookup: {
                     from: 'users',
-                    localField: '_id',
+                    localField: 'sender',
                     foreignField: '_id',
-                    as: 'participantDetails'
+                    as: 'sender'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'receiver',
+                    foreignField: '_id',
+                    as: 'receiver'
+                }
+            },
+            {
+                $unwind: { path: '$sender', preserveNullAndEmptyArrays: true }
+            },
+            {
+                $unwind: { path: '$receiver', preserveNullAndEmptyArrays: true }
+            },
+            {
+                $addFields: {
+                    senderId: { $ifNull: ['$sender._id', null] },
+                    receiverId: { $ifNull: ['$receiver._id', null] }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        senderId: '$senderId',
+                        receiverId: '$receiverId'
+                    },
+                    chatRoom: { $first: '$$ROOT' }
                 }
             },
             {
                 $project: {
-                    _id: 0, // Exclude _id from final output if not needed
-                    roomId: {
-                        $concat: [
-                            { $toString: userId },
-                            '_',
-                            { $toString: '$_id' }
+                    _id: 0,
+                    'chatRoom.sender': {
+                        $cond: [
+                            { $eq: ['$chatRoom.sender._id', new ObjectId(userId)] },
+                            null,
+                            '$chatRoom.sender'
                         ]
                     },
-                    lastMessage: 1,
-                    lastTimestamp: 1,
-                    participant: {
-                        $arrayElemAt: ['$participantDetails', 0]
+                    'chatRoom.receiver': {
+                        $cond: [
+                            { $eq: ['$chatRoom.receiver._id', new ObjectId(userId)] },
+                            null,
+                            '$chatRoom.receiver'
+                        ]
                     },
-                    sentByCurrentUser: {
-                        $cond: {
-                            if: { $eq: ['$_id', userId] },
-                            then: true,
-                            else: false
-                        }
-                    }
+                    'chatRoom.senderId': 0,
+                    'chatRoom.receiverId': 0
                 }
             }
         ];
@@ -88,6 +100,7 @@ export const getChatRooms = async (req, res, next) => {
         });
     }
 };
+
 // const removeUser = async (array, id) => {
 //     return array.map(chatRoom => {
 //         if (chatRoom.sender && chatRoom.sender._id.toString() === id) {
