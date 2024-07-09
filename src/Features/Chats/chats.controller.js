@@ -22,8 +22,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $group: {
                     _id: {
-                        senderId: '$sender',
-                        receiverId: '$reciever'
+                        senderId: { $cond: [{ $eq: ['$sender', new ObjectId(userId)] }, '$sender', '$reciever'] },
+                        receiverId: { $cond: [{ $eq: ['$sender', new ObjectId(userId)] }, '$reciever', '$sender'] }
                     },
                     lastMessage: { $first: '$$ROOT' }
                 }
@@ -31,7 +31,7 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $lookup: {
                     from: 'users',
-                    localField: 'lastMessage.sender',
+                    localField: '_id.senderId',
                     foreignField: '_id',
                     as: 'sender'
                 }
@@ -39,7 +39,7 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $lookup: {
                     from: 'users',
-                    localField: 'lastMessage.reciever',
+                    localField: '_id.receiverId',
                     foreignField: '_id',
                     as: 'reciever'
                 }
@@ -51,18 +51,11 @@ export const getChatRooms = async (req, res, next) => {
                 $unwind: { path: '$reciever', preserveNullAndEmptyArrays: true }
             },
             {
-                $addFields: {
-                    senderId: { $ifNull: ['$sender._id', null] },
-                    receiverId: { $ifNull: ['$reciever._id', null] }
-                }
-            },
-            {
                 $project: {
-                    _id: 0,
-                    'chatRoom._id': '$lastMessage._id',
-                    'chatRoom.message': '$lastMessage.message',
-                    'chatRoom.timestamp': '$lastMessage.createdAt',
-                    'chatRoom.sender': {
+                    _id: '$lastMessage._id',
+                    message: '$lastMessage.message',
+                    timestamp: '$lastMessage.createdAt',
+                    sender: {
                         $cond: [
                             { $eq: ['$lastMessage.sender', new ObjectId(userId)] },
                             null,
@@ -74,7 +67,7 @@ export const getChatRooms = async (req, res, next) => {
                             }
                         ]
                     },
-                    'chatRoom.reciever': {
+                    reciever: {
                         $cond: [
                             { $eq: ['$lastMessage.reciever', new ObjectId(userId)] },
                             null,
@@ -96,7 +89,13 @@ export const getChatRooms = async (req, res, next) => {
             message: 'Chat rooms list',
             http_status_code: 200,
             success: true,
-            data: rooms.map(doc => doc.chatRoom),
+            data: rooms.map(doc => ({
+                _id: doc._id,
+                message: doc.message,
+                timestamp: doc.timestamp,
+                sender: doc.sender,
+                reciever: doc.reciever
+            })),
             token: null
         });
     } catch (error) {
