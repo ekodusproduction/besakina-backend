@@ -98,7 +98,7 @@ export const getChatRooms = async (req, res, next) => {
             message: 'Chat rooms list',
             http_status_code: 200,
             success: true,
-            data: rooms,
+            data: rooms.map(doc => doc.chatRoom),
             token: null
         });
     } catch (error) {
