@@ -75,14 +75,14 @@ export const getChatRooms = async (req, res, next) => {
                     "lastTimestamp": 1,
                     "sender": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.sender", new ObjectId(userId)] },
+                            "if": { "$eq": ["$_id.reciever", new ObjectId(userId)] },
                             "then": { "$arrayElemAt": ["$senderDetails", 0] },
                             "else": {}
                         }
                     },
                     "reciever": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.reciever", new ObjectId(userId)] },
+                            "if": { "$eq": ["$_id.sender", new ObjectId(userId)] },
                             "then": { "$arrayElemAt": ["$recieverDetails", 0] },
                             "else": {}
                         }
