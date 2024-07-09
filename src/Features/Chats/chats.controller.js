@@ -59,7 +59,7 @@ export const getChatRooms = async (req, res, next) => {
                     },
                     sentByCurrentUser: {
                         $cond: {
-                            if: { $eq: ['$_id', ObjectId(userId)] },
+                            if: { $eq: ['$_id', userId] },
                             then: true,
                             else: false
                         }
