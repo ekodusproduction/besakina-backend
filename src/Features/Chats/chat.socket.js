@@ -2,13 +2,13 @@ import Chat from "./chatModel.js";
 
 export const chatSocket = (socket) => {
 
-    socket.on('join', async ({ recieverId }) => {
+    socket.on('join', async ({ reciever }) => {
         try {
             // console.log("data--------->", data)
             console.log("join event fired");
             const sender = socket.user;
             console.log("sender", sender);
-            const roomId = [recieverId, sender].sort().join("_");
+            const roomId = [reciever, sender].sort().join("_");
             socket.join(roomId);
             socket.emit('joinedRoom', { roomId, message: `You have joined room ${roomId}` });
             console.log(`User joined room: ${roomId}`);
@@ -45,15 +45,15 @@ export const chatSocket = (socket) => {
 
     socket.on("isActive", async (messageData) => {
         try {
-            const receiverId = messageData.reciever;
+            const reciever = messageData.reciever;
             const sender = socket.user;
-            const roomId = [receiverId, sender.id].sort().join("_");
+            const roomId = [reciever, sender.id].sort().join("_");
 
             // Check if the recipient is active
-            const isRecipientActive = await redisClient.sismember('onlineUsers', receiverId);
+            const isRecipientActive = await redisClient.sismember('onlineUsers', reciever);
 
             if (socket.rooms.has(roomId)) {
-                socket.emit("userIsActive", { userId: receiverId, isActive: isRecipientActive });
+                socket.emit("userIsActive", { userId: reciever, isActive: isRecipientActive });
                 console.log(`isActive event sent to user: ${sender.username} for room: ${roomId}`);
             } else {
                 console.error(`Socket is not in the room: ${roomId}`);
