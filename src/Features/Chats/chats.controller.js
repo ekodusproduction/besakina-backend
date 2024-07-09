@@ -71,7 +71,7 @@ export const getChatRooms = async (req, res, next) => {
                 }
             }
         ];
-        ;
+        
 
         const rooms = await Chat.aggregate(pipeline);
 
