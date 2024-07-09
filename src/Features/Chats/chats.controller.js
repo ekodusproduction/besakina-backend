@@ -5,25 +5,33 @@ import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { getDB } from "../../mongodb/mongodb.js";
 
+
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = req.user.toString(); // Assuming userId is obtained from req.user
+        const userId = req.user.toString();
 
         const pipeline = [
             {
-                "$sort": {
-                    "createdAt": -1
+                $match: {
+                    $or: [{ sender: new ObjectId(userId) }, { receiver: new ObjectId(userId) }]
                 }
             },
             {
-                $match: {
-                    $or: [{ sender: new ObjectId(userId) }, { reciever: new ObjectId(userId) }]
+                $sort: { createdAt: -1 }
+            },
+            {
+                $group: {
+                    _id: {
+                        senderId: '$sender',
+                        receiverId: '$receiver'
+                    },
+                    lastMessage: { $first: '$$ROOT' }
                 }
             },
             {
                 $lookup: {
                     from: 'users',
-                    localField: 'sender',
+                    localField: 'lastMessage.sender',
                     foreignField: '_id',
                     as: 'sender'
                 }
@@ -31,59 +39,50 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $lookup: {
                     from: 'users',
-                    localField: 'reciever',
+                    localField: 'lastMessage.receiver',
                     foreignField: '_id',
-                    as: 'reciever'
+                    as: 'receiver'
                 }
             },
             {
                 $unwind: { path: '$sender', preserveNullAndEmptyArrays: true }
             },
             {
-                $unwind: { path: '$reciever', preserveNullAndEmptyArrays: true }
+                $unwind: { path: '$receiver', preserveNullAndEmptyArrays: true }
             },
             {
                 $addFields: {
                     senderId: { $ifNull: ['$sender._id', null] },
-                    receiverId: { $ifNull: ['$reciever._id', null] }
-                }
-            },
-            {
-                $group: {
-                    _id: {
-                        senderId: '$senderId',
-                        receiverId: '$receiverId'
-                    },
-                    chatRoom: { $first: '$$ROOT' }
+                    receiverId: { $ifNull: ['$receiver._id', null] }
                 }
             },
             {
                 $project: {
                     _id: 0,
-                    'chatRoom._id': 1,
-                    'chatRoom.message': 1,
-                    'chatRoom.timestamp': 1,
+                    'chatRoom._id': '$lastMessage._id',
+                    'chatRoom.message': '$lastMessage.message',
+                    'chatRoom.timestamp': '$lastMessage.createdAt',
                     'chatRoom.sender': {
                         $cond: [
-                            { $eq: ['$chatRoom.sender._id', new ObjectId(userId)] },
+                            { $eq: ['$lastMessage.sender', new ObjectId(userId)] },
                             null,
                             {
-                                _id: '$chatRoom.sender._id',
-                                fullname: { $ifNull: ['$chatRoom.sender.fullname', 'No Name'] },
-                                profile_pic: { $ifNull: ['$chatRoom.sender.profile_pic', 'No Pic'] },
-                                mobile: { $ifNull: ['$chatRoom.sender.mobile', 'No Mobile'] }
+                                _id: '$sender._id',
+                                fullname: { $ifNull: ['$sender.fullname', 'No Name'] },
+                                profile_pic: { $ifNull: ['$sender.profile_pic', 'No Pic'] },
+                                mobile: { $ifNull: ['$sender.mobile', 'No Mobile'] }
                             }
                         ]
                     },
-                    'chatRoom.reciever': {
+                    'chatRoom.receiver': {
                         $cond: [
-                            { $eq: ['$chatRoom.reciever._id', new ObjectId(userId)] },
+                            { $eq: ['$lastMessage.receiver', new ObjectId(userId)] },
                             null,
                             {
-                                _id: '$chatRoom.reciever._id',
-                                fullname: { $ifNull: ['$chatRoom.reciever.fullname', 'No Name'] },
-                                profile_pic: { $ifNull: ['$chatRoom.reciever.profile_pic', 'No Pic'] },
-                                mobile: { $ifNull: ['$chatRoom.reciever.mobile', 'No Mobile'] }
+                                _id: '$receiver._id',
+                                fullname: { $ifNull: ['$receiver.fullname', 'No Name'] },
+                                profile_pic: { $ifNull: ['$receiver.profile_pic', 'No Pic'] },
+                                mobile: { $ifNull: ['$receiver.mobile', 'No Mobile'] }
                             }
                         ]
                     }
@@ -93,7 +92,6 @@ export const getChatRooms = async (req, res, next) => {
 
         const rooms = await Chat.aggregate(pipeline);
 
-        // Prepare and send response
         return res.status(200).json({
             message: 'Chat rooms list',
             http_status_code: 200,
