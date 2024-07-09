@@ -18,7 +18,7 @@ export const getChatRooms = async (req, res, next) => {
 
             {
                 "$match": {
-                    "$or": [{ "sender": userId }, { "receiver": userId }]
+                    "$or": [{ "sender": new ObjectId(userId) }, { "receiver": new ObjectId(userId) }]
                 }
             },
             {
@@ -67,14 +67,14 @@ export const getChatRooms = async (req, res, next) => {
                         "timestamp": 1,
                         "sender": {
                             "$cond": [
-                                { $eq: ['$chatRoom.sender._id', userId] },
+                                { $eq: ['$chatRoom.sender._id', new ObjectId(userId)] },
                                 null,
                                 '$chatRoom.sender'
                             ]
                         },
                         "receiver": {
                             "$cond": [
-                                { "$eq": ['$chatRoom.receiver._id', userId] },
+                                { "$eq": ['$chatRoom.receiver._id', new ObjectId(userId)] },
                                 null,
                                 '$chatRoom.receiver'
                             ]
@@ -82,7 +82,6 @@ export const getChatRooms = async (req, res, next) => {
                     }
                 }
             }
-
         ];
 
         const rooms = await Chat.aggregate(pipeline);
