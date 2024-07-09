@@ -82,7 +82,7 @@ export const getChatRooms = async (req, res, next) => {
                             {
                                 _id: '$chatRoom.receiver._id',
                                 fullname: { $ifNull: ['$chatRoom.receiver.fullname', ''] },
-                                profile_pic: { $ifNull: ['$chatRoom.receiver.profile_pic', ''] },
+                                profile_pic: { $ifNull: ['', '$chatRoom.receiver.profile_pic'] },
                                 mobile: { $ifNull: ['$chatRoom.receiver.mobile', ''] }
                             }
                         ]
