@@ -36,7 +36,7 @@ io.on('connection', async (socket) => {
     chatSocket(socket);
 
     socket.on('disconnect', async () => {
-        await removeUserFromOnline(user)
+        // await removeUserFromOnline(user)
     });
 });
 
