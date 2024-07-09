@@ -7,92 +7,87 @@ import { getDB } from "../../mongodb/mongodb.js";
 
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = req.user.toString();
-        console.log("userId:", userId);
+        const userId = req.user.toString(); // Assuming userId is obtained from req.user
 
         const pipeline = [
             {
-                "$sort": {
-                    "createdAt": -1
-                }
-            },
-            {
-                "$match": {
-                    "$or": [
-                        { "sender": userId },
-                        { "receiver": userId }
+                $match: {
+                    $or: [
+                        { sender: userId },
+                        { receiver: userId }
                     ]
                 }
             },
             {
-                "$addFields": {
-                    "participant": {
-                        "$cond": {
-                            "if": { "$eq": ["$sender", userId] },
-                            "then": "$receiver",
-                            "else": "$sender"
-                        }
-                    }
-                }
+                $sort: { createdAt: -1 }
             },
             {
-                "$group": {
-                    "_id": "$participant",
-                    "roomId": {
-                        "$first": {
-                            "$concat": [
-                                { "$toString": "$participant" },
-                                "_",
-                                { "$toString": { "$ifNull": ["$_id", "$participant"] } }
-                            ]
+                $group: {
+                    _id: {
+                        $cond: {
+                            if: { $eq: ['$sender', userId] },
+                            then: '$receiver',
+                            else: '$sender'
                         }
                     },
-                    "lastMessage": { "$first": "$message" },
-                    "lastTimestamp": { "$first": "$createdAt" }
+                    lastMessage: { $first: '$message' },
+                    lastTimestamp: { $first: '$createdAt' }
                 }
             },
             {
-                "$lookup": {
-                    "from": "users",
-                    "localField": "_id",
-                    "foreignField": "_id",
-                    "as": "participantDetails"
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'participantDetails'
                 }
             },
             {
-                "$project": {
-                    "roomId": 1,
-                    "lastMessage": 1,
-                    "lastTimestamp": 1,
-                    "participant": {
-                        "$arrayElemAt": ["$participantDetails", 0]
+                $project: {
+                    _id: 0, // Exclude _id from final output if not needed
+                    roomId: {
+                        $concat: [
+                            { $toString: userId },
+                            '_',
+                            { $toString: '$_id' }
+                        ]
+                    },
+                    lastMessage: 1,
+                    lastTimestamp: 1,
+                    participant: {
+                        $arrayElemAt: ['$participantDetails', 0]
+                    },
+                    sentByCurrentUser: {
+                        $cond: {
+                            if: { $eq: ['$_id', ObjectId(userId)] },
+                            then: true,
+                            else: false
+                        }
                     }
-                }
-            },
-            {
-                "$project": {
-                    "roomId": 1,
-                    "lastMessage": 1,
-                    "lastTimestamp": 1,
-                    "participant.fullname": 1,
-                    "participant.profile_pic": 1,
-                    "participant._id": 1,
-                    "participant.mobile": 1
                 }
             }
         ];
 
         const rooms = await Chat.aggregate(pipeline);
 
-        console.log("Rooms:", rooms);
-
-        return sendResponse(res, "Chat rooms list", 200, rooms);
+        // Prepare and send response
+        return res.status(200).json({
+            message: 'Chat rooms list',
+            http_status_code: 200,
+            success: true,
+            data: rooms,
+            token: null
+        });
     } catch (error) {
-        console.error("Error fetching chat rooms:", error);
-        return sendError(res, "Failed to fetch chat rooms", 500);
+        console.error('Error fetching chat rooms:', error);
+        return res.status(500).json({
+            message: 'Internal server error',
+            http_status_code: 500,
+            success: false,
+            error: error.message
+        });
     }
 };
-
 // const removeUser = async (array, id) => {
 //     return array.map(chatRoom => {
 //         if (chatRoom.sender && chatRoom.sender._id.toString() === id) {
