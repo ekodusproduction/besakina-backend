@@ -27,21 +27,24 @@ export const getChatRooms = async (req, res, next) => {
             },
             {
                 "$addFields": {
-                    "isSender": { "$eq": ["$sender", new ObjectId(userId)] }
+                    "participant": {
+                        "$cond": {
+                            "if": { "$eq": ["$sender", new ObjectId(userId)] },
+                            "then": "$receiver",
+                            "else": "$sender"
+                        }
+                    }
                 }
             },
             {
                 "$group": {
-                    "_id": {
-                        "sender": "$sender",
-                        "receiver": "$receiver"
-                    },
+                    "_id": "$participant",
                     "roomId": {
                         "$first": {
                             "$concat": [
-                                { "$toString": "$sender" },
+                                { "$toString": "$participant" },
                                 "_",
-                                { "$toString": "$receiver" }
+                                { "$toString": { "$ifNull": ["$_id", "$participant"] } }
                             ]
                         }
                     },
@@ -50,24 +53,32 @@ export const getChatRooms = async (req, res, next) => {
                 }
             },
             {
+                "$lookup": {
+                    "from": "users",
+                    "localField": "_id",
+                    "foreignField": "_id",
+                    "as": "participantDetails"
+                }
+            },
+            {
                 "$project": {
                     "roomId": 1,
                     "lastMessage": 1,
                     "lastTimestamp": 1,
                     "participant": {
-                        "$cond": {
-                            "if": { "$eq": ["$isSender", true] },
-                            "then": "$$REMOVE",
-                            "else": "$_id.sender"
-                        }
-                    },
-                    "participant": {
-                        "$cond": {
-                            "if": { "$eq": ["$isSender", false] },
-                            "then": "$$REMOVE",
-                            "else": "$_id.receiver"
-                        }
+                        "$arrayElemAt": ["$participantDetails", 0]
                     }
+                }
+            },
+            {
+                "$project": {
+                    "roomId": 1,
+                    "lastMessage": 1,
+                    "lastTimestamp": 1,
+                    "participant.fullname": 1,
+                    "participant.profile_pic": 1,
+                    "participant._id": 1,
+                    "participant.mobile": 1
                 }
             }
         ];
