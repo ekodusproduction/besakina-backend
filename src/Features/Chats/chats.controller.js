@@ -5,15 +5,14 @@ import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { getDB } from "../../mongodb/mongodb.js";
 
-
 export const getChatRooms = async (req, res, next) => {
     try {
-        const userId = req.user.toString();
+        const userId = new ObjectId(req.user.toString());
 
         const pipeline = [
             {
                 $match: {
-                    $or: [{ sender: new ObjectId(userId) }, { reciever: new ObjectId(userId) }]
+                    $or: [{ sender: userId }, { reciever: userId }]
                 }
             },
             {
@@ -22,8 +21,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $group: {
                     _id: {
-                        senderId: { $cond: [{ $eq: ['$sender', new ObjectId(userId)] }, '$sender', '$reciever'] },
-                        receiverId: { $cond: [{ $eq: ['$sender', new ObjectId(userId)] }, '$reciever', '$sender'] }
+                        senderId: { $cond: [{ $eq: ['$sender', userId] }, '$sender', '$reciever'] },
+                        receiverId: { $cond: [{ $eq: ['$sender', userId] }, '$reciever', '$sender'] }
                     },
                     lastMessage: { $first: '$$ROOT' }
                 }
@@ -51,13 +50,21 @@ export const getChatRooms = async (req, res, next) => {
                 $unwind: { path: '$reciever', preserveNullAndEmptyArrays: true }
             },
             {
+                $match: {
+                    $or: [
+                        { 'sender._id': { $ne: userId } }, // Exclude current user as sender
+                        { 'reciever._id': { $ne: userId } } // Exclude current user as reciever
+                    ]
+                }
+            },
+            {
                 $project: {
                     _id: '$lastMessage._id',
                     message: '$lastMessage.message',
                     timestamp: '$lastMessage.createdAt',
                     sender: {
                         $cond: [
-                            { $eq: ['$lastMessage.sender', new ObjectId(userId)] },
+                            { $eq: ['$lastMessage.sender', userId] },
                             null,
                             {
                                 _id: '$sender._id',
@@ -69,7 +76,7 @@ export const getChatRooms = async (req, res, next) => {
                     },
                     reciever: {
                         $cond: [
-                            { $eq: ['$lastMessage.reciever', new ObjectId(userId)] },
+                            { $eq: ['$lastMessage.reciever', userId] },
                             null,
                             {
                                 _id: '$reciever._id',
