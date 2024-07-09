@@ -17,7 +17,7 @@ export const getChatRooms = async (req, res, next) => {
             },
             {
                 $match: {
-                    $or: [{ sender: new ObjectId(userId) }, { receiver: new ObjectId(userId) }]
+                    $or: [{ sender: new ObjectId(userId) }, { reciever: new ObjectId(userId) }]
                 }
             },
             {
@@ -31,21 +31,21 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $lookup: {
                     from: 'users',
-                    localField: 'receiver',
+                    localField: 'reciever',
                     foreignField: '_id',
-                    as: 'receiver'
+                    as: 'reciever'
                 }
             },
             {
                 $unwind: { path: '$sender', preserveNullAndEmptyArrays: true }
             },
             {
-                $unwind: { path: '$receiver', preserveNullAndEmptyArrays: true }
+                $unwind: { path: '$reciever', preserveNullAndEmptyArrays: true }
             },
             {
                 $addFields: {
                     senderId: { $ifNull: ['$sender._id', null] },
-                    receiverId: { $ifNull: ['$receiver._id', null] }
+                    receiverId: { $ifNull: ['$reciever._id', null] }
                 }
             },
             {
@@ -75,15 +75,15 @@ export const getChatRooms = async (req, res, next) => {
                             }
                         ]
                     },
-                    'chatRoom.receiver': {
+                    'chatRoom.reciever': {
                         $cond: [
-                            { $eq: ['$chatRoom.receiver._id', new ObjectId(userId)] },
+                            { $eq: ['$chatRoom.reciever._id', new ObjectId(userId)] },
                             null,
                             {
-                                _id: '$chatRoom.receiver._id',
-                                fullname: { $ifNull: ['$chatRoom.receiver.fullname', 'No Name'] },
-                                profile_pic: { $ifNull: ['$chatRoom.receiver.profile_pic', 'No Pic'] },
-                                mobile: { $ifNull: ['$chatRoom.receiver.mobile', 'No Mobile'] }
+                                _id: '$chatRoom.reciever._id',
+                                fullname: { $ifNull: ['$chatRoom.reciever.fullname', 'No Name'] },
+                                profile_pic: { $ifNull: ['$chatRoom.reciever.profile_pic', 'No Pic'] },
+                                mobile: { $ifNull: ['$chatRoom.reciever.mobile', 'No Mobile'] }
                             }
                         ]
                     }
