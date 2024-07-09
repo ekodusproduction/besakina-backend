@@ -11,7 +11,7 @@ export const getChatRooms = async (req, res, next) => {
         console.log("userId:", userId);
         const db = getDB()
 
-        const pipeline = [
+        const pipeline = const pipeline = [
             {
                 "$sort": {
                     "createdAt": -1
@@ -21,30 +21,27 @@ export const getChatRooms = async (req, res, next) => {
                 "$match": {
                     "$or": [
                         { "sender": new ObjectId(userId) },
-                        { "reciever": new ObjectId(userId) }
+                        { "receiver": new ObjectId(userId) }
                     ]
                 }
             },
             {
                 "$addFields": {
-                    "senderReciever": {
-                        "$cond": [
-                            { "$gt": ["$sender", "$reciever"] },
-                            { "sender": "$reciever", "reciever": "$sender" },
-                            { "sender": "$sender", "reciever": "$reciever" }
-                        ]
-                    }
+                    "isSender": { "$eq": ["$sender", new ObjectId(userId)] }
                 }
             },
             {
                 "$group": {
-                    "_id": "$senderReciever",
+                    "_id": {
+                        "sender": "$sender",
+                        "receiver": "$receiver"
+                    },
                     "roomId": {
                         "$first": {
                             "$concat": [
-                                { "$toString": "$senderReciever.sender" },
+                                { "$toString": "$sender" },
                                 "_",
-                                { "$toString": "$senderReciever.reciever" }
+                                { "$toString": "$receiver" }
                             ]
                         }
                     },
@@ -53,59 +50,28 @@ export const getChatRooms = async (req, res, next) => {
                 }
             },
             {
-                "$lookup": {
-                    "from": "users",
-                    "localField": "_id.sender",
-                    "foreignField": "_id",
-                    "as": "senderDetails"
-                }
-            },
-            {
-                "$lookup": {
-                    "from": "users",
-                    "localField": "_id.reciever",
-                    "foreignField": "_id",
-                    "as": "recieverDetails"
-                }
-            },
-            {
                 "$project": {
                     "roomId": 1,
                     "lastMessage": 1,
                     "lastTimestamp": 1,
-                    "sender": {
+                    "participant": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.sender", new ObjectId(userId)] },
-                            "then": { "$arrayElemAt": ["$recieverDetails", 0] },
-                            "else": null
+                            "if": { "$eq": ["$isSender", true] },
+                            "then": "$$REMOVE",
+                            "else": "$_id.sender"
                         }
                     },
-                    "reciever": {
+                    "participant": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.reciever", new ObjectId(userId)] },
-                            "then": { "$arrayElemAt": ["$senderDetails", 0] },
-                            "else": null
+                            "if": { "$eq": ["$isSender", false] },
+                            "then": "$$REMOVE",
+                            "else": "$_id.receiver"
                         }
                     }
                 }
-            },
-            {
-                "$project": {
-                    "roomId": 1,
-                    "lastMessage": 1,
-                    "lastTimestamp": 1,
-                    "sender.fullname": "$sender.fullname",
-                    "sender.profile_pic": "$sender.profile_pic",
-                    "sender._id": "$sender._id",
-                    "sender.mobile": "$sender.mobile",
-
-                    "reciever.fullname": "$reciever.fullname",
-                    "reciever.profile_pic": "$reciever.profile_pic",
-                    "reciever._id": "$sender._id",
-                    "reciever.mobile": "$sender.mobile",
-                }
             }
         ];
+        ;
 
         const rooms = await Chat.aggregate(pipeline);
 
