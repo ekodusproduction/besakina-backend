@@ -11,7 +11,7 @@ export const getChatRooms = async (req, res, next) => {
         console.log("userId:", userId);
         const db = getDB()
 
-        const pipeline = const pipeline = [
+        const pipeline = [
             {
                 "$sort": {
                     "createdAt": -1
@@ -71,7 +71,7 @@ export const getChatRooms = async (req, res, next) => {
                 }
             }
         ];
-        
+
 
         const rooms = await Chat.aggregate(pipeline);
 
