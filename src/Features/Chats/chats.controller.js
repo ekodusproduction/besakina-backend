@@ -69,9 +69,9 @@ export const getChatRooms = async (req, res, next) => {
                             null,
                             {
                                 _id: '$chatRoom.sender._id',
-                                fullname: { $ifNull: ['$chatRoom.sender.fullname', ''] },
-                                profile_pic: { $ifNull: ['$chatRoom.sender.profile_pic', ''] },
-                                mobile: { $ifNull: ['$chatRoom.sender.mobile', ''] }
+                                fullname: { $ifNull: ['$chatRoom.sender.fullname', 'No Name'] },
+                                profile_pic: { $ifNull: ['$chatRoom.sender.profile_pic', 'No Pic'] },
+                                mobile: { $ifNull: ['$chatRoom.sender.mobile', 'No Mobile'] }
                             }
                         ]
                     },
@@ -81,9 +81,9 @@ export const getChatRooms = async (req, res, next) => {
                             null,
                             {
                                 _id: '$chatRoom.receiver._id',
-                                fullname: { $ifNull: ['$chatRoom.receiver.fullname', ''] },
-                                profile_pic: { $ifNull: ['', '$chatRoom.receiver.profile_pic'] },
-                                mobile: { $ifNull: ['$chatRoom.receiver.mobile', ''] }
+                                fullname: { $ifNull: ['$chatRoom.receiver.fullname', 'No Name'] },
+                                profile_pic: { $ifNull: ['$chatRoom.receiver.profile_pic', 'No Pic'] },
+                                mobile: { $ifNull: ['$chatRoom.receiver.mobile', 'No Mobile'] }
                             }
                         ]
                     }
