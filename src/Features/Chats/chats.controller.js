@@ -17,7 +17,7 @@ export const getChatRooms = async (req, res, next) => {
             },
             {
                 $match: {
-                    $or: [{ sender: ObjectId(userId) }, { receiver: ObjectId(userId) }]
+                    $or: [{ sender: new ObjectId(userId) }, { receiver: new ObjectId(userId) }]
                 }
             },
             {
@@ -71,7 +71,7 @@ export const getChatRooms = async (req, res, next) => {
                     'chatRoom.timestamp': 1,
                     'chatRoom.sender': {
                         $cond: [
-                            { $eq: ['$chatRoom.sender._id', ObjectId(userId)] },
+                            { $eq: ['$chatRoom.sender._id', new ObjectId(userId)] },
                             null,
                             {
                                 _id: '$chatRoom.sender._id',
@@ -83,7 +83,7 @@ export const getChatRooms = async (req, res, next) => {
                     },
                     'chatRoom.receiver': {
                         $cond: [
-                            { $eq: ['$chatRoom.receiver._id', ObjectId(userId)] },
+                            { $eq: ['$chatRoom.receiver._id', new ObjectId(userId)] },
                             null,
                             {
                                 _id: '$chatRoom.receiver._id',
