@@ -48,6 +48,4 @@ async function connectRedis() {
     }
 }
 
-connectRedis();
-
-export { asyncGet, asyncSadd, asyncSet, asyncSismember, asyncSmembers, asyncSrem };
+export { asyncGet, asyncSadd, asyncSet, asyncSismember, asyncSmembers, asyncSrem, connectRedis };

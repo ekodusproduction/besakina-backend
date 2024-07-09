@@ -62,7 +62,4 @@ export const chatSocket = (socket) => {
             console.error("Error sending isActive event:", error);
         }
     });
-
-
-
 };
