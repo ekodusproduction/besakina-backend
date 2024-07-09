@@ -9,7 +9,6 @@ export const getChatRooms = async (req, res, next) => {
     try {
         const userId = req.user.toString();
         console.log("userId:", userId);
-        const db = getDB()
 
         const pipeline = [
             {
@@ -20,8 +19,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 "$match": {
                     "$or": [
-                        { "sender": new ObjectId(userId) },
-                        { "receiver": new ObjectId(userId) }
+                        { "sender": ObjectId(userId) },
+                        { "receiver": ObjectId(userId) }
                     ]
                 }
             },
@@ -29,7 +28,7 @@ export const getChatRooms = async (req, res, next) => {
                 "$addFields": {
                     "participant": {
                         "$cond": {
-                            "if": { "$eq": ["$sender", new ObjectId(userId)] },
+                            "if": { "$eq": ["$sender", ObjectId(userId)] },
                             "then": "$receiver",
                             "else": "$sender"
                         }
@@ -83,18 +82,16 @@ export const getChatRooms = async (req, res, next) => {
             }
         ];
 
-
         const rooms = await Chat.aggregate(pipeline);
 
         console.log("Rooms:", rooms);
 
         return sendResponse(res, "Chat rooms list", 200, rooms);
     } catch (error) {
-        logger.error(error);
-        return res.status(500).json({ success: false, error: error.message });
+        console.error("Error fetching chat rooms:", error);
+        return sendError(res, "Failed to fetch chat rooms", 500);
     }
 };
-
 
 // const removeUser = async (array, id) => {
 //     return array.map(chatRoom => {
