@@ -21,7 +21,7 @@ export const chatSocket = (socket) => {
         try {
             console.log("sendMessage event fired", messageData);
 
-            const recieverId = messageData.receiver;
+            const recieverId = messageData.reciever;
             const sender = socket.user;
             console.log("sender", sender);
             const roomId = [recieverId, sender].sort().join("_");
@@ -45,7 +45,7 @@ export const chatSocket = (socket) => {
 
     socket.on("isActive", async (messageData) => {
         try {
-            const receiverId = messageData.receiver;
+            const receiverId = messageData.reciever;
             const sender = socket.user;
             const roomId = [receiverId, sender.id].sort().join("_");
 

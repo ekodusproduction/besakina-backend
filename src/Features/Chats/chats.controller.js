@@ -21,30 +21,30 @@ export const getChatRooms = async (req, res, next) => {
                 "$match": {
                     "$or": [
                         { "sender": new ObjectId(userId) },
-                        { "receiver": new ObjectId(userId) }
+                        { "reciever": new ObjectId(userId) }
                     ]
                 }
             },
             {
                 "$addFields": {
-                    "senderReceiver": {
+                    "senderReciever": {
                         "$cond": [
-                            { "$gt": ["$sender", "$receiver"] },
-                            { "sender": "$receiver", "receiver": "$sender" },
-                            { "sender": "$sender", "receiver": "$receiver" }
+                            { "$gt": ["$sender", "$reciever"] },
+                            { "sender": "$reciever", "reciever": "$sender" },
+                            { "sender": "$sender", "reciever": "$reciever" }
                         ]
                     }
                 }
             },
             {
                 "$group": {
-                    "_id": "$senderReceiver",
+                    "_id": "$senderReciever",
                     "roomId": {
                         "$first": {
                             "$concat": [
-                                { "$toString": "$senderReceiver.sender" },
+                                { "$toString": "$senderReciever.sender" },
                                 "_",
-                                { "$toString": "$senderReceiver.receiver" }
+                                { "$toString": "$senderReciever.reciever" }
                             ]
                         }
                     },
@@ -63,9 +63,9 @@ export const getChatRooms = async (req, res, next) => {
             {
                 "$lookup": {
                     "from": "users",
-                    "localField": "_id.receiver",
+                    "localField": "_id.reciever",
                     "foreignField": "_id",
-                    "as": "receiverDetails"
+                    "as": "recieverDetails"
                 }
             },
             {
@@ -75,15 +75,15 @@ export const getChatRooms = async (req, res, next) => {
                     "lastTimestamp": 1,
                     "sender": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.receiver", new ObjectId(userId)] },
+                            "if": { "$eq": ["$_id.sender", new ObjectId(userId)] },
                             "then": { "$arrayElemAt": ["$senderDetails", 0] },
                             "else": {}
                         }
                     },
-                    "receiver": {
+                    "reciever": {
                         "$cond": {
-                            "if": { "$eq": ["$_id.sender", new ObjectId(userId)] },
-                            "then": { "$arrayElemAt": ["$receiverDetails", 0] },
+                            "if": { "$eq": ["$_id.reciever", new ObjectId(userId)] },
+                            "then": { "$arrayElemAt": ["$recieverDetails", 0] },
                             "else": {}
                         }
                     }
@@ -96,8 +96,13 @@ export const getChatRooms = async (req, res, next) => {
                     "lastTimestamp": 1,
                     "sender.fullname": "$sender.fullname",
                     "sender.profile_pic": "$sender.profile_pic",
-                    "receiver.fullname": "$receiver.fullname",
-                    "receiver.profile_pic": "$receiver.profile_pic"
+                    "sender._id": "$sender._id",
+                    "sender.mobile": "$sender.mobile",
+
+                    "reciever.fullname": "$reciever.fullname",
+                    "reciever.profile_pic": "$reciever.profile_pic",
+                    "reciever._id": "$sender._id",
+                    "reciever.mobile": "$sender.mobile",
                 }
             }
         ];
@@ -169,8 +174,8 @@ const transformMessages = async (array, id) => {
         if (transformedMessage.sender._id == id) {
             transformedMessage.user = transformedMessage.sender;
         }
-        if (transformedMessage.receiver._id == id) {
-            transformedMessage.user = transformedMessage.receiver;
+        if (transformedMessage.reciever._id == id) {
+            transformedMessage.user = transformedMessage.reciever;
         }
         return transformedMessage;
     });
@@ -183,7 +188,7 @@ export const getMessagesInChatRoom = async (req, res, next) => {
         const userId = req.user;
 
         const messages = await Chat.find({
-            $or: [{ sender: userId, receiver: roomId }, { sender: roomId, receiver: userId }]
+            $or: [{ sender: userId, reciever: roomId }, { sender: roomId, reciever: userId }]
         }).sort({ createdAt: 1 })
 
         console.log("Fetched Messages:", messages);
