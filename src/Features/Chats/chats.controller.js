@@ -180,7 +180,8 @@ const transformMessages = async (array, id) => {
 export const getMessagesInChatRoom = async (req, res, next) => {
     try {
         const userId = new mongoose.Types.ObjectId(req.user.toString());
-        const roomId = req.params.id;
+        const recieverId = req.params.id;
+        const roomId = [recieverId, sender].sort().join("_");
 
         const pipeline = [
             {
