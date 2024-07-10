@@ -207,12 +207,6 @@ export const getMessagesInChatRoom = async (req, res, next) => {
                 }
             },
             {
-                $unwind: '$senderDetails'
-            },
-            {
-                $unwind: '$recieverDetails'
-            },
-            {
                 $addFields: {
                     user: {
                         $cond: {
