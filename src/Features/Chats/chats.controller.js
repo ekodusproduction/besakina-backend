@@ -21,8 +21,8 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $group: {
                     _id: {
-                        senderId: { $cond: [{ $eq: ['$sender', userId] }, '$reciever', '$reciever'] },
-                        receiverId: { $cond: [{ $eq: ['$reciever', userId] }, '$sender', '$sender'] }
+                        senderId: { $cond: [{ $eq: ['$sender', userId] }, '$reciever', '$sender'] },
+                        recieverId: { $cond: [{ $eq: ['$reciever', userId] }, '$sender', '$reciever'] }
                     },
                     lastMessage: { $first: '$$ROOT' }
                 }
@@ -38,7 +38,7 @@ export const getChatRooms = async (req, res, next) => {
             {
                 $lookup: {
                     from: 'users',
-                    localField: '_id.receiverId',
+                    localField: '_id.recieverId',
                     foreignField: '_id',
                     as: 'reciever'
                 }
@@ -48,14 +48,6 @@ export const getChatRooms = async (req, res, next) => {
             },
             {
                 $unwind: { path: '$reciever', preserveNullAndEmptyArrays: true }
-            },
-            {
-                $match: {
-                    $or: [
-                        { 'sender._id': { $ne: userId } }, // Exclude current user as sender
-                        { 'reciever._id': { $ne: userId } } // Exclude current user as reciever
-                    ]
-                }
             },
             {
                 $project: {
@@ -86,6 +78,14 @@ export const getChatRooms = async (req, res, next) => {
                             }
                         ]
                     }
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        { 'sender': { $ne: null } },
+                        { 'reciever': { $ne: null } }
+                    ]
                 }
             }
         ];
