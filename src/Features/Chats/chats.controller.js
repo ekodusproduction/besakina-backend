@@ -177,23 +177,81 @@ const transformMessages = async (array, id) => {
         return transformedMessage;
     });
 };
-
 export const getMessagesInChatRoom = async (req, res, next) => {
     try {
+        const userId = new mongoose.Types.ObjectId(req.user.toString());
         const roomId = req.params.id;
-        console.log("rooms", roomId)
-        const userId = req.user;
 
-        const messages = await Chat.find({
-            $or: [{ sender: userId, reciever: roomId }, { sender: roomId, reciever: userId }]
-        }).sort({ createdAt: 1 })
+        const pipeline = [
+            {
+                $match: { roomId: roomId }
+            },
+            {
+                $sort: { createdAt: 1 }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'sender',
+                    foreignField: '_id',
+                    as: 'senderDetails'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'reciever',
+                    foreignField: '_id',
+                    as: 'recieverDetails'
+                }
+            },
+            {
+                $unwind: '$senderDetails'
+            },
+            {
+                $unwind: '$recieverDetails'
+            },
+            {
+                $addFields: {
+                    user: {
+                        $cond: {
+                            if: { $eq: ['$sender', userId] },
+                            then: '$senderDetails',
+                            else: '$recieverDetails'
+                        }
+                    }
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    message: 1,
+                    seen: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    sender: '$senderDetails',
+                    reciever: '$recieverDetails',
+                    user: 1
+                }
+            }
+        ];
 
-        console.log("Fetched Messages:", messages);
+        const messages = await Chat.aggregate(pipeline);
 
-        const result = await transformMessages(messages, userId);
-        return sendResponse(res, "Chat message list", 200, result);
+        return res.status(200).json({
+            message: 'Chat message list',
+            http_status_code: 200,
+            success: true,
+            data: messages,
+            token: null
+        });
     } catch (error) {
-        logger.error(error);
-        return sendError(res, error.message, 500);
+        console.error('Error fetching chat messages:', error);
+        return res.status(500).json({
+            message: 'Internal server error',
+            http_status_code: 500,
+            success: false,
+            error: error.message
+        });
     }
 };
