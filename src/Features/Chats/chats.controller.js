@@ -177,10 +177,11 @@ const transformMessages = async (array, id) => {
         return transformedMessage;
     });
 };
+
 export const getMessagesInChatRoom = async (req, res, next) => {
     try {
         const userId = new mongoose.Types.ObjectId(req.user.toString());
-        const recieverId = req.params.id;
+        const recieverId = new mongoose.Types.ObjectId(req.params.id);
         const roomId = [recieverId, userId].sort().join("_");
 
         const pipeline = [
@@ -191,28 +192,12 @@ export const getMessagesInChatRoom = async (req, res, next) => {
                 $sort: { createdAt: 1 }
             },
             {
-                $lookup: {
-                    from: 'users',
-                    localField: 'sender',
-                    foreignField: '_id',
-                    as: 'senderDetails'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'reciever',
-                    foreignField: '_id',
-                    as: 'recieverDetails'
-                }
-            },
-            {
                 $addFields: {
                     user: {
                         $cond: {
                             if: { $eq: ['$sender', userId] },
-                            then: '$senderDetails',
-                            else: '$recieverDetails'
+                            then: '$sender',
+                            else: '$reciever'
                         }
                     }
                 }
@@ -224,8 +209,8 @@ export const getMessagesInChatRoom = async (req, res, next) => {
                     seen: 1,
                     createdAt: 1,
                     updatedAt: 1,
-                    sender: '$senderDetails',
-                    reciever: '$recieverDetails',
+                    sender: 1,
+                    reciever: 1,
                     user: 1
                 }
             }
