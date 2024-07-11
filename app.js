@@ -58,7 +58,6 @@ app.get("/api", (req, res) => {
 
 app.use("/api/users", userRouter);
 app.use("/api/category", categoryRouter);
-
 app.use("/api/Property", propertyRouter);
 app.use("/api/Vehicle", vehiclesRouter);
 app.use("/api/Hospital", hospitalsRouter);

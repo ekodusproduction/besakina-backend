@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 import { getDB } from "../../mongodb/mongodb.js";
 
-export const getChatRooms = async (req, res, next) => {
+export const getChatRooms = async (req, res, next) => { 
     try {
         const userId = new ObjectId(req.user.toString());
 

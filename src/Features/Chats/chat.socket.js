@@ -23,20 +23,23 @@ export const chatSocket = (socket) => {
 
             const recieverId = messageData.reciever;
             const sender = socket.user;
-            console.log("sender", sender);
-            const roomId = [recieverId, sender].sort().join("_");
-            messageData.roomId = roomId;
-            messageData.sender = sender;
-            const message = await Chat.create(messageData);
-            messageData.user = sender;
+            if (sender != recieverId) {
 
-            console.log("message", message);
-            if (socket.rooms.has(roomId)) {
-                console.log("has room ");
-                socket.to(roomId).emit("receivedMessage", message);
-                console.log(`Message sent to room: ${roomId}`, message);
-            } else {
-                console.error(`Socket is not in the room: ${roomId}`);
+                console.log("sender", sender);
+                const roomId = [recieverId, sender].sort().join("_");
+                messageData.roomId = roomId;
+                messageData.sender = sender;
+                const message = await Chat.create(messageData);
+                messageData.user = sender;
+
+                console.log("message", message);
+                if (socket.rooms.has(roomId)) {
+                    console.log("has room ");
+                    socket.to(roomId).emit("receivedMessage", message);
+                    console.log(`Message sent to room: ${roomId}`, message);
+                } else {
+                    console.error(`Socket is not in the room: ${roomId}`);
+                }
             }
         } catch (error) {
             console.error("Error sending message:", error);
