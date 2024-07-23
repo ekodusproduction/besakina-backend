@@ -10,9 +10,9 @@ export const mongooseConnection = async function () {
         const collections = await db.listCollections().toArray();
 
         console.log("Collections:");
-        collections.forEach(collection => {
-            console.log(collection.name);
-        });
+        for (const collection of collections) {
+            await db.collection(collection.name).reIndex();
+        }
         console.log('Connected to MongoDB using Mongoose');
     } catch (err) {
         console.error('Failed to connect to MongoDB using Mongoose', err);
