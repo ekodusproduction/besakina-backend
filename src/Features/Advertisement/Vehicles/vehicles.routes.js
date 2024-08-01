@@ -16,7 +16,7 @@ import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../..
 const vehiclesRouter = Router()
 
 //protected routes id=> advertisement id
-vehiclesRouter.post("/add", jwtAuth, fileUpload("vehicles"), checkUserProfileCompletion, addAdvertisement)
+vehiclesRouter.post("/add", jwtAuth, fileUpload("vehicles"), checkUserProfileCompletion, checkUserPlanQuotaPermissions, addAdvertisement)
 
 vehiclesRouter.get("/filter", filterAdvertisement)
 
