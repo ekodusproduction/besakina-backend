@@ -14,6 +14,7 @@ export const checkUserProfileCompletion = async (req, res, next) => {
         if (!userProfile.fullname || !userProfile.mobile || !userProfile.city || !userProfile.profile_pic || !userProfile.state) {
             return sendError(res, "User Profile Incomplete", 400);
         }
+        console.log("calling next")
         next();
     } catch (error) {
         console.error("Checking user profile error", error);
@@ -56,7 +57,7 @@ export const checkUserPlanQuotaPermissions = async (req, res, next) => {
         if (userPostsCount >= user.plan.no_of_ads) {
             return sendError(res, "Advertisement quota is full. Please upgrade the plan.", 403);
         }
- 
+
         next();
     } catch (error) {
         console.error("Error checking user plan quota permissions:", error);
