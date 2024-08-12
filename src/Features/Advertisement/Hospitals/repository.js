@@ -9,6 +9,8 @@ export const addAdvertisement = async (requestBody, files) => {
     try {
         requestBody.images = files;
         const result = new Hospital(requestBody);
+        console.log("in cont", result);
+
         const savedDoctor = await result.save();
         if (!savedDoctor) {
             return { error: true, data: { message: "Error adding Hospital.", statusCode: 400, data: null } };
