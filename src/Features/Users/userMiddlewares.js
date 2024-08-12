@@ -56,7 +56,7 @@ export const checkUserPlanQuotaPermissions = async (req, res, next) => {
         if (userPostsCount >= user.plan.no_of_ads) {
             return sendError(res, "Advertisement quota is full. Please upgrade the plan.", 403);
         }
-
+ 
         next();
     } catch (error) {
         console.error("Error checking user plan quota permissions:", error);
