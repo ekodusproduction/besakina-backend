@@ -7,6 +7,7 @@ export const addAdvertisement = async (requestBody, files) => {
     try {
         requestBody.images = files;
         const result = new Hospitality(requestBody);
+        console.log("in repo",result);
         const savedDoctor = await result.save();
         if (!savedDoctor) {
             return { error: true, data: { message: "Error adding Hospitality.", statusCode: 400, data: null } };
