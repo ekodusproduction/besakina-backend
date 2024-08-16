@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     plan: { type: mongoose.Schema.Types.ObjectId, ref: 'Plan', default: null },
     plan_date: { type: Date, default: Date.now },
     contacts_quota: { type: Number, default: null },
-    payments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Payments', default: null }],
+    payments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Payment', default: null }],
     state: { type: String, default: null },
     city: { type: String, default: null },
     locality: { type: String, default: null },
