@@ -27,7 +27,7 @@ import homeRouter from './src/Features/Home/home.routes.js';
 import bannerRouter from './src/Features/Banner/banner.routes.js';
 import wishlistRoutes from './src/Features/Wishlist/wishlist.routes.js';
 import paymentRouter from './src/Features/Payments/paymentRoutes.js';
-
+import businessRouter from "./src/Features/BusinessListing/business.routes.js"
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express()
 // Middleware setup
@@ -70,7 +70,7 @@ app.use("/api/home", homeRouter)
 app.use("/api/favourites", homeRouter)
 app.use("/api/banner", bannerRouter)
 app.use('/api/wishlist', wishlistRoutes)
-app.use('/api/business', businessR)
+app.use('/api/business', businessRouter)
 app.use('/api/payments', paymentRouter)
 
 app.use(async (err, req, res, next) => {
