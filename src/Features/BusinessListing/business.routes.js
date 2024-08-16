@@ -11,27 +11,22 @@ import {
 import { jwtAuth } from "../../Middlewares/auth.middleware.js";
 import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../Users/userMiddlewares.js";
 import { fileUpload } from "../../Middlewares/multer.middlewares.js";
+
 let businessRouter = Router()
-//protected routes id=> advertisement id
 businessRouter.post("/add", jwtAuth, fileUpload("vehicles"), checkUserProfileCompletion, checkUserPlanQuotaPermissions, addAdvertisement)
-
 businessRouter.get("/filter", filterAdvertisement)
-
 businessRouter.put("/id/:id", jwtAuth, updateAdvertisement)
 businessRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)
 businessRouter.delete("/deactivate/id/:id", jwtAuth, deactivateAdvertisement)
-
 businessRouter.get("/id/:id", getAdvertisement)
 // images
 //id =>advertisement id
 businessRouter.delete("/image/delete/id/:id", jwtAuth, deleteImage)
-
 businessRouter.post("/images/id/:id", jwtAuth, fileUpload("vehicles"), addImage)
 // list user own advertisement //id => user id
 //category => doctors, education, hospitals, hospitality, vehicles, properties
 businessRouter.get("/list", getListAdvertisement)
 businessRouter.delete("/id/:id", jwtAuth, deleteAdvertisement)
-
 businessRouter.get("/formdata/fieldname/:fieldname", listFormData)
 businessRouter.post("/formdata", jwtAuth, addFormData)
 businessRouter.put("/formdata/id/:id", jwtAuth, editFormData)
