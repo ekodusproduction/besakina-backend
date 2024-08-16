@@ -25,7 +25,7 @@ export const verifyIp = async function (req, res, next) {
     }
 }
 
-export default verifyRequestOrigin = async function (req, res, next) {
+export const verifyRequestOrigin = async function (req, res, next) {
     const origin = req.headers.origin;
     const allowedOrigins = ['https://test.payu.in', "https://secure.payu.in"];
 
