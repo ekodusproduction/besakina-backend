@@ -35,7 +35,9 @@ const app = express()
 app.set('trust proxy', true);
 app.use(cors({ credentials: false }));
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use((req, res, next) => {
     console.log("ip", req.ip)
     console.log("url", req.url)
@@ -45,7 +47,6 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(express.urlencoded({ extended: true }));
 app.use(helmet({
     crossOriginResourcePolicy: false,
 }));

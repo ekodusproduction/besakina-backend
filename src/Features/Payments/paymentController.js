@@ -4,6 +4,7 @@ import User from "../Users/Models/UserModel.js"
 
 export const addPayments = async function (req, res, next) {
     try {
+        console.log("req ", req.body);
         const payment = new Payment(req.body);
         await payment.save();
         await User.updateOne(
