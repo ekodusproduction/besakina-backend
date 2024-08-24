@@ -1,15 +1,19 @@
 MYSQL_PORT = 3306
-NODE_ENV  = development
+NODE_ENV = development
 JWT_SECRET=FBG237CV278gwgwgwqeEG2G9V3GFB2XCQNF
 PORT = 4000
 
 REDIS_HOST = 127.0.0.1
 REDIS_PORT = 6379
+REDIS_PASSWORD=redis@123
+MYSQL_ROOT_PASSWORD=mariaDb
+MYSQL_USER=maria
 
 DG_ORIGIN_ENDPOINT=https://besakina.blr1.digitaloceanspaces.com
 DG_SPACES_KEY=DO00PFHT9G6KPQ8C4TTZ
 DG_SPACES_SECRET=Su3AeKa6mODYEUuURH5Hg20CTogbNG2j2rCrrC57gXI
 
-
+MONGO_INITDB_ROOT_USERNAME=mongoadmin
 MONGODB_URI = mongodb+srv://doadmin:568dI2N1T4U0oVp3@besakina-cf2566c4.mongo.ondigitalocean.com/besakina_prod?tls=true&authSource=admin&replicaSet=besakina
 MONGO_DB = besakina_prod
+MONGO_INITDB_ROOT_PASSWORD=mangoIsMongo
