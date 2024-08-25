@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import mongoose from "mongoose"
+import mongoose from "mongoose";
 
 export const mongooseConnection = async function () {
     const uri = process.env.MONGODB_URI;
@@ -11,7 +11,8 @@ export const mongooseConnection = async function () {
 
         console.log("Collections:");
         for (const collection of collections) {
-            await db.collection(collection.name).reIndex();
+            console.log(`Collection: ${collection.name}`);
+            // Remove or replace the reIndex operation if needed
         }
         console.log('Connected to MongoDB using Mongoose');
     } catch (err) {
@@ -19,4 +20,3 @@ export const mongooseConnection = async function () {
         throw err;
     }
 }
-
