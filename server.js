@@ -42,6 +42,6 @@ io.on('connection', async (socket) => {
 
 httpServer.listen(port, async () => {
     console.log(`HTTP server running on port ${port}`);
-    // await connectToMongoDB()
+    await connectToMongoDB()
     await mongooseConnection()
 });
