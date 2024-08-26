@@ -8,7 +8,7 @@ import { addVehicles } from "./vehicles.seeder.js";
 export const seeder = async () => {
     try {
         const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjY1MDg3N2E3MzcwYzZlZGZmNjJjZTg5IiwicGxhbl9pZCI6bnVsbCwiaWF0IjoxNzE4NDMwMzA5LCJleHAiOjE3MjEwMjIzMDl9.yD9Bt56MTim5v4RydQS1PXrTqBCYG5mWuWxJtBATZwY`
-        const baseUrl = 'besakina.com/dev'
+        const baseUrl = 'besakina.com'
         await addPlans(token, baseUrl);
         // await addProperties(token, baseUrl);
         // await addVehicles(token, baseUrl)
