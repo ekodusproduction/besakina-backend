@@ -21,8 +21,7 @@ const uploadToSpaces = async (file) => {
         Bucket: 'besakina',
         Key: `${uuidv4()}`,
         Body: file.buffer,
-        ContentType: file.mimetype,
-        ACL: 'public-read'
+        ContentType: file.mimetype
     };
 
     try {
@@ -30,7 +29,8 @@ const uploadToSpaces = async (file) => {
         console.log("command", command)
         const data = await s3Client.send(command);
         console.log("file data", data)
-        const fileUrl = `${spaceBaseUrl}/${params.Key}`;
+        //endpoint/object/public/besakina/2a43b29a-67ab-4e54-9952-b94ce15a4ca3
+        const fileUrl = `https://baymzlfblrjzezsxitxq.supabase.co/storage/v1/object/public/besakina/${params.Key}`;
         return { fieldname: file.fieldname, path: fileUrl };
     } catch (error) {
         throw new ApplicationError('Failed to upload file to supabase', 400);
