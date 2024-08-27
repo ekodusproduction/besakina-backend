@@ -7,6 +7,7 @@ import { ApplicationError } from "../ErrorHandler/applicationError.js";
 const spaceBaseUrl = process.env.SP_ORIGIN_ENDPOINT;
 // Define s3Client here
 export const s3Client = new S3Client({
+    forcePathStyle: true,
     region: process.env.SP_REGION,
     credentials: {
         accessKeyId: process.env.SP_SPACES_KEY,
