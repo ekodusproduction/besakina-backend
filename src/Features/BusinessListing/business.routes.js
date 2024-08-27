@@ -13,7 +13,7 @@ import { checkUserProfileCompletion, checkUserPlanQuotaPermissions } from "../Us
 import { fileUpload } from "../../Middlewares/multer.middlewares.js";
 
 let businessRouter = Router()
-businessRouter.post("/add", jwtAuth, fileUpload("vehicles"), checkUserProfileCompletion, checkUserPlanQuotaPermissions, addAdvertisement)
+businessRouter.post("/add", jwtAuth, fileUpload("vehicles"), checkUserProfileCompletion,  addAdvertisement)
 businessRouter.get("/filter", filterAdvertisement)
 businessRouter.put("/id/:id", jwtAuth, updateAdvertisement)
 businessRouter.put("/activate/id/:id", jwtAuth, activateAdvertisement)

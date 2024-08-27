@@ -9,7 +9,7 @@ export const addAdvertisement = async (requestBody, files) => {
         const result = new Business(requestBody);
         const savedDoctor = await result.save();
         if (!savedDoctor) {
-            return { error: true, data: { message: "Error adding Business.", statusCode: 400, data: null } };
+            return { error: true, data: { message: "Error adding Business.", statusCode: 401, data: null } };
         }
         return { error: false, data: { message: "Business added successfully", statusCode: 200, data: { id: savedDoctor._id } } };
     } catch (error) {

@@ -32,7 +32,7 @@ export const fileUpload = (destination) => {
             try {
                 const uploadedFileUrls = [];
                 for (const file of req.files) {
-
+                    console.log("files  -->", file)
                     const fileUrl = await uploadToSpaces(file);
                     console.log("file url in middleware", fileUrl)
                     uploadedFileUrls.push(fileUrl);
