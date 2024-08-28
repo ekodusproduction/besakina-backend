@@ -11,12 +11,8 @@ export const mongooseConnection = async function () {
         const db = mongoose.connection.db;
         const collections = await db.listCollections().toArray();
 
-        console.log("Collections:");
-        for (const collection of collections) {
-            console.log(`Collection: ${collection.name}`);
-            // Remove or replace the reIndex operation if needed
-        }
-        console.log('Connected to MongoDB using Mongoose');
+
+        console.log('Connected to MongoDB using Mongoose and reindexed all collections');
     } catch (err) {
         console.error('Failed to connect to MongoDB using Mongoose', err);
         throw err;

@@ -115,7 +115,11 @@ export const getUserAdds = async function (req, res, next) {
     try {
 
         const ads = await getDB().collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        console.log("Ads:", ads);  // Log the ads
+
         const business = await getDB().collection('businesses').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+        console.log("Businesses:", business);  // Log the businesses
+
         const combined = [...business, ...ads];
         if (!combined.length) {
             return sendResponse(res, "No advertisements or businesses found", 200, []);
