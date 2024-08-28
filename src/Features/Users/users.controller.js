@@ -115,7 +115,7 @@ export const getUserAdds = async function (req, res, next) {
     }
     try {
 
-        const ads = await Base.find({ user: new ObjectId(user) })
+        const ads = await Base.find({ user:user) })
         console.log("Ads:", ads);  // Log the ads
 
         const business = await Business.find({ user: new ObjectId(user) })
