@@ -39,8 +39,8 @@ userSchema.pre('save', function (next) {
 
     next();
 });
-
-
+userSchema.index({ "mobile": 1 })
+userSchema.index({ "_id": 1, "mobile": 1 })
 const User = mongoose.model('User', userSchema);
 
 export default User;

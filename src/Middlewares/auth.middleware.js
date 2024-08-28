@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 dotenv.config();
 import jwt, { decode } from 'jsonwebtoken';
 import { sendError } from "../Utility/response.js";
+
 export const verifyToken = (token) => {
     try {
         console.log("token in verification", token)
