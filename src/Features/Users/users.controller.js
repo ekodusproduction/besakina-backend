@@ -105,6 +105,33 @@ export const addUserDocs = async function (req, res, next) {
     }
 };
 
+// export const getUserAdds = async function (req, res, next) {
+//     const { user } = req;
+
+//     if (!ObjectId.isValid(user)) {
+//         return sendError(res, "Invalid User id", 400);
+//     }
+
+//     try {
+
+//         const ads = await getDB().collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+//         console.log("Ads:", ads);  // Log the ads
+
+//         const business = await getDB().collection('businesses').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
+//         console.log("Businesses:", business);  // Log the businesses
+
+//         const combined = [...business, ...ads];
+//         if (!combined.length) {
+//             return sendResponse(res, "No advertisements or businesses found", 200, []);
+//         }
+
+//         return sendResponse(res, 'User ads and businesses', 200, combined);
+//     } catch (error) {
+//         console.error("Error fetching user ads and businesses:", error);
+//         next(error);
+//     }
+// };
+
 export const getUserAdds = async function (req, res, next) {
     const { user } = req;
 
@@ -113,14 +140,31 @@ export const getUserAdds = async function (req, res, next) {
     }
 
     try {
+        const db = getDB();
 
-        const ads = await getDB().collection('advertisement').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
-        console.log("Ads:", ads);  // Log the ads
+        const adsAggregation = [
+            { $match: { user: new ObjectId(user) } },
+            { $project: { type: 1, name: 1, title: 1, description: 1, created_at: 1 } },
+            { $sort: { created_at: -1 } },
+            { $addFields: { source: "advertisement" } }
+        ];
 
-        const business = await getDB().collection('businesses').find({ user: new ObjectId(user) }).sort({ created_at: -1 }).toArray();
-        console.log("Businesses:", business);  // Log the businesses
+        const businessAggregation = [
+            { $match: { user: new ObjectId(user) } },
+            { $project: { type: 1, name: 1, title: 1, description: 1, created_at: 1 } },
+            { $sort: { created_at: -1 } },
+            { $addFields: { source: "businesses" } }
+        ];
 
-        const combined = [...business, ...ads];
+        // Run both aggregations in parallel
+        const [ads, business] = await Promise.all([
+            db.collection('advertisement').aggregate(adsAggregation).toArray(),
+            db.collection('businesses').aggregate(businessAggregation).toArray()
+        ]);
+
+        // Combine results
+        const combined = [...ads, ...business];
+
         if (!combined.length) {
             return sendResponse(res, "No advertisements or businesses found", 200, []);
         }
