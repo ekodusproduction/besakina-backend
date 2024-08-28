@@ -8,7 +8,6 @@ import { MongoClient, ObjectId } from 'mongodb';
 import { getDB } from '../../config/mongodb.js';
 import Base from '../Advertisement/BaseModel/BaseModel.js';
 import Business from '../BusinessListing/Model/BusinessModel.js';
-import { Console } from 'winston/lib/winston/transports/index.js';
 // Send OTP
 export const sendOtp = async (req, res, next) => {
     const { mobile } = req.body;
