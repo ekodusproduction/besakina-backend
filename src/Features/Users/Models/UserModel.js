@@ -41,7 +41,6 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.index({ "mobile": 1 }, { unique: true });
-userSchema.index({ "_id": 1, "mobile": 1 }, { unique: true });
 
 const User = mongoose.model('User', userSchema);
 
