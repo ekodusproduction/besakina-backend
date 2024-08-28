@@ -46,7 +46,6 @@ baseSchema.pre('save', function (next) {
     }
     next();
 });
-baseSchema.index({ user: 1, _id: 1 });
 
 const Base = mongoose.model('Base', baseSchema);
 
