@@ -144,14 +144,14 @@ export const getUserAdds = async function (req, res, next) {
         const db = getDB();
 
         const adsAggregation = [
-            { $match: { user: new ObjectId(user) } },
+            { $match: { user: user } },
             { $project: { type: 1, name: 1, title: 1, description: 1, created_at: 1 } },
             { $sort: { created_at: -1 } },
             { $addFields: { source: "advertisement" } }
         ];
 
         const businessAggregation = [
-            { $match: { user: new ObjectId(user) } },
+            { $match: { user: user } },
             { $project: { type: 1, name: 1, title: 1, description: 1, created_at: 1 } },
             { $sort: { created_at: -1 } },
             { $addFields: { source: "businesses" } }
