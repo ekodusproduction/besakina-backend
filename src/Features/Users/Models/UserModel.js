@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     fullname: { type: String, default: null },
-    mobile: { type: String, required: true, unique: true },
+    mobile: { type: Number, required: true, unique: true },
     alternate_mobile: { type: Number, default: null },
-    otp: { type: String, default: null },
+    otp: { type: Number, default: null },
     email: { type: String, default: null },
     doc_number: { type: String, default: null },
     doc_type: { type: String, default: null },
