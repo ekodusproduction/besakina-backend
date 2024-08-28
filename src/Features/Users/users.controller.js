@@ -10,17 +10,17 @@ import Base from '../Advertisement/BaseModel/BaseModel.js';
 import Business from '../BusinessListing/Model/BusinessModel.js';
 // Send OTP
 export const sendOtp = async (req, res, next) => {
-    const { mobile } = req.body;
+    const mobile = parseInt(req.body.mobile, 10);
     const otp = Math.floor(Math.random() * 8999 + 1000);
 
     try {
         let user = await User.findOne({ mobile });
-        console.log(user)
+        console.log(user);
         if (!user) {
             user = new User({ mobile, otp });
             await user.save();
         } else {
-            console.log("usr found")
+            console.log("User found");
             user.otp = otp;
             await user.save();
         }
@@ -30,13 +30,15 @@ export const sendOtp = async (req, res, next) => {
     }
 };
 
+
 // Login
 export const login = async (req, res, next) => {
-    const { mobile, otp } = req.body;
+    const mobile = parseInt(req.body.mobile, 10);
+    const otp = parseInt(req.body.otp, 10);
 
     try {
         const user = await User.findOne({ mobile, otp });
-        console.log("user", user);
+        console.log("User", user);
         if (!user) {
             throw new ApplicationError('Invalid OTP', 404);
         }
