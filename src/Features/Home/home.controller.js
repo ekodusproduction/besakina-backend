@@ -1,5 +1,5 @@
 import { sendResponse } from "../../Utility/response.js";
-import { getDB } from "../../mongodb/mongodb.js";
+import { getDB } from "../../config/mongodb.js";
 
 export const latestAdds = async function (req, res, next) {
     try {

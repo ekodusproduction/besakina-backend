@@ -5,7 +5,7 @@ import { sendError, sendResponse } from '../../Utility/response.js';
 import { ApplicationError } from '../../ErrorHandler/applicationError.js';
 import jwt from 'jsonwebtoken';
 import { MongoClient, ObjectId } from 'mongodb';
-import { getDB } from '../../mongodb/mongodb.js';
+import { getDB } from '../../config/mongodb.js';
 // Send OTP
 export const sendOtp = async (req, res, next) => {
     const { mobile } = req.body;

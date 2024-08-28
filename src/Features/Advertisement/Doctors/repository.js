@@ -1,6 +1,6 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
-import { getDB } from "../../../mongodb/mongodb.js";
+import { getDB } from "../../../config/mongodb.js";
 import Doctor from "./Models/DoctorModel.js";
 import DoctorExpertise from "./Models/ExpertiseModel.js";
 

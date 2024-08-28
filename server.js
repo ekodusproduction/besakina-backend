@@ -9,8 +9,8 @@ import { jwtAuth } from './src/Middlewares/auth.middleware.js';
 import { socketAuth } from "./socketAuth.js"
 import { s3Client } from './src/config/aws-sdk.js';
 import fs from "fs";
-import { connectToMongoDB } from './src/mongodb/mongodb.js';
-import { mongooseConnection } from "./src/Mongoose/mongoose.js"
+import { connectToMongoDB } from './src/config/mongodb.js';
+import { mongooseConnection } from "./src/config/mongoose.js"
 import { chatSocket } from './src/Features/Chats/chat.socket.js';
 import { addUserToOnline, removeUserFromOnline } from './src/Features/Users/userActivity.js';
 // import { connectRedis } from "./redis.js"

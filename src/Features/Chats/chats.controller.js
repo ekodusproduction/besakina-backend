@@ -3,9 +3,9 @@ import { sendResponse, sendError } from "../../Utility/response.js";
 import Chat from "./chatModel.js";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
-import { getDB } from "../../mongodb/mongodb.js";
+import { getDB } from "../../config/mongodb.js";
 
-export const getChatRooms = async (req, res, next) => { 
+export const getChatRooms = async (req, res, next) => {
     try {
         const userId = new ObjectId(req.user.toString());
 
