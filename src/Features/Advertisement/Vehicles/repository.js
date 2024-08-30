@@ -123,13 +123,17 @@ export const addImage = async (advertisementID, files, userId) => {
             return { error: true, data: { message: "Vehicle not found.", statusCode: 404, data: null } };
         }
         result.images.push(files[0]);
-        await result.save();
+
+        // Disable schema validation before saving
+        await result.save({ validateBeforeSave: false });
+
         return { error: false, data: { data: [files[0]], message: "Vehicle image has been added.", statusCode: 200 } };
     } catch (error) {
         logger.info(error);
         throw new ApplicationError(error, 500);
     }
 };
+
 
 export const deleteImage = async (advertisementID, file, userId) => {
     try {
