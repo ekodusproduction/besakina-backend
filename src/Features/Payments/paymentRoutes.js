@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getPayments, addPayments } from "./paymentController.js"
+import { getPayments } from "./paymentController.js"
+import {addPayments, failedPayments, disputePayments, refundPayments} from "./paymentHooks.js"
 import {  verifyRequestOrigin } from "./verifyIpMiddleware.js"
 import { jwtAuth } from "../../Middlewares/auth.middleware.js";
 
