@@ -124,8 +124,7 @@ export const addImage = async (advertisementID, files, userId) => {
         }
         result.images.push(files[0]);
 
-        // Disable schema validation before saving
-        await result.save({ validateBeforeSave: false });
++        await result.save({ validateBeforeSave: false });
 
         return { error: false, data: { data: [files[0]], message: "Vehicle image has been added.", statusCode: 200 } };
     } catch (error) {
