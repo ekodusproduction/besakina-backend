@@ -9,6 +9,7 @@ import { getDB } from '../../config/mongodb.js';
 import Base from '../Advertisement/BaseModel/BaseModel.js';
 import Business from '../BusinessListing/Model/BusinessModel.js';
 import { sendSms } from '../../config/smsConfig.js';
+
 export const sendOtp = async (req, res, next) => {
     const mobile = parseInt(req.body.mobile, 10);
     const otp = Math.floor(Math.random() * 8999 + 1000);
@@ -24,7 +25,7 @@ export const sendOtp = async (req, res, next) => {
             user.otp = otp;
             await user.save();
         }
-        variables = `${otp}|5`
+        const variables = `${otp}|5`
         const messagestatus = await sendSms(process.env.MESSAGE_ID_LOGIN_OTP, variables, mobile)
         if (!messagestatus) {
             return await sendError(res, 'Error occured while trying to send otp. Try Again', 200,);
@@ -36,7 +37,6 @@ export const sendOtp = async (req, res, next) => {
 };
 
 
-// Login
 export const login = async (req, res, next) => {
     const mobile = parseInt(req.body.mobile, 10);
     const otp = parseInt(req.body.otp, 10);
