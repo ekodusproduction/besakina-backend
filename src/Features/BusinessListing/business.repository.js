@@ -57,8 +57,7 @@ const filterAdvertisement = async (query) => {
             if (query.hasOwnProperty(key)) {
                 if (key === 'minPrice' && query[key] !== undefined) {
                     if (!filter.price) filter.price = {};
-                    filter.price.$gte = parseFloat(query[key]);
-                } else if (key === 'maxPrice' && query[key] !== undefined) {
+                 } else if (key === 'maxPrice' && query[key] !== undefined) {
                     if (!filter.price) filter.price = {};
                     filter.price.$lte = parseFloat(query[key]);
                 } else {

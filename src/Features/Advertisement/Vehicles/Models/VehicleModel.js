@@ -4,7 +4,7 @@ import Base from '../../BaseModel/BaseModel.js';
 const vehicleSchema = new mongoose.Schema({
     type: { type: String, required: true },
     brand: { type: String, required: true },
-    registration_year: { type: String, required: true },
+    registration_year: { type: String, required: false },
     kilometer_driven: { type: String, default: null },
     category: { type: String, default: null },
     fuel: { type: String, required: true },

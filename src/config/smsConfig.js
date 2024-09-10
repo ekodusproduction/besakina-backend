@@ -5,13 +5,13 @@ import axios from "axios"
 const url = 'https://www.fast2sms.com/dev/bulkV2';
 const apiKey = process.env.API_KEY_FAST2SMS;
 
-export const sendSms = async function (messageId, variables, number) {
+export const sendSms = async function (messageId, variables, numbers) {
     const data = {
         sender_id: process.env.DLT_SENDER_ID,
         message: messageId,
         variables_values: variables,
         route: 'dlt',
-        numbers: number
+        numbers: numbers
     };
 
     try {
