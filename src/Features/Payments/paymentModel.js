@@ -51,7 +51,8 @@ const paymentSchema = new mongoose.Schema({
     bankcode: { type: String },
     surl: { type: String },
     curl: { type: String },
-    furl: { type: String }
+    furl: { type: String },
+    plan: { type: mongoose.Schema.Types.ObjectId, ref: 'Plan', default: null },
 }, { timestamps: true });
 
 const Payment = mongoose.model('Payment', paymentSchema);

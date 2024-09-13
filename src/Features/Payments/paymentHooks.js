@@ -2,6 +2,7 @@ import Payment from "./paymentModel.js"
 import { sendResponse, sendError } from "../../Utility/response.js"
 import User from "../Users/Models/UserModel.js"
 
+
 export const addPayments = async function (req, res, next) {
     try {
         const payment = new Payment(req.body);

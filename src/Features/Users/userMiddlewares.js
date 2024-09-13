@@ -22,28 +22,6 @@ export const checkUserProfileCompletion = async (req, res, next) => {
     }
 };
 
-// export const checkUserPlanQuotaPermissions = async function (req, res, next) {
-//     const connection = await pool.getConnection()
-//     try {
-//         const selectUser = `SELECT * FROM userselectedplans WHERE user = ?`
-//         const [rows, fields] = await connection.query(selectUser, [req.user])
-//         const userProfile = rows[0];
-//         const planSql = `SELECT * FROM plans WHERE id = ?`
-//         const [plans, planFields] = await connection.query(planSql, [rows[0].plan_id])
-
-//         const sql = countUserPosts.replaceAll('?', user)
-//         const [posts, postFields] = await connection.query(sql);
-//         if(posts[0].total_posts >= plans[0].no_of_ads){
-//             return await sendError(res, "Advertisement quota is full. Please upgrade the plan.")
-//         }
-//         next()
-//     } catch (error) {
-//         return await sendError(res, "Internal Server Error", 500);
-//     } finally {
-//         connection.release()
-//     }
-// }
-
 export const checkUserPlanQuotaPermissions = async (req, res, next) => {
     try {
         const user = await User.findById(req.user).populate('plan').exec();
