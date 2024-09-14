@@ -5,7 +5,7 @@ const bannerSchema = new mongoose.Schema({
     images: { type: String, required: true },
 });
 
-bannerSchema.index({ rank: 1 })
+bannerSchema.index({ type: 1 })
 const Banner = mongoose.model('Banner', bannerSchema);
 
 export default Banner;
