@@ -1,15 +1,16 @@
 import Banner from "./BannerModel.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
-
+import { logger } from "../../Middlewares/logger.middleware.js";
 const getBanner = async () => {
     try {
-        const data = await Banner.find({});
+        const data = await Banner.aggregate([{ $sample: { size: 10 } }]); 
         return { error: false, data: { message: "Banner list.", statusCode: 200, data } };
     } catch (error) {
         logger.error(error);
         throw new ApplicationError(error, 500);
     }
 };
+
 
 const addBanner = async (requestBody, files) => {
     try {

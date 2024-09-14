@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 const bannerSchema = new mongoose.Schema({
     type: { type: String, required: true },
     images: { type: String, required: true },
-    rank: { type: Number, required: true },
 });
 
 bannerSchema.index({ rank: 1 })
