@@ -19,7 +19,7 @@ export const addBanner = async (req, res, next) => {
 export const getBanner = async (req, res, next) => {
     try {
         const { type } = req.query;
-        const result = await repository.getBanner();
+        const result = await repository.getBanner(type);
         if (result.error) {
             return sendError(res, result.data.message, result.data.statusCode);
         }
