@@ -18,6 +18,7 @@ const getBanner = async (type = null) => {
             {
                 $project: {
                     images: 1, // Include the single image
+                    _id: 0 // Omit the _id field 
                 }
 
             }
