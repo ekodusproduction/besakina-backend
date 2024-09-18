@@ -10,11 +10,11 @@ const getBanner = async (type = null) => {
         if (type != null) {
             matchQuery.type = type; // Add type filtering if provided
         }
-
+        const sampleCount = await Banner.countDocuments(matchQuery);
         // Aggregate query to filter, sample, project images and subType, and randomize image order
         const data = await Banner.aggregate([
             { $match: matchQuery }, // Filter by isActive and type (if provided)
-            { $sample: { size: 10 } }, // Get a random sample of 10 banners
+            { $sort: { $random: { } } }, // Get a random sample of 10 banners
             {
                 $project: {
                     images: 1, // Include the single image
