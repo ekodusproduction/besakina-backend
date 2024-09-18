@@ -5,20 +5,18 @@ import { logger } from "../../Middlewares/logger.middleware.js";
 const getBanner = async (type = null) => {
     try {
 
-        // Build the filter for the aggregate query
-        let matchQuery = { isActive: true }; // Only active banners
+        let matchQuery = { isActive: true };
         if (type != null) {
-            matchQuery.type = type; // Add type filtering if provided
+            matchQuery.type = type;
         }
         const sampleCount = await Banner.countDocuments(matchQuery);
-        // Aggregate query to filter, sample, project images and subType, and randomize image order
         const data = await Banner.aggregate([
-            { $match: matchQuery }, // Filter by isActive and type (if provided)
-            { $sort: { $random: { } } }, // Get a random sample of 10 banners
+            { $match: matchQuery },
+            { $sample: { size: sampleCount } },
             {
                 $project: {
-                    images: 1, // Include the single image
-                    _id: 0 // Omit the _id field 
+                    images: 1,
+                    _id: 0
                 }
 
             }
