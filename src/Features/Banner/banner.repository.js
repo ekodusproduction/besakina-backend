@@ -7,7 +7,7 @@ const getBanner = async (type = null) => {
 
         // Build the filter for the aggregate query
         let matchQuery = { isActive: true }; // Only active banners
-        if (type) {
+        if (type != null) {
             matchQuery.type = type; // Add type filtering if provided
         }
 
