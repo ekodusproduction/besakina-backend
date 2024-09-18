@@ -10,6 +10,7 @@ const getBanner = async (type = null) => {
             matchQuery.type = type;
         }
         const sampleCount = await Banner.countDocuments(matchQuery);
+        console.log("sampleCount", sampleCount);
         const data = await Banner.aggregate([
             { $match: matchQuery },
             { $sample: { size: sampleCount } },
