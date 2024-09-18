@@ -17,11 +17,10 @@ const getBanner = async (type = null) => {
             { $sample: { size: 10 } }, // Get a random sample of 10 banners
             {
                 $project: {
-                    $project: {
-                        images: 1, // Include the single image
-                        subType: 1, // Include subType in the result
-                        _id: 0 // Omit the _id field
-                    }
+                    images: 1, // Include the single image
+                    subType: 1, // Include subType in the result
+                    _id: 0 // Omit the _id field
+
 
                 }
 
