@@ -5,7 +5,7 @@ import { sendError, sendResponse } from "../../Utility/response.js";
 export const addBanner = async (req, res, next) => {
     try {
         req.body.user = req.user;
-        const result = await repository.addBanner(req.body, req.files);
+        const result = await repository.addBanner(req.body, req.images);
         if (result.error) {
             return sendError(res, result.data.message, result.data.statusCode);
         }
