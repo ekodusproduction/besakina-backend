@@ -1,6 +1,7 @@
 import Banner from "./BannerModel.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 import { logger } from "../../Middlewares/logger.middleware.js";
+
 const getBanner = async () => {
     try {
         const data = await Banner.aggregate([{ $sample: { size: 10 } }]); 

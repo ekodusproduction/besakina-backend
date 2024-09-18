@@ -24,8 +24,7 @@ export const fileUpload = (destination) => {
             if (!req.files || req.files.length === 0) {
                 console.log("file upload skipped")
                 next()
-                // return next(new ApplicationError('No files uploaded', 400));
-            }
+             }
             if (err) {
                 return next(err);
             }

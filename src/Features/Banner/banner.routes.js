@@ -5,7 +5,7 @@ import { getBanner, addBanner, editBanner, deleteBanner } from "./banner.control
 const bannerRouter = Router()
 
 bannerRouter.get("/", getBanner)
-bannerRouter.post("/", jwtAuth, addBanner)
+bannerRouter.post("/", jwtAuth, fileUpload("banner"),addBanner)
 bannerRouter.put("/id/:id", jwtAuth, editBanner)
 bannerRouter.delete("/id/:id", jwtAuth, deleteBanner)
 
