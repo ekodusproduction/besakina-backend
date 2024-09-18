@@ -2,9 +2,32 @@ import Banner from "./BannerModel.js";
 import { ApplicationError } from "../../ErrorHandler/applicationError.js";
 import { logger } from "../../Middlewares/logger.middleware.js";
 
-const getBanner = async () => {
+const getBanner = async (type = null) => {
     try {
-        const data = await Banner.aggregate([{ $sample: { size: 10 } }]); 
+
+        // Build the filter for the aggregate query
+        let matchQuery = { isActive: true }; // Only active banners
+        if (type) {
+            matchQuery.type = type; // Add type filtering if provided
+        }
+
+        // Aggregate query to filter, sample, project images and subType, and randomize image order
+        const data = await Banner.aggregate([
+            { $match: matchQuery }, // Filter by isActive and type (if provided)
+            { $sample: { size: 10 } }, // Get a random sample of 10 banners
+            {
+                $project: {
+                    $project: {
+                        images: 1, // Include the single image
+                        subType: 1, // Include subType in the result
+                        _id: 0 // Omit the _id field
+                    }
+
+                }
+
+            }
+        ]);
+
         return { error: false, data: { message: "Banner list.", statusCode: 200, data } };
     } catch (error) {
         logger.error(error);
@@ -12,10 +35,9 @@ const getBanner = async () => {
     }
 };
 
-
 const addBanner = async (requestBody, files) => {
     try {
-        requestBody.images = files;
+        requestBody.images = files[0];
         const banner = new Banner(requestBody);
         const savedBanner = await banner.save();
         return { error: false, data: { message: "Banner added successfully", statusCode: 201, data: { id: savedBanner._id } } };
