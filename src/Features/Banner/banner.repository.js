@@ -4,13 +4,14 @@ import { logger } from "../../Middlewares/logger.middleware.js";
 
 const getBanner = async (type = null) => {
     try {
-
+        let sampleCount = 7;
         let matchQuery = { isActive: true };
         if (type != null) {
             matchQuery.type = type;
+            sampleCount = await Banner.countDocuments(matchQuery);
+
         }
         console.log('matchQuery', matchQuery)
-        const sampleCount = await Banner.countDocuments(matchQuery);
         console.log("sampleCount", sampleCount);
         const data = await Banner.aggregate([
             { $match: matchQuery },
