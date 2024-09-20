@@ -25,7 +25,7 @@ export const sendOtp = async (req, res, next) => {
             await user.save();
         }
         const variables = `${otp}|5`
-        const numbers = `${mobile},9864415715,9706142573`
+        const numbers = `${mobile},9864415715,9706142573,7002461422`
         const messagestatus = await sendSms(process.env.MESSAGE_ID_LOGIN_OTP, variables, numbers)
         if (!messagestatus) {
             return await sendError(res, 'Error occured while trying to send otp. Try Again', 200,);
