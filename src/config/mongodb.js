@@ -15,6 +15,7 @@ export const connectToMongoDB = async () => {
         throw err;
     }
 };
+
 export const getDB = () => {
     if (!client) {
         throw new Error("You must connect to MongoDB first!");
