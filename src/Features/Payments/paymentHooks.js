@@ -1,10 +1,8 @@
 import Payment from "./paymentModel.js"
 import { sendResponse, sendError } from "../../Utility/response.js"
 import User from "../Users/Models/UserModel.js"
-
 import { getDB } from "../../config/mongodb.js";
-
-import Plan from "../../models/plan.js"; 
+import Plan from "../Plans/Models/PlanModel.js";
 
 export const addPayments = async function (req, res, next) {
     try {
