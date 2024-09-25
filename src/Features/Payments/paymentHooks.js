@@ -4,8 +4,7 @@ import User from "../Users/Models/UserModel.js"
 
 import { getDB } from "../../config/mongodb.js";
 
-import { getDB } from "../../config/mongodb.js";
-import Plan from "../../models/plan.js"; // Assuming the Plan model is in this path
+import Plan from "../../models/plan.js"; 
 
 export const addPayments = async function (req, res, next) {
     try {
