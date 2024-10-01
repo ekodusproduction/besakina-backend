@@ -33,7 +33,7 @@ export const getAdvertisement = async (req, res, next) => {
 
 export const getListAdvertisement = async (req, res, next) => {
   try {
-    const result = await repository.getListAdvertisement();
+    const result = await repository.getListAdvertisement(req);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }

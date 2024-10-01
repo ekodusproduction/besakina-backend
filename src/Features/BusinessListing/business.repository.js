@@ -35,7 +35,7 @@ export const getAdvertisement = async (advertisementID) => {
     }
 };
 
-export const getListAdvertisement = async () => {
+export const getListAdvertisement = async (req) => {
     try {
         const limit = parseInt(req.query.limit) || 100;
         const page = parseInt(req.query.page) || 1;
