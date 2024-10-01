@@ -36,7 +36,13 @@ export const getAdvertisement = async (advertisementID) => {
 
 export const getListAdvertisement = async () => {
     try {
-        const result = await Property.find({ is_active: true }).sort({ created_at: -1 });
+        const limit = parseInt(req.query.limit) || 100;
+        const page = parseInt(req.query.page) || 1;
+        const offset = (page - 1) * limit;
+
+        const result = await Property.find({ is_active: true }).sort({ created_at: -1 })
+        .skip(offset)
+        .limit(limit);
         if (result.length === 0) {
             return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
         }

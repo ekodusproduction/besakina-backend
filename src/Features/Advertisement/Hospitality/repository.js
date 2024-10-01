@@ -7,7 +7,6 @@ export const addAdvertisement = async (requestBody, files) => {
     try {
         requestBody.images = files;
         const result = new Hospitality(requestBody);
-        console.log("in repo",result);
         const savedDoctor = await result.save();
         if (!savedDoctor) {
             return { error: true, data: { message: "Error adding Hospitality.", statusCode: 400, data: null } };
@@ -38,7 +37,11 @@ export const getAdvertisement = async (advertisementID) => {
 // Get List of Advertisements
 export const getListAdvertisement = async () => {
     try {
-        const result = await Hospitality.find({ is_active: true }).sort({ created_at: -1 });
+        const limit = parseInt(req.query.limit) || 100;
+        const page = parseInt(req.query.page) || 1;
+        const offset = (page - 1) * limit;
+        const result = await Hospitality.find({ is_active: true }).sort({ created_at: -1 }).skip(offset)
+            .limit(limit);
         if (result.length === 0) {
             return { error: true, data: { message: "No Hospitality to show.", statusCode: 404, data: null } };
         }

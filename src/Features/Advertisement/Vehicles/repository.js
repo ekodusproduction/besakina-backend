@@ -37,7 +37,14 @@ export const getAdvertisement = async (advertisementID) => {
 
 export const getListAdvertisement = async () => {
     try {
-        const result = await Vehicle.find({ is_active: true }).sort({ created_at: -1 });
+        const limit = parseInt(req.query.limit) || 100;
+        const page = parseInt(req.query.page) || 1;
+        const offset = (page - 1) * limit;
+
+        const result = await Vehicle.find({ is_active: true })
+            .sort({ created_at: -1 })
+            .skip(offset)
+            .limit(limit);
         if (result.length === 0) {
             return { error: true, data: { message: "No Vehicle to show.", statusCode: 404, data: null } };
         }
@@ -124,7 +131,7 @@ export const addImage = async (advertisementID, files, userId) => {
         }
         result.images.push(files[0]);
 
-+        await result.save({ validateBeforeSave: false });
+        +        await result.save({ validateBeforeSave: false });
 
         return { error: false, data: { data: [files[0]], message: "Vehicle image has been added.", statusCode: 200 } };
     } catch (error) {
