@@ -13,7 +13,13 @@ export const addPayments = async function (req, res, next) {
             return res.status(200).send('No plan found');
         }
         const { merchantKey, orderId, paymentId, status, amount } = req.body;
-
+        console.log({
+            merchantKey: merchantKey,
+            orderId: orderId,
+            paymentId: paymentId,
+            status: status,
+            amount: amount
+        })
         const planValidity = plan.validity || 0;
         const extraOfferValidity = plan.extra_offer_validity || 0;
 
