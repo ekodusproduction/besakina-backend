@@ -35,11 +35,9 @@ export const getAdvertisement = async (advertisementID) => {
     }
 };
 
-export const getListAdvertisement = async (req) => {
+export const getListAdvertisement = async (limit, offset) => {
     try {
-        const limit = parseInt(req.query.limit) || 100;
-        const page = parseInt(req.query.page) || 1;
-        const offset = (page - 1) * limit;
+
 
         const result = await Business.find({ is_active: true })
             .sort({ created_at: -1 })

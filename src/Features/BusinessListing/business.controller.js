@@ -33,7 +33,10 @@ export const getAdvertisement = async (req, res, next) => {
 
 export const getListAdvertisement = async (req, res, next) => {
   try {
-    const result = await repository.getListAdvertisement(req);
+    const limit = parseInt(req.query.limit) || 100;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
+    const result = await repository.getListAdvertisement(limit, offset);
     if (result.error) {
       return await sendError(res, result.data.message, result.data.statusCode)
     }
