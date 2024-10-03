@@ -32,37 +32,19 @@ export const searchAdds = async function (req, res, next) {
 
         const [advResults, businessResults] = await Promise.allSettled([
             getDB().collection("advertisement").find({
-                $or: [
-                    { title: { $regex: search } },
-                    { description: { $regex: search } },
-                    { city: { $regex: search } },
-                    { state: { $regex: search } },
-                    { category: { $regex: search } },
-                    { price: { $regex: search } },
-                    { type: { $regex: search } }
-                ]
+                $text: { $search: search }
             })
             .sort({ created_at: -1 })
             .skip(offset)
             .limit(limit)
             .toArray(),
 
-            getDB().collection("business").find({
-                $or: [
-                    { street: { $regex: search } },
-                    { locality: { $regex: search } },
-                    { city: { $regex: search } },
-                    { state: { $regex: search } },
-                    { pincode: { $regex: search } },
-                    { name: { $regex: search } },
-                    { description: { $regex: search } },
-                    { category: { $regex: search } }
-                ]
+            getDB().collection("Business").find({
+                $text: { $search: search }
             })
-            .sort({ created_at: -1 })
-            .skip(offset)
-            .limit(limit)
-            .toArray()
+                .sort({ created_at: -1 })
+                .skip(offset)
+                .limit(limit).toArray()
         ]);
         console.log("business", businessResults)
         // Extract the fulfilled results
