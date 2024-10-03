@@ -22,3 +22,4 @@ export const getDB = () => {
     }
     return client.db();
 };
+getDB().collection('Business').createIndex({ street: 'text', locality: 'text', city: 'text', state: 'text', pincode: 'text', name: 'text', description: 'text', category: 'text' });

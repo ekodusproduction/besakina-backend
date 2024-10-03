@@ -39,7 +39,7 @@ export const searchAdds = async function (req, res, next) {
             .limit(limit)
             .toArray(),
 
-            getDB().collection("Business").find({
+            getDB().collection("businesses").find({
                 is_active: true,
                 $text: { $search: search } // Use search directly
             })
