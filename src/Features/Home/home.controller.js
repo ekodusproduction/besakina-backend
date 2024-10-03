@@ -30,8 +30,7 @@ export const searchAdds = async function (req, res, next) {
         const offset = (page - 1) * limit;
         search = new RegExp(search, 'i');
 
-        // Run both queries in parallel using Promise.all
-        const [advResults, businessResults] = await Promise.all([
+        const [advResults, businessResults] = await Promise.allSettled([
             getDB().collection("advertisement").find({
                 $or: [
                     { title: { $regex: search } },
@@ -66,7 +65,6 @@ export const searchAdds = async function (req, res, next) {
             .toArray()
         ]);
 
-        // Combine the results from both queries
         const advertisements = [...advResults, ...businessResults];
 
         return await sendResponse(res, "Search Results", 200, { advertisements });
