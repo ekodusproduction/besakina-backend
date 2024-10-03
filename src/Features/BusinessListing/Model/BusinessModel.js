@@ -31,6 +31,17 @@ businessSchema.pre('save', function (next) {
     next();
 });
 
+businessSchema.index({
+    street: 'text',
+    locality: 'text',
+    city: 'text',
+    state: 'text',
+    pincode: 'text',
+    name: 'text',
+    description: 'text',
+    category: 'text'
+});
+
 const Business = mongoose.model('Business', businessSchema);
 
 export default Business;

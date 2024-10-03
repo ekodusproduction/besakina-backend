@@ -30,42 +30,46 @@ export const searchAdds = async function (req, res, next) {
         const offset = (page - 1) * limit;
         search = new RegExp(search, 'i');
 
-        const adv = await getDB().collection("advertisement").find({
-            $or: [
-                { title: { $regex: search } },
-                { description: { $regex: search } },
-                { city: { $regex: search } },
-                { state: { $regex: search } },
-                { category: { $regex: search } },
-                { price: { $regex: search } },
-                { type: { $regex: search } }
-            ]
-        })
+        // Run both queries in parallel using Promise.all
+        const [advResults, businessResults] = await Promise.all([
+            getDB().collection("advertisement").find({
+                $or: [
+                    { title: { $regex: search } },
+                    { description: { $regex: search } },
+                    { city: { $regex: search } },
+                    { state: { $regex: search } },
+                    { category: { $regex: search } },
+                    { price: { $regex: search } },
+                    { type: { $regex: search } }
+                ]
+            })
             .sort({ created_at: -1 })
             .skip(offset)
             .limit(limit)
-            .toArray();
+            .toArray(),
 
-        const otherResults = await getDB().collection("Business").find({
-            $or: [
-                { street: { $regex: search } },
-                { locality: { $regex: search } },
-                { city: { $regex: search } },
-                { state: { $regex: search } },
-                { pincode: { $regex: search } },
-                { name: { $regex: search } },
-                { description: { $regex: search } },
-                { category: { $regex: search } }
-            ]
-        })
+            getDB().collection("Business").find({
+                $or: [
+                    { street: { $regex: search } },
+                    { locality: { $regex: search } },
+                    { city: { $regex: search } },
+                    { state: { $regex: search } },
+                    { pincode: { $regex: search } },
+                    { name: { $regex: search } },
+                    { description: { $regex: search } },
+                    { category: { $regex: search } }
+                ]
+            })
             .sort({ created_at: -1 })
             .skip(offset)
             .limit(limit)
-            .toArray();
+            .toArray()
+        ]);
 
-        const advertisements  = [...adv, ...otherResults];
+        // Combine the results from both queries
+        const advertisements = [...advResults, ...businessResults];
 
-        return await sendResponse(res, "Search Results", 200, { advertisements  });
+        return await sendResponse(res, "Search Results", 200, { advertisements });
     } catch (error) {
         next(error);
     }
