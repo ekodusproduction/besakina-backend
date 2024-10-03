@@ -65,7 +65,12 @@ export const searchAdds = async function (req, res, next) {
             .toArray()
         ]);
 
-        const advertisements = [...advResults, ...businessResults];
+        // Extract the fulfilled results
+        const advData = advResults.status === 'fulfilled' ? advResults.value : [];
+        const businessData = businessResults.status === 'fulfilled' ? businessResults.value : [];
+
+        // Combine the results
+        const advertisements = [...advData, ...businessData];
 
         return await sendResponse(res, "Search Results", 200, { advertisements });
     } catch (error) {
