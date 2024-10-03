@@ -24,7 +24,7 @@ export const latestAdds = async function (req, res, next) {
 
 export const searchAdds = async function (req, res, next) {
     try {
-        const limit = parseInt(req.query.limit) || 100;
+        const limit = parseInt(req.query.limit) || 4;
         const page = parseInt(req.query.page) || 1;
         let search = req.query.search || '';
         const offset = (page - 1) * limit;
