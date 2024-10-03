@@ -64,7 +64,7 @@ export const searchAdds = async function (req, res, next) {
             .limit(limit)
             .toArray()
         ]);
-        console.log("business", businessData)
+        console.log("business", businessResults)
         // Extract the fulfilled results
         const advData = advResults.status === 'fulfilled' ? advResults.value : [];
         const businessData = businessResults.status === 'fulfilled' ? businessResults.value : [];
