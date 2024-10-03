@@ -30,7 +30,7 @@ export const searchAdds = async function (req, res, next) {
         const offset = (page - 1) * limit;
         search = new RegExp(search, 'i');
 
-        const advertisements = await getDB().collection("advertisement").find({
+        const adv = await getDB().collection("advertisement").find({
             $or: [
                 { title: { $regex: search } },
                 { description: { $regex: search } },
@@ -63,9 +63,9 @@ export const searchAdds = async function (req, res, next) {
             .limit(limit)
             .toArray();
 
-        const combinedResults = [...advertisements, ...otherResults];
+        const advertisements  = [...adv, ...otherResults];
 
-        return await sendResponse(res, "Search Results", 200, { combinedResults });
+        return await sendResponse(res, "Search Results", 200, { advertisements  });
     } catch (error) {
         next(error);
     }
