@@ -21,6 +21,7 @@ export const latestAdds = async function (req, res, next) {
     }
 };
 
+
 export const searchAdds = async function (req, res, next) {
     try {
         const limit = parseInt(req.query.limit) || 100;
@@ -39,13 +40,32 @@ export const searchAdds = async function (req, res, next) {
                 { price: { $regex: search } },
                 { type: { $regex: search } }
             ]
-        },)
+        })
             .sort({ created_at: -1 })
             .skip(offset)
             .limit(limit)
             .toArray();
 
-        return await sendResponse(res, "Search Results", 200, { advertisements });
+        const otherResults = await getDB().collection("Business").find({
+            $or: [
+                { street: { $regex: search } },
+                { locality: { $regex: search } },
+                { city: { $regex: search } },
+                { state: { $regex: search } },
+                { pincode: { $regex: search } },
+                { name: { $regex: search } },
+                { description: { $regex: search } },
+                { category: { $regex: search } }
+            ]
+        })
+            .sort({ created_at: -1 })
+            .skip(offset)
+            .limit(limit)
+            .toArray();
+
+        const combinedResults = [...advertisements, ...otherResults];
+
+        return await sendResponse(res, "Search Results", 200, { combinedResults });
     } catch (error) {
         next(error);
     }
