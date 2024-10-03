@@ -47,7 +47,7 @@ export const searchAdds = async function (req, res, next) {
             .limit(limit)
             .toArray(),
 
-            getDB().collection("Business").find({
+            getDB().collection("business").find({
                 $or: [
                     { street: { $regex: search } },
                     { locality: { $regex: search } },
