@@ -32,6 +32,7 @@ export const searchAdds = async function (req, res, next) {
 
         const [advResults, businessResults] = await Promise.allSettled([
             getDB().collection("advertisement").find({
+                is_active: true,  
                 $text: { $search: search }
             })
             .sort({ created_at: -1 })
@@ -40,13 +41,16 @@ export const searchAdds = async function (req, res, next) {
             .toArray(),
 
             getDB().collection("Business").find({
+                is_active: true,  
                 $text: { $search: search }
             })
                 .sort({ created_at: -1 })
                 .skip(offset)
-                .limit(limit).toArray()
+                .limit(limit)
+                .toArray()
         ]);
-        console.log("business", businessResults)
+
+        console.log("business", businessResults);
         // Extract the fulfilled results
         const advData = advResults.status === 'fulfilled' ? advResults.value : [];
         const businessData = businessResults.status === 'fulfilled' ? businessResults.value : [];
