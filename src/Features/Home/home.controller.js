@@ -28,12 +28,11 @@ export const searchAdds = async function (req, res, next) {
         const page = parseInt(req.query.page) || 1;
         let search = req.query.search || '';
         const offset = (page - 1) * limit;
-        search = new RegExp(search, 'i');
 
         const [advResults, businessResults] = await Promise.allSettled([
             getDB().collection("advertisement").find({
-                is_active: true,  
-                $text: { $search: search }
+                is_active: true,
+                $text: { $search: search } // Use search directly
             })
             .sort({ created_at: -1 })
             .skip(offset)
@@ -41,13 +40,13 @@ export const searchAdds = async function (req, res, next) {
             .toArray(),
 
             getDB().collection("Business").find({
-                is_active: true,  
-                $text: { $search: search }
+                is_active: true,
+                $text: { $search: search } // Use search directly
             })
-                .sort({ created_at: -1 })
-                .skip(offset)
-                .limit(limit)
-                .toArray()
+            .sort({ created_at: -1 })
+            .skip(offset)
+            .limit(limit)
+            .toArray()
         ]);
 
         console.log("business", businessResults);
