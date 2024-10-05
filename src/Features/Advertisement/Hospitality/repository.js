@@ -21,7 +21,11 @@ export const addAdvertisement = async (requestBody, files) => {
 
 export const getAdvertisement = async (advertisementID) => {
     try {
-        const result = await Hospitality.findById(advertisementID).populate('user');
+        const result = await Hospitality.findOneAndUpdate(
+            { _id: advertisementID },
+            { $inc: { views: 1 }, $setOnInsert: { views: 0 } },
+            { new: true }
+        ).populate('user');
 
         if (!result) {
             return { error: true, data: { message: "No Hospitality to show.", statusCode: 404, data: null } };

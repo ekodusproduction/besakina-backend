@@ -33,6 +33,7 @@ const baseSchema = new mongoose.Schema({
     title: { type: String, required: false, default: null },
     description: { type: String, required: true },
     price: { type: Number, default: null, validate: priceValidator },
+    views: { type: Number, default: 0 }
 }, baseOptions);
 
 baseSchema.index({ "advType": 1 })

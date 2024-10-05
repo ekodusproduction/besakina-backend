@@ -16,7 +16,8 @@ const businessSchema = new mongoose.Schema({
     pincode: { type: String, required: true },
     name: { type: String, required: true, },
     description: { type: String, required: true },
-    category: { type: String, required: true }
+    category: { type: String, required: true },
+    views: { type: Number, default: 0 }
 }, { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } });
 
 businessSchema.index({ "category": 1 })

@@ -21,7 +21,11 @@ export const addAdvertisement = async (requestBody, files) => {
 
 export const getAdvertisement = async (advertisementID) => {
     try {
-        const result = await Property.findById(advertisementID).populate('user');
+        const result = await Property.findOneAndUpdate(
+            { _id: advertisementID },
+            { $inc: { views: 1 }, $setOnInsert: { views: 0 } },
+            { new: true }
+        ).populate('user');
 
         if (!result) {
             return { error: true, data: { message: "No Property to show.", statusCode: 404, data: null } };
@@ -37,8 +41,8 @@ export const getAdvertisement = async (advertisementID) => {
 export const getListAdvertisement = async (limit, offset) => {
     try {
         const result = await Property.find({ is_active: true }).sort({ created_at: -1 })
-        .skip(offset)
-        .limit(limit);
+            .skip(offset)
+            .limit(limit);
         if (result.length === 0) {
             return { error: true, data: { message: "No property to show.", statusCode: 404, data: null } };
         }

@@ -22,7 +22,11 @@ export const addAdvertisement = async (requestBody, files) => {
 
 export const getAdvertisement = async (advertisementID) => {
     try {
-        const doctor = await Doctor.findById(advertisementID).populate('user');
+        const doctor = await Doctor.findOneAndUpdate(
+            { _id: advertisementID }, 
+            { $inc: { views: 1 },$setOnInsert: { views: 0 }},
+            { new: true } 
+        ).populate('user');
 
         if (!doctor) {
             return { error: true, data: { message: "No doctors to show.", statusCode: 404, data: null } };

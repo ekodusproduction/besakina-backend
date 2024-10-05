@@ -22,7 +22,11 @@ export const addAdvertisement = async (requestBody, files) => {
 
 export const getAdvertisement = async (advertisementID) => {
     try {
-        const result = await Education.findById(advertisementID).populate('user');
+        const result = await Education.findOneAndUpdate(
+            { _id: advertisementID }, 
+            { $inc: { views: 1 },$setOnInsert: { views: 0 } },
+            { new: true } 
+        ).populate('user');
 
         if (!result) {
             return { error: true, data: { message: "No Education to show.", statusCode: 404, data: null } };

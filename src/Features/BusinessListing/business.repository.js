@@ -22,7 +22,11 @@ export const addAdvertisement = async (requestBody, files) => {
 // Get Advertisement
 export const getAdvertisement = async (advertisementID) => {
     try {
-        const result = await Business.findById(advertisementID).populate('user');
+        const result = await Business.findOneAndUpdate(
+            { _id: advertisementID }, 
+            { $inc: { views: 1 }, $setOnInsert: { views: 0 } },
+            { new: true } 
+        ).populate('user');
 
         if (!result) {
             return { error: true, data: { message: "No Business to show.", statusCode: 404, data: null } };
