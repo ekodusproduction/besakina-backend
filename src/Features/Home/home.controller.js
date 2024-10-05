@@ -29,50 +29,48 @@ export const searchAdds = async function (req, res, next) {
         const page = parseInt(req.query.page) || 1;
         let search = req.query.search || '';
         const offset = (page - 1) * limit;
-  
-        // Optimize regex pattern
-        const regexSearch = new RegExp(search.trim(), 'i'); // Case-insensitive
-  
+
+        const regexSearch = new RegExp(`^${search.trim()}`, 'i'); 
+
         const [advResults, businessResults] = await Promise.allSettled([
             Base.find({
-                is_active:true,
-                $or:[
-                    { title:{ $regex : regexSearch }},
-                    { description:{ $regex : regexSearch }},
-                    { city:{ $regex : regexSearch }},
-                    { state:{ $regex : regexSearch }},
+                is_active: true,
+                $or: [
+                    { title: { $regex: regexSearch }},
+                    { description: { $regex: regexSearch }},
+                    { city: { $regex: regexSearch }},
+                    { state: { $regex: regexSearch }},
                 ]
             })
-            .sort({ createdAt:-1 })
+            .sort({ createdAt: -1 })
             .skip(offset)
             .limit(limit)
             .exec(),
-  
+
             Business.find({
-                is_active:true,
-                $or:[
-                    { street:{ $regex : regexSearch }},
-                    { locality:{ $regex : regexSearch }},
-                    { city:{ $regex : regexSearch }},
-                    { state:{ $regex : regexSearch }},
-                    { name:{ $regex : regexSearch }},
-                    { description:{ $regex : regexSearch }},
+                is_active: true,
+                $or: [
+                    { street: { $regex: regexSearch }},
+                    { locality: { $regex: regexSearch }},
+                    { city: { $regex: regexSearch }},
+                    { state: { $regex: regexSearch }},
+                    { name: { $regex: regexSearch }},
+                    { description: { $regex: regexSearch }},
                 ]
             })
-            .sort({ createdAt:-1 })
+            .sort({ createdAt: -1 })
             .skip(offset)
             .limit(limit)
             .exec()
         ]);
-  
+
         const advData = advResults.status === 'fulfilled' ? advResults.value : [];
         const businessData = businessResults.status === 'fulfilled' ? businessResults.value : [];
-  
-        // Combine the results
+
         const advertisements = [...advData, ...businessData];
-  
-        return await sendResponse(res,"Search Results",200,{ advertisements });
+
+        return await sendResponse(res, "Search Results", 200, { advertisements });
     } catch (error) {
         next(error);
     }
-  };
+};
