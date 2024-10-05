@@ -11,6 +11,9 @@ const doctorSchema = new mongoose.Schema({
 doctorSchema.index({ expertise: 'text', name: "text", is_active: 1 });
 doctorSchema.index({ is_active: 1, created_at: -1 });
 
+const Doctor = Base.discriminator('Doctor', doctorSchema);
+export default Doctor;
+
 // doctorSchema.pre('save', function (next) {
 //     // Set the discriminator key to the model name
 //     this.__t = this.constructor.modelName;
@@ -18,6 +21,3 @@ doctorSchema.index({ is_active: 1, created_at: -1 });
 //     console.log("this", this.__t)
 //     next();
 // });
-
-const Doctor = Base.discriminator('Doctor', doctorSchema);
-export default Doctor;
