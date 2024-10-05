@@ -30,7 +30,8 @@ export const searchAdds = async function (req, res, next) {
         let search = req.query.search || '';
         const offset = (page - 1) * limit;
 
-        const regexSearch = new RegExp(`^${search.trim()}`, 'i'); 
+        // Optimize regex pattern to match the beginning of the string
+        const regexSearch = new RegExp(`^${search.trim()}`, 'i'); // Case-insensitive and matches from the start
 
         const [advResults, businessResults] = await Promise.allSettled([
             Base.find({
