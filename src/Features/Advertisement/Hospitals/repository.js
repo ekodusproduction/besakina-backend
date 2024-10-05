@@ -27,7 +27,7 @@ export const getAdvertisement = async (advertisementID) => {
     try {
         const result = await Hospital.findOneAndUpdate(
             { _id: advertisementID },
-            { $inc: { views: 1 }, $setOnInsert: { views: 0 } },
+            { $setOnInsert: { views: 0 }, $inc: { views: 1 } },
             { new: true }
         ).populate('user');
 
