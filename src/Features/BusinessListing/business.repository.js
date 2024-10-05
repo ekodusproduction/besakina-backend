@@ -23,9 +23,9 @@ export const addAdvertisement = async (requestBody, files) => {
 export const getAdvertisement = async (advertisementID) => {
     try {
         const result = await Business.findOneAndUpdate(
-            { _id: advertisementID }, 
-            { $setOnInsert: { views: 0 }, $inc: { views: 1 } },
-            { new: true } 
+            { _id: advertisementID },
+            { $inc: { views: 1 } },
+            { new: true }
         ).populate('user');
 
         if (!result) {
