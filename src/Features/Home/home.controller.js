@@ -1,5 +1,7 @@
 import { sendResponse } from "../../Utility/response.js";
 import { getDB } from "../../config/mongodb.js";
+import Base from "../Advertisement/BaseModel/BaseModel.js";
+import Business from "../BusinessListing/Model/BusinessModel.js";
 
 export const latestAdds = async function (req, res, next) {
     try {
