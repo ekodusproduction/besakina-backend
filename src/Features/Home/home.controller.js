@@ -32,7 +32,7 @@ export const searchAdds = async function (req, res, next) {
         const regexSearch = new RegExp(search.trim(), 'i'); // Case-insensitive
   
         const [advResults, businessResults] = await Promise.allSettled([
-            Advertisement.find({
+            Base.find({
                 is_active:true,
                 $or:[
                     { title:{ $regex : regexSearch }},
