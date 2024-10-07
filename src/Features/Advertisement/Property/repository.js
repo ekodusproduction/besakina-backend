@@ -126,7 +126,7 @@ export const addImage = async (advertisementID, files, userId) => {
         if (!result) {
             return { error: true, data: { message: "Property not found.", statusCode: 404, data: null } };
         }
-        result.images.push(files[0]);
+        result.images.push(...files);
         await result.save();
         return { error: false, data: { data: [files[0]], message: "Property image has been added.", statusCode: 200 } };
     } catch (error) {

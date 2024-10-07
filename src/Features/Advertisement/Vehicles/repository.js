@@ -129,7 +129,7 @@ export const addImage = async (advertisementID, files, userId) => {
         if (!result) {
             return { error: true, data: { message: "Vehicle not found.", statusCode: 404, data: null } };
         }
-        result.images.push(files[0]);
+        result.images.push(...files);
 
         await result.save({ validateBeforeSave: false });
 

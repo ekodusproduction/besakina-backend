@@ -30,23 +30,16 @@ export const searchAdds = async function (req, res, next) {
         let search = req.query.search || '';
         const offset = (page - 1) * limit;
 
-        const trimmedSearch = search.trim();
-        const regexSearch = new RegExp(trimmedSearch, 'i'); 
-
-        const prefixMatch = new RegExp(`^${trimmedSearch}`, 'i');
+        const regexSearch = new RegExp(`^${search.trim()}`, 'i'); 
 
         const [advResults, businessResults] = await Promise.allSettled([
             Base.find({
                 is_active: true,
                 $or: [
-                    { title: { $regex: prefixMatch } },
-                    { title: { $regex: regexSearch, $options: 'i' } }, 
-                    { description: { $regex: prefixMatch } },
-                    { description: { $regex: regexSearch, $options: 'i' } },
-                    { city: { $regex: prefixMatch } },
-                    { city: { $regex: regexSearch, $options: 'i' } },
-                    { state: { $regex: prefixMatch } },
-                    { state: { $regex: regexSearch, $options: 'i' } },
+                    { title: { $regex: regexSearch }},
+                    { description: { $regex: regexSearch }},
+                    { city: { $regex: regexSearch }},
+                    { state: { $regex: regexSearch }},
                 ]
             })
             .sort({ createdAt: -1 })
@@ -57,18 +50,12 @@ export const searchAdds = async function (req, res, next) {
             Business.find({
                 is_active: true,
                 $or: [
-                    { street: { $regex: prefixMatch } },
-                    { street: { $regex: regexSearch, $options: 'i' } },
-                    { locality: { $regex: prefixMatch } },
-                    { locality: { $regex: regexSearch, $options: 'i' } },
-                    { city: { $regex: prefixMatch } },
-                    { city: { $regex: regexSearch, $options: 'i' } },
-                    { state: { $regex: prefixMatch } },
-                    { state: { $regex: regexSearch, $options: 'i' } },
-                    { name: { $regex: prefixMatch } },
-                    { name: { $regex: regexSearch, $options: 'i' } },
-                    { description: { $regex: prefixMatch } },
-                    { description: { $regex: regexSearch, $options: 'i' } },
+                    { street: { $regex: regexSearch }},
+                    { locality: { $regex: regexSearch }},
+                    { city: { $regex: regexSearch }},
+                    { state: { $regex: regexSearch }},
+                    { name: { $regex: regexSearch }},
+                    { description: { $regex: regexSearch }},
                 ]
             })
             .sort({ createdAt: -1 })
@@ -86,4 +73,4 @@ export const searchAdds = async function (req, res, next) {
     } catch (error) {
         next(error);
     }
-};
+}
