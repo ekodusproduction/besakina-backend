@@ -1,6 +1,7 @@
 import { ApplicationError } from "../../../ErrorHandler/applicationError.js";
 import { logger } from "../../../Middlewares/logger.middleware.js";
 import { getDB } from "../../../mongodb/mongodb.js";
+import Base from "./BaseModel.js";
 
 export const addAdvertisement = async (requestBody, files, Model) => {
     try {
@@ -33,9 +34,9 @@ export const getAdvertisement = async (advertisementID, Model) => {
     }
 };
 
-export const getListAdvertisement = async (Model) => {
+export const getListAdvertisement = async () => {
     try {
-        const result = await Model.find({ is_active: true }).sort({ created_at: -1 });
+        const result = await Base.find({ is_active: true }).sort({ created_at: -1 });
 
         if (result.length === 0) {
             return { error: true, data: { message: `No ${Model} to show.`, statusCode: 404, data: null } };

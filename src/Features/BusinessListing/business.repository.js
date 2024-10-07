@@ -41,8 +41,6 @@ export const getAdvertisement = async (advertisementID) => {
 
 export const getListAdvertisement = async (limit, offset) => {
     try {
-
-
         const result = await Business.find({ is_active: true })
             .sort({ created_at: -1 })
             .skip(offset)

@@ -31,7 +31,6 @@ export const searchAdds = async function (req, res, next) {
         const offset = (page - 1) * limit;
 
         const regexSearch = new RegExp(`^${search.trim()}`, 'i'); 
-
         const [advResults, businessResults] = await Promise.allSettled([
             Base.find({
                 is_active: true,
