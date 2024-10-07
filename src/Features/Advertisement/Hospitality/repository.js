@@ -138,10 +138,7 @@ export const addImage = async (advertisementID, files, userId) => {
 
 export const deleteImage = async (advertisementID, files, userId) => {
     try {
-        console.log("adve", advertisementID)
-        console.log("files", files)
-        console.log("userId", userId)
-
+    
         const result = await Hospitality.findOneAndUpdate(
             { _id: advertisementID, user: userId },
             { $pull: { images: files } },
