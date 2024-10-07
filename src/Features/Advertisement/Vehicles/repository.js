@@ -22,7 +22,7 @@ export const addAdvertisement = async (requestBody, files) => {
 // Get Advertisement
 export const getAdvertisement = async (advertisementID) => {
     try {
-        const result = await VehiclefindOneAndUpdate(
+        const result = await Vehicle.findOneAndUpdate(
             { _id: advertisementID },
             { $inc: { views: 1 } },
             { new: true }
