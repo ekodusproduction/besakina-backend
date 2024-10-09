@@ -31,25 +31,43 @@ export const searchAdds = async function (req, res, next) {
         let search = req.query.search || '';
         const offset = (page - 1) * limit;
 
-        // Define the text search query
-        const textSearchQuery = search.trim() ? { $text: { $search: search } } : {};
+        const regexSearchQuery = search.trim() ? {
+            $or: [
+                { title: { $regex: search, $options: 'i' } },
+                { description: { $regex: search, $options: 'i' } },
+                { name: { $regex: search, $options: 'i' } },
+                { type: { $regex: search, $options: 'i' } },
+                { city: { $regex: search, $options: 'i' } },
+                { state: { $regex: search, $options: 'i' } },
+                { locality: { $regex: search, $options: 'i' } },
+                { category: { $regex: search, $options: 'i' } },
+                { pincode: { $regex: search, $options: 'i' } },
+                { brand: { $regex: search, $options: 'i' } },
+                { kilometer_driven: { $regex: search, $options: 'i' } },
+                { registration_year: { $regex: search, $options: 'i' } },
+                { fuel: { $regex: search, $options: 'i' } },
+                { second_hand: { $regex: search, $options: 'i' } },
+                { model: { $regex: search, $options: 'i' } },
+                { variant: { $regex: search, $options: 'i' } },
+                { transmission: { $regex: search, $options: 'i' } },
 
-        const projection = {
-            score: { $meta: "textScore" }
-        };
+                { street: { $regex: search, $options: 'i' } },
+                { locality_business: { $regex: search, $options: 'i' } }, 
+                { city_business: { $regex: search, $options: 'i' } },    
+                { state_business: { $regex: search, $options: 'i' } }, 
+                { pincode_business: { $regex: search, $options: 'i' } }, 
+            ]
+        } : {};
 
-        // Perform text search on the `advertisement` and `business` collections
         const [advResults, businessResults] = await Promise.allSettled([
             db.collection('advertisement')
-                .find({ is_active: true, ...textSearchQuery }, { projection })
-                .sort({ score: { $meta: "textScore" } })
+                .find({ is_active: true, ...regexSearchQuery })
                 .skip(offset)
                 .limit(limit)
                 .toArray(),
 
             db.collection('Business')
-                .find({ is_active: true, ...textSearchQuery }, { projection })
-                .sort({ score: { $meta: "textScore" } })
+                .find({ is_active: true, ...regexSearchQuery })
                 .skip(offset)
                 .limit(limit)
                 .toArray()
