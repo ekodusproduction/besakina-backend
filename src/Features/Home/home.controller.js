@@ -48,7 +48,7 @@ export const searchAdds = async function (req, res, next) {
                 .limit(limit)
                 .toArray(),
 
-            db.collection('business')
+            db.collection('Business')
                 .find({ is_active: true, ...textSearchQuery }, { projection })
                 .sort({ score: { $meta: "textScore" } })
                 .skip(offset)
