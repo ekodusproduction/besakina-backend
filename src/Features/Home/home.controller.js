@@ -43,14 +43,14 @@ export const searchAdds = async function (req, res, next) {
         const [advResults, businessResults] = await Promise.allSettled([
             db.collection('advertisement')
                 .find({ is_active: true, ...textSearchQuery }, { projection })
-                .sort({ score: { $meta: "textScore" }, createdAt: -1 })
+                .sort({ score: { $meta: "textScore" } })
                 .skip(offset)
                 .limit(limit)
                 .toArray(),
 
             db.collection('business')
                 .find({ is_active: true, ...textSearchQuery }, { projection })
-                .sort({ score: { $meta: "textScore" }, createdAt: -1 })
+                .sort({ score: { $meta: "textScore" } })
                 .skip(offset)
                 .limit(limit)
                 .toArray()
