@@ -50,4 +50,24 @@ baseSchema.pre('save', function (next) {
 
 const Base = mongoose.model('Base', baseSchema);
 
+baseSchema.index({
+    title: 'text',
+    description: 'text',
+    name: 'text',
+    type: 'text',
+    city: 'text',
+    state: 'text',
+    locality: 'text',
+    category: 'text',
+    pincode: 'text',
+    brand: 'text',
+    kilometer_driven: 'text',
+    registration_year: 'text',
+    fuel: 'text',
+    second_hand: 'text',
+    model: 'text',
+    variant: 'text',
+    transmission: 'text'
+});
+
 export default Base;
