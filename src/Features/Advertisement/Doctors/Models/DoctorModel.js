@@ -8,7 +8,7 @@ const doctorSchema = new mongoose.Schema({
     price_per_visit: { type: String, default: null },
 });
 
-doctorSchema.index({ expertise: 'text', name: "text", is_active: 1 });
+doctorSchema.index({ expertise: 'text', name: "text" });
 doctorSchema.index({ is_active: 1, created_at: -1 });
 
 const Doctor = Base.discriminator('Doctor', doctorSchema);

@@ -34,7 +34,6 @@ export const searchAdds = async function (req, res, next) {
         // Define the text search query
         const textSearchQuery = search.trim() ? { $text: { $search: search } } : {};
 
-        // Define the projection for textScore
         const projection = {
             score: { $meta: "textScore" }
         };
