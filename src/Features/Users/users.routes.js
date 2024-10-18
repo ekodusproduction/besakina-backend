@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { loginValidation, mobileValidation } from "./users.validator.js";
-import { login, sendOtp, getUsers, addUserDetails, getUserAdds, getUserDetails, getUserById, addUserDocs, profileStatus } from "./users.controller.js";
+import { login, sendOtp, getUsers, addUserDetails, getUserAdds, getUserDetails, getUserById, addUserDocs, profileStatus, deleteUser } from "./users.controller.js";
 import { jwtAuth } from "../../Middlewares/auth.middleware.js";
 import { fileUpload } from "../../Middlewares/multer.middlewares.js";
 import { checkUserProfileCompletion } from "./userMiddlewares.js";
@@ -15,5 +15,6 @@ userRouter.get("/details", jwtAuth, getUserDetails)
 userRouter.get("/myads", jwtAuth, getUserAdds)
 userRouter.get("/id/:id", jwtAuth, getUserById)
 userRouter.get("/profile/status", jwtAuth, checkUserProfileCompletion, profileStatus)
+userRouter.delete("/delete", jwtAuth, deleteUser)
 
 export default userRouter  

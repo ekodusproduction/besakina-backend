@@ -196,3 +196,16 @@ export const profileStatus = async function (req, res, next) {
         next(error);
     }
 };
+
+export const deleteUser = async function (req, res, next) {
+    try {
+        const { mobile, otp } = req.body
+        const user = await User.find({ mobile, otp })
+        await getDB().collections('advertisement').deleteOne({ _id: user._id })
+        await Business.deleteOne({ _id: user._id })
+        await User.deleteOne({ mobile, otp })
+        return await sendResponse(req, 'User deleted succesfully')
+    } catch (error) {
+        next(error);
+    }
+}
