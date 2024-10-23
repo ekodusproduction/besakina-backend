@@ -75,7 +75,7 @@ app.use("/api/banner", bannerRouter)
 app.use('/api/wishlist', wishlistRoutes)
 app.use('/api/business', businessRouter)
 app.use('/api/payments', paymentRouter)
-app.use('/api/payments', adminRouter)
+app.use('/api/admin', adminRouter)
 
 app.use(async (err, req, res, next) => {
     logger.info(err);
