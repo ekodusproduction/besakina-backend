@@ -11,7 +11,7 @@ const educationSchema = new mongoose.Schema({
             message: 'Domain cannot be empty'
         }
     }],
-    institution_name: { type: String, required: true },
+    name: { type: String, required: true },
     course_duration: { type: String, required: true }
 });
 

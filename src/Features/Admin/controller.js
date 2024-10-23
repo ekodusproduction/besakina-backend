@@ -8,7 +8,7 @@ export const businessInfo = async (req, res, next) => {
         let advertisements = await Business.find({ is_active: true })
             .select('created_at category street city locality') 
             .populate({
-                path: 'user', 
+                path: 'User', 
                 select: 'plan fullname mobile' 
             });
 
@@ -23,7 +23,7 @@ export const advertisementInfo = async (req, res, next) => {
         let advertisements = await Base.find({ is_active: true })
             .select('created_at category street city locality advType') 
             .populate({
-                path: 'user', 
+                path: 'User', 
                 select: 'plan fullname mobile' 
             });
 

@@ -18,7 +18,6 @@ const propertySchema = new mongoose.Schema({
     category: { type: String, default: null },
     house_no: { type: String, default: null },
     landmark: { type: String, default: null }
-
 });
 
 propertySchema.index({ title: 'text', type: 'text', city: 'text', state: 'text', landmark: 'text', category: 'text', price: 'text', pincode: 'text' });
