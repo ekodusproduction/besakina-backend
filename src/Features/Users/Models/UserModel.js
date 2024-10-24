@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
     plan: { type: mongoose.Schema.Types.ObjectId, ref: 'Plan', default: null },
     plan_date: { type: Date, default: Date.now },
     plan_expiry_date: { type: Date, default: null },
+    plan_expired: {type: Boolean, default: false },
     payments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Payment', default: null }],
     contacts_quota: { type: Number, default: null },
     state: { type: String, default: null },
