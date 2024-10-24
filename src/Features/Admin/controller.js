@@ -26,10 +26,10 @@ export const advertisementInfo = async (req, res, next) => {
             { $match: { is_active: true } }, 
             {
                 $lookup: {
-                    from: 'user',           // Join with the 'user' collection
-                    localField: 'user',     // Field in the 'advertisement' collection
-                    foreignField: '_id',    // Field in the 'user' collection
-                    as: 'user'              // Resulting field in the output
+                    from: 'user',          
+                    localField: 'user',     
+                    foreignField: '_id',   
+                    as: 'user'            
                 }
             },
             { $unwind: '$user' }, 
