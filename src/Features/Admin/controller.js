@@ -17,7 +17,6 @@ export const businessInfo = async (req, res, next) => {
         next(error);
     }
 };
-
 export const advertisementInfo = async (req, res, next) => {
     try {
         const db = getDB(); 
@@ -26,13 +25,12 @@ export const advertisementInfo = async (req, res, next) => {
             { $match: { is_active: true } }, 
             {
                 $lookup: {
-                    from: 'user',          
+                    from: 'user',           
                     localField: 'user',     
-                    foreignField: '_id',   
-                    as: 'user'            
+                    foreignField: '_id',    
+                    as: 'user'              
                 }
             },
-            { $unwind: '$user' }, 
             {
                 $project: {  
                     created_at: 1,
@@ -41,16 +39,18 @@ export const advertisementInfo = async (req, res, next) => {
                     city: 1,
                     locality: 1,
                     advType: 1,
-                    'user.plan': 1,
-                    'user.fullname': 1,
-                    'user.mobile': 1
+                    'user.plan': { $arrayElemAt: ['$user.plan', 0] }, 
+                    'user.fullname': { $arrayElemAt: ['$user.fullname', 0] },
+                    'user.mobile': { $arrayElemAt: ['$user.mobile', 0] }
                 }
             }
         ]).toArray();
 
+        // Send response
         return sendResponse(res, 'Advertisement Info List', 200, advertisements, null);
     } catch (error) {
         next(error); 
     }
 };
+
 
